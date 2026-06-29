@@ -76,6 +76,9 @@ export default function App() {
   const [position, setPosition] = useState(0)
   const [volume, setVolume] = useState(0.8)
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null)
+  // Mirrors `currentIndex` so navigation/auto-advance always read the latest
+  // value synchronously, even across rapid clicks before React re-renders.
+  const currentIndexRef = useRef(0)
 
   const current = TRACKS[currentIndex]
 
@@ -88,26 +91,27 @@ export default function App() {
   const playIndex = useCallback(
     async (index: number) => {
       const next = ((index % TRACKS.length) + TRACKS.length) % TRACKS.length
-      if (next !== currentIndex) {
+      if (next !== currentIndexRef.current) {
+        currentIndexRef.current = next
         setCurrentIndex(next)
         engine.load(TRACKS[next])
+        setPosition(0)
       }
-      setPosition(0)
       await engine.play()
       setAnalyser(engine.getAnalyser())
       setPlaying(true)
     },
-    [currentIndex, engine],
+    [engine],
   )
 
   useEffect(() => {
     engine.onEnded = () => {
-      void playIndex(currentIndex + 1)
+      void playIndex(currentIndexRef.current + 1)
     }
     return () => {
       engine.onEnded = null
     }
-  }, [engine, currentIndex, playIndex])
+  }, [engine, playIndex])
 
   // Poll the engine for playhead position while it renders audio.
   useEffect(() => {
@@ -195,13 +199,13 @@ export default function App() {
 
         <div className="player__center">
           <div className="player__buttons">
-            <button className="ctrl" aria-label="Previous" onClick={() => void playIndex(currentIndex - 1)}>
+            <button className="ctrl" aria-label="Previous" onClick={() => void playIndex(currentIndexRef.current - 1)}>
               ⏮
             </button>
             <button className="ctrl ctrl--primary" aria-label={playing ? 'Pause' : 'Play'} onClick={() => void togglePlay()}>
               {playing ? '❚❚' : '▶'}
             </button>
-            <button className="ctrl" aria-label="Next" onClick={() => void playIndex(currentIndex + 1)}>
+            <button className="ctrl" aria-label="Next" onClick={() => void playIndex(currentIndexRef.current + 1)}>
               ⏭
             </button>
           </div>
