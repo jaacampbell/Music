@@ -52,6 +52,9 @@ export const ERA_TAXONOMY = [
 ] as const;
 
 export const GENRE_SCENE_TAXONOMY = [
+  "pop",
+  "electronic",
+  "rap",
   "hip_hop",
   "trap",
   "boom_bap",
@@ -96,6 +99,7 @@ export const GENRE_SCENE_TAXONOMY = [
   "experimental",
   "noise",
   "jazz",
+  "classical",
   "film_score",
   "game_score"
 ] as const;

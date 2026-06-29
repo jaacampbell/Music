@@ -25,8 +25,7 @@ const buildQuery = (url: URL): ProducerDnaQuery => {
   const scope = scopeSchema.safeParse(url.searchParams.get("scope") ?? "all");
   const tiers = parseCsv(url.searchParams.get("tiers"))
     .map((tier) => tierSchema.safeParse(tier))
-    .filter((result): result is z.SafeParseSuccess<z.infer<typeof tierSchema>> => result.success)
-    .map((result) => result.data);
+    .flatMap((result) => (result.success ? [result.data] : []));
 
   return {
     q: url.searchParams.get("q") ?? undefined,
