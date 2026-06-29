@@ -79,10 +79,11 @@ export default function App() {
 
   const current = TRACKS[currentIndex]
 
+  // Load the initial track once. Subsequent track changes are handled
+  // imperatively in `playIndex` to avoid racing with playback start.
   useEffect(() => {
-    engine.load(current)
-    setPosition(0)
-  }, [engine, current])
+    engine.load(TRACKS[0])
+  }, [engine])
 
   const playIndex = useCallback(
     async (index: number) => {
@@ -91,6 +92,7 @@ export default function App() {
         setCurrentIndex(next)
         engine.load(TRACKS[next])
       }
+      setPosition(0)
       await engine.play()
       setAnalyser(engine.getAnalyser())
       setPlaying(true)
