@@ -54,24 +54,25 @@ function Visualizer({ analyser, playing }: { analyser: AnalyserNode | null; play
       const { width, height } = canvas
       ctx.clearRect(0, 0, width, height)
 
-      // Only sample while playing; when paused the last frame is kept (frozen).
-      if (analyserNode && data && playingRef.current) analyserNode.getByteFrequencyData(data)
+      const isPlaying = playingRef.current
+      if (analyserNode && data && isPlaying) analyserNode.getByteFrequencyData(data)
 
       const bars = data ? data.length : 32
       const gap = 2
       const barWidth = (width - gap * (bars - 1)) / bars
       for (let i = 0; i < bars; i++) {
-        const v = data ? data[i] / 255 : 0
-        // Keep a small baseline so the visualizer is always visible (idle/paused).
-        const h = Math.max(3, v * height)
+        const v = isPlaying && data ? data[i] / 255 : 0
+        // When idle/paused show a gentle static baseline so it never looks empty.
+        const idle = 6 + 9 * Math.abs(Math.sin(i * 0.5))
+        const h = isPlaying ? Math.max(3, v * height) : idle
         const x = i * (barWidth + gap)
-        if (v > 0.01) {
+        if (isPlaying && v > 0.01) {
           const grad = ctx.createLinearGradient(0, height, 0, height - h)
           grad.addColorStop(0, '#6d5dfc')
           grad.addColorStop(1, '#42c6ff')
           ctx.fillStyle = grad
         } else {
-          ctx.fillStyle = 'rgba(109, 93, 252, 0.25)'
+          ctx.fillStyle = 'rgba(109, 93, 252, 0.35)'
         }
         ctx.fillRect(x, height - h, barWidth, h)
       }
