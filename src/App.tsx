@@ -62,8 +62,8 @@ function Visualizer({ analyser, playing }: { analyser: AnalyserNode | null; play
       const barWidth = (width - gap * (bars - 1)) / bars
       for (let i = 0; i < bars; i++) {
         const v = isPlaying && data ? data[i] / 255 : 0
-        // When idle/paused show a gentle static baseline so it never looks empty.
-        const idle = 6 + 9 * Math.abs(Math.sin(i * 0.5))
+        // When idle/paused show a clear static baseline so it never looks empty.
+        const idle = 10 + 18 * Math.abs(Math.sin(i * 0.5))
         const h = isPlaying ? Math.max(3, v * height) : idle
         const x = i * (barWidth + gap)
         if (isPlaying && v > 0.01) {
@@ -72,7 +72,10 @@ function Visualizer({ analyser, playing }: { analyser: AnalyserNode | null; play
           grad.addColorStop(1, '#42c6ff')
           ctx.fillStyle = grad
         } else {
-          ctx.fillStyle = 'rgba(109, 93, 252, 0.35)'
+          const grad = ctx.createLinearGradient(0, height, 0, height - h)
+          grad.addColorStop(0, 'rgba(109, 93, 252, 0.85)')
+          grad.addColorStop(1, 'rgba(66, 198, 255, 0.65)')
+          ctx.fillStyle = grad
         }
         ctx.fillRect(x, height - h, barWidth, h)
       }
