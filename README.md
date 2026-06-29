@@ -1,36 +1,52 @@
 # Music
 
-A tiny, self-contained music player built with **Vite + React + TypeScript**. It
-ships no audio files — every "track" is composed programmatically and rendered in
-the browser with the **Web Audio API**, complete with a live frequency
-visualizer.
+This repository now includes a production blueprint for a **universal Agentic Beat Lab OS** (AI Producer + A&R + Mix Engineer loop), including:
 
-## Features
+- Song DNA and beat strategy decomposition
+- Parallel generation and stem-first selection
+- Audio analysis + A&R scoring loop
+- Revision prompting and iterative quality improvement
+- DAW/export-oriented output planning
+- Parallel multi-agent implementation plan (including UI squad)
+- Prompt caching and token-saver policy for lower inference cost
 
-- Synth-powered playback (oscillators + envelopes) with play/pause, next/prev,
-  seek, and volume.
-- Four built-in generated tracks with distinct tempos and moods.
-- Real-time frequency-bar visualizer driven by an `AnalyserNode`.
-- Auto-advance to the next track when the current one ends.
+## Documents
 
-## Getting started
+- [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
+
+## Built MVP (interface + APIs)
+
+This repository now contains a runnable **Agentic Beat Lab OS command center** built with Next.js:
+
+- 10-tab interface:
+  - Song Brief
+  - Song DNA
+  - Prompt Pack
+  - Generations
+  - Stem Library
+  - Beat Breakdown
+  - Scorecards
+  - Mix Notes
+  - Revision Loop
+  - Final Export
+- API routes for:
+  - project creation/listing
+  - stem extraction jobs (2/4/6/10 modes)
+  - music analysis jobs
+  - export jobs (WAV ZIP, REAPER, Ableton-style, Logic-style)
+  - natural-language agent loop execution (single or multitask batch)
+  - prompt cache statistics
+- Prompt caching + token saver policy implemented in code:
+  - stable template keying
+  - hash-based context blocks
+  - revision-delta context
+  - cache hit/token savings telemetry
+
+## Run locally
 
 ```bash
 npm install
-npm run dev      # start the dev server at http://localhost:5173
+npm run dev
 ```
 
-## Scripts
-
-| Command           | Description                                  |
-| ----------------- | -------------------------------------------- |
-| `npm run dev`     | Start the Vite dev server (development mode) |
-| `npm run build`   | Type-check (`tsc -b`) and build for prod     |
-| `npm run preview` | Preview the production build locally         |
-| `npm run lint`    | Lint the codebase with oxlint                |
-
-## Project structure
-
-- `src/tracks.ts` — track definitions and the procedural music composer.
-- `src/synth.ts` — `SynthEngine`: a Web Audio scheduler (play/pause/seek/volume).
-- `src/App.tsx` — player UI, playlist, and the canvas visualizer.
+Open [http://localhost:3000](http://localhost:3000).
