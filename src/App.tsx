@@ -28,6 +28,12 @@ function Artwork({ track, size }: { track: Track; size: number }) {
 
 function Visualizer({ analyser, playing }: { analyser: AnalyserNode | null; playing: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  // Read latest props inside the persistent rAF loop without restarting it,
+  // so the frequency buffer survives play/pause and the last frame stays frozen.
+  const analyserRef = useRef(analyser)
+  const playingRef = useRef(playing)
+  analyserRef.current = analyser
+  playingRef.current = playing
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -36,17 +42,22 @@ function Visualizer({ analyser, playing }: { analyser: AnalyserNode | null; play
     if (!ctx) return
 
     let raf = 0
-    const data = analyser ? new Uint8Array(analyser.frequencyBinCount) : null
-    const bars = data ? data.length : 32
+    let data: Uint8Array<ArrayBuffer> | null = null
 
     const draw = () => {
       raf = requestAnimationFrame(draw)
+      const analyserNode = analyserRef.current
+      if (analyserNode && (!data || data.length !== analyserNode.frequencyBinCount)) {
+        data = new Uint8Array(analyserNode.frequencyBinCount)
+      }
+
       const { width, height } = canvas
       ctx.clearRect(0, 0, width, height)
 
       // Only sample while playing; when paused the last frame is kept (frozen).
-      if (analyser && data && playing) analyser.getByteFrequencyData(data)
+      if (analyserNode && data && playingRef.current) analyserNode.getByteFrequencyData(data)
 
+      const bars = data ? data.length : 32
       const gap = 2
       const barWidth = (width - gap * (bars - 1)) / bars
       for (let i = 0; i < bars; i++) {
@@ -67,7 +78,7 @@ function Visualizer({ analyser, playing }: { analyser: AnalyserNode | null; play
     }
     draw()
     return () => cancelAnimationFrame(raf)
-  }, [analyser, playing])
+  }, [])
 
   return <canvas ref={canvasRef} className="visualizer" width={520} height={96} />
 }
