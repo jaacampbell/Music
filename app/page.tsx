@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import type { Project } from "@/lib/types";
+import type { Project, ProducerCapsule, ProducerTaxonomy } from "@/lib/types";
 
 const TABS = [
   "Song Brief",
@@ -14,8 +14,17 @@ const TABS = [
   "Scorecards",
   "Mix Notes",
   "Revision Loop",
-  "Final Export"
+  "Final Export",
+  "Producer DNA"
 ] as const;
+
+const selectStyle: React.CSSProperties = {
+  borderRadius: 8,
+  border: "1px solid var(--line)",
+  background: "#0f1220",
+  color: "var(--text)",
+  padding: "0.45rem"
+};
 
 type TabName = (typeof TABS)[number];
 
@@ -52,6 +61,20 @@ export default function HomePage(): React.JSX.Element {
   const [cacheEntries, setCacheEntries] = useState(0);
   const [busy, setBusy] = useState(false);
 
+  const [producers, setProducers] = useState<ProducerCapsule[]>([]);
+  const [producerTaxonomy, setProducerTaxonomy] = useState<ProducerTaxonomy | null>(null);
+  const [producerQuery, setProducerQuery] = useState("");
+  const [eraFilter, setEraFilter] = useState("");
+  const [genreFilter, setGenreFilter] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
+  const [confidenceFilter, setConfidenceFilter] = useState("");
+  const [selectedProducer, setSelectedProducer] = useState<ProducerCapsule | null>(null);
+  const [promptExport, setPromptExport] = useState<{
+    prompts: string[];
+    originalityWarnings: string[];
+    confidenceNote: string;
+  } | null>(null);
+
   const selectedProject = useMemo(
     () => projects.find((project) => project.id === activeProjectId) ?? null,
     [projects, activeProjectId]
@@ -70,9 +93,55 @@ export default function HomePage(): React.JSX.Element {
     setCacheEntries(data.cache.entries);
   };
 
+  const loadProducers = async (): Promise<void> => {
+    const params = new URLSearchParams();
+    if (producerQuery.trim()) params.set("query", producerQuery.trim());
+    if (eraFilter) params.set("era", eraFilter);
+    if (genreFilter) params.set("genre", genreFilter);
+    if (roleFilter) params.set("role", roleFilter);
+    if (confidenceFilter) params.set("confidence", confidenceFilter);
+    const data = await api<{
+      producers: ProducerCapsule[];
+      total: number;
+      taxonomy: ProducerTaxonomy;
+    }>(`/api/producers?${params.toString()}`);
+    setProducers(data.producers);
+    setProducerTaxonomy(data.taxonomy);
+  };
+
+  const selectProducer = async (producerId: string): Promise<void> => {
+    setPromptExport(null);
+    try {
+      const data = await api<{ producer: ProducerCapsule }>(`/api/producers/${producerId}`);
+      setSelectedProducer(data.producer);
+    } catch (error) {
+      setStatusText(error instanceof Error ? error.message : "Unable to load producer");
+    }
+  };
+
+  const generateProducerPrompt = async (): Promise<void> => {
+    if (!selectedProducer) return;
+    try {
+      const data = await api<{
+        result: { prompts: string[]; originalityWarnings: string[]; confidenceNote: string };
+      }>(`/api/producers/${selectedProducer.id}/prompt-export`, {
+        method: "POST",
+        body: JSON.stringify({})
+      });
+      setPromptExport(data.result);
+      setStatusText(`Prompt export generated for ${selectedProducer.name}.`);
+    } catch (error) {
+      setStatusText(error instanceof Error ? error.message : "Prompt export failed");
+    }
+  };
+
   useEffect(() => {
-    void Promise.all([loadProjects(), loadCacheStats()]);
+    void Promise.all([loadProjects(), loadCacheStats(), loadProducers()]);
   }, []);
+
+  useEffect(() => {
+    void loadProducers();
+  }, [producerQuery, eraFilter, genreFilter, roleFilter, confidenceFilter]);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -199,7 +268,258 @@ export default function HomePage(): React.JSX.Element {
     });
   };
 
+  const eraLabel = (slug: string): string =>
+    producerTaxonomy?.eras.find((era) => era.slug === slug)?.label ?? slug;
+  const genreLabel = (slug: string): string =>
+    producerTaxonomy?.genres.find((genre) => genre.slug === slug)?.label ?? slug;
+  const roleLabel = (slug: string): string =>
+    producerTaxonomy?.roles.find((role) => role.slug === slug)?.label ?? slug;
+  const dimensionLabel = (slug: string): string =>
+    producerTaxonomy?.scoringDimensions.find((dim) => dim.slug === slug)?.label ?? slug;
+
+  const renderProducerDetail = (producer: ProducerCapsule): React.JSX.Element => {
+    const scoreEntries = Object.entries(producer.scores);
+    return (
+      <div className="grid" style={{ gridTemplateColumns: "1fr" }}>
+        <div className="card">
+          <button className="tab-item" style={{ width: "auto" }} onClick={() => setSelectedProducer(null)}>
+            ← Back to list
+          </button>
+          <h3 style={{ marginTop: "0.6rem" }}>
+            {producer.name} <span className="meta">({producer.id})</span>
+          </h3>
+          <p className="meta">
+            {producer.realName ? `${producer.realName} · ` : ""}
+            {producer.region} · {eraLabel(producer.era)}
+          </p>
+          <div>
+            <span className="pill">Analysis tier: {producer.analysisConfidence}</span>
+            <span className="pill">Facts: {producer.factStatus}</span>
+          </div>
+          <div style={{ marginTop: "0.5rem" }}>
+            {producer.genres.map((slug) => (
+              <span className="pill" key={`g-${slug}`}>
+                {genreLabel(slug)}
+              </span>
+            ))}
+          </div>
+          <div>
+            {producer.roles.map((slug) => (
+              <span className="pill" key={`r-${slug}`}>
+                {roleLabel(slug)}
+              </span>
+            ))}
+          </div>
+          <p style={{ marginBottom: 0 }}>
+            <strong>Core DNA angle (D-tier):</strong> {producer.coreDnaAngle}
+          </p>
+        </div>
+
+        {producer.profile ? (
+          <div className="card">
+            <h3>Analytical DNA Layer</h3>
+            <div className="mono">
+              {`Signature: ${producer.profile.signatureSummary}\n\n`}
+              {`Artistic DNA: ${producer.profile.artisticDna}\n\n`}
+              {`Technical DNA: ${producer.profile.technicalDna}\n\n`}
+              {`Sonic DNA: ${producer.profile.sonicDna}\n\n`}
+              {`Rhythmic DNA: ${producer.profile.rhythmicDna}\n\n`}
+              {`Melodic/Harmonic DNA: ${producer.profile.melodicHarmonicDna}\n\n`}
+              {`Arrangement DNA: ${producer.profile.arrangementDna}\n\n`}
+              {`Mixing DNA: ${producer.profile.mixingDna}\n\n`}
+              {`Sampling DNA: ${producer.profile.samplingDna}`}
+            </div>
+          </div>
+        ) : (
+          <div className="card">
+            <h3>Analytical DNA Layer</h3>
+            <p className="meta">
+              Full DNA profile not yet expanded. This capsule holds the audible core DNA angle
+              (D-tier); verified facts still need citation before this entry is promoted.
+            </p>
+          </div>
+        )}
+
+        {producer.profile ? (
+          <div className="card">
+            <h3>Style nuance map</h3>
+            <ul className="list">
+              <li>Casual listeners: {producer.profile.styleNuanceMap.casualListeners}</li>
+              <li>Producers: {producer.profile.styleNuanceMap.producers}</li>
+              <li>Engineers: {producer.profile.styleNuanceMap.engineers}</li>
+              <li>Artists: {producer.profile.styleNuanceMap.artists}</li>
+              <li>DJs: {producer.profile.styleNuanceMap.djs}</li>
+              <li>Beginners misunderstand: {producer.profile.styleNuanceMap.beginnersMisunderstand}</li>
+            </ul>
+          </div>
+        ) : null}
+
+        {producer.profile ? (
+          <div className="card">
+            <h3>Creative Direction Layer</h3>
+            <p>
+              <strong>Inspired direction:</strong> {producer.profile.inspiredDirection}
+            </p>
+            <p>
+              <strong>Originality twist:</strong> {producer.profile.originalityTwist}
+            </p>
+            <strong>Fusion paths</strong>
+            <ul className="list">
+              {producer.profile.fusionPaths.map((path) => (
+                <li key={path}>{path}</li>
+              ))}
+            </ul>
+            <strong>Originality warnings (do-not-copy)</strong>
+            <ul className="list">
+              {producer.profile.originalityWarnings.map((warning) => (
+                <li key={warning}>{warning}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {scoreEntries.length > 0 ? (
+          <div className="card">
+            <h3>DNA scoring (1–10, not a popularity ranking)</h3>
+            <div className="grid">
+              {scoreEntries.map(([dimension, value]) => (
+                <div className="meta" key={dimension}>
+                  {dimensionLabel(dimension)}: <strong>{value}</strong>/10
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        <div className="card">
+          <h3>Prompt exports</h3>
+          <button className="tab-item" style={{ width: "auto" }} onClick={() => void generateProducerPrompt()}>
+            Generate reference-safe prompts
+          </button>
+          {promptExport ? (
+            <div style={{ marginTop: "0.6rem" }}>
+              <ul className="list">
+                {promptExport.prompts.map((prompt) => (
+                  <li key={prompt}>{prompt}</li>
+                ))}
+              </ul>
+              <strong>Originality warnings</strong>
+              <ul className="list">
+                {promptExport.originalityWarnings.map((warning) => (
+                  <li key={warning}>{warning}</li>
+                ))}
+              </ul>
+              <p className="meta">{promptExport.confidenceNote}</p>
+            </div>
+          ) : (
+            <p className="meta">
+              Generates ethical type-beat translation prompts with do-not-copy safeguards.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderProducerDna = (): React.JSX.Element => {
+    if (selectedProducer) {
+      return renderProducerDetail(selectedProducer);
+    }
+    return (
+      <div className="grid" style={{ gridTemplateColumns: "1fr" }}>
+        <div className="card">
+          <h3>Producer DNA Research base</h3>
+          <p className="meta">
+            Verified facts and audible/creative analysis as searchable, confidence-labeled fields.
+            Showing {producers.length} of Batch 001.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
+            <input
+              value={producerQuery}
+              onChange={(event) => setProducerQuery(event.target.value)}
+              placeholder="Search name, region, scene, DNA angle..."
+              style={selectStyle}
+            />
+            <select value={eraFilter} onChange={(e) => setEraFilter(e.target.value)} style={selectStyle}>
+              <option value="">All eras</option>
+              {producerTaxonomy?.eras.map((era) => (
+                <option key={era.slug} value={era.slug}>
+                  {era.label}
+                </option>
+              ))}
+            </select>
+            <select value={genreFilter} onChange={(e) => setGenreFilter(e.target.value)} style={selectStyle}>
+              <option value="">All genres/scenes</option>
+              {producerTaxonomy?.genres.map((genre) => (
+                <option key={genre.slug} value={genre.slug}>
+                  {genre.label}
+                </option>
+              ))}
+            </select>
+            <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} style={selectStyle}>
+              <option value="">All roles</option>
+              {producerTaxonomy?.roles.map((role) => (
+                <option key={role.slug} value={role.slug}>
+                  {role.label}
+                </option>
+              ))}
+            </select>
+            <select
+              value={confidenceFilter}
+              onChange={(e) => setConfidenceFilter(e.target.value)}
+              style={selectStyle}
+            >
+              <option value="">All confidence tiers</option>
+              {producerTaxonomy?.confidenceTiers.map((tier) => (
+                <option key={tier.tier} value={tier.tier}>
+                  {tier.tier} — {tier.meaning.slice(0, 40)}…
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        {producers.length === 0 ? (
+          <div className="card">
+            <h3>No matches</h3>
+            <p className="meta">Adjust the search or filters to see Batch 001 producers.</p>
+          </div>
+        ) : (
+          <div className="grid">
+            {producers.map((producer) => (
+              <button
+                key={producer.id}
+                className="card"
+                style={{ textAlign: "left", cursor: "pointer" }}
+                onClick={() => void selectProducer(producer.id)}
+              >
+                <h3>
+                  {producer.name} {producer.profile ? "★" : ""}
+                </h3>
+                <p className="meta">
+                  {producer.id} · {producer.region} · {eraLabel(producer.era)}
+                </p>
+                <div className="mono">{producer.coreDnaAngle}</div>
+                <div style={{ marginTop: "0.4rem" }}>
+                  <span className="pill">{producer.analysisConfidence}-tier</span>
+                  {producer.genres.slice(0, 3).map((slug) => (
+                    <span className="pill" key={`${producer.id}-${slug}`}>
+                      {genreLabel(slug)}
+                    </span>
+                  ))}
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderMainContent = (): React.JSX.Element => {
+    if (activeTab === "Producer DNA") {
+      return renderProducerDna();
+    }
+
     if (!selectedProject) {
       return (
         <div className="card">
