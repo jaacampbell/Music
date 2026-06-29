@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import ProducerDnaPanel from "@/app/components/ProducerDnaPanel";
 import type { Project } from "@/lib/types";
 
 const TABS = [
@@ -14,7 +15,8 @@ const TABS = [
   "Scorecards",
   "Mix Notes",
   "Revision Loop",
-  "Final Export"
+  "Final Export",
+  "Producer DNA"
 ] as const;
 
 type TabName = (typeof TABS)[number];
@@ -200,6 +202,10 @@ export default function HomePage(): React.JSX.Element {
   };
 
   const renderMainContent = (): React.JSX.Element => {
+    if (activeTab === "Producer DNA") {
+      return <ProducerDnaPanel />;
+    }
+
     if (!selectedProject) {
       return (
         <div className="card">
