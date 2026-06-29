@@ -1,0 +1,49 @@
+roles:
+  - code: beatmaker
+    label: "Beatmaker"
+    tier: sole_creator
+  - code: producer_auteur
+    label: "Producer-Auteur"
+    tier: sole_creator
+  - code: studio_producer
+    label: "Studio Producer"
+    tier: collaborator
+  - code: engineer_producer
+    label: "Engineer-Producer"
+    tier: technical
+  - code: dj_producer
+    label: "DJ-Producer"
+    tier: sole_creator
+  - code: composer_producer
+    label: "Composer-Producer"
+    tier: sole_creator
+  - code: arranger
+    label: "Arranger"
+    tier: collaborator
+  - code: remixer
+    label: "Remixer"
+    tier: collaborator
+  - code: sound_designer
+    label: "Sound Designer"
+    tier: technical
+  - code: executive_producer
+    label: "Executive Producer"
+    tier: executive
+  - code: label_architect
+    label: "Label Architect"
+    tier: executive
+  - code: sampling_architect
+    label: "Sampling Architect"
+    tier: sole_creator
+  - code: vocal_producer
+    label: "Vocal Producer"
+    tier: collaborator
+  - code: mix_engineer_producer
+    label: "Mix Engineer as Producer"
+    tier: technical
+  - code: band_member_producer
+    label: "Band Member as Producer"
+    tier: collaborator
+  - code: production_collective
+    label: "Production Collective"
+    tier: sole_creator

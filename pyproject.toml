@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "producer-dna"
+version = "0.1.0"
+description = "Producer DNA Research OS — a music producer knowledge database"
+requires-python = ">=3.11"
+dependencies = [
+    "sqlalchemy>=2.0",
+    "alembic>=1.13",
+    "psycopg2-binary>=2.9",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "click>=8.1",
+    "rich>=13.0",
+    "requests>=2.31",
+    "requests-cache>=1.1",
+    "tenacity>=8.2",
+    "musicbrainzngs>=0.7",
+    "discogs-client>=2.3",
+    "SPARQLWrapper>=2.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "vcrpy>=4.3",
+    "factory-boy>=3.3",
+    "mypy>=1.7",
+    "ruff>=0.1",
+]
+
+[project.scripts]
+pdna = "pdna.cli.main:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pdna*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=pdna --cov-report=term-missing -q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true

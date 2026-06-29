@@ -1,0 +1,140 @@
+# Canonical works stubs for Batch 001 producers
+# These are the most historically significant works per producer.
+# Full works lists come from MusicBrainz/Discogs ingestion.
+works:
+  - pdna_id: PDNA-000001
+    works:
+      - title: "Sgt. Pepper's Lonely Hearts Club Band"
+        work_type: album
+        release_year: 1967
+        artist: "The Beatles"
+        label: "Parlophone"
+        role: producer
+        confidence: A
+      - title: "Abbey Road"
+        work_type: album
+        release_year: 1969
+        artist: "The Beatles"
+        label: "Apple Records"
+        role: producer
+        confidence: A
+
+  - pdna_id: PDNA-000002
+    works:
+      - title: "Be My Baby"
+        work_type: track
+        release_year: 1963
+        artist: "The Ronettes"
+        label: "Philles Records"
+        role: producer
+        confidence: A
+      - title: "River Deep – Mountain High"
+        work_type: track
+        release_year: 1966
+        artist: "Ike & Tina Turner"
+        label: "Philles Records"
+        role: producer
+        confidence: A
+
+  - pdna_id: PDNA-000003
+    works:
+      - title: "Thriller"
+        work_type: album
+        release_year: 1982
+        artist: "Michael Jackson"
+        label: "Epic Records"
+        role: producer
+        confidence: A
+      - title: "Off the Wall"
+        work_type: album
+        release_year: 1979
+        artist: "Michael Jackson"
+        label: "Epic Records"
+        role: producer
+        confidence: A
+
+  - pdna_id: PDNA-000004
+    works:
+      - title: "Discreet Music"
+        work_type: album
+        release_year: 1975
+        artist: "Brian Eno"
+        label: "Obscure Records"
+        role: producer
+        confidence: A
+      - title: "The Unforgettable Fire"
+        work_type: album
+        release_year: 1984
+        artist: "U2"
+        label: "Island Records"
+        role: producer
+        confidence: A
+
+  - pdna_id: PDNA-000013
+    works:
+      - title: "Donuts"
+        work_type: album
+        release_year: 2006
+        artist: "J Dilla"
+        label: "Stones Throw Records"
+        role: producer
+        confidence: A
+      - title: "Runnin'"
+        work_type: track
+        release_year: 1995
+        artist: "The Pharcyde"
+        label: "Delicious Vinyl"
+        role: producer
+        confidence: A
+
+  - pdna_id: PDNA-000014
+    works:
+      - title: "Illmatic"
+        work_type: album
+        release_year: 1994
+        artist: "Nas"
+        label: "Columbia Records"
+        role: producer
+        confidence: A
+        notes: "Premier produced multiple tracks including NY State of Mind"
+      - title: "Moment of Truth"
+        work_type: album
+        release_year: 1998
+        artist: "Gang Starr"
+        label: "Noo Trybe Records"
+        role: producer
+        confidence: A
+
+  - pdna_id: PDNA-000031
+    works:
+      - title: "Selected Ambient Works 85-92"
+        work_type: album
+        release_year: 1992
+        artist: "Aphex Twin"
+        label: "Apollo Records"
+        role: producer
+        confidence: A
+      - title: "Richard D. James Album"
+        work_type: album
+        release_year: 1996
+        artist: "Aphex Twin"
+        label: "Warp Records"
+        role: producer
+        confidence: A
+
+  - pdna_id: PDNA-000032
+    works:
+      - title: "Homework"
+        work_type: album
+        release_year: 1997
+        artist: "Daft Punk"
+        label: "Virgin Records"
+        role: producer
+        confidence: A
+      - title: "Random Access Memories"
+        work_type: album
+        release_year: 2013
+        artist: "Daft Punk"
+        label: "Columbia Records"
+        role: producer
+        confidence: A

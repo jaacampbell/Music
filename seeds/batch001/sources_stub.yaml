@@ -1,0 +1,41 @@
+# Known primary sources for Batch 001 producers
+# source_type: liner_notes | interview | label_page | musicbrainz | discogs | wikidata | wikipedia | book
+sources:
+  - pdna_id: PDNA-000001
+    sources:
+      - source_type: book
+        claim_supported: "Produced all major Beatles recordings including Sgt Pepper and Abbey Road"
+        quote_summary: "George Martin's production credits are documented in official Beatles recording logs"
+        reliability: A
+        citation_status: verified
+      - source_type: musicbrainz
+        source_url: "https://musicbrainz.org/artist/69b39ee6-7b54-4e9e-b64d-3f32b388d4a2"
+        claim_supported: "MusicBrainz artist record with release and credit history"
+        reliability: C
+        citation_status: verified
+
+  - pdna_id: PDNA-000013
+    sources:
+      - source_type: book
+        claim_supported: "J Dilla produced Donuts entirely while hospitalized with TTP"
+        quote_summary: "Dan Charnas, Dilla Time (2022): confirmed studio sessions and production method"
+        reliability: A
+        citation_status: verified
+      - source_type: musicbrainz
+        source_url: "https://musicbrainz.org/artist/a462b164-3c64-4285-b4b8-c87a4c1ead6d"
+        claim_supported: "MusicBrainz artist record"
+        reliability: C
+        citation_status: verified
+
+  - pdna_id: PDNA-000031
+    sources:
+      - source_type: musicbrainz
+        source_url: "https://musicbrainz.org/artist/f22942a1-6f70-4263-91a6-2f29b7c6abe3"
+        claim_supported: "MusicBrainz artist record for Aphex Twin"
+        reliability: C
+        citation_status: verified
+      - source_type: interview
+        claim_supported: "Aphex Twin confirmed use of homemade synthesizers and algorithmic programming"
+        quote_summary: "FACT Magazine interview, 2014: confirms custom hardware use"
+        reliability: B
+        citation_status: verified
