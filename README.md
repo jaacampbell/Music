@@ -7,6 +7,8 @@ This repository now includes a production blueprint for a **universal Agentic Be
 - Audio analysis + A&R scoring loop
 - Revision prompting and iterative quality improvement
 - DAW/export-oriented output planning
+- Parallel multi-agent implementation plan (including UI squad)
+- Prompt caching and token-saver policy for lower inference cost
 
 ## Documents
 

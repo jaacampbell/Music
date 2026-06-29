@@ -147,6 +147,43 @@ Target concept:
 
 ---
 
+## Parallel build mode (including interface build)
+
+Yes: the agents should build the **interface** in parallel with backend/audio services.
+
+### Parallel squads
+
+| Squad | Scope | Primary output |
+|---|---|---|
+| Interface Squad | Build command center UI and state flows | Web app screens + interaction logic |
+| Orchestration Squad | Agent router, job graph, retries, run history | Agent workflow engine |
+| Audio Pipeline Squad | Ingest, decode, stem extraction, analysis | Processing services and workers |
+| Export/Interop Squad | ZIP packs, metadata, DAW-ready structures | Export modules + import docs |
+| Memory/RAG Squad | Retrieval, ranking, approved/rejected memory | Retrieval API + ranking policies |
+| Evaluation Squad | Scorecard, QA harness, regression checks | Automated and listening-test reports |
+
+### Interface squad backlog (must-have)
+
+1. Song Brief intake (prompt, references, constraints)
+2. Song DNA inspector and editable controls
+3. Prompt Pack editor with variant compare
+4. Generations grid with A/B/X listening
+5. Stem Library with solo/mute, gain, pan
+6. Beat Breakdown timeline with section markers
+7. Scorecards dashboard and winner selection
+8. Mix Notes panel with structured revision inputs
+9. Revision Loop console ("run next iteration")
+10. Final Export panel (DAW profiles + bundle download)
+
+### Parallel development rules
+
+- Each squad works on a focused branch/worktree, then merges via contracts.
+- Shared contracts are versioned first (API schemas, manifest schemas, event types).
+- Integration cadence: short merge windows after each contract-stable milestone.
+- No squad blocks UI progress; use mocks when downstream services are unavailable.
+
+---
+
 ## MVP stack
 
 - Frontend: React or Next.js dashboard
@@ -158,6 +195,48 @@ Target concept:
 - AI layer: LLM for prompt analysis, critique, revision writing
 - Music generation providers: any provider allowing audio export and stem workflows
 - Stem workflow: native generator stems when available; otherwise separation pipeline
+
+---
+
+## Prompt caching + token saver policy
+
+The system should aggressively reduce token waste while preserving quality.
+
+### Prompt cache strategy
+
+1. **Stable system prefix**: keep long base instructions fixed so cache hits are maximized.
+2. **Prompt template IDs**: reference reusable templates by ID, not repeated full text.
+3. **Context blocks by hash**: include immutable context via content hashes and references.
+4. **Revision delta prompts**: pass only changes since prior iteration, not full history.
+5. **Agent-local memory summaries**: store concise structured summaries after each run.
+
+### Token saver rules
+
+- Hard budget per agent call (input + output token caps).
+- Use tiered context:
+  - Tier 1: current task facts
+  - Tier 2: top-k retrieved approved/rejected examples
+  - Tier 3: compressed long-term memory summary
+- Prefer JSON fields over narrative paragraphs for internal agent-to-agent communication.
+- Truncate low-value logs and retain decision-critical fields only.
+- Cache embeddings and retrieval results by project + revision hash.
+- Reuse analysis artifacts (BPM/key/scorecards) unless source audio changes.
+
+### Caching checkpoints in the loop
+
+1. After Song DNA extraction
+2. After strategy map generation
+3. After each generation batch evaluation
+4. After scorecard + selected stem decision
+5. After revision prompt generation
+
+### Minimum telemetry for savings tracking
+
+- Cache hit rate by agent
+- Tokens saved by cache reuse
+- Average tokens per successful iteration
+- Cost per accepted revision
+- Latency impact of cache lookup vs regeneration
 
 ---
 
