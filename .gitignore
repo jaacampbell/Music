@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+.env
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# Node
+node_modules/
+dist/
+.eslintcache
+
+# Data (runtime)
+data/
+!data/.gitkeep
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Demucs model cache (large)
+~/.cache/torch/hub/
+~/.cache/demucs/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid

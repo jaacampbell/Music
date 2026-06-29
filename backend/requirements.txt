@@ -1,0 +1,44 @@
+# Web framework
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+
+# Settings
+pydantic-settings==2.7.0
+pydantic==2.10.4
+
+# Job queue
+celery==5.4.0
+redis==5.2.1
+kombu==5.4.2
+
+# Audio I/O and conversion
+ffmpeg-python==0.2.0
+soundfile==0.12.1
+pydub==0.25.1
+numpy==1.26.4
+
+# Loudness measurement
+pyloudnorm==0.1.1
+
+# Musical analysis
+librosa==0.10.2.post1
+scipy==1.13.1
+
+# Stem separation
+demucs==4.0.1
+
+# Audio-to-MIDI (Phase 2 — installed but imported lazily)
+basic-pitch==0.4.0
+
+# Pitch and tempo editing (Phase 3)
+pyrubberband==0.3.0
+
+# HTTP client for tests
+httpx==0.28.1
+pytest==8.3.4
+pytest-asyncio==0.25.0
+
+# Utilities
+python-dotenv==1.0.1
+aiofiles==24.1.0
