@@ -13,6 +13,7 @@ This repository now includes a production blueprint for a **universal Agentic Be
 ## Documents
 
 - [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
+- [`docs/producer-dna-research-base.md`](docs/producer-dna-research-base.md): Three-layer Producer DNA architecture with confidence tiers, taxonomies, Batch 001 seed strategy, and searchable research API contracts.
 
 ## Built MVP (interface + APIs)
 
