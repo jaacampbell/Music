@@ -199,3 +199,263 @@ select {
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Producer DNA Research Base ─────────────────────────────── */
+
+.pdna-nav-link {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.pdna-nav-link:hover {
+  color: var(--accent);
+}
+
+.pdna-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.pdna-search-input {
+  flex: 1;
+  min-width: 180px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0f1220;
+  color: var(--text);
+  padding: 0.5rem 0.65rem;
+  font: inherit;
+}
+
+.pdna-filter-select {
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0f1220;
+  color: var(--text);
+  padding: 0.5rem 0.65rem;
+  font: inherit;
+  min-width: 130px;
+}
+
+.pdna-layout {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.pdna-list-panel {
+  padding: 0.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.pdna-list-item {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.65rem 0.7rem;
+  margin-bottom: 0.4rem;
+  cursor: pointer;
+  color: var(--text);
+  transition: border-color 0.12s;
+}
+
+.pdna-list-item:hover {
+  border-color: var(--accent);
+}
+
+.pdna-list-item.active {
+  background: rgba(107, 140, 255, 0.12);
+  border-color: var(--accent);
+}
+
+.pdna-list-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.pdna-list-meta {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.pdna-list-angle {
+  font-size: 0.78rem;
+  color: #c2cadf;
+  line-height: 1.35;
+}
+
+.pdna-detail-panel {
+  padding: 0;
+  min-height: 70vh;
+}
+
+.pdna-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.pdna-detail-body {
+  padding: 1rem;
+}
+
+.pdna-profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pdna-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.pdna-tier {
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: help;
+}
+
+.pdna-era-pill {
+  border-color: #4a5a80;
+  color: #8ca0cc;
+}
+
+.pdna-role-pill {
+  border-color: #3a5a40;
+  color: #7aca80;
+}
+
+.pdna-core-angle {
+  font-style: italic;
+  font-size: 1.02rem;
+  color: #d0d8f0;
+  border-left: 3px solid var(--accent);
+  padding-left: 0.75rem;
+  margin: 0;
+}
+
+.pdna-scores-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.pdna-score-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pdna-score-label {
+  width: 160px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.pdna-score-track {
+  flex: 1;
+  height: 8px;
+  background: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pdna-score-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.pdna-score-value {
+  width: 20px;
+  text-align: right;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pdna-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.pdna-table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 500;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.pdna-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid rgba(43, 48, 64, 0.5);
+  vertical-align: top;
+}
+
+.pdna-pending {
+  border-color: rgba(43, 48, 64, 0.8);
+}
+
+.pdna-warning-card {
+  border-color: rgba(220, 100, 80, 0.5);
+  background: rgba(220, 100, 80, 0.05);
+}
+
+.pdna-direction-text {
+  line-height: 1.65;
+  padding: 0.5rem 0.75rem;
+  background: rgba(107, 140, 255, 0.07);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+.pdna-prompt-box {
+  background: #0a0c15;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  color: #c2cadf;
+}
+
+@media (max-width: 960px) {
+  .pdna-layout {
+    grid-template-columns: 1fr;
+  }
+  .pdna-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .pdna-list-panel {
+    max-height: 40vh;
+  }
+}

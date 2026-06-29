@@ -385,7 +385,19 @@ export default function HomePage(): React.JSX.Element {
   return (
     <main className="page">
       <header className="header">
-        <h1>Agentic Beat Lab OS</h1>
+        <div style={{ display: "flex", alignItems: "baseline", gap: "1rem" }}>
+          <h1>Agentic Beat Lab OS</h1>
+          <a
+            href="/producer-dna"
+            style={{
+              fontSize: "0.88rem",
+              color: "var(--muted)",
+              textDecoration: "none"
+            }}
+          >
+            Producer DNA Base →
+          </a>
+        </div>
         <p>Parallel interface + agent workflow + token saver command center</p>
       </header>
       <section className="controls">
