@@ -1,0 +1,95 @@
+/** Master era taxonomy for Producer DNA Research. */
+export const ERA_TAXONOMY = [
+  "pre-tape studio era",
+  "tape/console era",
+  "wall of sound era",
+  "dub/soundsystem era",
+  "disco/electronic studio era",
+  "early hip-hop sampling era",
+  "MIDI/sampler era",
+  "DAW era",
+  "internet beatmaker era",
+  "streaming/social-platform era",
+  "AI-assisted production era"
+] as const;
+
+/** Master genre/scene taxonomy. */
+export const GENRE_SCENE_TAXONOMY = [
+  "hip-hop",
+  "trap",
+  "boom bap",
+  "G-funk",
+  "drill",
+  "grime",
+  "UK garage",
+  "dubstep",
+  "jungle",
+  "drum and bass",
+  "techno",
+  "house",
+  "footwork",
+  "ambient",
+  "IDM",
+  "synthpop",
+  "disco",
+  "funk",
+  "R&B",
+  "soul",
+  "gospel",
+  "rock",
+  "punk",
+  "metal",
+  "reggae",
+  "dub",
+  "dancehall",
+  "Afrobeats",
+  "amapiano",
+  "highlife",
+  "reggaeton",
+  "dembow",
+  "Latin pop",
+  "baile funk/funk carioca",
+  "cumbia",
+  "salsa",
+  "K-pop",
+  "J-pop",
+  "city pop",
+  "Bollywood/Indian film music",
+  "Arabic pop",
+  "experimental",
+  "noise",
+  "jazz",
+  "film score",
+  "game score",
+  "hyperpop",
+  "new wave",
+  "alternative rock",
+  "indie rock",
+  "electro",
+  "neo-soul",
+  "underground rap"
+] as const;
+
+/** Producer-role taxonomy. */
+export const PRODUCER_ROLE_TAXONOMY = [
+  "beatmaker",
+  "producer-auteur",
+  "studio producer",
+  "engineer-producer",
+  "DJ-producer",
+  "composer-producer",
+  "arranger",
+  "remixer",
+  "sound designer",
+  "executive producer",
+  "label architect",
+  "sampling architect",
+  "vocal producer",
+  "mix engineer as producer",
+  "band member as producer",
+  "production collective"
+] as const;
+
+export type EraTaxon = (typeof ERA_TAXONOMY)[number];
+export type GenreSceneTaxon = (typeof GENRE_SCENE_TAXONOMY)[number];
+export type ProducerRoleTaxon = (typeof PRODUCER_ROLE_TAXONOMY)[number];

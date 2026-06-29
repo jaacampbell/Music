@@ -1,4 +1,5 @@
 import { buildPromptWithCache } from "@/lib/prompt-cache";
+import { buildProducerDnaPromptContext } from "@/lib/producer-dna/agent-context";
 import { runAgentLoop, runAnalysis, runExport, runExtraction } from "@/lib/store";
 
 export interface AgentDecision {
@@ -70,16 +71,18 @@ export const executeAgentCommand = (
   tokensSaved: number;
 } => {
   const decision = decideAgentPlan(command);
+  const producerContext = buildProducerDnaPromptContext(command);
   const { prompt, telemetry } = buildPromptWithCache({
     templateId: "agentic-beat-lab-router-v1",
     systemPrefix:
       "You are the Agentic Beat Lab OS. Keep outputs structured, rights-safe, and iteration-focused.",
     tier1Facts: `Intent:${decision.intent}\nStemMode:${decision.stemMode}\nModel:${decision.modelProfile}`,
-    tier2Examples: [
+    tier2Examples: producerContext?.tier2Examples ?? [
       "Approved example: Version 2 drums + Version 1 atmosphere.",
       "Rejected pattern: crowded 2-4k range blocks vocal pocket."
     ],
     tier3Summary:
+      producerContext?.tier3Summary ??
       "Long-term memory: preserve originality, maintain stem alignment, and explain limitations clearly.",
     revisionDelta: command
   });

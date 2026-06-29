@@ -2,11 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { ProducerDnaResearchPanel } from "@/components/ProducerDnaResearchPanel";
 import type { Project } from "@/lib/types";
 
 const TABS = [
   "Song Brief",
   "Song DNA",
+  "Producer DNA",
   "Prompt Pack",
   "Generations",
   "Stem Library",
@@ -250,6 +252,8 @@ export default function HomePage(): React.JSX.Element {
             </div>
           </div>
         );
+      case "Producer DNA":
+        return <ProducerDnaResearchPanel />;
       case "Prompt Pack":
         return (
           <div className="card">
