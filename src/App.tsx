@@ -37,25 +37,30 @@ function Visualizer({ analyser, playing }: { analyser: AnalyserNode | null; play
 
     let raf = 0
     const data = analyser ? new Uint8Array(analyser.frequencyBinCount) : null
+    const bars = data ? data.length : 32
 
     const draw = () => {
       raf = requestAnimationFrame(draw)
       const { width, height } = canvas
       ctx.clearRect(0, 0, width, height)
 
-      if (!analyser || !data || !playing) return
-      analyser.getByteFrequencyData(data)
-      const bars = data.length
+      if (analyser && data && playing) analyser.getByteFrequencyData(data)
+
       const gap = 2
       const barWidth = (width - gap * (bars - 1)) / bars
       for (let i = 0; i < bars; i++) {
-        const v = data[i] / 255
-        const h = Math.max(2, v * height)
+        const v = playing && data ? data[i] / 255 : 0
+        // Keep a small baseline so the visualizer is always visible (idle or paused).
+        const h = Math.max(3, v * height)
         const x = i * (barWidth + gap)
-        const grad = ctx.createLinearGradient(0, height, 0, height - h)
-        grad.addColorStop(0, '#6d5dfc')
-        grad.addColorStop(1, '#42c6ff')
-        ctx.fillStyle = grad
+        if (v > 0.01) {
+          const grad = ctx.createLinearGradient(0, height, 0, height - h)
+          grad.addColorStop(0, '#6d5dfc')
+          grad.addColorStop(1, '#42c6ff')
+          ctx.fillStyle = grad
+        } else {
+          ctx.fillStyle = 'rgba(109, 93, 252, 0.25)'
+        }
         ctx.fillRect(x, height - h, barWidth, h)
       }
     }
