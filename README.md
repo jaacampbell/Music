@@ -34,7 +34,7 @@ This repository now contains a runnable **Agentic Beat Lab OS command center** b
   - stem extraction jobs (2/4/6/10 modes)
   - music analysis jobs
   - export jobs (WAV ZIP, REAPER, Ableton-style, Logic-style)
-  - natural-language agent loop execution
+  - natural-language agent loop execution (single or multitask batch)
   - prompt cache statistics
 - Prompt caching + token saver policy implemented in code:
   - stable template keying

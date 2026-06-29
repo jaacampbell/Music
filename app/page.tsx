@@ -121,6 +121,32 @@ export default function HomePage(): React.JSX.Element {
     });
   };
 
+  const runMultitask = async (): Promise<void> => {
+    if (!selectedProject) return;
+    const commands = commandInput
+      .split("\n")
+      .map((value) => value.trim())
+      .filter(Boolean);
+    if (commands.length === 0) {
+      setStatusText("Add one command per line to run multitask.");
+      return;
+    }
+    await withBusy(async () => {
+      const data = await api<{
+        result: { totalCommands: number; totalJobs: number; totalTokensSaved: number };
+      }>("/api/agent/multitask", {
+        method: "POST",
+        body: JSON.stringify({
+          projectId: selectedProject.id,
+          commands
+        })
+      });
+      setStatusText(
+        `Multitask finished: ${data.result.totalCommands} commands, ${data.result.totalJobs} jobs, ${data.result.totalTokensSaved} tokens saved.`
+      );
+    });
+  };
+
   const runExtraction = async (mode: 2 | 4 | 6 | 10): Promise<void> => {
     if (!selectedProject) return;
     await withBusy(async () => {
@@ -194,6 +220,7 @@ export default function HomePage(): React.JSX.Element {
             <div className="card">
               <h3>Agent command</h3>
               <p className="meta">{commandInput}</p>
+            <div className="meta">Tip: one command per line for Multitask.</div>
               <div className="meta">Prompt cache entries: {cacheEntries}</div>
             </div>
           </div>
@@ -400,6 +427,9 @@ export default function HomePage(): React.JSX.Element {
           </button>
           <button onClick={() => void runAgentLoop()} disabled={busy || !selectedProject}>
             Run Agent Loop
+          </button>
+          <button onClick={() => void runMultitask()} disabled={busy || !selectedProject}>
+            Multitask (Batch)
           </button>
           <button
             className="secondary"

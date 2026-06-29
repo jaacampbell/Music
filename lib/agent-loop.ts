@@ -109,3 +109,32 @@ export const executeAgentCommand = (
     tokensSaved: telemetry.tokensSaved
   };
 };
+
+export const executeMultiAgentCommands = (
+  projectId: string,
+  commands: string[]
+): {
+  totalCommands: number;
+  results: Array<{
+    command: string;
+    decision: AgentDecision;
+    jobIds: string[];
+    promptPreview: string;
+    cacheHit: boolean;
+    tokensSaved: number;
+  }>;
+  totalJobs: number;
+  totalTokensSaved: number;
+} => {
+  const cleanCommands = commands.map((value) => value.trim()).filter(Boolean);
+  const results = cleanCommands.map((command) => ({
+    command,
+    ...executeAgentCommand(projectId, command)
+  }));
+  return {
+    totalCommands: cleanCommands.length,
+    totalJobs: results.reduce((sum, item) => sum + item.jobIds.length, 0),
+    totalTokensSaved: results.reduce((sum, item) => sum + item.tokensSaved, 0),
+    results
+  };
+};
