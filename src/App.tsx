@@ -189,8 +189,14 @@ export default function App() {
                   <span className="track__artist">{track.artist}</span>
                 </span>
                 <span className="track__bpm">{track.bpm} BPM</span>
-                <span className="track__state">
-                  {isCurrent && playing ? '▶' : isCurrent ? '❚❚' : ''}
+                <span className="track__state" aria-hidden>
+                  {isCurrent && playing ? (
+                    <span className="eq">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                  ) : null}
                 </span>
               </button>
             )

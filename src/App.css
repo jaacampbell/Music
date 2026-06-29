@@ -119,7 +119,48 @@
 
 .track__state {
   width: 18px;
-  color: #6d5dfc;
+  display: flex;
+  justify-content: center;
+}
+
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.eq i {
+  width: 3px;
+  border-radius: 1px;
+  background: #6d5dfc;
+  transform-origin: bottom;
+  animation: eq 0.9s ease-in-out infinite;
+}
+
+.eq i:nth-child(1) {
+  height: 7px;
+  animation-delay: -0.2s;
+}
+
+.eq i:nth-child(2) {
+  height: 14px;
+  animation-delay: -0.45s;
+}
+
+.eq i:nth-child(3) {
+  height: 9px;
+  animation-delay: -0.1s;
+}
+
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 
 /* Stage */
