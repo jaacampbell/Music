@@ -3,6 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type { Project } from "@/lib/types";
+import type {
+  ConfidenceTierDefinition,
+  ProducerDnaBatch,
+  ProducerDnaCapsule,
+  ProducerDnaSourceOption,
+  ProducerDnaTableDefinition,
+  ResearchConfidenceTier
+} from "@/lib/producer-dna";
 
 const TABS = [
   "Song Brief",
@@ -12,12 +20,36 @@ const TABS = [
   "Stem Library",
   "Beat Breakdown",
   "Scorecards",
+  "Producer DNA",
   "Mix Notes",
   "Revision Loop",
   "Final Export"
 ] as const;
 
 type TabName = (typeof TABS)[number];
+
+type ProducerDnaResponse = {
+  architecture: {
+    sources: ProducerDnaSourceOption[];
+    tables: ProducerDnaTableDefinition[];
+    confidenceTiers: ConfidenceTierDefinition[];
+    taxonomy: {
+      eras: string[];
+      genreScenes: string[];
+      producerRoles: string[];
+    };
+    scoringRubric: string[];
+    operatingOrder: string[];
+  };
+  batch: ProducerDnaBatch;
+  exampleCapsule: ProducerDnaCapsule;
+  nextBatches: string[];
+  search: {
+    query: string;
+    confidenceTier: ResearchConfidenceTier | null;
+    resultCount: number;
+  };
+};
 
 const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
   const response = await fetch(url, {
@@ -50,6 +82,11 @@ export default function HomePage(): React.JSX.Element {
   const [exportPlanInput, setExportPlanInput] = useState("");
   const [statusText, setStatusText] = useState("Ready");
   const [cacheEntries, setCacheEntries] = useState(0);
+  const [producerDna, setProducerDna] = useState<ProducerDnaResponse | null>(null);
+  const [producerDnaQuery, setProducerDnaQuery] = useState("");
+  const [producerDnaConfidence, setProducerDnaConfidence] = useState<
+    ResearchConfidenceTier | ""
+  >("");
   const [busy, setBusy] = useState(false);
 
   const selectedProject = useMemo(
@@ -70,9 +107,26 @@ export default function HomePage(): React.JSX.Element {
     setCacheEntries(data.cache.entries);
   };
 
+  const loadProducerDna = async (): Promise<void> => {
+    const params = new URLSearchParams();
+    if (producerDnaQuery.trim()) {
+      params.set("query", producerDnaQuery.trim());
+    }
+    if (producerDnaConfidence) {
+      params.set("confidence", producerDnaConfidence);
+    }
+    const suffix = params.toString() ? `?${params.toString()}` : "";
+    const data = await api<ProducerDnaResponse>(`/api/producer-dna${suffix}`);
+    setProducerDna(data);
+  };
+
   useEffect(() => {
     void Promise.all([loadProjects(), loadCacheStats()]);
   }, []);
+
+  useEffect(() => {
+    void loadProducerDna();
+  }, [producerDnaQuery, producerDnaConfidence]);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -334,6 +388,141 @@ export default function HomePage(): React.JSX.Element {
                 </p>
               </div>
             ))}
+          </div>
+        );
+      case "Producer DNA":
+        if (!producerDna) {
+          return (
+            <div className="card">
+              <h3>Producer DNA Research Base</h3>
+              <p className="meta">Loading research architecture...</p>
+            </div>
+          );
+        }
+        return (
+          <div className="stack">
+            <div className="card">
+              <h3>Producer DNA Research Base</h3>
+              <p>
+                Three-layer research base: verified facts, audible/creative analysis, and
+                rights-safe creative direction are stored separately, then exposed as searchable
+                fields.
+              </p>
+              <div className="meta">
+                Batch {producerDna.batch.batchNumber}: {producerDna.search.resultCount} /{" "}
+                {producerDna.batch.producerCount} seed producers shown
+              </div>
+              <div className="filters">
+                <input
+                  value={producerDnaQuery}
+                  onChange={(event) => setProducerDnaQuery(event.target.value)}
+                  placeholder="Search producer, scene, role, or DNA trait"
+                />
+                <select
+                  value={producerDnaConfidence}
+                  onChange={(event) =>
+                    setProducerDnaConfidence(event.target.value as ResearchConfidenceTier | "")
+                  }
+                >
+                  <option value="">All confidence</option>
+                  {producerDna.architecture.confidenceTiers.map((item) => (
+                    <option key={item.tier} value={item.tier}>
+                      Tier {item.tier}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid">
+              {(["verified-metadata", "analytical-dna", "creative-direction"] as const).map(
+                (layer) => (
+                  <div className="card" key={layer}>
+                    <h3>{layer}</h3>
+                    <p className="meta">
+                      {producerDna.architecture.tables.filter((table) => table.layer === layer)
+                        .length}{" "}
+                      tables
+                    </p>
+                    <ul className="list">
+                      {producerDna.architecture.tables
+                        .filter((table) => table.layer === layer)
+                        .slice(0, 4)
+                        .map((table) => (
+                          <li key={table.tableName}>
+                            {table.tableName}: {table.searchableFields.slice(0, 4).join(", ")}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                )
+              )}
+            </div>
+
+            <div className="grid">
+              <div className="card">
+                <h3>Metadata source stack</h3>
+                <ul className="list">
+                  {producerDna.architecture.sources.map((source) => (
+                    <li key={source.id}>
+                      {source.name}: {source.role}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="card">
+                <h3>Confidence system</h3>
+                <ul className="list">
+                  {producerDna.architecture.confidenceTiers.map((item) => (
+                    <li key={item.tier}>
+                      Tier {item.tier}: {item.meaning}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="grid">
+              {producerDna.batch.seeds.map((producer) => (
+                <div className="card" key={producer.id}>
+                  <h3>
+                    {producer.id} - {producer.name}
+                  </h3>
+                  <p>{producer.coreDnaAngle}</p>
+                  <p className="meta">{producer.regionScene}</p>
+                  <div>
+                    <span className="pill">metadata {producer.metadataConfidence}</span>
+                    <span className="pill">analysis {producer.analysisConfidence}</span>
+                  </div>
+                  <div className="meta">{producer.taxonomyTags.join(" / ")}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid">
+              <div className="card">
+                <h3>Compressed capsule example: {producerDna.exampleCapsule.name}</h3>
+                <div className="mono">
+                  {[
+                    producerDna.exampleCapsule.signatureSoundSummary,
+                    producerDna.exampleCapsule.rhythmicDna,
+                    producerDna.exampleCapsule.typeBeatInspiredDirection,
+                    producerDna.exampleCapsule.researchConfidence
+                  ].join("\n\n")}
+                </div>
+              </div>
+              <div className="card">
+                <h3>Operating order</h3>
+                <ol className="list">
+                  {producerDna.architecture.operatingOrder.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ol>
+                <div className="meta">
+                  Scoring fields: {producerDna.architecture.scoringRubric.join(", ")}
+                </div>
+              </div>
+            </div>
           </div>
         );
       case "Mix Notes":

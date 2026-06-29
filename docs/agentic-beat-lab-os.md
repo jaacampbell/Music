@@ -141,9 +141,10 @@ Target concept:
 5. Stem Library
 6. Beat Breakdown
 7. Scorecards
-8. Mix Notes
-9. Revision Loop
-10. Final Export
+8. Producer DNA
+9. Mix Notes
+10. Revision Loop
+11. Final Export
 
 ---
 
@@ -237,6 +238,59 @@ The system should aggressively reduce token waste while preserving quality.
 - Average tokens per successful iteration
 - Cost per accepted revision
 - Latency impact of cache lookup vs regeneration
+
+---
+
+## Producer DNA Research base
+
+Producer DNA is a research base, not a fame list. It separates verified facts from
+audible and creative analysis, then turns both into searchable fields for original
+music direction.
+
+### Layer model
+
+1. Verified Metadata Layer: producers, aliases, works, credits, sources,
+   gear claims, collaborator edges, and influence edges.
+2. Analytical DNA Layer: producer profiles, sonic DNA, rhythmic DNA,
+   melodic/harmonic DNA, arrangement DNA, mixing DNA, sampling DNA, and
+   style nuance maps.
+3. Creative Direction Layer: inspired directions, creative iterations,
+   originality warnings, fusion paths, and prompt exports.
+
+### Confidence tiers
+
+| Tier | Meaning |
+|---|---|
+| A | Primary source, liner note, official credit, interview, label, publisher, or direct archive |
+| B | Multiple credible secondary sources |
+| C | Open database listing that still needs independent verification |
+| D | Audible or musicological analysis |
+| E | Educated hypothesis requiring review |
+| Unknown | Not enough reliable information |
+
+### Metadata source strategy
+
+- MusicBrainz: relational catalogue backbone for artists, releases, recordings,
+  works, labels, relationships, genres, instruments, and snapshots.
+- Discogs: release-level credits, roles, versions, labels, and track metadata.
+- Wikidata: linked-entity layer for producer relationships, not final authority.
+- WhoSampled: sample, remix, interpolation, and cover relationships when terms
+  permit ingestion.
+- FMA: hierarchical genre taxonomy and audio-feature reference.
+
+### Batch 001
+
+Batch 001 contains 50 global foundation producers across pop, hip-hop,
+electronic, dub, R&B, rock, film/game, Latin, Afrobeats, experimental, and
+regional club music. Selection is based on historical importance, technical
+influence, recognizable production identity, cross-genre usefulness, cultural
+impact, region/scene diversity, and future database value.
+
+### Full-profile operating order
+
+metadata first -> source verification -> key works -> listening analysis -> DNA
+summary -> type-beat translation -> originality warnings -> iteration matrix ->
+scoring -> open questions.
 
 ---
 

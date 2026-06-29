@@ -18,7 +18,7 @@ This repository now includes a production blueprint for a **universal Agentic Be
 
 This repository now contains a runnable **Agentic Beat Lab OS command center** built with Next.js:
 
-- 10-tab interface:
+- 11-tab interface:
   - Song Brief
   - Song DNA
   - Prompt Pack
@@ -26,6 +26,7 @@ This repository now contains a runnable **Agentic Beat Lab OS command center** b
   - Stem Library
   - Beat Breakdown
   - Scorecards
+  - Producer DNA
   - Mix Notes
   - Revision Loop
   - Final Export
@@ -41,6 +42,10 @@ This repository now contains a runnable **Agentic Beat Lab OS command center** b
   - hash-based context blocks
   - revision-delta context
   - cache hit/token savings telemetry
+- Producer DNA Research base:
+  - verified metadata, analytical DNA, and creative direction layers
+  - confidence tiers for facts, catalogue claims, audible analysis, and hypotheses
+  - searchable Batch 001 seed producers and source architecture endpoint
 
 ## Run locally
 

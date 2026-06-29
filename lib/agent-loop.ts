@@ -71,16 +71,17 @@ export const executeAgentCommand = (
 } => {
   const decision = decideAgentPlan(command);
   const { prompt, telemetry } = buildPromptWithCache({
-    templateId: "agentic-beat-lab-router-v1",
+    templateId: "agentic-beat-lab-router-v2-producer-dna",
     systemPrefix:
-      "You are the Agentic Beat Lab OS. Keep outputs structured, rights-safe, and iteration-focused.",
+      "You are the Agentic Beat Lab OS. Use Producer DNA as a source-labeled research base: separate verified metadata from audible analysis, then translate influences into original, rights-safe creative direction.",
     tier1Facts: `Intent:${decision.intent}\nStemMode:${decision.stemMode}\nModel:${decision.modelProfile}`,
     tier2Examples: [
       "Approved example: Version 2 drums + Version 1 atmosphere.",
-      "Rejected pattern: crowded 2-4k range blocks vocal pocket."
+      "Rejected pattern: crowded 2-4k range blocks vocal pocket.",
+      "Producer DNA rule: never copy melodies, exact drum timing, vocal tags, chains, or recognizable samples."
     ],
     tier3Summary:
-      "Long-term memory: preserve originality, maintain stem alignment, and explain limitations clearly.",
+      "Long-term memory: confidence labels A-E/Unknown govern claims; D-tier analysis can guide sound language but not factual attribution.",
     revisionDelta: command
   });
 

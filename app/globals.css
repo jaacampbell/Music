@@ -143,6 +143,28 @@ select {
   gap: 0.85rem;
 }
 
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.filters input,
+.filters select {
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0f1220;
+  color: var(--text);
+  padding: 0.55rem 0.65rem;
+}
+
 .card {
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -196,6 +218,9 @@ select {
     grid-template-columns: 1fr;
   }
   .grid {
+    grid-template-columns: 1fr;
+  }
+  .filters {
     grid-template-columns: 1fr;
   }
 }
