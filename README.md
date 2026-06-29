@@ -13,12 +13,13 @@ This repository now includes a production blueprint for a **universal Agentic Be
 ## Documents
 
 - [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
+- [`docs/producer-dna-research-base.md`](docs/producer-dna-research-base.md): Three-layer Producer DNA Research Base (verified metadata, analytical DNA, creative direction), research-confidence tiering, scoring rubric, master taxonomy, API surface, and Batch 001+ seed roadmap.
 
 ## Built MVP (interface + APIs)
 
 This repository now contains a runnable **Agentic Beat Lab OS command center** built with Next.js:
 
-- 10-tab interface:
+- 11-tab interface:
   - Song Brief
   - Song DNA
   - Prompt Pack
@@ -29,6 +30,7 @@ This repository now contains a runnable **Agentic Beat Lab OS command center** b
   - Mix Notes
   - Revision Loop
   - Final Export
+  - Producer DNA (research base — 50 seeded Batch 001 producers across 3 layers)
 - API routes for:
   - project creation/listing
   - stem extraction jobs (2/4/6/10 modes)
@@ -36,6 +38,7 @@ This repository now contains a runnable **Agentic Beat Lab OS command center** b
   - export jobs (WAV ZIP, REAPER, Ableton-style, Logic-style)
   - natural-language agent loop execution (single or multitask batch)
   - prompt cache statistics
+  - Producer DNA research base (CRUD across producers, credits, sources, gear claims, score rubric, creative-direction artifacts, taxonomy, stats)
 - Prompt caching + token saver policy implemented in code:
   - stable template keying
   - hash-based context blocks
