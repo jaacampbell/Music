@@ -2,9 +2,16 @@
 
 ## Cursor Cloud specific instructions
 
-- This repository is currently a **placeholder**: the only tracked file is `README.md` (containing `# Music`). There is no application code, dependency manifest, lockfile, Dockerfile/devcontainer, or services yet.
-- Because there is no manifest, environment setup is intentionally a **no-op**. The startup update script is guarded and will only install dependencies once a manifest appears:
-  - Node: detects `package-lock.json` (npm), `pnpm-lock.yaml` (pnpm), `yarn.lock` (yarn), or a bare `package.json` (npm).
-  - Python: detects `requirements.txt` (pip) or `pyproject.toml` (pip editable install).
-- Toolchain available on the VM: Node `v22`, npm, pnpm, yarn (classic), Python `3.12`, pip. There is no `uv`.
-- Once real project scaffolding is added, update this section with the actual services, plus how to lint/test/build/run them (or point to README/`package.json` scripts/Makefile instead of duplicating).
+This repository is **Music** — a single-page music player front end built with **Vite + React + TypeScript**. There is no backend; track audio is synthesized live in the browser with the Web Audio API (`src/audio/useAudioEngine.ts`), so the app runs fully offline with no external audio files or API keys.
+
+### Commands (see `package.json` scripts)
+- `npm run dev` — start the Vite dev server (default `http://localhost:5173`).
+- `npm run build` — type-check (`tsc -b`) then production build to `dist/`.
+- `npm run preview` — serve the production build locally.
+- `npm run lint` — ESLint (flat config in `eslint.config.js`).
+
+### Non-obvious notes
+- ESLint is v10 with `eslint-plugin-react-hooks` v7. Use `reactHooks.configs.flat.recommended` (the legacy `recommended-latest` export still uses the array-of-strings `plugins` form that ESLint 10 rejects). The v7 hooks rules also forbid writing a ref's `.current` during render — sync refs inside `useEffect` instead.
+- The `AudioContext` is created lazily on the first play interaction (browser autoplay policy), so audio only starts after a user gesture.
+- Deployment targets Netlify (`netlify.toml`): build command `npm run build`, publish dir `dist`, with an SPA fallback redirect.
+- The startup update script is guarded and installs from `package-lock.json` via `npm ci`; no extra setup is required.
