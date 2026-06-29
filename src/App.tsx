@@ -44,13 +44,14 @@ function Visualizer({ analyser, playing }: { analyser: AnalyserNode | null; play
       const { width, height } = canvas
       ctx.clearRect(0, 0, width, height)
 
+      // Only sample while playing; when paused the last frame is kept (frozen).
       if (analyser && data && playing) analyser.getByteFrequencyData(data)
 
       const gap = 2
       const barWidth = (width - gap * (bars - 1)) / bars
       for (let i = 0; i < bars; i++) {
-        const v = playing && data ? data[i] / 255 : 0
-        // Keep a small baseline so the visualizer is always visible (idle or paused).
+        const v = data ? data[i] / 255 : 0
+        // Keep a small baseline so the visualizer is always visible (idle/paused).
         const h = Math.max(3, v * height)
         const x = i * (barWidth + gap)
         if (v > 0.01) {
