@@ -45,8 +45,46 @@ interface StoreStats {
   creativeClaims: number;
 }
 
-const api = async <T,>(url: string): Promise<T> => {
-  const response = await fetch(url);
+interface ParallelAgentTask {
+  id: string;
+  agentId: string;
+  step: string;
+  producerId?: string;
+  status: string;
+  message: string;
+  confidenceTier?: string;
+}
+
+interface ParallelWorkBatch {
+  id: string;
+  name: string;
+  status: string;
+  progress: number;
+  message: string;
+  concurrency: number;
+  tasks: ParallelAgentTask[];
+  result?: {
+    completedTasks: number;
+    failedTasks: number;
+    totalTokensSaved?: number;
+  };
+}
+
+interface ParallelStats {
+  totalBatches: number;
+  runningBatches: number;
+  completedTasks: number;
+  failedTasks: number;
+}
+
+const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
+  const response = await fetch(url, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {})
+    }
+  });
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     throw new Error(error.error ?? `Request failed (${response.status})`);
@@ -65,16 +103,27 @@ export function ProducerDnaPanel(): React.JSX.Element {
   const [searchLayer, setSearchLayer] = useState("all");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(true);
+  const [parallelBusy, setParallelBusy] = useState(false);
+  const [parallelConcurrency, setParallelConcurrency] = useState(5);
+  const [parallelBatchSize, setParallelBatchSize] = useState(5);
+  const [latestParallelBatch, setLatestParallelBatch] = useState<ParallelWorkBatch | null>(null);
+  const [parallelStats, setParallelStats] = useState<ParallelStats | null>(null);
+  const [parallelError, setParallelError] = useState<string | null>(null);
 
   const loadBase = async (): Promise<void> => {
-    const [dnaData, batchData] = await Promise.all([
+    const [dnaData, batchData, parallelData] = await Promise.all([
       api<{ producers: ProducerSummary[]; stats: StoreStats }>("/api/producer-dna"),
-      api<{ batches: BatchInfo[]; roadmapTarget: number }>("/api/producer-dna/batches")
+      api<{ batches: BatchInfo[]; roadmapTarget: number }>("/api/producer-dna/batches"),
+      api<{ batches: ParallelWorkBatch[]; stats: ParallelStats }>(
+        "/api/producer-dna/research/parallel"
+      ).catch(() => ({ batches: [], stats: null }))
     ]);
     setProducers(dnaData.producers);
     setStats(dnaData.stats);
     setBatches(batchData.batches);
     setRoadmapTarget(batchData.roadmapTarget);
+    if (parallelData.stats) setParallelStats(parallelData.stats);
+    if (parallelData.batches.length > 0) setLatestParallelBatch(parallelData.batches[0]);
     if (!selectedId && dnaData.producers.length > 0) {
       setSelectedId(dnaData.producers[0].id);
     }
@@ -93,6 +142,28 @@ export function ProducerDnaPanel(): React.JSX.Element {
       `/api/producer-dna/search?${params.toString()}`
     );
     setSearchResults(data.results);
+  };
+
+  const runParallelResearch = async (): Promise<void> => {
+    setParallelBusy(true);
+    setParallelError(null);
+    try {
+      const producerIds = producers.slice(0, parallelBatchSize).map((p) => p.id);
+      const data = await api<{ batch: ParallelWorkBatch }>("/api/producer-dna/research/parallel", {
+        method: "POST",
+        body: JSON.stringify({
+          producerIds,
+          concurrency: parallelConcurrency
+        })
+      });
+      setLatestParallelBatch(data.batch);
+      const statsData = await api<{ stats: ParallelStats }>("/api/producer-dna/research/parallel");
+      setParallelStats(statsData.stats);
+    } catch (error) {
+      setParallelError(error instanceof Error ? error.message : "Parallel research failed");
+    } finally {
+      setParallelBusy(false);
+    }
   };
 
   useEffect(() => {
@@ -173,6 +244,76 @@ export function ProducerDnaPanel(): React.JSX.Element {
           <p className="meta" style={{ marginTop: "0.5rem" }}>
             {searchResults.length} results
           </p>
+        )}
+      </div>
+
+      <div className="card">
+        <h3>Parallel agentic work</h3>
+        <p className="meta">
+          Run the 10-step profile pipeline across multiple producers in parallel. Each producer runs
+          steps sequentially (metadata → open questions); producers run concurrently.
+        </p>
+        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem", flexWrap: "wrap" }}>
+          <label className="meta">
+            Producers:{" "}
+            <input
+              type="number"
+              min={1}
+              max={50}
+              value={parallelBatchSize}
+              onChange={(e) => setParallelBatchSize(Number(e.target.value))}
+              style={{ width: "4rem" }}
+            />
+          </label>
+          <label className="meta">
+            Concurrency:{" "}
+            <input
+              type="number"
+              min={1}
+              max={10}
+              value={parallelConcurrency}
+              onChange={(e) => setParallelConcurrency(Number(e.target.value))}
+              style={{ width: "4rem" }}
+            />
+          </label>
+        </div>
+        <button onClick={() => void runParallelResearch()} disabled={parallelBusy}>
+          {parallelBusy ? "Running agents..." : "Run parallel research"}
+        </button>
+        {parallelError && (
+          <p className="meta" style={{ marginTop: "0.5rem", color: "#ff6b6b" }}>
+            {parallelError}
+          </p>
+        )}
+        {parallelStats && (
+          <p className="meta" style={{ marginTop: "0.5rem" }}>
+            {parallelStats.totalBatches} batches | {parallelStats.completedTasks} tasks completed |{" "}
+            {parallelStats.failedTasks} failed
+          </p>
+        )}
+        {latestParallelBatch && (
+          <div style={{ marginTop: "0.75rem" }}>
+            <p className="meta">
+              Latest: {latestParallelBatch.name} — {latestParallelBatch.progress}% (
+              {latestParallelBatch.status})
+            </p>
+            <p className="meta">{latestParallelBatch.message}</p>
+            {latestParallelBatch.result && (
+              <p className="meta">
+                {latestParallelBatch.result.completedTasks} completed |{" "}
+                {latestParallelBatch.result.failedTasks} failed |{" "}
+                {latestParallelBatch.result.totalTokensSaved ?? 0} tokens saved
+              </p>
+            )}
+            <ul className="list" style={{ maxHeight: "160px", overflowY: "auto" }}>
+              {latestParallelBatch.tasks.slice(-8).map((task) => (
+                <li key={task.id}>
+                  [{task.status}] {task.producerId} / {task.step} — {task.agentId}
+                  {task.confidenceTier ? ` (${task.confidenceTier})` : ""}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
 

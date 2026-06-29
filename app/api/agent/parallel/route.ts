@@ -6,7 +6,8 @@ import { getProject } from "@/lib/store";
 
 const bodySchema = z.object({
   projectId: z.string().uuid(),
-  commands: z.array(z.string().min(1)).min(1).max(20)
+  commands: z.array(z.string().min(1)).min(1).max(20),
+  concurrency: z.number().int().min(1).max(10).optional()
 });
 
 export async function POST(request: Request): Promise<NextResponse> {
@@ -24,6 +25,10 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
-  const result = await executeMultiAgentCommands(parsed.data.projectId, parsed.data.commands);
+  const result = await executeMultiAgentCommands(
+    parsed.data.projectId,
+    parsed.data.commands,
+    parsed.data.concurrency ?? 5
+  );
   return NextResponse.json({ result });
 }

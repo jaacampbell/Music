@@ -161,3 +161,46 @@ Research Confidence: Mixed — facts need citation; analysis is D-tier
 3. Score each producer across 15 dimensions
 4. Wire Producer DNA into agent loop prompt cache (Tier 1 facts, Tier 2 examples)
 5. Migrate from in-memory store to Netlify Database using `db/producer-dna-schema.sql`
+
+## Parallel Agentic Work
+
+The system runs producer research pipelines in parallel while preserving per-producer step order.
+
+### Agent squads
+
+| Squad | Agents |
+|-------|--------|
+| Metadata | Metadata Agent, Key Works Agent |
+| Source Verification | Source Verification Agent (MusicBrainz, Discogs, Wikidata) |
+| Analytical | Listening Analysis Agent, DNA Summary Agent |
+| Creative | Type-Beat Translation Agent, Iteration Matrix Agent |
+| Copyright Safety | Originality Agent |
+| Evaluation | Scoring Agent, Open Questions Agent |
+
+### Parallelism model
+
+- **Across producers:** up to N concurrent pipelines (default 5)
+- **Within producer:** 10 steps run sequentially per operating rule
+- **Beat lab multitask:** commands now execute in parallel via `runWithConcurrency`
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/producer-dna/research/parallel` | POST | Run parallel research on producer IDs |
+| `/api/producer-dna/research/parallel` | GET | List batches + stats |
+| `/api/producer-dna/research/parallel?batchId=` | GET | Get specific batch |
+| `/api/agent/parallel` | POST | Parallel beat-lab commands with concurrency |
+| `/api/agent/batches/[batchId]` | GET | Get parallel batch status |
+
+### Example
+
+```json
+POST /api/producer-dna/research/parallel
+{
+  "producerIds": ["PDNA-000013", "PDNA-000014", "PDNA-000015"],
+  "concurrency": 3
+}
+```
+
+Each producer runs: metadata → source verification → key works → listening analysis → DNA summary → type-beat translation → originality warnings → iteration matrix → scoring → open questions.

@@ -5,7 +5,9 @@ export type JobType =
   | "analyze"
   | "export"
   | "agent-loop"
-  | "save-state";
+  | "save-state"
+  | "parallel-agent"
+  | "producer-dna-research";
 
 export interface SongDNA {
   bpm: number | null;
@@ -82,6 +84,7 @@ export interface Job {
   message: string;
   result?: Record<string, unknown>;
   error?: string;
+  batchId?: string;
   createdAt: string;
   updatedAt: string;
 }
