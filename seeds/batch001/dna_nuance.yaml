@@ -1,0 +1,450 @@
+nuance:
+  - pdna_id: PDNA-000001
+    casual_listener: "Hears lush, full-sounding music that feels emotionally elevated without knowing why. Notices strings and orchestration as 'fancy' or 'cinematic' quality."
+    producer_ear: "Studies the orchestral-pop counterpoint — how independent melodic lines in strings and brass occupy frequency space without masking the lead vocal. Notes the harmonic sophistication beneath accessible melodies."
+    engineer_ear: "Hears the acoustic dimensionality of Abbey Road's echo chambers. Notes the natural reverb tails on strings, the lack of digital processing, and the depth created by room acoustics alone."
+    artist_ear: "Hears wide-open melodic space between the orchestral layers. Recognizes the vocal is treated as first-among-equals in a conversational arrangement, not buried or over-supported."
+    dj_ear: "Recognizes limited DJ utility — long intro builds, orchestra-driven structures. Tempo variation between sections makes beat-matching unreliable. Best mixed at natural endings."
+    beginner_ear: "Hears 'real instruments' and associates the sound with old, expensive music. May struggle to identify individual parts within the dense orchestral mix."
+    confidence: D
+
+  - pdna_id: PDNA-000002
+    casual_listener: "Hears an overwhelming wall of sound — feels big, lush, sometimes suffocating. Immediately recognizable as 'that old music' with a specific reverb character."
+    producer_ear: "Analyzes the multi-layered doubling strategy — three pianos, multiple guitar tracks, layered strings all occupying the same role. Studies how density creates emotional weight without individual part distinctness."
+    engineer_ear: "Hears radical room processing through Gold Star's echo chambers. Notes the compressed, mono-phase-coherent mix, the deliberate frequency masking, and how the kick drum disappears into bass density."
+    artist_ear: "Hears a production where the voice is the only clear melodic element. The orchestra is a texture bed. Strong vocal identity is essential to cut through — this context rewards uniqueness over technical precision."
+    dj_ear: "Limited utility for mixing — mono recordings, unstable tempo, no reliable intro/outro. Historical curiosity rather than functional DJ tool."
+    beginner_ear: "Hears 'big old music' with everything reverbed. May find it overwhelming or claustrophobic. Doesn't distinguish individual parts — experiences the blend as a single entity."
+    confidence: D
+
+  - pdna_id: PDNA-000003
+    casual_listener: "Hears impeccably polished, radio-perfect music. Notices everything sits in exactly the right place. Associates the sound with sophistication and professionalism."
+    producer_ear: "Studies the sophisticated arrangement economy — how Quincy builds energy across eight-bar sections, when to add and remove elements, how the rhythm section locks without over-playing."
+    engineer_ear: "Hears masterclass clarity — every frequency occupied precisely, no masking, kick-snare separation with room to breathe, vocal sitting in a carved-out midrange pocket."
+    artist_ear: "Hears generous space for vocal performance. The arrangement builds dynamically around the lead, and key musical moments are timed to reinforce lyrical peaks."
+    dj_ear: "High DJ utility — consistent BPM, clean intros on many releases, predictable structure. Michael Jackson productions have reliable 32-bar sections for phrase mixing."
+    beginner_ear: "Hears professional polish without understanding what makes it different. May not identify why it sounds 'better' than bedroom production."
+    confidence: D
+
+  - pdna_id: PDNA-000004
+    casual_listener: "Hears sound that feels like a place — not a song but a space to inhabit. May find it boring or meditative depending on attention mode."
+    producer_ear: "Studies the generative approach — tape loop density as compositional parameter, silence as an active element, and how gradual timbral evolution creates narrative without traditional structure."
+    engineer_ear: "Hears the sophisticated use of early tape delay, the deliberate analog degradation, and how room acoustics become the primary mixing medium."
+    artist_ear: "Hears an invitation to improvise freely over shifting textural beds. Identifies unusual tonal centers and modal ambiguity as opportunities for unconventional melodic choices."
+    dj_ear: "Specialized utility — ambient and experimental DJ contexts. Long, gradual transitions work well. No traditional structure means creative freedom in ambient sets."
+    beginner_ear: "May question whether it qualifies as music. Hears 'weird sounds' without recognizing the compositional intention."
+    confidence: D
+
+  - pdna_id: PDNA-000005
+    casual_listener: "Hears psychedelic reggae with a distinctly strange energy — like the studio itself is an additional musician. Notices echoes and reverbs that feel alive."
+    producer_ear: "Studies the real-time mixing as performance — the dub drop-outs, echo sends treated as instruments, and how the board becomes a compositional tool."
+    engineer_ear: "Hears creative misuse of studio equipment — delays fed back into themselves, spring reverb overdriven, equipment noise incorporated as texture. Anti-precision engineering."
+    artist_ear: "Hears a production environment that rewards chaos and spontaneity. The vocal sits in unpredictable spaces — sometimes buried, sometimes spotlight. Demands personality over technical consistency."
+    dj_ear: "Good utility for reggae and dub sets — consistent riddim structure, reliable drop-out moments for transition points. Extended dub versions with long percussion-only sections are DJ-friendly."
+    beginner_ear: "Hears 'trippy old reggae' — may be confused by the studio sounds, echo effects, and unpredictable mixing choices."
+    confidence: D
+
+  - pdna_id: PDNA-000006
+    casual_listener: "Hears reggae that strips away everything except the essential rhythmic skeleton. Notices the bass-heavy, reverb-rich sound with instruments appearing and disappearing."
+    producer_ear: "Studies the muting technique as composition — how removing the vocal creates tension, adding it resolves it. Recognizes the mixing board as a real-time instrument."
+    engineer_ear: "Hears the Tubby's Hometown Hi-Fi setup — modified mixing console, spring reverb, echo units chained. Studies how hardware limitations become sonic signatures."
+    artist_ear: "Hears the radical hospitality of dub versions — the vocal is stripped away entirely to create a purely instrumental context that highlights the band's musicianship."
+    dj_ear: "Excellent DJ utility — long percussion-only passages, consistent BPM, clean break sections ideal for transitions. Dub's call-and-response structure is inherently mix-friendly."
+    beginner_ear: "Hears 'reggae with the singing removed' — finds it sparse or incomplete. May not understand the intentional emptiness."
+    confidence: D
+
+  - pdna_id: PDNA-000007
+    casual_listener: "Hears driving, machine-like music with a clear pulse and cinematic sweep. Immediately associates it with Donna Summer, film scores, or classic disco."
+    producer_ear: "Studies the sequencer as song arrangement — how Giorgio uses the Moog's rigidity to drive velocity forward, and how he layers analog synth voices to create orchestral density."
+    engineer_ear: "Hears the analog synthesizer frequency management — how different oscillator waveforms occupy frequency bands without crossing over, and how the mix creates a synthetic orchestra."
+    artist_ear: "Hears an intensely forward-moving, high-BPM context that demands vocal performance with physical energy and clear melodic trajectory."
+    dj_ear: "Ideal for mixing — extremely consistent BPM, long synth intros and outros, music built for extended dance floor use. Giorgio's tracks are among the most DJ-functional ever made."
+    beginner_ear: "Hears 'disco synthesizer music' — immediately accessible. The pulse and momentum are obvious even without production knowledge."
+    confidence: D
+
+  - pdna_id: PDNA-000008
+    casual_listener: "Hears music that feels authentic and immediate — live, unprocessed, real. The sound has a physical presence that feels like being in a room with the musicians."
+    producer_ear: "Studies Tom Dowd's minimalist philosophy — how restraint in processing reveals the performance. Notices the absence of reverb on rhythm section, the transparency of the mix."
+    engineer_ear: "Hears precision microphone placement and gain staging as the primary sonic tool. Notes the flat, uncolored frequency response and how it differs from heavily processed contemporaries."
+    artist_ear: "Hears a production that respects and elevates performance. The arrangement serves the song, not the other way around. Ideal for artists who want to feel documented rather than constructed."
+    dj_ear: "Moderate utility — consistent production quality but arrangements vary in structure and tempo. Atlantic catalog recordings are deep-groove-friendly for DJs who prioritize musicality."
+    beginner_ear: "Hears 'clean old music' without artificial effects. May not distinguish from a live recording — which was exactly Tom Dowd's intention."
+    confidence: D
+
+  - pdna_id: PDNA-000009
+    casual_listener: "Hears challenging, unpredictable jazz that seems to break its own rules. May feel difficult to follow — the music seems to shift unexpectedly."
+    producer_ear: "Studies the tape collage methodology — how separate performances from different sessions are edited together seamlessly, creating impossible musical conversations."
+    engineer_ear: "Hears the extraordinary edit work — splice points invisible in the mix, disparate recordings unified through careful equalization and level management."
+    artist_ear: "Hears an approach where the performance doesn't need to be perfect — the editor will construct the definitive version from the best moments of many takes."
+    dj_ear: "Low DJ utility — complex tempo and structure variations, irregular phrase lengths, modal jazz harmony. Specialized jazz DJs use Miles Davis strategically in beatless or jazz-specific contexts."
+    beginner_ear: "Hears 'difficult jazz' and may disengage. The absence of conventional pop structure makes entry points hard to find."
+    confidence: D
+
+  - pdna_id: PDNA-000010
+    casual_listener: "Hears the foundational sound of hip-hop — this is where the genre begins. The simple, driving energy feels historic."
+    producer_ear: "Studies the drum loop isolation technique that created hip-hop's rhythmic infrastructure. Recognizes how the locked loop created a new compositional grammar."
+    engineer_ear: "Hears early-era recording limitations — limited dynamic range, tape saturation, early drum machine characteristics. Recognizes the 'happy accident' sound quality as genre-defining."
+    artist_ear: "Hears an open, supportive backing that was genuinely designed for over-the-top vocal performance. The minimalism creates maximum vocal space."
+    dj_ear: "Good hip-hop DJ utility — early Sugarhill tracks have the simple structure that defines early hip-hop's DJ-friendly format. Long percussion-only passages common."
+    beginner_ear: "Hears 'old school hip-hop' with historical significance. Simple enough to understand immediately but the cultural context is more complex."
+    confidence: D
+
+  - pdna_id: PDNA-000011
+    casual_listener: "Hears music that feels stripped-down and powerful. Drums are loud, guitars are loud, everything else is reduced. The energy is physical."
+    producer_ear: "Studies the subtraction philosophy — how removing elements creates power. Recognizes Rick Rubin's role as 'no' — preventing over-arrangement to reveal the song's essence."
+    engineer_ear: "Hears room-heavy drum recordings — the room becomes the reverb. Notes the controlled, not-over-compressed dynamics that give drums their physical impact."
+    artist_ear: "Hears production that demands a performer who carries their own weight. The production won't hide weaknesses — what's there is what you hear."
+    dj_ear: "Varies by genre — metal and rock catalog is functional for genre-specific DJs. Hip-hop crossover work is beat-friendly. Rap-rock (Beastie Boys) is highly DJ-compatible."
+    beginner_ear: "Hears the power of 'less is more' intuitively — appreciates the directness even without analysis."
+    confidence: D
+
+  - pdna_id: PDNA-000012
+    casual_listener: "Hears music with an immaculate physical presence — the bass hits in the chest, the snare cracks, everything sounds expensive. The G-funk palette is immediately recognizable."
+    producer_ear: "Studies the pentatonic synth selection, the P-Funk bass replays, the 808 kick-bass relationships, and the three-beat snare arrangement that defines West Coast rap."
+    engineer_ear: "Hears the sophisticated low-end engineering — the bass guitar and 808 occupy separate frequency bands, kick sits between them, and the sub frequencies are rolled off perfectly for car stereo playback."
+    artist_ear: "Hears a production that rewards a slow, confident, melodic delivery style. The melodic synth lines invite call-and-response with the vocal lead."
+    dj_ear: "High DJ utility in hip-hop contexts — consistent BPM, long instrumental intros standard in G-funk era, productions mixed to loop cleanly."
+    beginner_ear: "Hears the physical impact first — bass and snare are unmistakable. The 'expensive' quality is perceptible without knowing the source."
+    confidence: D
+
+  - pdna_id: PDNA-000013
+    casual_listener: "Hears something that feels off-balance but emotionally right — like music that's slightly drunk but never falls over. The warmth is immediate, the instability is confusing."
+    producer_ear: "Diagnoses the deliberately displaced quantization — hears exactly where the kick falls relative to grid and how far each snare event deviates. Recognizes the intentional rhythmic sabotage."
+    engineer_ear: "Hears the vinyl saturation processing — the soft knee compression from analog chain, the high-frequency roll-off that gives samples their 'cooked' quality. Notes the low headroom mix."
+    artist_ear: "Hears maximum improvisational freedom — the beat's rhythmic uncertainty demands a performer who can float above the grid rather than lock to it. A constraining beat for rigid performers, liberating for expressive ones."
+    dj_ear: "Technically difficult to mix — quantization errors mean beat-matching requires manual adjustment per track. Dilla beats can drift within bars. High-skill DJs use the looseness as a feature."
+    beginner_ear: "Notices something feels 'off' but sounds good — the dissonance between expectation and reality creates an unresolved pleasant tension."
+    confidence: D
+
+  - pdna_id: PDNA-000014
+    casual_listener: "Hears grimy, no-nonsense hip-hop. The beats feel serious — urgent, dark, purposeful. No unnecessary elements."
+    producer_ear: "Studies the two-element simplicity — sample loop plus drums, nothing else. Recognizes how the filtered sample's frequency relationships with the 808 create the entire harmonic world."
+    engineer_ear: "Hears deliberate high-frequency filtering of samples — the warmth is engineered, not accidental. Notes how filtering creates apparent distance and historical patina."
+    artist_ear: "Hears production designed for one purpose: maximum lyrical clarity. The sparse arrangement creates a vacuum that demands the MC fill it with substance."
+    dj_ear: "Excellent DJ utility — boom bap's locked two-bar structure is highly mix-friendly, transitions cleanly, most Premier beats have clear phrase structure."
+    beginner_ear: "Hears simplicity — may not initially understand why this works when 'nothing is happening.' The power is invisible until you understand what's been removed."
+    confidence: D
+
+  - pdna_id: PDNA-000015
+    casual_listener: "Hears menacing, cinematic hip-hop with a distinctive low-fi quality. The music feels like a film score for an urban thriller."
+    producer_ear: "Studies the horror-film sonic vocabulary — how minor-key piano stabs, string samples, and martial percussion create psychological tension within a hip-hop framework."
+    engineer_ear: "Hears intentional degradation as production tool — the lo-fi quality is engineered through deliberate downsampling, filtering, and vinyl crackle integration."
+    artist_ear: "Hears an expansive lyrical canvas that rewards complex, narrative, multi-syllabic performance. The cinematic production elevates conceptual MC work."
+    dj_ear: "Functional DJ tool — consistent BPM across Wu-Tang catalog, distinctive intro styles, recognizable enough for crowd response. Staten Island block party certified."
+    beginner_ear: "Hears 'old school hip-hop' with a dark quality — immediately notices the mood even without being able to identify its sources."
+    confidence: D
+
+  - pdna_id: PDNA-000016
+    casual_listener: "Hears futuristic, slightly alien hip-hop and R&B. The beats sound like they're from a different planet — the rhythms are unpredictable but the hooks are immediately catchy."
+    producer_ear: "Studies the odd-meter percussion arrangements — how Timbaland uses asymmetric drum patterns that feel like they break but always resolve. Notes the ethnic instrument integration technique."
+    engineer_ear: "Hears sophisticated low-frequency management — the sub-bass movement against the kick, the bright percussion stack in the high end, and the mid-frequency clearing for vocals."
+    artist_ear: "Hears production that rewards confident, rhythmically adventurous vocal performance. The irregular percussion provides multiple grid alignments to choose from."
+    dj_ear: "Moderate DJ utility — irregular phrase lengths complicate transitions. High crowd recognition compensates. Experienced DJs learn the phrase structures of key Timbaland productions."
+    beginner_ear: "Hears something that sounds familiar-but-different — the pop hooks are accessible, the rhythmic complexity is felt rather than analyzed."
+    confidence: D
+
+  - pdna_id: PDNA-000017
+    casual_listener: "Hears impossibly smooth, futuristic pop and hip-hop. Everything sparkles. The sound has a quality that feels aspirational and effortless simultaneously."
+    producer_ear: "Studies the orchestration of silence — how The Neptunes leave dramatic space between drum elements, creating maximum impact per hit. Notes the analog-feeling warmth in digital production."
+    engineer_ear: "Hears meticulous frequency separation — each drum element occupies a precise band, synths are carved to avoid masking, bass is tight and controlled. A mixing lesson in restraint."
+    artist_ear: "Hears elastic, responsive production that seems to expand around the vocal. The space in Neptunes beats invites the performer to fill the silence with personality."
+    dj_ear: "High DJ utility — consistent BPM, clean phrase structures, the Neptunes' catalog is extremely mix-friendly. High recognition factor generates crowd energy."
+    beginner_ear: "Hears 'clean' and 'expensive' without analysis. The aspirational quality is immediately felt."
+    confidence: D
+
+  - pdna_id: PDNA-000018
+    casual_listener: "Hears an irresistible energy that defies category — funny, strange, powerful, and danceable simultaneously. The hooks penetrate effortlessly."
+    producer_ear: "Studies the eccentric sound selection — the deliberate wrongness of certain elements that shouldn't work but do. Notes the call-and-response structure between vocal ad-libs and production elements."
+    engineer_ear: "Hears the complex layered vocal processing — harmonized ad-libs, pitch-shifted doubles, and counter-melodies that create a one-person vocal ensemble effect."
+    artist_ear: "Hears the invitation to be a character, not just a singer. Missy's productions reward theatrical, committed, fearless performance choices."
+    dj_ear: "High energy DJ tool — uptempo, crowd-recognition is massive, clean phrase structures. Missy hits in R&B, hip-hop, and pop room contexts."
+    beginner_ear: "Hears the personality first — the music sounds like the artist. The character is more immediate than any technical quality."
+    confidence: D
+
+  - pdna_id: PDNA-000019
+    casual_listener: "Hears dark, cinematic trap music with an ominous atmosphere. The music feels like it soundtracks something serious."
+    producer_ear: "Studies the horror-score sample selection, 808 programming, and hi-hat patterns — particularly the triplet hi-hat acceleration that defines modern trap's rhythmic identity."
+    engineer_ear: "Hears the 808 sub-bass management — how the 808 slides between notes without muddying the mix, the sidechain relationship between kick and sub, and the deliberate low-end shaping."
+    artist_ear: "Hears a high-drama production context that rewards confident, authoritative delivery. The ominous production creates an expectation the MC must meet or exceed."
+    dj_ear: "High utility in trap and hip-hop contexts — consistent 140+ BPM range, predictable hi-hat patterns serve as transition markers, high recognition factor."
+    beginner_ear: "Hears 'dark trap music' — the mood is immediately legible even without production knowledge."
+    confidence: D
+
+  - pdna_id: PDNA-000020
+    casual_listener: "Hears Atlanta hip-hop and R&B that sounds current and spacious. Melodies feel sticky, production feels expensive but not overwhelming."
+    producer_ear: "Studies the melodic trap construction — how synth melodies are voiced for maximum ear-candy without conflicting with the vocal melody."
+    engineer_ear: "Hears the wet reverb/delay processing on melodic elements and the contrast with the dry, punchy rhythm section. The space between elements is carefully designed."
+    artist_ear: "Hears a melodic landscape designed for melodic rap and singing crossover. Multiple pitch zones are available for vocal ad-libs and harmonies."
+    dj_ear: "High utility in current hip-hop and R&B DJ sets — consistent BPM, high recognition factor, tracks are structured for seamless mixing."
+    beginner_ear: "Hears contemporary hit music — the accessibility is immediate. Production sounds like 'what's on the radio now.'"
+    confidence: D
+
+  - pdna_id: PDNA-000021
+    casual_listener: "Hears trap music with a surprisingly musical quality — the piano runs feel almost classical against the hard 808s."
+    producer_ear: "Studies the jazz/gospel piano voicing in a trap context — the minor-key chord movements and how they create emotional depth underneath standard trap drum programming."
+    engineer_ear: "Hears the layered piano processing — the bright attack of the Steinway samples against the soft sub-bass of the 808, and how they avoid masking through frequency complementarity."
+    artist_ear: "Hears a highly musical bed that allows melodic rappers and singers to operate in classical-inflected harmonic space. The piano creates strong harmonic centers."
+    dj_ear: "Functional in Atlanta trap contexts — consistent BPM, familiar structures. The piano element distinguishes Zaytoven in DJ sets."
+    beginner_ear: "Hears 'trap music but with piano' — the piano is the immediately recognizable distinctive element."
+    confidence: D
+
+  - pdna_id: PDNA-000022
+    casual_listener: "Hears a sound that immediately signals maximum energy — the rattling hi-hats and massive 808s create pure adrenaline."
+    producer_ear: "Studies the rattle hi-hat programming — the sixteenth-note cascades and triplet rolls that create a machine-gun energy, and how the 808 slide complements the rattling texture."
+    engineer_ear: "Hears the extreme compression on the drum bus that glues the rattling hi-hats into a cohesive texture, and the sub-bass 808 that sits entirely below 80Hz."
+    artist_ear: "Hears a production designed for peak-energy performance — demanding physical, intense delivery. Not a production for nuance or introspection."
+    dj_ear: "High utility for peak moments — the extreme energy is effective at set climaxes. Somewhat uniform across catalog making extended Lex Luger sets fatiguing."
+    beginner_ear: "Hears 'the loudest, most intense beat imaginable' — the aggression is immediate and unmistakable."
+    confidence: D
+
+  - pdna_id: PDNA-000023
+    casual_listener: "Hears Atlanta trap music that feels authoritative and street-certified. The energy is direct and uncompromising."
+    producer_ear: "Studies the 808 Mafia production school — the shared aesthetic vocabulary of rattling hi-hats, slid 808 bass, and minimal melodic content."
+    engineer_ear: "Hears the compressed, saturated low end and the high-frequency hi-hat stack. Notes the relatively simple mixing approach compared to more orchestrated producers."
+    artist_ear: "Hears an aggressive, high-energy production context that requires a similarly aggressive, authoritative delivery style."
+    dj_ear: "Standard trap DJ utility — consistent BPM, predictable structure. Southside tracks blend seamlessly with broader Atlanta catalog."
+    beginner_ear: "Hears standard trap music — may not immediately distinguish from other Atlanta producers without deep familiarity."
+    confidence: D
+
+  - pdna_id: PDNA-000024
+    casual_listener: "Hears something that feels simultaneously old and timeless — dusty, warm, and deeply musical. The samples feel like unearthed treasures."
+    producer_ear: "Studies the global crate-digging vocabulary — identifies the source regions by texture, processing artifacts, and the cultural musical tradition the sample inhabits."
+    engineer_ear: "Hears the intentional low-fidelity processing — the deliberate vinyl noise, the bit-depth reduction, the heavy low-pass filtering that creates the 'dug from a crate' patina."
+    artist_ear: "Hears the most musically sophisticated hip-hop production context — Madlib beats reward equally sophisticated lyrical content. The music is complete as an instrumental."
+    dj_ear: "High utility for jazz, soul, and underground hip-hop DJ contexts — unusual samples create surprise in sets. Irregular bar lengths require skilled DJs."
+    beginner_ear: "Hears 'old music chopped up' — may initially be confused by the unfamiliar source material and irregular structure."
+    confidence: D
+
+  - pdna_id: PDNA-000025
+    casual_listener: "Hears warm, soulful hip-hop that feels like Sunday afternoon. The horns and keys are immediately inviting and emotionally resonant."
+    producer_ear: "Studies the sample selection for rhythmic pocket — how Pete Rock finds the two-beat dead zone in a jazz record and extracts it as the entire groove's engine."
+    engineer_ear: "Hears careful filtering choices — the low-pass that gives samples their warmth, the compression that seats the drum loop into the sample, and the controlled dynamic range."
+    artist_ear: "Hears the most welcoming hip-hop production for lyrical performance — the musical quality of Pete Rock beats rewards substance-over-style MC approaches."
+    dj_ear: "Excellent hip-hop DJ utility — clean phrase structures, warm consistent textures, gold era catalog is deeply familiar to hip-hop audiences."
+    beginner_ear: "Hears 'classic hip-hop' — immediately identifiable as the golden era aesthetic without knowing why."
+    confidence: D
+
+  - pdna_id: PDNA-000026
+    casual_listener: "Hears the first hip-hop that sounds like hip-hop — the locked drum loop is the genre's DNA."
+    producer_ear: "Studies the accidental innovation — Marley Marl's drum sampling through the sampler's keyboard triggered break loops in a way that became the hip-hop rhythmic template."
+    engineer_ear: "Hears the early Emu SP-12 sampling artifacts — the low sample rate, the characteristic grit of 12-bit samples, and how these limitations became the genre's sonic signature."
+    artist_ear: "Hears the original context for MC performance — the locked, repeating loop created the first reliable rhythmic platform for extended over-the-beat speech."
+    dj_ear: "Historical reference utility — Marley Marl productions are the source material DJs reference for 'foundational hip-hop.' High recognition for knowledgeable audiences."
+    beginner_ear: "Hears 'really old hip-hop' — the production age is apparent. May undervalue the historical importance."
+    confidence: D
+
+  - pdna_id: PDNA-000027
+    casual_listener: "Hears music that seems to be underwater or half-asleep. The slowed, syrupy quality creates a dreamlike, narcotic state."
+    producer_ear: "Studies the temporal compression technique — how pitch and tempo are locked together on analog equipment, creating the characteristic warbled slow pitch that defines the aesthetic."
+    engineer_ear: "Hears the generation loss from tape dubbing — the Screw tapes' characteristic hiss, slight wow-and-flutter, and the frequency coloring of multiple tape copies."
+    artist_ear: "Hears production that transforms any vocal performance into something slower, more deliberate, and emotionally heavier. The pitch-down effect deepens and darkens every voice."
+    dj_ear: "Specialized utility in Houston-context DJ sets — Screw tapes are cultural artifacts as much as DJ tools. Operating within the chopped-and-screwed tradition."
+    beginner_ear: "Hears 'slowed music' — the technique is immediately perceptible. May not understand why it's artistically significant rather than just a technical effect."
+    confidence: D
+
+  - pdna_id: PDNA-000028
+    casual_listener: "Hears music that sounds like no other music — alien, physical, simultaneously aggressive and beautiful. The experience is sensory rather than musical."
+    producer_ear: "Studies the hyperreal synthesis design — how SOPHIE achieves sounds that feel physically real (crinkling plastic, squeaking rubber) through entirely digital synthesis."
+    engineer_ear: "Hears extreme spectral engineering — the forensic-level frequency relationships between ultra-bright high end and controlled sub-bass, and how they avoid intermodulation."
+    artist_ear: "Hears production that demands total character commitment from the performer. The synthetic hyper-reality requires the vocal to inhabit the same hyperreal aesthetic space."
+    dj_ear: "High DJ utility in club contexts — tracks designed for maximum dance-floor impact. SOPHIE understood club physics better than most producers."
+    beginner_ear: "Hears music that sounds 'fake' or 'digital' in a striking way. The plasticity is immediately apparent but the artistic intention may not be."
+    confidence: D
+
+  - pdna_id: PDNA-000029
+    casual_listener: "Hears something uncomfortable and alien — the music seems designed to disorient rather than please. May be experienced as noise or chaos."
+    producer_ear: "Studies the structural approach to discomfort — how Arca uses specific pitch intervals, rhythmic displacement, and timbral extremes to create productive musical anxiety."
+    engineer_ear: "Hears sophisticated spectral manipulation — the mid-side processing, the extreme distortion applied to specific frequency bands while leaving others clean, the spatial design."
+    artist_ear: "Hears production that demands unconventional vocal performance — conventional phrasing or delivery feels jarring against the production's unpredictability."
+    dj_ear: "Specialized utility in experimental and avant-garde club contexts — Arca's work has been commissioned for high-end club residencies where the disorienting quality is the point."
+    beginner_ear: "May not recognize as music in a conventional sense. The absence of traditional musical markers can be alienating."
+    confidence: D
+
+  - pdna_id: PDNA-000030
+    casual_listener: "Hears music that feels like a specific emotional state — late-night loneliness, urban isolation — rather than a song. The mood is the content."
+    producer_ear: "Studies the blur-processing technique — how Burial processes samples until the source becomes unrecognizable texture, and how this textural approach creates emotional rather than musical narrative."
+    engineer_ear: "Hears the vinyl simulation chain — the crackle processing, the low-pass filter rolloff that mimics vinyl frequency response, and the stereo field degradation."
+    artist_ear: "Hears production where the voice is a texture, not a lead. Burial's vocal samples are ghostly, processed beyond identity — an invitation to exist in the sound, not perform over it."
+    dj_ear: "Specialized utility in ambient, post-club, and UK underground contexts. Burial's mid-BPM structure (130 BPM half-time feel) sits between genre expectations — challenging but rewarding for skilled DJs."
+    beginner_ear: "Hears 'sad, weird music' with a lot of reverb. The emotional directness is accessible even when the musical complexity isn't."
+    confidence: D
+
+  - pdna_id: PDNA-000031
+    casual_listener: "Hears electronic music that ranges from melodic and beautiful to harsh and overwhelming — the palette is extremely wide. May feel unpredictable."
+    producer_ear: "Studies the synthesis programming depth — the modulation routing, the unusual waveform combinations, and how Aphex creates sounds that have never existed before through custom patching."
+    engineer_ear: "Hears the extreme dynamic range — from near-silence to clipping, within a single piece. Notes the precise spectral placement of ultra-high frequency elements and sub-bass design."
+    artist_ear: "Hears production that doesn't need or want a vocalist — the music is complete in itself. Collaborating with Aphex Twin would require total sonic reinvention."
+    dj_ear: "Specialized utility — Selected Ambient Works Vol. 2 is excellent for ambient DJ contexts, while Come to Daddy is effective for harsh industrial moments. Wide catalog requires strategic selection."
+    beginner_ear: "Hears a very wide range — some Aphex Twin is immediately beautiful, some is immediately scary. Hard to form a unified impression."
+    confidence: D
+
+  - pdna_id: PDNA-000032
+    casual_listener: "Hears electronic music that feels both robotic and deeply human — the funk underneath the machines creates irresistible dance energy."
+    producer_ear: "Studies the live-instrument integration with electronic production — the guitar work, the live bass, the organic elements that prevent the electronic production from feeling cold."
+    engineer_ear: "Hears the meticulous frequency management — how the vocoder, synth bass, guitar, and electronic drums occupy distinct spectral bands without competition."
+    artist_ear: "Hears production that is essentially complete as an instrumental — adding a vocal lead requires competing with the already-rich melodic content."
+    dj_ear: "Extremely high DJ utility — Daft Punk tracks are designed for dance floor deployment. Random Access Memories and Discovery have clean, DJ-friendly structures. High recognition factor."
+    beginner_ear: "Hears accessible electronic music — the funk grooves and melodic hooks are immediate entry points. Probably the most beginner-friendly catalog in electronic music."
+    confidence: D
+
+  - pdna_id: PDNA-000033
+    casual_listener: "Hears music that sounds like machines are making music. Robotic, futuristic, cold but with a human emotional undercurrent."
+    producer_ear: "Studies the motorik sequencer pattern — how Kraftwerk programs the same four-bar cycle in infinite variations, using timbre change rather than rhythmic variation as development."
+    engineer_ear: "Hears the precise acoustic design of Kling Klang Studio — the controlled room treatment, the custom synthesizer signal paths, and the meticulous stereo image construction."
+    artist_ear: "Hears production from an era that mostly didn't require a vocalist — Kraftwerk built a complete musical world without traditional vocal leads. The rare vocal appearance is mechanized."
+    dj_ear: "Historical electronic music DJ utility — Trans-Europe Express and Man Machine are canonical DJ tools in electronic and hip-hop contexts. Long sequencer loops make for easy blending."
+    beginner_ear: "Hears 'computer music' — the machine aesthetic is immediately apparent. The repetition may feel tedious or hypnotic depending on attention."
+    confidence: D
+
+  - pdna_id: PDNA-000034
+    casual_listener: "Hears classical music played by machines — immediately recognizable as synthesized but still melodically familiar."
+    producer_ear: "Studies the Moog parameter programming — how Wendy Carlos achieves timbral variation through filter modulation to compensate for the synthesizer's inability to vary bow pressure or lip tension."
+    engineer_ear: "Hears the careful multi-track synthesis — each voice in the Bach fugue is synthesized separately and mixed together, requiring frequency carving to maintain voice distinction."
+    artist_ear: "Hears a demonstration that synthesis can be expressive — this challenged the assumption that electronic instruments were inherently cold and inexpressive."
+    dj_ear: "Limited DJ utility outside specialized contexts — classical structure, variable tempo, no dance-floor application in conventional DJ settings."
+    beginner_ear: "Hears recognizable classical music played on weird-sounding instruments. The approachability of Bach makes the synthesized timbre less alienating."
+    confidence: D
+
+  - pdna_id: PDNA-000035
+    casual_listener: "Hears sophisticated, cinematic music that could accompany a Japanese art film or a European drama. Emotional and elegant."
+    producer_ear: "Studies the piano-synthesis integration — how Sakamoto uses acoustic piano as an anchor point while synthesizers create the temporal and spatial dimension around it."
+    engineer_ear: "Hears the recording philosophy: acoustic piano captured with space and reverb matching the synthetic elements, creating a unified ambient-acoustic soundfield."
+    artist_ear: "Hears production that would frame a vocalist within an art-music context — demanding lyrical and vocal sophistication in return for rich musical support."
+    dj_ear: "Limited utility in conventional DJ contexts — ambient and experimental electronic DJ sets can incorporate Sakamoto effectively. Variable BPM."
+    beginner_ear: "Hears 'pretty, calming music' with a Japanese or European aesthetic quality. The accessibility of the melodic content makes it approachable despite sophistication."
+    confidence: D
+
+  - pdna_id: PDNA-000036
+    casual_listener: "Hears hyper-bright, sugar-rush pop music with an intensely artificial quality that is somehow irresistible. The hooks penetrate immediately."
+    producer_ear: "Studies the layered synth composition — how Nakata stacks multiple synthesizer voices in different octave registers to create maximum frequency density without muddiness."
+    engineer_ear: "Hears the Japanese pop frequency curve — emphasized high end at 10-12kHz, tight controlled bass, and a bright, present midrange that compensates for the lack of acoustic warmth."
+    artist_ear: "Hears production designed for a specific vocal aesthetic — bright, slightly robotic, heavily processed. Artists who perform over Nakata productions inhabit his aesthetic, not their own."
+    dj_ear: "High utility in J-Pop and JPop-adjacent contexts — consistent BPM, high energy, designed for club and TV performance deployment."
+    beginner_ear: "Hears intensely catchy pop music. The hypnotic repetition and bright production are immediately engaging."
+    confidence: D
+
+  - pdna_id: PDNA-000037
+    casual_listener: "Hears richly emotional music that feels simultaneously grand and intimate. The blend of orchestral, electronic, and Indian classical elements creates a distinctive warmth."
+    producer_ear: "Studies the orchestration choices — how Rahman combines Western string arrangements with Carnatic percussion and electronic elements without any element dominating. Studies the dynamic arc."
+    engineer_ear: "Hears the acoustic-electronic hybrid recording philosophy — live orchestral sections recorded with space and natural reverb, electronic elements mixed in dry, balanced for theatrical deployment."
+    artist_ear: "Hears production that can accommodate voices across radically different cultural traditions — Hindustani classical, Western pop, and film song all work within Rahman's framework."
+    dj_ear: "Specialized utility in South Asian and world music DJ contexts. Variable BPM and complex structure require skilled handling."
+    beginner_ear: "Hears 'Indian film music' — the cultural signifier is immediately apparent. May not appreciate the Western musical integration."
+    confidence: D
+
+  - pdna_id: PDNA-000038
+    casual_listener: "Hears perfect pop music — the kind where everything is exactly where it should be, the chorus hits exactly when expected, and the hook is inescapable."
+    producer_ear: "Studies the hook architecture — how Max Martin builds tension through pre-chorus restraint and releases it in the chorus with maximum frequency density and energy."
+    engineer_ear: "Hears the maximally polished production — frequency-perfect mix, controlled dynamics, vocals that sit in front of the track without sounding artificially boosted."
+    artist_ear: "Hears production built entirely around an ideal vocal performance. Every musical decision serves vocal intelligibility and emotional impact."
+    dj_ear: "High DJ utility — consistent BPM, predictable structure, massive recognition factor. Max Martin catalog is essential for mainstream pop DJ sets."
+    beginner_ear: "Hears 'perfect radio pop' — the accessibility is complete. May underestimate the craft because it sounds effortless."
+    confidence: D
+
+  - pdna_id: PDNA-000039
+    casual_listener: "Hears polished, modern pop with a punchy rhythm section and instantly memorable melodies. Similar Max Martin-school sound but with slightly harder edges."
+    producer_ear: "Studies the percussive element layering — how Shellback builds rhythm with drum machines, real drums, and programmed percussion simultaneously without crowding the mix."
+    engineer_ear: "Hears the transient management — how the drum sounds are shaped for maximum punch without harshness, and how the bass and kick relationship is managed for radio and streaming."
+    artist_ear: "Hears a production that serves vocals without being subservient — the production has personality that the vocalist must match rather than merely inhabit."
+    dj_ear: "High utility in mainstream pop DJ contexts — consistent BPM, predictable structure, familiar catalog."
+    beginner_ear: "Hears current-sounding pop music — may not distinguish from other contemporary producers without familiarity."
+    confidence: D
+
+  - pdna_id: PDNA-000040
+    casual_listener: "Hears music that makes people move without knowing why — the guitar groove creates an almost involuntary physical response."
+    producer_ear: "Studies the rhythm guitar technique — how Nile Rodgers' chord voicings emphasize the upbeats, creating a rhythmic propulsion that drum machines can't replicate."
+    engineer_ear: "Hears the clean, transient-rich DI'd guitar signal and how it's placed in the stereo field. Notes the absence of guitar amp reverb — the direct sound creates rhythmic precision."
+    artist_ear: "Hears a production where the guitar IS the rhythm section — everything else serves the guitar groove. Vocalists must find their own rhythmic pocket relative to the guitar."
+    dj_ear: "Extremely high DJ utility — Le Freak, Good Times, I'm Coming Out are canonical DJ tools across disco, hip-hop, and pop contexts. Consistent groove makes mixing straightforward."
+    beginner_ear: "Hears irresistible funk — the physical response to the guitar groove is immediate even without musical analysis."
+    confidence: D
+
+  - pdna_id: PDNA-000041
+    casual_listener: "Hears grand, maximalist pop that sounds both cinematic and artificial — the 1980s production aesthetic is immediately recognizable."
+    producer_ear: "Studies the Fairlight CMI programming — how Trevor Horn built complex orchestral simulations from early digital samples, and how he compensated for the technology's limitations with layering."
+    engineer_ear: "Hears the technical maximalism — the frequency range pushed to its limits, the complex multi-layered arrangement, and how everything is competing for the same spectral space."
+    artist_ear: "Hears production that demands a large, confident vocal personality. The grandeur of Horn's arrangements requires a proportionally large performance."
+    dj_ear: "Moderate utility in 80s-specific DJ contexts — tempo and structure match the era's conventions. High recognition factor for appropriate audiences."
+    beginner_ear: "Hears 'big 80s music' — the production era is immediately apparent. May find it excessive or exciting depending on taste."
+    confidence: D
+
+  - pdna_id: PDNA-000042
+    casual_listener: "Hears dark, dramatic rock or electronic music with an ominous atmosphere. The production feels intentionally heavy and immersive."
+    producer_ear: "Studies the studio-as-instrument approach — how Flood uses the recording environment and signal chain as compositional tools rather than transparent documentation."
+    engineer_ear: "Hears the deliberate sonic coloring — specific analog saturation choices, the intentional harmonic distortion that colors every element, and the unified tonal character."
+    artist_ear: "Hears a production context designed for intense, committed artistic expression. Flood's production serves bands with strong artistic vision — it amplifies rather than imposes."
+    dj_ear: "Specialized utility in alternative and industrial DJ contexts — NIN and Depeche Mode productions are functional for dark club environments."
+    beginner_ear: "Hears 'dark, serious music' — the intensity is immediately apparent. May be intrigued or alienated depending on temperament."
+    confidence: D
+
+  - pdna_id: PDNA-000043
+    casual_listener: "Hears rich, orchestrated rock music with a lush ambient quality. Emotional without being sentimental — the sound has depth without obvious manipulation."
+    producer_ear: "Studies the texture architecture — how Godrich layers ambient electronics, acoustic instruments, and treated guitar into a unified textural mass with hidden internal movement."
+    engineer_ear: "Hears the sophisticated room recording technique — how different sections of Kid A and OK Computer use the room as a variable element, creating spatial inconsistency as an emotional tool."
+    artist_ear: "Hears production that completely merges with the artist — Godrich's work is inseparable from Radiohead's sound. This reflects a production philosophy where the producer disappears into the artist's vision."
+    dj_ear: "Limited mainstream DJ utility — Radiohead's complex structures resist beat-mixing. Specialized alternative and art-rock DJs use Godrich productions strategically."
+    beginner_ear: "Hears Radiohead — the band's sonic identity is immediately recognizable regardless of which era."
+    confidence: D
+
+  - pdna_id: PDNA-000044
+    casual_listener: "Hears music that sounds like you're in the room with the musicians — physical, immediate, with no studio gloss."
+    producer_ear: "Studies the microphone placement philosophy — the room becomes the reverb, the performance is the arrangement, and nothing is added that wasn't there in the room."
+    engineer_ear: "Hears the high-fidelity minimalism — flat-response microphones, minimal processing chain, no limiting, extreme dynamic range preservation. Studies the technical approach to transparency."
+    artist_ear: "Hears the most demanding performance context — nothing can be fixed or hidden. The performance is the record. This context rewards authenticity and composition over production."
+    dj_ear: "Limited DJ utility — variable tempo, wide dynamic range, minimal studio structure makes mixing difficult. Not designed for DJ deployment."
+    beginner_ear: "Hears 'raw, unpolished rock' — may initially interpret the lack of processing as poor quality rather than intentional philosophy."
+    confidence: D
+
+  - pdna_id: PDNA-000045
+    casual_listener: "Hears powerful, emotionally direct pop rock with a singer-songwriter quality — feels personal and unmediated."
+    producer_ear: "Studies the song-first production philosophy — arrangement choices serve lyrical and emotional narrative rather than sonic showcasing."
+    engineer_ear: "Hears clean, transparent production with moderate processing. The vocal is always primary, with arrangement supporting rather than competing."
+    artist_ear: "Hears a collaborative production context — Linda Perry writes and produces for the artist, which means the production is already calibrated to that artist's strengths."
+    dj_ear: "Moderate utility in pop and adult contemporary contexts — consistent structures, well-known catalog, though tempo variability limits technical mixing options."
+    beginner_ear: "Hears emotional pop music with strong vocal prominence. The accessibility is complete."
+    confidence: D
+
+  - pdna_id: PDNA-000046
+    casual_listener: "Hears modern reggaeton and Latin pop that sounds polished, contemporary, and immediately catchy. The rhythm is hypnotic."
+    producer_ear: "Studies the dembow rhythm construction — the kick-snare relationship on the one and the 'and' of two, and how melodic elements are layered above it."
+    engineer_ear: "Hears the Latin pop frequency profile — bright, present high-mids, controlled sub-bass designed for car stereo and club speaker systems."
+    artist_ear: "Hears a highly melodic production context that invites melodic rapping and singing crossover. The harmonic richness rewards melodic performance."
+    dj_ear: "High utility in Latin club and radio contexts — consistent dembow BPM structure makes mixing straightforward. High recognition factor."
+    beginner_ear: "Hears instantly danceable Latin pop — the rhythmic propulsion is immediately engaging."
+    confidence: D
+
+  - pdna_id: PDNA-000047
+    casual_listener: "Hears early reggaeton that sounds raw and energetic — less polished than current productions but with undeniable momentum."
+    producer_ear: "Studies the dembow's original formulation — the slightly rougher production quality that defined the genre before major-label refinement."
+    engineer_ear: "Hears the production quality of the early 2000s Puerto Rican reggaeton scene — digital production with limited mastering, characteristic of the genre's underground origins."
+    artist_ear: "Hears the original context for reggaeton vocal performance — the freestyle and call-and-response traditions of early perreo."
+    dj_ear: "Historical reggaeton DJ utility — Luny Tunes productions are canonical for Puerto Rican reggaeton sets. The rough production is now valued as authentic."
+    beginner_ear: "Hears 'old reggaeton' — the production era is apparent. May prefer contemporary production."
+    confidence: D
+
+  - pdna_id: PDNA-000048
+    casual_listener: "Hears contemporary African pop with a warm, propulsive quality that is immediately accessible and danceable."
+    producer_ear: "Studies the Afrobeats rhythm construction — the layered percussion, the interplay between drum machine and live drums, and how Western electronic production integrates with traditional rhythmic frameworks."
+    engineer_ear: "Hears the Lagos-influenced production aesthetic — bright and present mids, compressed but punchy low end, and mixing that prioritizes radio and mobile speaker playback."
+    artist_ear: "Hears a welcoming production context for African vocal traditions — the melodic richness accommodates both Western-influenced melodic singing and African conversational vocal styles."
+    dj_ear: "High utility in Afrobeats and global club contexts — consistent 100-110 BPM range, predictable structure, and massive global recognition."
+    beginner_ear: "Hears warm, danceable African pop — the rhythmic accessibility is immediate. The cultural specificity becomes apparent on deeper listening."
+    confidence: D
+
+  - pdna_id: PDNA-000049
+    casual_listener: "Hears hypnotic South African house music with a distinct log drum bass that feels ancestral and contemporary simultaneously."
+    producer_ear: "Studies the log drum synthesis — the characteristic Amapiano sub-bass bounce, how it rhythmically displaces against the kick, and how melodic piano lines float above the percussion bed."
+    engineer_ear: "Hears the Amapiano mixing approach — the log drum's sub-bass dominance, the bright percussion stack, and the piano elements floating in the upper midrange without low-frequency competition."
+    artist_ear: "Hears a production tradition that welcomes melodic improvisation and extended vocal performance — the loop-based structure gives artists room to develop extended melodies."
+    dj_ear: "High utility in Amapiano and Afro house contexts — consistent BPM (100-115), long percussion-only passages create natural transition zones."
+    beginner_ear: "Hears the log drum immediately — the distinctive bass sound is the genre's most recognizable element."
+    confidence: D
+
+  - pdna_id: PDNA-000050
+    casual_listener: "Hears impossibly fast, intensely rhythmic music that feels superhuman. The chopped vocals and rapid-fire percussion create a dizzying energy."
+    producer_ear: "Studies the footwork drum programming — the kick pattern that operates at half-time against the 160 BPM master tempo, creating a perpetual syncopated energy within the grid."
+    engineer_ear: "Hears the Chicago ghetto house production aesthetic — digital production with minimal mastering, high-frequency-dominant mix designed for the specific acoustic environment of ghetto house parties."
+    artist_ear: "Hears music that is inherently vocal — the chopped vocals are the melodic content. Footwork's vocal sampling tradition invites creative vocal deployment."
+    dj_ear: "High utility in footwork and juke contexts — the 160 BPM grid is designed for competitive footwork battles. The rhythm creates physical challenges that define the cultural practice."
+    beginner_ear: "Hears music that sounds impossibly fast — may struggle to find the beat. The rhythmic complexity is the most immediately apparent quality."
+    confidence: D

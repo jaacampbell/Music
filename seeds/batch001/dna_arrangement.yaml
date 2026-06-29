@@ -1,0 +1,554 @@
+# Batch 001 — Arrangement DNA
+# loop_evolution: 1=static loop throughout 10=constantly evolving
+# tension_release: 1=flat/no tension arc 10=extreme tension-release dynamics
+# structural_complexity: 1=simple loop/verse-chorus 10=complex multi-part
+arrangement:
+  - pdna_id: PDNA-000001
+    intro_style: "Instrumental intro establishing orchestral texture and key before vocal entry"
+    drop_behavior: "Not applicable — no electronic drops; orchestral builds and releases instead"
+    chorus_behavior: "Chorus marked by orchestral swell, vocal harmony, and dynamic lift"
+    loop_evolution: 3
+    transition_style: "Orchestral transitions — key changes, modulations, dynamic swells"
+    tension_release: 7
+    structural_complexity: 8
+    notes: "Martin builds structure classically: exposition, development, recapitulation within pop song form"
+    confidence: D
+
+  - pdna_id: PDNA-000002
+    intro_style: "Wall of Sound immediately present from bar one — no build, no intro silence"
+    drop_behavior: "No drop — density is constant throughout"
+    chorus_behavior: "Chorus achieves emotional climax through lyrical content, not structural change"
+    loop_evolution: 2
+    transition_style: "Minimal transitions — Wall maintains throughout"
+    tension_release: 5
+    structural_complexity: 5
+    notes: "Spector's arrangement is a single sustained blast — the tension comes from the wall itself, not from its variation"
+    confidence: D
+
+  - pdna_id: PDNA-000003
+    intro_style: "Groove-led intro establishing rhythm section feel before the full arrangement"
+    drop_behavior: "Builds rather than drops — dynamic architecture"
+    chorus_behavior: "Full arrangement with horn hits, vocal backing, and maximum energy"
+    loop_evolution: 5
+    transition_style: "Jazz-influenced transitions: key modulations, tempo shifts"
+    tension_release: 8
+    structural_complexity: 9
+    notes: "Quincy's arrangements are through-composed — nothing is static, everything develops"
+    confidence: D
+
+  - pdna_id: PDNA-000004
+    intro_style: "Gradual emergence from silence or drone — no clear beginning"
+    drop_behavior: "No conventional drop — elements appear and disappear in cycles"
+    chorus_behavior: "No chorus — ambient music is non-sectional"
+    loop_evolution: 9
+    transition_style: "Crossfading, overlap, and gradual substitution"
+    tension_release: 5
+    structural_complexity: 6
+    notes: "Eno designs processes rather than structures — the arrangement emerges from system behavior"
+    confidence: D
+
+  - pdna_id: PDNA-000005
+    intro_style: "Rhythm section establishes groove; instruments added gradually"
+    drop_behavior: "Dub drop: instruments removed dramatically to create negative space"
+    chorus_behavior: "In dub, 'chorus' is a moment of maximum echo — elements dropped, reverb multiplied"
+    loop_evolution: 7
+    transition_style: "Dub transitions: fader pulls, echo sends, tape delays"
+    tension_release: 9
+    structural_complexity: 7
+    notes: "Perry's arrangements are performative — he manipulates the desk like an instrument"
+    confidence: D
+
+  - pdna_id: PDNA-000006
+    intro_style: "Full track that gradually has elements removed rather than added"
+    drop_behavior: "The drop IS the music — sudden bass drop is climactic event"
+    chorus_behavior: "Moment of maximum echo and reverb with drums and bass stripped away"
+    loop_evolution: 8
+    transition_style: "Real-time fader manipulation — Tubby's transitions are performances"
+    tension_release: 10
+    structural_complexity: 6
+    notes: "Dub arrangement is deconstruction in real time — building by removing"
+    confidence: D
+
+  - pdna_id: PDNA-000007
+    intro_style: "Sequencer intro establishing tempo and key, often with solo synthesizer"
+    drop_behavior: "Disco build-up then sustained peak rather than drop"
+    chorus_behavior: "Chorus: full arrangement at peak energy, voice elevated"
+    loop_evolution: 4
+    transition_style: "Disco breakdown into build-up, standard four-on-the-floor structure"
+    tension_release: 7
+    structural_complexity: 6
+    notes: "Moroder's structure is disco architecture: build, sustain, build further"
+    confidence: D
+
+  - pdna_id: PDNA-000008
+    intro_style: "Recorded performance from bar one — what happened in the studio"
+    drop_behavior: "Not applicable — arrangement serves live performance capture"
+    chorus_behavior: "Chorus defined by the artists' performance, not production intervention"
+    loop_evolution: 3
+    transition_style: "Natural performance transitions"
+    tension_release: 7
+    structural_complexity: 6
+    notes: "Dowd's arrangement philosophy: capture what the artists built, don't reorganize it"
+    confidence: D
+
+  - pdna_id: PDNA-000009
+    intro_style: "Often mid-performance — Macero enters a take at its most interesting moment"
+    drop_behavior: "Tape splice as structural event — abrupt transitions by design"
+    chorus_behavior: "No conventional chorus — jazz improvisation has no sectional repetition"
+    loop_evolution: 8
+    transition_style: "Tape splicing: abrupt or seamless according to compositional intent"
+    tension_release: 8
+    structural_complexity: 9
+    notes: "Macero's arrangements are assemblages — sections from different takes in different orders"
+    confidence: D
+
+  - pdna_id: PDNA-000010
+    intro_style: "Groove established, then build to hook"
+    drop_behavior: "No electronic drop — soul-disco structure"
+    chorus_behavior: "Memorable hook repeated with musical variation"
+    loop_evolution: 3
+    transition_style: "Standard verse-chorus with bridge"
+    tension_release: 5
+    structural_complexity: 5
+    notes: "Robinson's arrangements follow pop-soul convention — hook delivery is the goal"
+    confidence: D
+
+  - pdna_id: PDNA-000011
+    intro_style: "Direct — often starts with the defining riff or sound"
+    drop_behavior: "Not applicable — Rubin eschews production drops"
+    chorus_behavior: "Chorus achieves power through dynamics and performance, not tricks"
+    loop_evolution: 3
+    transition_style: "Song-driven transitions"
+    tension_release: 8
+    structural_complexity: 6
+    notes: "Rubin's arrangements are minimal by philosophy — remove everything that isn't essential"
+    confidence: D
+
+  - pdna_id: PDNA-000012
+    intro_style: "Signature bass/synth hook immediately establishes the sonic world"
+    drop_behavior: "G-Funk groove maintained throughout rather than dropping"
+    chorus_behavior: "Chorus marked by melodic synth hook and lyrical/vocal peak"
+    loop_evolution: 5
+    transition_style: "Smooth G-Funk transitions: bass slide, synth modulation"
+    tension_release: 6
+    structural_complexity: 7
+    notes: "Dre arrangements are architecturally precise — everything has its frequency and time territory"
+    confidence: D
+
+  - pdna_id: PDNA-000013
+    intro_style: "Loop begins immediately — no build, just groove entry"
+    drop_behavior: "Dilla rarely drops in the electronic sense — elements shift and layer"
+    chorus_behavior: "Often loop-based with minimal structural distinction between sections"
+    loop_evolution: 6
+    transition_style: "Sample variations, filter changes, subtle layering additions"
+    tension_release: 5
+    structural_complexity: 5
+    notes: "Dilla's arrangements are groove-focused — the magic is in the feel, not the structure"
+    confidence: D
+
+  - pdna_id: PDNA-000014
+    intro_style: "Drum loop establishes groove, then sample enters above it"
+    drop_behavior: "No electronic drop — structure is verse-hook with scratch hook"
+    chorus_behavior: "Premier scratch hook replaces melodic chorus — rhythm-identity over melody"
+    loop_evolution: 3
+    transition_style: "Loop variation, scratch insertion, MC section"
+    tension_release: 5
+    structural_complexity: 5
+    notes: "Premier's structure: loop + MC verse + scratch hook, repeated — simple and effective"
+    confidence: D
+
+  - pdna_id: PDNA-000015
+    intro_style: "Often cinematic — a sample intro establishes the world before drums enter"
+    drop_behavior: "Wu-Tang drops are dramatic but understated — instruments drop out, not in"
+    chorus_behavior: "Hook driven by memorable vocal line rather than instrumental change"
+    loop_evolution: 4
+    transition_style: "Sample variation, skit inserts, dramatic pauses"
+    tension_release: 7
+    structural_complexity: 7
+    notes: "RZA's arrangements tell stories — structure serves the mythology"
+    confidence: D
+
+  - pdna_id: PDNA-000016
+    intro_style: "Percussive intro immediately establishes the rhythmic concept"
+    drop_behavior: "Timbaland-era drops: elements removed and returned for dramatic effect"
+    chorus_behavior: "Chorus often defined by melodic vocal hook above the percussive bed"
+    loop_evolution: 7
+    transition_style: "Rhythmic transitions — texture changes while meter stays locked"
+    tension_release: 8
+    structural_complexity: 8
+    notes: "Timbaland builds around rhythmic tension — the arrangement is an exercise in groove manipulation"
+    confidence: D
+
+  - pdna_id: PDNA-000017
+    intro_style: "Sparse hook enters directly — no extended introduction"
+    drop_behavior: "Neptunes use silence and space as drop — elements removed for effect"
+    chorus_behavior: "Chorus often minimal compared to other producers — the hook is in the pocket"
+    loop_evolution: 4
+    transition_style: "Confidence through silence — transitions marked by what stops, not what starts"
+    tension_release: 6
+    structural_complexity: 6
+    notes: "Neptunes arrange by subtraction — they trust that less sounds like more"
+    confidence: D
+
+  - pdna_id: PDNA-000018
+    intro_style: "Often a bold vocal gesture or unusual sound that immediately signals imagination"
+    drop_behavior: "Playful drops — surprising sonic events rather than conventional releases"
+    chorus_behavior: "Chorus designed for physical response — vocal and rhythmic convergence"
+    loop_evolution: 7
+    transition_style: "Creative transitions — sound effects, reversed audio, unexpected elements"
+    tension_release: 8
+    structural_complexity: 7
+    notes: "Missy's arrangements contain surprises — you can't predict the next section from the current one"
+    confidence: D
+
+  - pdna_id: PDNA-000019
+    intro_style: "Atmospheric intro — synthesizer pads and 808 sub before full arrangement"
+    drop_behavior: "Trap drop: percussion strips down before re-entering at full density"
+    chorus_behavior: "Hook section with 808 pattern change and atmospheric intensification"
+    loop_evolution: 5
+    transition_style: "Dark atmospheric transitions — reverb tails and silence"
+    tension_release: 8
+    structural_complexity: 6
+    notes: "Metro's structure is cinematic: intro, escalating tension, release, repeat"
+    confidence: D
+
+  - pdna_id: PDNA-000020
+    intro_style: "Loop-in — beat enters and hook follows quickly"
+    drop_behavior: "Standard trap drop"
+    chorus_behavior: "Hook-focused — vocal hook defines the section"
+    loop_evolution: 3
+    transition_style: "Standard trap transitions"
+    tension_release: 6
+    structural_complexity: 5
+    notes: "Mike WiLL's structure serves the artist's vocal hook — not complex by design"
+    confidence: D
+
+  - pdna_id: PDNA-000021
+    intro_style: "Piano entry often improvised-feeling, leading into the trap framework"
+    drop_behavior: "Piano-led drop with trap kick following"
+    chorus_behavior: "Piano chord pattern change marking the chorus section"
+    loop_evolution: 6
+    transition_style: "Piano-led — chord changes mark structure"
+    tension_release: 6
+    structural_complexity: 6
+    notes: "Zaytoven's arrangements feel organic — the piano player's decisions structure the track"
+    confidence: D
+
+  - pdna_id: PDNA-000022
+    intro_style: "Full assault from bar one — maximum intensity immediately"
+    drop_behavior: "No drop — maximum intensity sustained"
+    chorus_behavior: "Chorus at same intensity as verse — no structural variation"
+    loop_evolution: 2
+    transition_style: "Minimal transitions — energy maintained"
+    tension_release: 4
+    structural_complexity: 4
+    notes: "Lex Luger's arrangement is a single sustained intensity — the song is one block of energy"
+    confidence: D
+
+  - pdna_id: PDNA-000023
+    intro_style: "Dark atmospheric intro leading to bass drop"
+    drop_behavior: "808 bass entry as the defining structural moment"
+    chorus_behavior: "Hook section with bass pattern variation"
+    loop_evolution: 4
+    transition_style: "Dark trap standard"
+    tension_release: 7
+    structural_complexity: 5
+    notes: "Southside's structure: build tension with atmosphere, release with 808 bass"
+    confidence: D
+
+  - pdna_id: PDNA-000024
+    intro_style: "Loop begins mid-groove — Madlib throws you in"
+    drop_behavior: "No conventional drop — samples shift and evolve"
+    chorus_behavior: "Often no distinct chorus — groove is continuous"
+    loop_evolution: 7
+    transition_style: "Sample layering, filter changes, tempo variations across projects"
+    tension_release: 5
+    structural_complexity: 6
+    notes: "Madlib's arrangements are collage — structure is less important than the moment-to-moment feel"
+    confidence: D
+
+  - pdna_id: PDNA-000025
+    intro_style: "Horn loop or jazz sample establishes melodic identity"
+    drop_behavior: "Soul-hip-hop structure — no electronic drops"
+    chorus_behavior: "Hook carries emotional weight with melodic sample as anchor"
+    loop_evolution: 4
+    transition_style: "Sample variation, additional instrumentation layer"
+    tension_release: 6
+    structural_complexity: 6
+    notes: "Pete Rock's arrangements grow naturally from the source sample's original structure"
+    confidence: D
+
+  - pdna_id: PDNA-000026
+    intro_style: "Drum loop enters directly, establishing the reconstructed break"
+    drop_behavior: "No electronic drop — classic hip-hop structure"
+    chorus_behavior: "Hook with melodic sample above drum loop"
+    loop_evolution: 3
+    transition_style: "Sample cuts, MC section divisions"
+    tension_release: 5
+    structural_complexity: 5
+    notes: "Marley Marl's structure is hip-hop fundamentals — groove first, everything else serves it"
+    confidence: D
+
+  - pdna_id: PDNA-000027
+    intro_style: "Track begins already slowed — no intro transition from normal speed"
+    drop_behavior: "Screw-style chop: vinyl scratch inserted as structural event"
+    chorus_behavior: "Chorus often slowed to the point of dissolution"
+    loop_evolution: 4
+    transition_style: "Chops: scratch events punctuating the slowed flow"
+    tension_release: 4
+    structural_complexity: 4
+    notes: "Screw's arrangement is temporal — the structure of the original track remapped onto slowed time"
+    confidence: D
+
+  - pdna_id: PDNA-000028
+    intro_style: "Often begins with the most extreme sonic element — no conventional easing in"
+    drop_behavior: "SOPHIE drops are physical events — sub-bass or frequency extreme"
+    chorus_behavior: "Chorus designed as maximum synthetic euphoria"
+    loop_evolution: 7
+    transition_style: "Extreme transitions: silence to maximum volume, frequency sweeps"
+    tension_release: 9
+    structural_complexity: 7
+    notes: "SOPHIE's structure uses pop grammar to deliver experimental sonic experiences"
+    confidence: D
+
+  - pdna_id: PDNA-000029
+    intro_style: "No conventional intro — begins in chaos or in process"
+    drop_behavior: "Not conventional — moments of extreme sonic change rather than bass drops"
+    chorus_behavior: "No conventional chorus — Arca's music resists sectional repetition"
+    loop_evolution: 9
+    transition_style: "Rupture: abrupt change as the primary transition mode"
+    tension_release: 8
+    structural_complexity: 8
+    notes: "Arca's arrangements are anti-conventional — comfort and resolution are denied"
+    confidence: D
+
+  - pdna_id: PDNA-000030
+    intro_style: "Gradual emergence from silence, vinyl crackle as opening texture"
+    drop_behavior: "Burial's 'drop' is an emotional moment rather than a bass event"
+    chorus_behavior: "No conventional chorus — atmosphere builds rather than resolving"
+    loop_evolution: 7
+    transition_style: "Gradual layering, sample crossfading"
+    tension_release: 6
+    structural_complexity: 6
+    notes: "Burial's structure is emotional rather than sectional — the arrangement follows feeling"
+    confidence: D
+
+  - pdna_id: PDNA-000031
+    intro_style: "Varies enormously — ambient works begin with silence, drill tracks enter at full speed"
+    drop_behavior: "IDM drops are often rhythmic complexity events rather than bass events"
+    chorus_behavior: "No conventional chorus — Aphex Twin resists pop structure"
+    loop_evolution: 9
+    transition_style: "Wide range: seamless crossfade (ambient) to abrupt cut (drill and bass)"
+    tension_release: 8
+    structural_complexity: 9
+    notes: "Aphex Twin's arrangements range from completely static (ambient) to extremely complex (IDM)"
+    confidence: D
+
+  - pdna_id: PDNA-000032
+    intro_style: "Extended intro — Daft Punk loves the long build"
+    drop_behavior: "Classic French house drop: filter opens or bass enters"
+    chorus_behavior: "Chorus: maximum filter-open, full arrangement, hook vocal"
+    loop_evolution: 6
+    transition_style: "Filter sweeps, LFO-driven transitions, robot vocal"
+    tension_release: 8
+    structural_complexity: 7
+    notes: "Daft Punk's structure is house-derived: long intro, build, drop, breakdown, build, outro"
+    confidence: D
+
+  - pdna_id: PDNA-000033
+    intro_style: "Sequencer intro establishing tempo and motif before full arrangement"
+    drop_behavior: "No conventional drop — dynamics are subtle"
+    chorus_behavior: "Repetition rather than chorus — the motif returns with variation"
+    loop_evolution: 5
+    transition_style: "Sequencer variation, new layer additions"
+    tension_release: 5
+    structural_complexity: 7
+    notes: "Kraftwerk's structure is minimalist: establish, repeat, vary slightly, conclude"
+    confidence: D
+
+  - pdna_id: PDNA-000034
+    intro_style: "Begin with the musical theme, following the classical piece's structure"
+    drop_behavior: "Not applicable — classical form governs structure"
+    chorus_behavior: "Follows original composition's sectional structure"
+    loop_evolution: 2
+    transition_style: "Classical transitions: modulations, development sections"
+    tension_release: 8
+    structural_complexity: 9
+    notes: "Carlos works within existing classical structures — her innovation is timbral, not structural"
+    confidence: D
+
+  - pdna_id: PDNA-000035
+    intro_style: "Often begins with a single sound that establishes the harmonic and textural world"
+    drop_behavior: "Not typically electronic-drop based — dynamic architecture instead"
+    chorus_behavior: "Melodic return rather than conventional chorus"
+    loop_evolution: 7
+    transition_style: "Elegant crossfading between sections"
+    tension_release: 7
+    structural_complexity: 8
+    notes: "Sakamoto's structure balances Japanese and Western architectural sensibilities"
+    confidence: D
+
+  - pdna_id: PDNA-000036
+    intro_style: "Synthesizer intro leading to drop of full arrangement"
+    drop_behavior: "Electronic dance drop: all elements enter simultaneously"
+    chorus_behavior: "Maximum density and melodic intensity"
+    loop_evolution: 5
+    transition_style: "Electronic transition effects: risers, downlifters"
+    tension_release: 7
+    structural_complexity: 6
+    notes: "Nakata's structure follows J-pop and electronic dance conventions efficiently"
+    confidence: D
+
+  - pdna_id: PDNA-000037
+    intro_style: "Often begins with solo instrument or voice establishing the emotional key"
+    drop_behavior: "Cinematic build rather than electronic drop"
+    chorus_behavior: "Full orchestral-electronic arrangement at emotional peak"
+    loop_evolution: 6
+    transition_style: "Cinematic: modulation to related key, orchestral crescendo"
+    tension_release: 9
+    structural_complexity: 10
+    notes: "Rahman's film scores are fully composed architectures; his pop works adapt this complexity"
+    confidence: D
+
+  - pdna_id: PDNA-000038
+    intro_style: "Immediate hook entry or pre-chorus that establishes melodic expectation"
+    drop_behavior: "Pop drop: arrangement stripped for verse, built up for chorus"
+    chorus_behavior: "Maximum melodic clarity and emotional delivery — the chorus is the product"
+    loop_evolution: 4
+    transition_style: "Pop-perfect: pre-chorus lifts to chorus drop"
+    tension_release: 8
+    structural_complexity: 7
+    notes: "Max Martin's pre-chorus is his signature: builds tension that the chorus must resolve"
+    confidence: D
+
+  - pdna_id: PDNA-000039
+    intro_style: "Guitar-driven intro or immediate verse entry"
+    drop_behavior: "Rock-influenced pop drop"
+    chorus_behavior: "Chorus with full instrumentation"
+    loop_evolution: 4
+    transition_style: "Pop-rock transitions"
+    tension_release: 7
+    structural_complexity: 6
+    notes: "Shellback's structure follows the Max Martin template"
+    confidence: D
+
+  - pdna_id: PDNA-000040
+    intro_style: "Guitar groove establishes immediately — the riff is the intro"
+    drop_behavior: "No electronic drop — groove is continuous"
+    chorus_behavior: "Chorus: full arrangement with vocals, groove maintained"
+    loop_evolution: 4
+    transition_style: "Rhythmic transitions based on guitar part"
+    tension_release: 6
+    structural_complexity: 6
+    notes: "Nile Rodgers' structure is groove-continuous — the rhythm never stops"
+    confidence: D
+
+  - pdna_id: PDNA-000041
+    intro_style: "Elaborate intro designed as its own complete listening experience"
+    drop_behavior: "ZTT-style build — extended crescendo toward full arrangement"
+    chorus_behavior: "Maximal: every element deployed simultaneously"
+    loop_evolution: 6
+    transition_style: "Sophisticated transitions with production effects"
+    tension_release: 9
+    structural_complexity: 9
+    notes: "Trevor Horn treats album track arrangement as architectural achievement"
+    confidence: D
+
+  - pdna_id: PDNA-000042
+    intro_style: "Atmospheric intro building tension before drums enter"
+    drop_behavior: "Industrial drop: full band or electronic elements enter after tension"
+    chorus_behavior: "Chorus: maximum density, atmospheric peak"
+    loop_evolution: 5
+    transition_style: "Atmospheric transitions: silence, noise, sustained chord"
+    tension_release: 8
+    structural_complexity: 7
+    notes: "Flood builds arrangements as emotional architectures — structure serves feeling"
+    confidence: D
+
+  - pdna_id: PDNA-000043
+    intro_style: "Often begins with an unexpected sound or atmospheric element"
+    drop_behavior: "Godrich-era Radiohead drop: full band enters after sparse intro"
+    chorus_behavior: "Chorus: emotional peak through density change, not just volume"
+    loop_evolution: 7
+    transition_style: "Subtle but intentional — transitions designed to feel inevitable"
+    tension_release: 9
+    structural_complexity: 9
+    notes: "Godrich's arrangement philosophy: every section must earn its place"
+    confidence: D
+
+  - pdna_id: PDNA-000044
+    intro_style: "Direct: recording begins when performance begins"
+    drop_behavior: "Not applicable — Albini documents performances"
+    chorus_behavior: "Chorus defined by the band's arrangement, not production"
+    loop_evolution: 2
+    transition_style: "Song transitions as played, not produced"
+    tension_release: 7
+    structural_complexity: 5
+    notes: "Albini's arrangement is the artist's arrangement — he does not add structure"
+    confidence: D
+
+  - pdna_id: PDNA-000045
+    intro_style: "Often begins with the emotional key of the song — a vocal phrase or chord"
+    drop_behavior: "Not applicable — song-driven structure"
+    chorus_behavior: "Chorus: emotional peak, vocal performance at maximum"
+    loop_evolution: 3
+    transition_style: "Song-logical transitions"
+    tension_release: 8
+    structural_complexity: 6
+    notes: "Linda Perry arranges for emotional delivery — structure serves the singer's arc"
+    confidence: D
+
+  - pdna_id: PDNA-000046
+    intro_style: "Beat intro leading to hook entry"
+    drop_behavior: "Modern reggaeton drop with melodic hook entry"
+    chorus_behavior: "Melodic chorus with dembow rhythm continuing"
+    loop_evolution: 5
+    transition_style: "Latin pop transitions with dembow continuity"
+    tension_release: 7
+    structural_complexity: 6
+    notes: "Tainy's structure evolves the reggaeton template toward pop architecture"
+    confidence: D
+
+  - pdna_id: PDNA-000047
+    intro_style: "Dembow pattern established immediately"
+    drop_behavior: "Classic reggaeton: dembow always present"
+    chorus_behavior: "Hook above continuous dembow rhythm"
+    loop_evolution: 3
+    transition_style: "Reggaeton verse-hook structure"
+    tension_release: 5
+    structural_complexity: 5
+    notes: "Luny Tunes structure is the genre standard — they set the template"
+    confidence: D
+
+  - pdna_id: PDNA-000048
+    intro_style: "Afrobeats groove established before vocal entry"
+    drop_behavior: "No conventional drop — groove is continuous"
+    chorus_behavior: "Hook with melodic variation above groove"
+    loop_evolution: 5
+    transition_style: "Groove-based transitions"
+    tension_release: 5
+    structural_complexity: 5
+    notes: "Sarz's structure follows Afrobeats conventions"
+    confidence: D
+
+  - pdna_id: PDNA-000049
+    intro_style: "Long atmospheric intro — amapiano is DJ-set music, not radio-edit music"
+    drop_behavior: "Log drum bass entry as structural event"
+    chorus_behavior: "Piano loop variations mark sections"
+    loop_evolution: 9
+    transition_style: "Gradual evolution over 8-10 minute structures"
+    tension_release: 7
+    structural_complexity: 7
+    notes: "Kabza's arrangement is DJ-set oriented — designed to evolve over long periods"
+    confidence: D
+
+  - pdna_id: PDNA-000050
+    intro_style: "Full speed immediately — footwork enters at battle intensity"
+    drop_behavior: "No conventional drop — hyperkinetic energy is constant"
+    chorus_behavior: "No conventional chorus — rhythm is the structure"
+    loop_evolution: 7
+    transition_style: "Sample chops and rhythm variations as transitions"
+    tension_release: 6
+    structural_complexity: 7
+    notes: "Rashad's structure is relentless — the arrangement serves the battle context"
+    confidence: D

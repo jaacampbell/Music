@@ -1,0 +1,755 @@
+# Batch 001 — Rhythmic DNA
+# swing: 1=rigid machine 10=extreme human swing
+# grid_precision: 1=completely free 10=machine-quantized
+# drum_density: 1=bare/minimal 10=extremely dense
+# tempo range in BPM
+rhythmic:
+  - pdna_id: PDNA-000001
+    swing: 5
+    grid_precision: 7
+    drum_density: 5
+    groove_family: "orchestral_pop"
+    kick_language: "Acoustic kick with room ambience, punchy but not dominant"
+    snare_language: "Crisp orchestral snare, sometimes replaced by orchestral percussion"
+    hat_language: "Live hi-hats with natural bleed, part of the overall kit character"
+    percussion_behavior: "Percussion serves arrangement rather than driving it; strings and bass carry momentum"
+    tempo_min: 80
+    tempo_max: 160
+    tempo_signature: "4/4"
+    notes: "Rhythm section is human and supportive; Beatles recordings prioritize the ensemble over drum isolation"
+    confidence: D
+
+  - pdna_id: PDNA-000002
+    swing: 6
+    grid_precision: 7
+    drum_density: 8
+    groove_family: "wall_of_sound_pop"
+    kick_language: "Multiple acoustic kicks layered for mass rather than definition"
+    snare_language: "Multiple snares and percussion merged into a single thick crack"
+    hat_language: "Hats buried in the wall, contributing texture rather than rhythm"
+    percussion_behavior: "All percussion blends into the Wall — individual voices dissolve into mass"
+    tempo_min: 100
+    tempo_max: 145
+    tempo_signature: "4/4"
+    notes: "Rhythm is felt as a block rather than individual hits; density defeats definition intentionally"
+    confidence: D
+
+  - pdna_id: PDNA-000003
+    swing: 7
+    grid_precision: 8
+    drum_density: 6
+    groove_family: "jazz_funk_pop"
+    kick_language: "Tight studio kick with funk-influenced placement, often on all four for pop"
+    snare_language: "Crisp backbeat snare, precisely placed, often with ghost notes"
+    hat_language: "Closed and open hi-hat patterns with jazz-informed timing"
+    percussion_behavior: "Session players with perfect time and feel; percussion is a compositional element"
+    tempo_min: 85
+    tempo_max: 145
+    tempo_signature: "4/4"
+    notes: "Groove comes from deep session musician feel — tempo is locked but breathes"
+    confidence: D
+
+  - pdna_id: PDNA-000004
+    swing: 3
+    grid_precision: 5
+    drum_density: 2
+    groove_family: "ambient_minimal"
+    kick_language: "Absent or very sparse; rhythm is implied rather than stated"
+    snare_language: "Rarely present; texture replaces percussion"
+    hat_language: "Minimal to absent; rhythm carried by evolving timbres"
+    percussion_behavior: "Rhythm suggests duration rather than meter; pulse emerges from repetition cycles"
+    tempo_min: 60
+    tempo_max: 110
+    tempo_signature: "freeform"
+    notes: "Eno frequently works in unmeasured or cyclically ambiguous time"
+    confidence: D
+
+  - pdna_id: PDNA-000005
+    swing: 7
+    grid_precision: 6
+    drum_density: 5
+    groove_family: "dub_reggae"
+    kick_language: "Deep one-drop kick — bass-heavy, on the third beat"
+    snare_language: "Rim shot on the one-drop, often with echo trails"
+    hat_language: "Hi-hat skank pattern, syncopated"
+    percussion_behavior: "Dub: instruments drop in and out with dramatic effect; rhythmic punctuation through absence"
+    tempo_min: 65
+    tempo_max: 90
+    tempo_signature: "4/4"
+    notes: "One-drop rhythm fundamental; dub deconstructs it by removing and returning elements"
+    confidence: D
+
+  - pdna_id: PDNA-000006
+    swing: 6
+    grid_precision: 6
+    drum_density: 3
+    groove_family: "dub"
+    kick_language: "One-drop kick used as a dropped element — present, then absent, creating negative rhythm"
+    snare_language: "Echoed rim shot that trails off into reverb space"
+    hat_language: "Minimal hat presence, often dropped entirely for dramatic effect"
+    percussion_behavior: "Mixer-as-drummer: Tubby controls percussion presence in real time as performance"
+    tempo_min: 65
+    tempo_max: 85
+    tempo_signature: "4/4"
+    notes: "Tubby's mixing decisions are rhythmic events — his hands on faders are a percussion instrument"
+    confidence: D
+
+  - pdna_id: PDNA-000007
+    swing: 2
+    grid_precision: 10
+    drum_density: 7
+    groove_family: "electronic_disco"
+    kick_language: "Four-on-the-floor kick, machine-precise, synthetic"
+    snare_language: "Clap or snare on 2 and 4, programmed to sample accuracy"
+    hat_language: "Sixteenth-note hi-hats, rigidly sequenced"
+    percussion_behavior: "Machine rhythm as liberation — perfect tempo enables human dance without cognitive load"
+    tempo_min: 118
+    tempo_max: 140
+    tempo_signature: "4/4"
+    notes: "Moroder's machine lock was provocative in the late 1970s — the grid as aesthetic statement"
+    confidence: D
+
+  - pdna_id: PDNA-000008
+    swing: 7
+    grid_precision: 7
+    drum_density: 5
+    groove_family: "soul_rock"
+    kick_language: "Natural kick with studio presence, varies by project from tight to roomy"
+    snare_language: "Live snare with controlled room sound"
+    hat_language: "Live hi-hat patterns with musical phrasing"
+    percussion_behavior: "Rhythm section captured honestly — what the players did, faithfully documented"
+    tempo_min: 75
+    tempo_max: 155
+    tempo_signature: "4/4"
+    notes: "Dowd's engineering approach makes the rhythm section sound like they're in the room"
+    confidence: D
+
+  - pdna_id: PDNA-000009
+    swing: 6
+    grid_precision: 4
+    drum_density: 4
+    groove_family: "jazz_experimental"
+    kick_language: "Acoustic jazz kick, sometimes displaced via tape editing"
+    snare_language: "Jazz snare with brush and stick variations, edited non-linearly"
+    hat_language: "Jazz ride and hi-hat, tempo-defining then tempo-dissolving after edits"
+    percussion_behavior: "Rhythm established then systematically disrupted through tape splice — time is malleable"
+    tempo_min: 80
+    tempo_max: 180
+    tempo_signature: "freeform"
+    notes: "Macero's splices create rhythmic discontinuities that feel like dream logic rather than error"
+    confidence: D
+
+  - pdna_id: PDNA-000010
+    swing: 6
+    grid_precision: 7
+    drum_density: 6
+    groove_family: "soul_disco"
+    kick_language: "Disco four-on-the-floor with soul band feel"
+    snare_language: "Backbeat with R&B inflection, live recording"
+    hat_language: "Open and closed hi-hat patterns from live drummer"
+    percussion_behavior: "Rhythm section is the groove carrier; melody and lyrics ride on top"
+    tempo_min: 100
+    tempo_max: 130
+    tempo_signature: "4/4"
+    notes: "Rapper's Delight: live band at disco groove tempo creates hip-hop's first commercial rhythm"
+    confidence: D
+
+  - pdna_id: PDNA-000011
+    swing: 4
+    grid_precision: 7
+    drum_density: 5
+    groove_family: "rock_hip_hop_hybrid"
+    kick_language: "Varies: rock kick with room sound, or hip-hop drum loop with presence"
+    snare_language: "Big snare — often the loudest element. Crack and room."
+    hat_language: "Supportive rather than driving; rhythm section serves song rather than spectacle"
+    percussion_behavior: "Drumming captured as event, not processed into abstraction"
+    tempo_min: 80
+    tempo_max: 140
+    tempo_signature: "4/4"
+    notes: "Rubin focuses on the physical weight of the snare — the moment of impact as emotional anchor"
+    confidence: D
+
+  - pdna_id: PDNA-000012
+    swing: 5
+    grid_precision: 8
+    drum_density: 7
+    groove_family: "g_funk_hip_hop"
+    kick_language: "Tight sub-heavy kick, tuned to complement the bass note"
+    snare_language: "Crisp, precise snare on 2 and 4 with layered samples"
+    hat_language: "Sixteenth-note hi-hat patterns, sometimes with G-Funk skips"
+    percussion_behavior: "Rhythm is architecturally precise — every hit has its frequency territory defined"
+    tempo_min: 85
+    tempo_max: 110
+    tempo_signature: "4/4"
+    notes: "G-Funk groove has a rolling lazy feel despite technical precision — melody synths carry the swing"
+    confidence: D
+
+  - pdna_id: PDNA-000013
+    swing: 10
+    grid_precision: 3
+    drum_density: 5
+    groove_family: "hip_hop_off_grid"
+    kick_language: "MPC kick with deliberate micro-timing displacement"
+    snare_language: "Snare sitting behind the beat, sometimes dragged rather than struck"
+    hat_language: "Hi-hats with human feel, sometimes doubling or dropping unexpectedly"
+    percussion_behavior: "Each drum hit is a personality decision — not where the grid says, but where the feel demands"
+    tempo_min: 70
+    tempo_max: 105
+    tempo_signature: "4/4"
+    notes: "Dilla's timing is the opposite of quantization — human feel recreated through deliberate imprecision"
+    confidence: D
+
+  - pdna_id: PDNA-000014
+    swing: 6
+    grid_precision: 7
+    drum_density: 7
+    groove_family: "boom_bap"
+    kick_language: "Hard vinyl-sampled kick, often the original drum from a funk record"
+    snare_language: "Crisp sampled snare, tight and dry"
+    hat_language: "Eighth-note hi-hats with occasional open hi-hat accents"
+    percussion_behavior: "Loop drives the track; variations come from sample drops and Premier's scratch hooks"
+    tempo_min: 85
+    tempo_max: 100
+    tempo_signature: "4/4"
+    notes: "Boom bap rhythm: kick on 1 and 3, snare on 2 and 4, propulsive and relentless"
+    confidence: D
+
+  - pdna_id: PDNA-000015
+    swing: 7
+    grid_precision: 6
+    drum_density: 6
+    groove_family: "wu_tang_boom_bap"
+    kick_language: "Dusty sampled kick with lo-fi character, sometimes from kung-fu films"
+    snare_language: "Sampled snare with intentional rawness, often with reverb tails"
+    hat_language: "Sparse hi-hat usage, leaving space"
+    percussion_behavior: "Drums support the mythology — they feel like approaching weather, not pop rhythm"
+    tempo_min: 75
+    tempo_max: 100
+    tempo_signature: "4/4"
+    notes: "Wu-Tang beats breathe — space between hits is as important as the hits themselves"
+    confidence: D
+
+  - pdna_id: PDNA-000016
+    swing: 7
+    grid_precision: 7
+    drum_density: 6
+    groove_family: "synthetic_percussive"
+    kick_language: "Synthetic kick with unusual frequency character — sometimes pitched up, sometimes subterranean"
+    snare_language: "Clap-snare hybrids, often layered with vocal samples"
+    hat_language: "Unusual hi-hat patterns borrowing from non-Western rhythms"
+    percussion_behavior: "Percussion IS the song — melody orbits around rhythm rather than the reverse"
+    tempo_min: 90
+    tempo_max: 120
+    tempo_signature: "4/4"
+    notes: "Timbaland's beats work because the rhythm is the hook — you remember the percussion pattern"
+    confidence: D
+
+  - pdna_id: PDNA-000017
+    swing: 7
+    grid_precision: 7
+    drum_density: 4
+    groove_family: "sparse_synthetic_funk"
+    kick_language: "Short synthetic kick, placed with precision"
+    snare_language: "Rim or clap, sparse and deliberate"
+    hat_language: "Minimal hi-hat, often a single sixteenth-note pattern"
+    percussion_behavior: "Sparse by design — each rhythmic element chosen for its specific timbral contribution"
+    tempo_min: 90
+    tempo_max: 118
+    tempo_signature: "4/4"
+    notes: "Neptunes beats leave more space than any other pop producers of their era"
+    confidence: D
+
+  - pdna_id: PDNA-000018
+    swing: 8
+    grid_precision: 7
+    drum_density: 7
+    groove_family: "hip_hop_rnb_futurist"
+    kick_language: "Synthetic kick with character, often pitched or tuned"
+    snare_language: "Snare with personality — sometimes pitched, sometimes reversed"
+    hat_language: "Hi-hats used rhythmically as a lead voice, not just timekeeping"
+    percussion_behavior: "Vocal performance is itself rhythmic percussion — phoneme placement treated as drum hit"
+    tempo_min: 90
+    tempo_max: 115
+    tempo_signature: "4/4"
+    notes: "Missy treats the MC's delivery as the primary rhythmic instrument; beat supports vocal rhythm"
+    confidence: D
+
+  - pdna_id: PDNA-000019
+    swing: 3
+    grid_precision: 9
+    drum_density: 6
+    groove_family: "dark_trap"
+    kick_language: "808 kick with extended sub-bass sustain, tuned to the track key"
+    snare_language: "Snare on 2 and 4, sometimes with roll fills"
+    hat_language: "Hi-hat triplets and sixteenth rolls, energetic"
+    percussion_behavior: "Trap template: 808 bass notes are melodic, hi-hat rolls create urgency"
+    tempo_min: 130
+    tempo_max: 150
+    tempo_signature: "4/4"
+    notes: "Metro's rhythmic template is conventional trap, but atmosphere elevates it"
+    confidence: D
+
+  - pdna_id: PDNA-000020
+    swing: 3
+    grid_precision: 9
+    drum_density: 5
+    groove_family: "trap"
+    kick_language: "808 sub kick with pitch bends"
+    snare_language: "Snare on 2 and 4, sometimes with flam"
+    hat_language: "Hi-hat rolls and triplets driving energy"
+    percussion_behavior: "Hook-forward trap: rhythm serves the vocal hook rather than the atmosphere"
+    tempo_min: 130
+    tempo_max: 155
+    tempo_signature: "4/4"
+    notes: "Elastic 808 bends are the rhythmic signature — the bass note moves with pitch"
+    confidence: D
+
+  - pdna_id: PDNA-000021
+    swing: 6
+    grid_precision: 7
+    drum_density: 6
+    groove_family: "gospel_trap"
+    kick_language: "808 sub kick with slight looseness — gospel swing in trap tempo"
+    snare_language: "Snare with slightly delayed feel, churchly"
+    hat_language: "Hi-hat patterns with organic feel, not fully quantized"
+    percussion_behavior: "Piano improvisation and drum grid interact in real-time — looseness as authenticity"
+    tempo_min: 128
+    tempo_max: 148
+    tempo_signature: "4/4"
+    notes: "Zaytoven plays piano live over trap drums, creating a hybrid of programmed and performed"
+    confidence: D
+
+  - pdna_id: PDNA-000022
+    swing: 2
+    grid_precision: 9
+    drum_density: 8
+    groove_family: "maximal_trap"
+    kick_language: "808 kick with maximum low-end presence"
+    snare_language: "Hard snare flam, aggressive crack"
+    hat_language: "Dense hi-hat patterns, machine-rigid"
+    percussion_behavior: "Maximum energy, maximum density — nothing held back rhythmically"
+    tempo_min: 138
+    tempo_max: 160
+    tempo_signature: "4/4"
+    notes: "Lex Luger maximal trap: every element at full aggression simultaneously"
+    confidence: D
+
+  - pdna_id: PDNA-000023
+    swing: 3
+    grid_precision: 9
+    drum_density: 7
+    groove_family: "808_mafia_trap"
+    kick_language: "Dark 808 sub kick, pressure-focused"
+    snare_language: "Hard snare with 808 Mafia character"
+    hat_language: "Aggressive hi-hat rolls"
+    percussion_behavior: "808 bass notes function as both bass line and kick augmentation"
+    tempo_min: 135
+    tempo_max: 155
+    tempo_signature: "4/4"
+    notes: "Southside rhythm focuses on pressure — bass + kick = maximum body impact"
+    confidence: D
+
+  - pdna_id: PDNA-000024
+    swing: 8
+    grid_precision: 4
+    drum_density: 5
+    groove_family: "lo_fi_hip_hop"
+    kick_language: "Sampled vinyl kick with hiss, intentionally imperfect"
+    snare_language: "Dusty sampled snare, sometimes off-beat or off-grid"
+    hat_language: "Hi-hats with tape wobble and vinyl character"
+    percussion_behavior: "Imperfection as aesthetic: timing errors become groove, noise becomes texture"
+    tempo_min: 70
+    tempo_max: 100
+    tempo_signature: "4/4"
+    notes: "Madlib's drums are sourced from obscure vinyl and deliberately left raw"
+    confidence: D
+
+  - pdna_id: PDNA-000025
+    swing: 8
+    grid_precision: 6
+    drum_density: 6
+    groove_family: "boom_bap_soulful"
+    kick_language: "Warm sampled kick from soul or jazz records"
+    snare_language: "Sampled snare with body and warmth"
+    hat_language: "Organic hi-hat from original drum break, natural"
+    percussion_behavior: "Head-nod rhythm — steady and deep, builds gradually over loops"
+    tempo_min: 80
+    tempo_max: 100
+    tempo_signature: "4/4"
+    notes: "Pete Rock's groove comes from the source material's feel, preserved through careful sampling"
+    confidence: D
+
+  - pdna_id: PDNA-000026
+    swing: 7
+    grid_precision: 7
+    drum_density: 6
+    groove_family: "sample_reconstructed_hip_hop"
+    kick_language: "Isolated sampled drum hits re-assembled into patterns"
+    snare_language: "Single sampled snare hit triggered individually rather than as part of a loop"
+    hat_language: "Sampled hat hits, sometimes from different sources"
+    percussion_behavior: "First systematic deconstruction of breaks into components — each hit is a separate sample event"
+    tempo_min: 85
+    tempo_max: 105
+    tempo_signature: "4/4"
+    notes: "Marley Marl's technical breakthrough: drum components rather than complete loops"
+    confidence: D
+
+  - pdna_id: PDNA-000027
+    swing: 5
+    grid_precision: 5
+    drum_density: 4
+    groove_family: "chopped_screwed"
+    kick_language: "Original hip-hop kick slowed 30–40% — pitch and sustain transformed"
+    snare_language: "Slowed snare with extended tail, becomes almost tonal"
+    hat_language: "Slowed hi-hats drag like molasses"
+    percussion_behavior: "Chops (vinyl scratches) inserted at regular intervals interrupt and punctuate the slowed groove"
+    tempo_min: 55
+    tempo_max: 80
+    tempo_signature: "4/4"
+    notes: "Screw's tempo reduction makes the kick sit where no natural drummer could — it changes what 'groove' means"
+    confidence: D
+
+  - pdna_id: PDNA-000028
+    swing: 5
+    grid_precision: 8
+    drum_density: 7
+    groove_family: "hyperpop_electronic"
+    kick_language: "Extreme transient design — a kick that sounds like a physical impact on a synthetic surface"
+    snare_language: "Synthetic snare with precise transient shaping, sometimes layered with noise burst"
+    hat_language: "Machine-precise hi-hat patterns, sometimes at extreme subdivisions"
+    percussion_behavior: "Rhythm supports the sonic concept — percussion textures as designed objects"
+    tempo_min: 120
+    tempo_max: 160
+    tempo_signature: "4/4"
+    notes: "SOPHIE's drums feel constructed at a molecular level — every parameter chosen, nothing accidental"
+    confidence: D
+
+  - pdna_id: PDNA-000029
+    swing: 4
+    grid_precision: 4
+    drum_density: 7
+    groove_family: "mutant_electronic"
+    kick_language: "Fractured, sometimes absent — bass events happen without conventional kick support"
+    snare_language: "Snare may be a noise burst, a texture, or completely absent"
+    hat_language: "Unconventional rhythm signals — not hi-hats in any traditional sense"
+    percussion_behavior: "Rhythm as rupture: pattern established then deliberately broken, creating perpetual instability"
+    tempo_min: 90
+    tempo_max: 160
+    tempo_signature: "irregular"
+    notes: "Arca's rhythmic language refuses resolution — you cannot safely predict where the next beat will land"
+    confidence: D
+
+  - pdna_id: PDNA-000030
+    swing: 7
+    grid_precision: 6
+    drum_density: 5
+    groove_family: "2step_dubstep"
+    kick_language: "Shuffled 2-step kick pattern — kick on 1 and the 'and' of 2, not on 3"
+    snare_language: "Snare on irregular subdivisions, ghostly"
+    hat_language: "Vinyl crackle serves as hi-hat texture — no clean hat sounds"
+    percussion_behavior: "2-step shuffle creates perpetual forward momentum without obvious downbeat emphasis"
+    tempo_min: 130
+    tempo_max: 140
+    tempo_signature: "4/4"
+    notes: "Burial's shuffle feels like walking at night in rain — regular but never mechanical"
+    confidence: D
+
+  - pdna_id: PDNA-000031
+    swing: 6
+    grid_precision: 5
+    drum_density: 8
+    groove_family: "idm_polyrhythmic"
+    kick_language: "Algorithmic kick placement — mathematically constructed polyrhythm"
+    snare_language: "Snare placed by algorithm or by ear for maximum rhythmic complexity"
+    hat_language: "Hi-hat subdivision at extreme levels (32nd notes) creating texture as much as rhythm"
+    percussion_behavior: "Rhythm as mathematics: Aphex Twin works with time signatures and subdivisions unavailable to human drummers"
+    tempo_min: 100
+    tempo_max: 200
+    tempo_signature: "irregular"
+    notes: "Windowlicker-era Aphex: complex polyrhythm with emotional pop melodic content beneath"
+    confidence: D
+
+  - pdna_id: PDNA-000032
+    swing: 4
+    grid_precision: 9
+    drum_density: 6
+    groove_family: "filter_house_electronic"
+    kick_language: "Four-on-the-floor with French house weight and filter treatment"
+    snare_language: "Clap on 2 and 4, filtered and processed"
+    hat_language: "Filtered hi-hat patterns, rhythmically precise"
+    percussion_behavior: "Machine groove as tribute to disco — Daft Punk's robots celebrate the human dancefloor"
+    tempo_min: 115
+    tempo_max: 130
+    tempo_signature: "4/4"
+    notes: "Daft Punk's rhythm section is the architecture — melody and texture decorate it"
+    confidence: D
+
+  - pdna_id: PDNA-000033
+    swing: 1
+    grid_precision: 10
+    drum_density: 5
+    groove_family: "sequencer_electronic"
+    kick_language: "Machine-generated kick pulse, programmed not performed"
+    snare_language: "Electronic snare at machine precision"
+    hat_language: "Sequencer hi-hat pattern, eighth or sixteenth note grids"
+    percussion_behavior: "Rhythm as system: sequencer runs the groove, humans do not intervene"
+    tempo_min: 100
+    tempo_max: 130
+    tempo_signature: "4/4"
+    notes: "Kraftwerk's machine precision was a statement: humans can choose to play like machines"
+    confidence: D
+
+  - pdna_id: PDNA-000034
+    swing: 2
+    grid_precision: 9
+    drum_density: 3
+    groove_family: "electronic_classical"
+    kick_language: "Rarely prominent — rhythm comes from melodic sequencing not percussion"
+    snare_language: "Used selectively for accent in classical-influenced passages"
+    hat_language: "Minimal; rhythm implied through harmonic rhythm of sequenced parts"
+    percussion_behavior: "Classical meter without classical percussion; rhythm implied through note placement"
+    tempo_min: 70
+    tempo_max: 140
+    tempo_signature: "varies"
+    notes: "Carlos works in musical meter, not drum groove — the Bach originals provide rhythmic structure"
+    confidence: D
+
+  - pdna_id: PDNA-000035
+    swing: 5
+    grid_precision: 7
+    drum_density: 4
+    groove_family: "ambient_electronic_classical"
+    kick_language: "Sparse and deliberate — each drum event is a compositional decision"
+    snare_language: "Used as accent rather than pulse"
+    hat_language: "Minimal hi-hat presence"
+    percussion_behavior: "Rhythm emerges from interaction between sequenced electronic parts and performed acoustic elements"
+    tempo_min: 70
+    tempo_max: 130
+    tempo_signature: "4/4"
+    notes: "YMO uses Japanese pop rhythm grammar beneath experimental electronic texture"
+    confidence: D
+
+  - pdna_id: PDNA-000036
+    swing: 3
+    grid_precision: 9
+    drum_density: 7
+    groove_family: "jpop_electronic_dance"
+    kick_language: "Synthetic four-on-the-floor, often layered with sub-kick"
+    snare_language: "Clap or synthetic snare, precisely placed"
+    hat_language: "Dense programmed hi-hat patterns"
+    percussion_behavior: "Machine precision pop rhythm — grid serves the hook, not the other way around"
+    tempo_min: 118
+    tempo_max: 145
+    tempo_signature: "4/4"
+    notes: "Nakata's rhythm is functional: get the body moving so the melody can work its effect"
+    confidence: D
+
+  - pdna_id: PDNA-000037
+    swing: 6
+    grid_precision: 7
+    drum_density: 6
+    groove_family: "indian_classical_fusion"
+    kick_language: "Tabla patterns combined with electronic kick, Indian rhythmic cycles as foundation"
+    snare_language: "Dhol and snare combination, sometimes replaced entirely by tabla"
+    hat_language: "Percussion variations drawn from classical Indian vocabulary"
+    percussion_behavior: "Tala cycles (7, 14, 16 beats) from Carnatic tradition fused with Western pop grid"
+    tempo_min: 90
+    tempo_max: 180
+    tempo_signature: "varies"
+    notes: "Rahman works in complex Indian meters that create rhythmic excitement unavailable in 4/4 conventions"
+    confidence: D
+
+  - pdna_id: PDNA-000038
+    swing: 4
+    grid_precision: 9
+    drum_density: 6
+    groove_family: "commercial_pop"
+    kick_language: "Punchy synthetic kick, four-on-the-floor or rock pattern"
+    snare_language: "Crisp snare or clap on 2 and 4"
+    hat_language: "Standard hi-hat pattern, supportive"
+    percussion_behavior: "Rhythm serves the hook — the listener tracks the melody, not the groove"
+    tempo_min: 95
+    tempo_max: 140
+    tempo_signature: "4/4"
+    notes: "Max Martin's rhythm is functional transparency — felt but not noticed"
+    confidence: D
+
+  - pdna_id: PDNA-000039
+    swing: 4
+    grid_precision: 8
+    drum_density: 6
+    groove_family: "pop_rock_hybrid"
+    kick_language: "Rock-informed kick pattern, sometimes on all four"
+    snare_language: "Snare with guitar-band energy"
+    hat_language: "Guitar-band hi-hat feel"
+    percussion_behavior: "Bridges live-band energy and electronic pop precision"
+    tempo_min: 100
+    tempo_max: 140
+    tempo_signature: "4/4"
+    notes: "Shellback brings rock rhythm sensibility to pop electronic production"
+    confidence: D
+
+  - pdna_id: PDNA-000040
+    swing: 8
+    grid_precision: 7
+    drum_density: 6
+    groove_family: "disco_funk"
+    kick_language: "Four-on-the-floor disco kick, live recording"
+    snare_language: "Backbeat snare with funk pocket"
+    hat_language: "Open hi-hat on offbeats, classic funk pattern"
+    percussion_behavior: "Live rhythm section in perfect pocket — groove comes from feel, not programming"
+    tempo_min: 100
+    tempo_max: 130
+    tempo_signature: "4/4"
+    notes: "Nile Rodgers' guitar is the groove anchor — kick and bass follow its rhythmic logic"
+    confidence: D
+
+  - pdna_id: PDNA-000041
+    swing: 4
+    grid_precision: 9
+    drum_density: 6
+    groove_family: "synthpop_electronic"
+    kick_language: "Programmed synthetic kick, tight and precise"
+    snare_language: "Electronic snare or clap, often triggered from sequence"
+    hat_language: "Sequenced hi-hat patterns, mechanical precision"
+    percussion_behavior: "ZTT-era electronic rhythm — programmed with intent, each element sonically designed"
+    tempo_min: 110
+    tempo_max: 145
+    tempo_signature: "4/4"
+    notes: "Trevor Horn's beats are production objects — the drum sounds themselves are designed, not chosen"
+    confidence: D
+
+  - pdna_id: PDNA-000042
+    swing: 4
+    grid_precision: 7
+    drum_density: 6
+    groove_family: "industrial_rock"
+    kick_language: "Industrial kick with weight and texture — often layered with noise"
+    snare_language: "Hard industrial snare, sometimes with reverse or pitch treatment"
+    hat_language: "Electronic hi-hat patterns, sometimes sequenced irregularly"
+    percussion_behavior: "Rhythm supports atmosphere — the beat is a weather system, not a metronome"
+    tempo_min: 90
+    tempo_max: 135
+    tempo_signature: "4/4"
+    notes: "Flood's rhythm builds tension through texture as much as timing"
+    confidence: D
+
+  - pdna_id: PDNA-000043
+    swing: 5
+    grid_precision: 7
+    drum_density: 5
+    groove_family: "art_rock_electronic"
+    kick_language: "Acoustic-electronic hybrid kick, varies across Radiohead albums"
+    snare_language: "Live-sounding snare with electronic processing"
+    hat_language: "Hi-hat patterns that evolve across album eras"
+    percussion_behavior: "Rhythm is integral to song meaning — not decoration"
+    tempo_min: 75
+    tempo_max: 130
+    tempo_signature: "4/4"
+    notes: "Kid A era rhythm: programmed drums with live band feel, neither fully one nor the other"
+    confidence: D
+
+  - pdna_id: PDNA-000044
+    swing: 7
+    grid_precision: 5
+    drum_density: 6
+    groove_family: "noise_rock_punk"
+    kick_language: "Live kick with maximum room character — the room is the reverb"
+    snare_language: "Live snare with full ring and ambience"
+    hat_language: "Live hi-hats with bleed from other instruments"
+    percussion_behavior: "Document the drummer in the room — no triggering, no replacement, no samples"
+    tempo_min: 90
+    tempo_max: 200
+    tempo_signature: "4/4"
+    notes: "Albini's approach makes the kit sound like it's in a specific, identifiable room"
+    confidence: D
+
+  - pdna_id: PDNA-000045
+    swing: 6
+    grid_precision: 7
+    drum_density: 5
+    groove_family: "pop_rock"
+    kick_language: "Pop-rock kick, supportive"
+    snare_language: "Emotional snare — matched to the song's dynamic arc"
+    hat_language: "Hi-hat serves the verse-chorus structure"
+    percussion_behavior: "Rhythm follows the song's emotional need rather than a genre template"
+    tempo_min: 80
+    tempo_max: 130
+    tempo_signature: "4/4"
+    notes: "Linda Perry's rhythm serves the singer — tempo and groove chosen for vocal expression"
+    confidence: D
+
+  - pdna_id: PDNA-000046
+    swing: 4
+    grid_precision: 8
+    drum_density: 7
+    groove_family: "reggaeton_futurist"
+    kick_language: "Dembow kick pattern with modern sub-bass extension"
+    snare_language: "Dembow snare syncopation, clean and precise"
+    hat_language: "Electronic hi-hats with Caribbean rhythmic inflection"
+    percussion_behavior: "Evolved dembow: keeps the rhythm but adds atmospheric melodic elements"
+    tempo_min: 90
+    tempo_max: 108
+    tempo_signature: "4/4"
+    notes: "Tainy's dembow is recognizable but evolved — more atmospheric than the classic template"
+    confidence: D
+
+  - pdna_id: PDNA-000047
+    swing: 4
+    grid_precision: 8
+    drum_density: 7
+    groove_family: "classic_reggaeton"
+    kick_language: "Classic dembow kick — the syncopated sub pattern defines reggaeton"
+    snare_language: "Dembow snare on the 'and' of 2, the genre's most recognizable element"
+    hat_language: "Electronic hi-hat patterns supporting the dembow"
+    percussion_behavior: "Dembow is the genre — everything else is arrangement around it"
+    tempo_min: 90
+    tempo_max: 105
+    tempo_signature: "4/4"
+    notes: "Luny Tunes codified the dembow pattern — their productions are the reference template"
+    confidence: D
+
+  - pdna_id: PDNA-000048
+    swing: 7
+    grid_precision: 7
+    drum_density: 5
+    groove_family: "afrobeats"
+    kick_language: "Afrobeats kick pattern, layered synthetic and acoustic elements"
+    snare_language: "Snare with African rhythmic inflection"
+    hat_language: "Hi-hats with characteristic Afrobeats bounce"
+    percussion_behavior: "Interlocking percussion parts create polyrhythmic texture beneath melodic content"
+    tempo_min: 90
+    tempo_max: 110
+    tempo_signature: "4/4"
+    notes: "Afrobeats rhythm: the groove is in the conversation between parts, not any single element"
+    confidence: D
+
+  - pdna_id: PDNA-000049
+    swing: 6
+    grid_precision: 7
+    drum_density: 4
+    groove_family: "amapiano"
+    kick_language: "Log drum sub-bass kick — a specific South African sound: round, warm, sub-deep"
+    snare_language: "Minimal snare, often a rim or stick"
+    hat_language: "Sparse hi-hats leaving space for the log drum to breathe"
+    percussion_behavior: "Log drum is the genre's identity — its sub-bass presence defines amapiano"
+    tempo_min: 112
+    tempo_max: 118
+    tempo_signature: "4/4"
+    notes: "Amapiano groove is long-form — patterns evolve slowly across 8-10 minute structures"
+    confidence: D
+
+  - pdna_id: PDNA-000050
+    swing: 7
+    grid_precision: 6
+    drum_density: 9
+    groove_family: "footwork"
+    kick_language: "Multiple kick patterns layered simultaneously at 160 BPM — not one kick but many"
+    snare_language: "Snare elements embedded in polyrhythmic texture, not standard placement"
+    hat_language: "Hi-hat fills and rushes at extreme subdivisions"
+    percussion_behavior: "Battle rhythm: compete with the dancer by playing more rhythm than they can track"
+    tempo_min: 155
+    tempo_max: 165
+    tempo_signature: "4/4"
+    notes: "Footwork rhythm is intentionally overwhelming — the dancer's body must respond to multiple simultaneous patterns"
+    confidence: D
