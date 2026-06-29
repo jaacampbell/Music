@@ -1,52 +1,43 @@
 # Music
 
-This repository now includes a production blueprint for a **universal Agentic Beat Lab OS** (AI Producer + A&R + Mix Engineer loop), including:
+An npm-workspaces monorepo containing two independent web apps:
 
-- Song DNA and beat strategy decomposition
-- Parallel generation and stem-first selection
-- Audio analysis + A&R scoring loop
-- Revision prompting and iterative quality improvement
-- DAW/export-oriented output planning
-- Parallel multi-agent implementation plan (including UI squad)
-- Prompt caching and token-saver policy for lower inference cost
+| App | Path | Stack | Dev URL |
+| --- | --- | --- | --- |
+| **Agentic Beat Lab OS** | [`apps/beat-lab`](apps/beat-lab) | Next.js (App Router) + TypeScript | http://localhost:3000 |
+| **Music player** | [`apps/player`](apps/player) | Vite + React + TypeScript | http://localhost:5173 |
 
-## Documents
+## Getting started
 
-- [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
-
-## Built MVP (interface + APIs)
-
-This repository now contains a runnable **Agentic Beat Lab OS command center** built with Next.js:
-
-- 10-tab interface:
-  - Song Brief
-  - Song DNA
-  - Prompt Pack
-  - Generations
-  - Stem Library
-  - Beat Breakdown
-  - Scorecards
-  - Mix Notes
-  - Revision Loop
-  - Final Export
-- API routes for:
-  - project creation/listing
-  - stem extraction jobs (2/4/6/10 modes)
-  - music analysis jobs
-  - export jobs (WAV ZIP, REAPER, Ableton-style, Logic-style)
-  - natural-language agent loop execution (single or multitask batch)
-  - prompt cache statistics
-- Prompt caching + token saver policy implemented in code:
-  - stable template keying
-  - hash-based context blocks
-  - revision-delta context
-  - cache hit/token savings telemetry
-
-## Run locally
+Install all workspace dependencies from the repo root:
 
 ```bash
 npm install
-npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+## Running
+
+From the repo root:
+
+```bash
+# Agentic Beat Lab OS (Next.js)
+npm run dev:beat-lab        # http://localhost:3000
+
+# Music player (Vite)
+npm run dev:player          # http://localhost:5173
+```
+
+Or target a workspace directly, e.g. `npm run dev -w beat-lab` / `npm run dev -w music-player`.
+
+## Scripts (root)
+
+| Command | Description |
+| --- | --- |
+| `npm run dev:beat-lab` / `npm run dev:player` | Start a dev server |
+| `npm run build:beat-lab` / `npm run build:player` | Production build |
+| `npm run lint:beat-lab` / `npm run lint:player` | Lint a workspace |
+
+## The apps
+
+- **`apps/beat-lab`** — AI music-production command center (Producer + A&R + Mix Engineer loop). 10-tab UI backed by Next.js API routes and an in-memory store. See its [README](apps/beat-lab/README.md) and [`apps/beat-lab/docs`](apps/beat-lab/docs).
+- **`apps/player`** — a self-contained synth-powered music player; tracks are composed at runtime with the Web Audio API (no audio assets). See its [README](apps/player/README.md).

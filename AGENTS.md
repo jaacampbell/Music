@@ -2,23 +2,31 @@
 
 ## Project overview
 
-`Agentic Beat Lab OS` is a **Next.js (App Router) + TypeScript** command center for an
-AI music production loop (Producer + A&R + Mix Engineer). It is a single web app:
-a 10-tab UI (`app/page.tsx`) backed by Next.js API routes under `app/api/**` and an
-in-memory domain store (`lib/store.ts`, `lib/agent-loop.ts`, `lib/prompt-cache.ts`,
-`lib/types.ts`). See `docs/agentic-beat-lab-os.md` for the full operating model.
+This repository is an **npm-workspaces monorepo** with two independent apps under `apps/`:
+
+- **`apps/beat-lab`** — `Agentic Beat Lab OS`: Next.js (App Router) + TypeScript command
+  center for an AI music-production loop. 10-tab UI (`app/page.tsx`) backed by API routes
+  under `app/api/**` and an in-memory store (`lib/*`). See `apps/beat-lab/docs`.
+- **`apps/player`** — `Music player`: Vite + React + TypeScript. Audio is synthesized at
+  runtime via the Web Audio API (no audio assets). Key files: `src/synth.ts`,
+  `src/tracks.ts`, `src/App.tsx`.
 
 ## Cursor Cloud specific instructions
 
-- Standard commands are in `package.json` / `README.md`: `npm run dev` (Next dev
-  server, http://localhost:3000), `npm run build` (`next build`), `npm start`,
-  `npm run lint` (ESLint via `eslint-config-next`). Use those rather than duplicating.
-- Single service, no backend infra: all state lives in an **in-memory store**
-  (`lib/store.ts`) kept on `globalThis`. There is no database, and no env vars or
-  secrets are required to run or test.
-- Because state is in-memory, it **resets on server restart / full rebuild**, and is
-  per server process. Hot reload generally preserves it, but a restart clears all
-  projects and jobs — expected, not a bug.
-- The "jobs" (extract/analyze/export/agent-loop) are simulated synchronously in the
-  store and complete immediately; they do not call external services or process real
-  audio.
+- Dependencies for both apps install from the repo root with a single `npm install`
+  (npm workspaces hoists to the root `node_modules`). There is one root lockfile; the apps
+  do not keep their own lockfiles.
+- Standard commands live in each app's `package.json`; convenient root aliases are in the
+  root `package.json` (`dev:beat-lab`, `dev:player`, `build:*`, `lint:*`). You can also use
+  `npm run <script> -w beat-lab` / `-w music-player`.
+- The two apps run on different ports: **beat-lab → http://localhost:3000** (Next.js),
+  **player → http://localhost:5173** (Vite). They can run simultaneously.
+- Lint/build are per-workspace (run with the workspace as cwd), so the apps' different
+  linters/tsconfigs (ESLint+`eslint-config-next` for beat-lab, `oxlint` for player) do not
+  interfere with each other.
+- beat-lab state is an **in-memory store** (`lib/store.ts`, on `globalThis`): no database,
+  no env vars/secrets. It resets on server restart/full rebuild; its extract/analyze/export
+  "jobs" are simulated synchronously and do not touch real audio or external services.
+- player audio: browsers require a user gesture before an `AudioContext` makes sound, so
+  playback only starts after a click. In a headless browser there may be no audible output,
+  but playback is still observable via the advancing timer and animated visualizer.

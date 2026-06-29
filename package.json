@@ -1,37 +1,17 @@
 {
-  "name": "workspace",
+  "name": "music-monorepo",
+  "private": true,
   "version": "1.0.0",
-  "description": "Agentic Beat Lab OS command center MVP",
+  "description": "Monorepo containing the Agentic Beat Lab OS (Next.js) and the Music player (Vite).",
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jaacampbell/Music.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jaacampbell/Music/issues"
-  },
-  "homepage": "https://github.com/jaacampbell/Music#readme",
-  "dependencies": {
-    "next": "^16.2.9",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "zod": "^4.4.3"
-  },
-  "devDependencies": {
-    "@types/node": "^26.0.1",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.9",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.0"
+    "dev:beat-lab": "npm run dev -w beat-lab",
+    "dev:player": "npm run dev -w music-player",
+    "build:beat-lab": "npm run build -w beat-lab",
+    "build:player": "npm run build -w music-player",
+    "lint:beat-lab": "npm run lint -w beat-lab",
+    "lint:player": "npm run lint -w music-player"
   }
 }
