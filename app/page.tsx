@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import type { Project } from "@/lib/types";
@@ -387,6 +388,11 @@ export default function HomePage(): React.JSX.Element {
       <header className="header">
         <h1>Agentic Beat Lab OS</h1>
         <p>Parallel interface + agent workflow + token saver command center</p>
+        <p className="meta">
+          <Link href="/producer-dna" style={{ color: "var(--accent)" }}>
+            Open Producer DNA Research base →
+          </Link>
+        </p>
       </header>
       <section className="controls">
         <div>
