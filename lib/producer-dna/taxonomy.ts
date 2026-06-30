@@ -1,0 +1,173 @@
+/**
+ * Master taxonomy for Producer DNA Research Base.
+ */
+
+export const ERA_TAXONOMY = [
+  "pre_tape_studio_era",
+  "tape_console_era",
+  "wall_of_sound_era",
+  "dub_soundsystem_era",
+  "disco_electronic_studio_era",
+  "early_hip_hop_sampling_era",
+  "midi_sampler_era",
+  "daw_era",
+  "internet_beatmaker_era",
+  "streaming_social_platform_era",
+  "ai_assisted_production_era"
+] as const;
+
+export type EraTaxon = (typeof ERA_TAXONOMY)[number];
+
+export const ERA_LABELS: Record<EraTaxon, string> = {
+  pre_tape_studio_era: "Pre-tape studio era",
+  tape_console_era: "Tape/console era",
+  wall_of_sound_era: "Wall of Sound era",
+  dub_soundsystem_era: "Dub/soundsystem era",
+  disco_electronic_studio_era: "Disco/electronic studio era",
+  early_hip_hop_sampling_era: "Early hip-hop sampling era",
+  midi_sampler_era: "MIDI/sampler era",
+  daw_era: "DAW era",
+  internet_beatmaker_era: "Internet beatmaker era",
+  streaming_social_platform_era: "Streaming/social-platform era",
+  ai_assisted_production_era: "AI-assisted production era"
+};
+
+export const GENRE_SCENE_TAXONOMY = [
+  "hip_hop",
+  "trap",
+  "boom_bap",
+  "g_funk",
+  "drill",
+  "grime",
+  "uk_garage",
+  "dubstep",
+  "jungle",
+  "drum_and_bass",
+  "techno",
+  "house",
+  "footwork",
+  "ambient",
+  "idm",
+  "synthpop",
+  "disco",
+  "funk",
+  "r_and_b",
+  "soul",
+  "gospel",
+  "rock",
+  "punk",
+  "metal",
+  "reggae",
+  "dub",
+  "dancehall",
+  "afrobeats",
+  "amapiano",
+  "highlife",
+  "reggaeton",
+  "dembow",
+  "latin_pop",
+  "baile_funk",
+  "cumbia",
+  "salsa",
+  "k_pop",
+  "j_pop",
+  "city_pop",
+  "bollywood",
+  "arabic_pop",
+  "experimental",
+  "noise",
+  "jazz",
+  "film_score",
+  "game_score"
+] as const;
+
+export type GenreSceneTaxon = (typeof GENRE_SCENE_TAXONOMY)[number];
+
+export const GENRE_LABELS: Record<GenreSceneTaxon, string> = {
+  hip_hop: "Hip-hop",
+  trap: "Trap",
+  boom_bap: "Boom bap",
+  g_funk: "G-funk",
+  drill: "Drill",
+  grime: "Grime",
+  uk_garage: "UK garage",
+  dubstep: "Dubstep",
+  jungle: "Jungle",
+  drum_and_bass: "Drum and bass",
+  techno: "Techno",
+  house: "House",
+  footwork: "Footwork",
+  ambient: "Ambient",
+  idm: "IDM",
+  synthpop: "Synthpop",
+  disco: "Disco",
+  funk: "Funk",
+  r_and_b: "R&B",
+  soul: "Soul",
+  gospel: "Gospel",
+  rock: "Rock",
+  punk: "Punk",
+  metal: "Metal",
+  reggae: "Reggae",
+  dub: "Dub",
+  dancehall: "Dancehall",
+  afrobeats: "Afrobeats",
+  amapiano: "Amapiano",
+  highlife: "Highlife",
+  reggaeton: "Reggaeton",
+  dembow: "Dembow",
+  latin_pop: "Latin pop",
+  baile_funk: "Baile funk / funk carioca",
+  cumbia: "Cumbia",
+  salsa: "Salsa",
+  k_pop: "K-pop",
+  j_pop: "J-pop",
+  city_pop: "City pop",
+  bollywood: "Bollywood / Indian film music",
+  arabic_pop: "Arabic pop",
+  experimental: "Experimental",
+  noise: "Noise",
+  jazz: "Jazz",
+  film_score: "Film score",
+  game_score: "Game score"
+};
+
+export const PRODUCER_ROLE_TAXONOMY = [
+  "beatmaker",
+  "producer_auteur",
+  "studio_producer",
+  "engineer_producer",
+  "dj_producer",
+  "composer_producer",
+  "arranger",
+  "remixer",
+  "sound_designer",
+  "executive_producer",
+  "label_architect",
+  "sampling_architect",
+  "vocal_producer",
+  "mix_engineer_as_producer",
+  "band_member_as_producer",
+  "production_collective"
+] as const;
+
+export type ProducerRoleTaxon = (typeof PRODUCER_ROLE_TAXONOMY)[number];
+
+export const ROLE_LABELS: Record<ProducerRoleTaxon, string> = {
+  beatmaker: "Beatmaker",
+  producer_auteur: "Producer-auteur",
+  studio_producer: "Studio producer",
+  engineer_producer: "Engineer-producer",
+  dj_producer: "DJ-producer",
+  composer_producer: "Composer-producer",
+  arranger: "Arranger",
+  remixer: "Remixer",
+  sound_designer: "Sound designer",
+  executive_producer: "Executive producer",
+  label_architect: "Label architect",
+  sampling_architect: "Sampling architect",
+  vocal_producer: "Vocal producer",
+  mix_engineer_as_producer: "Mix engineer as producer",
+  band_member_as_producer: "Band member as producer",
+  production_collective: "Production collective"
+};

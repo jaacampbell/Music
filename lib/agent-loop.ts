@@ -1,4 +1,5 @@
 import { buildPromptWithCache } from "@/lib/prompt-cache";
+import { runWithConcurrency } from "@/lib/parallel-agents/orchestrator";
 import { runAgentLoop, runAnalysis, runExport, runExtraction } from "@/lib/store";
 
 export interface AgentDecision {
@@ -110,10 +111,11 @@ export const executeAgentCommand = (
   };
 };
 
-export const executeMultiAgentCommands = (
+export const executeMultiAgentCommands = async (
   projectId: string,
-  commands: string[]
-): {
+  commands: string[],
+  concurrency = 5
+): Promise<{
   totalCommands: number;
   results: Array<{
     command: string;
@@ -125,9 +127,9 @@ export const executeMultiAgentCommands = (
   }>;
   totalJobs: number;
   totalTokensSaved: number;
-} => {
+}> => {
   const cleanCommands = commands.map((value) => value.trim()).filter(Boolean);
-  const results = cleanCommands.map((command) => ({
+  const results = await runWithConcurrency(cleanCommands, concurrency, async (command) => ({
     command,
     ...executeAgentCommand(projectId, command)
   }));

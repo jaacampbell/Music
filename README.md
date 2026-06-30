@@ -14,9 +14,15 @@ This repository now includes a production blueprint for a **universal Agentic Be
 
 - [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
 
-## Producer DNA Research OS (integrated)
+### Stem Extraction + DAW Export (planning)
 
-The [`producer-dna/`](producer-dna/) directory vendors the **Producer DNA Research OS** — a Python research project (producer taxonomies, musicological seed data, scoring, and queries) that feeds Song DNA. It is integrated here as a subproject and also maintained standalone on its own branch. See [`producer-dna/README.md`](producer-dna/README.md).
+- [`docs/stem-extraction/PROPOSAL.md`](docs/stem-extraction/PROPOSAL.md): Technical proposal for the stem extraction + music editor export module.
+- [`docs/stem-extraction/agent-prompt.md`](docs/stem-extraction/agent-prompt.md): Runtime prompt for the Stem Extraction Agent.
+- [`docs/stem-extraction/build-checklist.md`](docs/stem-extraction/build-checklist.md): Phase 1 "build this first" checklist.
+
+## Producer DNA Research OS (integrated + standalone)
+
+The [`producer-dna/`](producer-dna/) directory vendors the **Producer DNA Research OS** — a Python research project (producer taxonomies, 3-layer musicological DNA, Batch 001 seed of 50 producers, ingestion adapters, scoring, and CLI) that feeds Song DNA. It is integrated here as a subproject **and** maintained as its own standalone repository. See [`producer-dna/README.md`](producer-dna/README.md).
 
 ## Built MVP (interface + APIs)
 

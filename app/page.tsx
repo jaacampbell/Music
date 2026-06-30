@@ -2,11 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { ProducerDnaPanel } from "@/app/components/ProducerDnaPanel";
 import type { Project } from "@/lib/types";
 
 const TABS = [
   "Song Brief",
   "Song DNA",
+  "Producer DNA",
   "Prompt Pack",
   "Generations",
   "Stem Library",
@@ -200,6 +202,10 @@ export default function HomePage(): React.JSX.Element {
   };
 
   const renderMainContent = (): React.JSX.Element => {
+    if (activeTab === "Producer DNA") {
+      return <ProducerDnaPanel />;
+    }
+
     if (!selectedProject) {
       return (
         <div className="card">
@@ -386,7 +392,12 @@ export default function HomePage(): React.JSX.Element {
     <main className="page">
       <header className="header">
         <h1>Agentic Beat Lab OS</h1>
-        <p>Parallel interface + agent workflow + token saver command center</p>
+        <p>
+          Parallel interface + agent workflow + token saver command center ·{" "}
+          <a href="/stem-lab" style={{ color: "var(--accent)" }}>
+            Stem Lab →
+          </a>
+        </p>
       </header>
       <section className="controls">
         <div>
