@@ -1,0 +1,581 @@
+warnings:
+
+  # ── George Martin (PDNA-000001) ────────────────────────────────────────────
+  - pdna_id: PDNA-000001
+    warning_type: surface_signifier
+    description: "Lush string arrangements are the most imitated surface of Martin's style. Using them without his structural restraint — knowing precisely when NOT to add strings — produces sentimentality, not sophistication."
+    severity: major
+
+  - pdna_id: PDNA-000001
+    warning_type: studio_trap
+    description: "Martin's innovations were inseparable from the limitation of 4-track recording. Replicating his techniques with unlimited tracks paradoxically loses the creative pressure that produced them."
+    severity: moderate
+
+  - pdna_id: PDNA-000001
+    warning_type: tonal_cliche
+    description: "The 'Beatles sound' has been so thoroughly absorbed into pop DNA that direct homage risks producing pastiche. The spirit of Martin's work is experimental ambition — apply that to today's tools, not yesterday's sounds."
+    severity: major
+
+  # ── Phil Spector (PDNA-000002) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000002
+    warning_type: surface_signifier
+    description: "Wall of Sound is defined by mass, space saturation, and emotional density — not by reverb. Cranking reverb on a thin arrangement produces mud, not Spector. The dense human ensemble is the foundation."
+    severity: major
+
+  - pdna_id: PDNA-000002
+    warning_type: rhythm_trap
+    description: "The shuffle-driven tempo and live feel of Spector's records requires organic performance variation. Quantizing drum machine loops to imitate his approach eliminates the fundamental quality that makes it work."
+    severity: moderate
+
+  # ── Quincy Jones (PDNA-000003) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000003
+    warning_type: studio_trap
+    description: "Jones's productions are the result of deep pre-production: precise charts, hand-picked session musicians, and hours of arrangement work before tape rolls. Improvising arrangements at the board produces a pale imitation."
+    severity: major
+
+  - pdna_id: PDNA-000003
+    warning_type: surface_signifier
+    description: "The glossy sheen of Thriller-era production is the finished surface of massive technical investment. Achieving the gloss with compression and limiting alone, without the underlying arrangement depth, produces hollow polish."
+    severity: moderate
+
+  - pdna_id: PDNA-000003
+    warning_type: tonal_cliche
+    description: "Jones's jazz vocabulary and pop instinct coexisted through mastery of both. Applying jazz harmony over pop drum patterns without fluency in either tradition produces awkward hybridity."
+    severity: moderate
+
+  # ── Brian Eno (PDNA-000004) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000004
+    warning_type: surface_signifier
+    description: "Slow attack times and reverb tails are Eno's surface — his real contribution is structured indeterminacy. Random-seeming ambient textures that aren't actually governed by a generative system are just wallpaper."
+    severity: major
+
+  - pdna_id: PDNA-000004
+    warning_type: studio_trap
+    description: "Eno's ambient works came from rigorous constraint and process design (tape loops, Oblique Strategies, limited gear). Imitating the aesthetic without a governing process produces aesthetic ambient without conceptual grounding."
+    severity: moderate
+
+  - pdna_id: PDNA-000004
+    warning_type: tonal_cliche
+    description: "The phrase 'inspired by Eno' has become a shorthand for any drone-heavy, reverb-drenched texture. Genuine Eno lineage requires process thinking and the discipline to let process generate unexpected outcomes."
+    severity: minor
+
+  # ── Lee "Scratch" Perry (PDNA-000005) ─────────────────────────────────────
+  - pdna_id: PDNA-000005
+    warning_type: surface_signifier
+    description: "Dub delay and echo are Perry's tools, not his music. The underlying riddim structures and vocal performances that he transformed are what give the effects meaning. Effects without strong source material become noise."
+    severity: major
+
+  - pdna_id: PDNA-000005
+    warning_type: tonal_cliche
+    description: "Jamaican patois, Rastafarian lyrical themes, and reggae riddim structures are cultural artifacts with specific origins. Borrowing the surface without understanding the tradition produces cultural pastiche."
+    severity: major
+
+  # ── King Tubby (PDNA-000006) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000006
+    warning_type: rhythm_trap
+    description: "Tubby's dub is built around strategic sound removal — the drop-out IS the composition. Filling every channel with dub effects destroys the spatial drama that makes his mixing revolutionary."
+    severity: major
+
+  - pdna_id: PDNA-000006
+    warning_type: studio_trap
+    description: "Tubby worked with a customized mixing board in a specific acoustic environment. Digital recreations of his echo units capture the effect but miss the tactile, real-time performance element that gave his mixes their living quality."
+    severity: moderate
+
+  # ── Giorgio Moroder (PDNA-000007) ─────────────────────────────────────────
+  - pdna_id: PDNA-000007
+    warning_type: surface_signifier
+    description: "The four-on-the-floor kick and sequenced synth bass are Moroder's signatures but not his innovation. His contribution was emotional urgency at machine tempo. Slavishly reproducing the pattern without the emotional arc produces generic disco."
+    severity: major
+
+  - pdna_id: PDNA-000007
+    warning_type: tonal_cliche
+    description: "Moroder's 70s sound has been retroactively stylized as vintage aesthetic. The original records were cutting-edge technology deployed in service of cathartic pop emotion — nostalgia for the sound misses the forward-looking intent."
+    severity: moderate
+
+  # ── Tom Dowd (PDNA-000008) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000008
+    warning_type: studio_trap
+    description: "Dowd's transparent recording philosophy requires performers capable of delivering complete performances. His approach breaks down when applied to productions that depend on heavy post-processing to compensate for performance deficiencies."
+    severity: moderate
+
+  - pdna_id: PDNA-000008
+    warning_type: surface_signifier
+    description: "Warmth and natural room sound in Dowd's records came from great rooms, great instruments, and great players — not from tape saturation plugins chasing vintage character."
+    severity: minor
+
+  # ── Teo Macero (PDNA-000009) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000009
+    warning_type: studio_trap
+    description: "Macero's tape-editing approach to Bitches Brew created coherence from dozens of hours of improvisation. Randomly splicing takes together without Macero's editorial judgment produces chaos, not composition."
+    severity: major
+
+  - pdna_id: PDNA-000009
+    warning_type: tonal_cliche
+    description: "The 'electric Miles' production aesthetic has been widely borrowed as a signifier of avant-garde jazz credibility. Applying it without command of the underlying musical language produces production posturing."
+    severity: moderate
+
+  # ── Sylvia Robinson (PDNA-000010) ─────────────────────────────────────────
+  - pdna_id: PDNA-000010
+    warning_type: surface_signifier
+    description: "The breakbeat loop and rapping vocal formula of early hip-hop records was Robinson's commercial innovation — but she succeeded by stripping music to its core groove. Layering effects and samples over that formula without that reductive discipline loses the point."
+    severity: moderate
+
+  - pdna_id: PDNA-000010
+    warning_type: tonal_cliche
+    description: "The old-school hip-hop aesthetic is now a nostalgia genre. The original records were urgent, street-level commercial music. Recreating the vintage sonic is a different artistic project from recreating the creative attitude."
+    severity: minor
+
+  # ── Rick Rubin (PDNA-000011) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000011
+    warning_type: studio_trap
+    description: "Rubin's stripping-back approach works because he selects performers with enough personality to fill space. Removing production elements from mediocre source material produces emptiness, not power."
+    severity: major
+
+  - pdna_id: PDNA-000011
+    warning_type: surface_signifier
+    description: "The Rubin aesthetic is often misconstrued as 'just turn up the room mic and add reverb.' His real contribution is curatorial: choosing the right artist, the right songs, the right room. The sound follows from those decisions."
+    severity: major
+
+  # ── Dr. Dre (PDNA-000012) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000012
+    warning_type: surface_signifier
+    description: "The rolling bass, orchestral string stabs, and cinematic scale of Dre's production are immediately recognizable — and immediately derivative if reproduced directly. The power comes from the restraint and the specific relationship between elements, not the individual sounds."
+    severity: major
+
+  - pdna_id: PDNA-000012
+    warning_type: studio_trap
+    description: "Dre is known for spending months perfecting beats that listeners hear as effortless. Attempting to recreate his production quality without that level of revision produces an approximation that misses precisely what took the longest to achieve."
+    severity: moderate
+
+  - pdna_id: PDNA-000012
+    warning_type: rhythm_trap
+    description: "The G-funk bounce requires specific drum programming relationships between the kick, bass, and synth. Getting the tempo right (usually 95-105 BPM) but missing the internal groove relationships produces loose rather than locked."
+    severity: moderate
+
+  # ── J Dilla (PDNA-000013) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000013
+    warning_type: rhythm_trap
+    description: "Loose quantization ≠ Dilla's feel. His swing is deliberate microtiming — each hit placed with intention relative to the grid. Programming a 'drunk' beat that wanders randomly misses the purposeful control behind every displacement."
+    severity: major
+
+  - pdna_id: PDNA-000013
+    warning_type: surface_signifier
+    description: "Vinyl crackle, tape hiss, and lo-fi processing are atmosphere cues, not the music itself. Dilla's warmth comes from sample selection and harmonic layering. Processing clean samples through lo-fi chains is the aesthetic without the substance."
+    severity: moderate
+
+  - pdna_id: PDNA-000013
+    warning_type: tonal_cliche
+    description: "Donuts is the most imitated record in underground hip-hop history. Using its tape-splice intros, filtered soul samples, and short looping structure is now a genre trope — the Dilla essence is the original crate-digging judgment beneath the technique."
+    severity: major
+
+  # ── DJ Premier (PDNA-000014) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000014
+    warning_type: surface_signifier
+    description: "The Premier scratch hook and chopped vocal sample intro are his most copied signatures. They work because they're preceded by exceptional sample selection and drum placement — copying the form without the underlying craft produces empty mimicry."
+    severity: major
+
+  - pdna_id: PDNA-000014
+    warning_type: rhythm_trap
+    description: "Premier's kicks hit hard because of specific low-frequency choices and sample layering — not because they're loud. Over-compressing or boosting bass indiscriminately to chase his punchiness creates bloat, not impact."
+    severity: moderate
+
+  # ── RZA (PDNA-000015) ─────────────────────────────────────────────────────
+  - pdna_id: PDNA-000015
+    warning_type: surface_signifier
+    description: "Kung fu movie samples and eerie minor-key loops are RZA's sonic trademark — and the most surface-level reference point. The real innovation is the chess-match structure of Wu-Tang's album construction, which requires knowing when each producer's style serves the larger concept."
+    severity: major
+
+  - pdna_id: PDNA-000015
+    warning_type: tonal_cliche
+    description: "Dark, grim, lo-fi hip-hop has become its own genre with its own clichés. RZA's original vision was specific to early-90s Staten Island and the particular set of MCs around him. The aesthetic divorced from that specificity becomes generic grimdark."
+    severity: moderate
+
+  # ── Timbaland (PDNA-000016) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000016
+    warning_type: rhythm_trap
+    description: "Timbaland's rhythmic complexity comes from layered, interlocking percussion cells that function as conversation rather than groove. Putting complex drum patterns over a static bassline produces busyness, not polyrhythm."
+    severity: major
+
+  - pdna_id: PDNA-000016
+    warning_type: surface_signifier
+    description: "The vocal chop and manipulated voice-as-instrument is his most imitated technique. It works in Timbaland records because the rhythmic placement is exact and in service of the song structure — placed randomly, it's just a production trick."
+    severity: moderate
+
+  # ── The Neptunes (PDNA-000017) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000017
+    warning_type: surface_signifier
+    description: "The Neptunes' sparse production sounds simple until you try to replicate it. Their minimalism requires perfect sound design choices — each element carries enormous weight because nothing else is there. Sparse production with weak sounds is just empty."
+    severity: major
+
+  - pdna_id: PDNA-000017
+    warning_type: tonal_cliche
+    description: "Early 2000s Neptunes production has become heavily nostalgized. The records were forward-looking at the time; recreating the aesthetic now produces period pastiche rather than the futuristic edge that made them distinctive."
+    severity: moderate
+
+  # ── Missy Elliott (PDNA-000018) ───────────────────────────────────────────
+  - pdna_id: PDNA-000018
+    warning_type: surface_signifier
+    description: "Missy's vocal delivery and production choices are inseparable — she co-creates the productions rather than receiving them. Producers replicating her production style without an artist who brings that same level of performative specificity produce hollow tracks."
+    severity: major
+
+  - pdna_id: PDNA-000018
+    warning_type: rhythm_trap
+    description: "The time-stretched vocal effects and reversed sounds that define her records require specific tempo relationships to work. Applying these techniques indiscriminately across different BPMs loses the rhythmic logic that makes them feel intentional."
+    severity: moderate
+
+  # ── Metro Boomin (PDNA-000019) ────────────────────────────────────────────
+  - pdna_id: PDNA-000019
+    warning_type: surface_signifier
+    description: "Metro's tag ('Metro Boomin want some more') is so widely recognized that its cadence has become a shorthand for trap production quality. Production isn't a tag — the tag is marketing for the actual craft underneath."
+    severity: minor
+
+  - pdna_id: PDNA-000019
+    warning_type: tonal_cliche
+    description: "The orchestral trap template Metro popularized has generated thousands of imitators. The key variable that separates his records from the copies is restraint in arrangement — knowing which orchestral elements to leave out."
+    severity: major
+
+  - pdna_id: PDNA-000019
+    warning_type: rhythm_trap
+    description: "Metro's 808s are tuned precisely to the key of the track — not randomly placed. 808 bass that clashes harmonically with melodic elements is the most common failure mode in trap imitation."
+    severity: major
+
+  # ── Mike WiLL Made-It (PDNA-000020) ──────────────────────────────────────
+  - pdna_id: PDNA-000020
+    warning_type: surface_signifier
+    description: "Mike WiLL's 'sound' is defined by the artists he works with as much as his production. His beats in isolation are skeletal by design — they depend on specific performer energies to come alive."
+    severity: moderate
+
+  - pdna_id: PDNA-000020
+    warning_type: rhythm_trap
+    description: "The hi-hat rolls and trap triplets in his records are placed to build tension and release — not applied uniformly throughout. Filling entire tracks with hi-hat rolls produces fatigue, not energy."
+    severity: moderate
+
+  # ── Zaytoven (PDNA-000021) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000021
+    warning_type: surface_signifier
+    description: "Zaytoven's piano runs are technically demanding improvisations built on deep gospel training. Running synth arpeggios over trap drums without that pianistic fluency produces decoration, not the organic energy that makes his records feel alive."
+    severity: major
+
+  - pdna_id: PDNA-000021
+    warning_type: studio_trap
+    description: "Zaytoven's prolific output comes from a real-time improvisation practice honed over decades. Attempting to recreate his approach by manually programming piano parts note-by-note loses the spontaneity that is central to his sound."
+    severity: moderate
+
+  # ── Lex Luger (PDNA-000022) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000022
+    warning_type: surface_signifier
+    description: "Lex Luger's orchestral trap was so widely imitated that it became a genre template within months of his rise. The saturation of his sound is now so complete that direct imitation reads as derivative regardless of execution quality."
+    severity: major
+
+  - pdna_id: PDNA-000022
+    warning_type: rhythm_trap
+    description: "The hard drop and 808 sub-bass that define Luger's records require precise low-end control. System-rattling bass that isn't tuned or filtered appropriately creates technical problems that mask the rhythmic impact."
+    severity: moderate
+
+  # ── Southside (PDNA-000023) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000023
+    warning_type: surface_signifier
+    description: "Southside's beats are engineered around specific artist deliveries — particularly Future's melodic autotune style. Tracks built in his style need an artist with equivalent tonal specificity or they sound unfinished."
+    severity: moderate
+
+  - pdna_id: PDNA-000023
+    warning_type: tonal_cliche
+    description: "The dark melodic trap sound Southside helped define has become the dominant aesthetic in trap music. Standing out within this space requires either mastery of the form's nuances or a genuine departure from it."
+    severity: moderate
+
+  # ── Madlib (PDNA-000024) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000024
+    warning_type: surface_signifier
+    description: "Madlib's aesthetic eclecticism — sampling from any genre, any era, any geography — is the surface expression of genuine encyclopedic knowledge. Sampling obscure records without that knowledge produces random obscurity, not intentional discovery."
+    severity: major
+
+  - pdna_id: PDNA-000024
+    warning_type: studio_trap
+    description: "Madlib is extraordinarily prolific. His volume means many experiments that don't work — the ratio of released to recorded material is a key part of his process. Attempting to achieve his quality through his volume without his curation produces quantity without coherence."
+    severity: moderate
+
+  # ── Pete Rock (PDNA-000025) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000025
+    warning_type: surface_signifier
+    description: "The soulful horn sample and mellow head-nod groove are Pete Rock's sonic calling card — and now a genre staple. The underlying editorial intelligence — knowing which break, which horn, which moment within the record — is invisible and inimitable without deep source knowledge."
+    severity: major
+
+  - pdna_id: PDNA-000025
+    warning_type: tonal_cliche
+    description: "Pete Rock's production has become the sonic reference point for 'soulful hip-hop' to the point of self-parody in some uses. The creative challenge is not to recreate his warmth but to find new sources of it."
+    severity: moderate
+
+  # ── Marley Marl (PDNA-000026) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000026
+    warning_type: surface_signifier
+    description: "The accidental discovery of drum sampling that launched Marley Marl's career was a technical innovation in 1986 — that technique is now universal. The genuine creative challenge is what he did with it: specific selection of which elements to isolate and which records to sample."
+    severity: moderate
+
+  - pdna_id: PDNA-000026
+    warning_type: tonal_cliche
+    description: "Boom bap's golden-era sounds are now well-mapped aesthetic territory. Marley Marl's original contribution was developing a new vocabulary — working 'in his style' today requires advancing from where he left off, not recreating his mid-point."
+    severity: minor
+
+  # ── DJ Screw (PDNA-000027) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000027
+    warning_type: surface_signifier
+    description: "Slowing audio to 60% and calling it 'chopped and screwed' captures the effect but misses DJ Screw's DJ practice — selecting exactly which moments to hold, chop, and layer in real time based on performance energy. The formula without the performative judgment produces mechanical slowness."
+    severity: major
+
+  - pdna_id: PDNA-000027
+    warning_type: tonal_cliche
+    description: "Screwed music's codeine-haze atmosphere is now aestheticized as a distinct sonic category. The original tapes were functional art — made for specific social contexts in Houston. Recreating the sound outside that context is cultural borrowing that should be acknowledged."
+    severity: moderate
+
+  # ── SOPHIE (PDNA-000028) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000028
+    warning_type: surface_signifier
+    description: "SOPHIE's hyper-processed textures are the product of extreme technical precision — not chaos. Randomly processed, pitch-shifted, and distorted audio without a structural intention produces noise, not the carefully controlled maximalism that makes her records coherent."
+    severity: major
+
+  - pdna_id: PDNA-000028
+    warning_type: tonal_cliche
+    description: "PC Music-adjacent hyper-pop aesthetics have been widely adopted and quickly became a genre with its own clichés. SOPHIE's work predated and in many ways exceeded the genre that used her as a reference point — she was never simply 'hyper-pop.'"
+    severity: moderate
+
+  # ── Arca (PDNA-000029) ────────────────────────────────────────────────────
+  - pdna_id: PDNA-000029
+    warning_type: surface_signifier
+    description: "Arca's body-horror sonic aesthetic is the surface expression of deep personal vulnerability and gender experience. Appropriating the extreme timbres without the emotional source material produces aesthetic grotesquerie rather than the cathartic expression that gives her work power."
+    severity: major
+
+  - pdna_id: PDNA-000029
+    warning_type: studio_trap
+    description: "Arca's production uses extreme processing to reveal the humanity in sound rather than remove it. Applying similar processing chains without that intention produces inhuman abstraction that lacks her work's strange warmth."
+    severity: moderate
+
+  # ── Burial (PDNA-000030) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000030
+    warning_type: surface_signifier
+    description: "Vinyl crackle, de-tuned pads, and UK garage rhythms are Burial's easily identifiable textures. His real contribution is the specific emotional loneliness in the arrangement choices — what's absent is as important as what's present."
+    severity: major
+
+  - pdna_id: PDNA-000030
+    warning_type: tonal_cliche
+    description: "UK bass music's melancholic-urban aesthetic has been thoroughly mined by artists citing Burial as a reference. The creative territory he opened has been largely mapped — genuine inspiration from his work means departing from where he left off."
+    severity: moderate
+
+  # ── Aphex Twin (PDNA-000031) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000031
+    warning_type: surface_signifier
+    description: "Complex drum programming, detuned acid lines, and ambient textures are Richard James's recognizable signatures. The actual innovation is algorithmic thinking applied to sound design — programming by constraint and process rather than melody-first composition."
+    severity: major
+
+  - pdna_id: PDNA-000031
+    warning_type: studio_trap
+    description: "Aphex Twin's catalog spans deliberate minimalism (ambient works) and deliberate maximalism (drill'n'bass). Using 'inspired by Aphex Twin' to justify any electronic approach is too broad — which Aphex Twin and which period?"
+    severity: moderate
+
+  # ── Daft Punk (PDNA-000032) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000032
+    warning_type: surface_signifier
+    description: "Vocoder and talkbox are Daft Punk's most-imitated sonic tools. Their secret is that these effects are used rhythmically — as percussive melodic elements, not as voice disguise. Applied as atmospheric decoration, they lose their function."
+    severity: major
+
+  - pdna_id: PDNA-000032
+    warning_type: tonal_cliche
+    description: "French house and electronic disco revivalism is now a well-trodden path. What made Daft Punk's references to disco feel fresh was their commitment to pure pop craft — hookwriting at the level of peak ABBA. Nostalgia for the aesthetic without that craft discipline produces retro genre exercise."
+    severity: major
+
+  # ── Kraftwerk (PDNA-000033) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000033
+    warning_type: surface_signifier
+    description: "Sequenced synth lines and robotic drums are Kraftwerk's most reproduced elements. Their actual innovation is conceptual: presenting technology as humanity's natural evolution. Imitating the sounds without the conceptual framework produces retro electronic music, not Kraftwerk's project."
+    severity: major
+
+  - pdna_id: PDNA-000033
+    warning_type: tonal_cliche
+    description: "Kraftwerk's entire catalog has been deeply absorbed into electronic music history. Their records are now reference points rather than points of departure. Genuine lineage means asking what Kraftwerk would do with today's technology, not recreating what they did with yesterday's."
+    severity: major
+
+  # ── Wendy Carlos (PDNA-000034) ────────────────────────────────────────────
+  - pdna_id: PDNA-000034
+    warning_type: surface_signifier
+    description: "Synthesized classical music has been done. The specific creative challenge Carlos solved — proving the synthesizer could achieve the articulation and phrasing of classical instruments — was definitively answered by Switched-On Bach. That question doesn't need answering again."
+    severity: major
+
+  - pdna_id: PDNA-000034
+    warning_type: studio_trap
+    description: "Carlos's early work required custom Moog circuitry built by her and Robert Moog in dialogue. Modern synthesizers provide what she had to engineer from scratch. The accessibility of the tools should not obscure the extraordinary technical mastery that underpinned her approach."
+    severity: minor
+
+  # ── Ryuichi Sakamoto (PDNA-000035) ────────────────────────────────────────
+  - pdna_id: PDNA-000035
+    warning_type: surface_signifier
+    description: "Sakamoto's solo piano works and electronic compositions sound simple on the surface — single melodic lines over sparse chords. This minimalism is the product of decades of reduction, not a starting point. Beginning there produces music that is thin rather than refined."
+    severity: major
+
+  - pdna_id: PDNA-000035
+    warning_type: tonal_cliche
+    description: "Japanese ambient minimalism is now a recognizable aesthetic with predictable signifiers (prepared piano, field recordings, drone). Sakamoto's actual work crosses too many genres to be reduced to this — he was equally at home in YMO's maximalist synth-pop."
+    severity: moderate
+
+  # ── Yasutaka Nakata (PDNA-000036) ─────────────────────────────────────────
+  - pdna_id: PDNA-000036
+    warning_type: surface_signifier
+    description: "Nakata's vocoded, candy-coated production is inseparable from specific artists (Capsule, Perfume, Kyary) whose personas shape how the music is heard. The production aesthetic loses much of its meaning without an artist whose character creates that specific high-gloss artificiality."
+    severity: major
+
+  - pdna_id: PDNA-000036
+    warning_type: tonal_cliche
+    description: "J-pop maximalism has been widely absorbed as an aesthetic reference in international pop. The cultural specificity of Nakata's work — its relationship to Akihabara culture, idol mythology, and specific Japanese pop conventions — is not portable without the cultural context."
+    severity: moderate
+
+  # ── A. R. Rahman (PDNA-000037) ────────────────────────────────────────────
+  - pdna_id: PDNA-000037
+    warning_type: surface_signifier
+    description: "Rahman's scoring integrates Indian classical, devotional, film, and electronic elements with genuine mastery of each tradition. Adding 'Indian sounds' (tabla, sitar, Carnatic vocals) to Western production without literacy in those traditions produces misrepresentative cultural collage."
+    severity: major
+
+  - pdna_id: PDNA-000037
+    warning_type: tonal_cliche
+    description: "Bollywood production has been mined for 'exotic' sonic references in global pop. Rahman's work transcends Bollywood — he has equal command of orchestral scoring, electronic textures, and pop songwriting. Using him as shorthand for Indian music reduces the range of his contribution."
+    severity: major
+
+  # ── Max Martin (PDNA-000038) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000038
+    warning_type: surface_signifier
+    description: "The 'melodic math' of Max Martin hits — rising pre-chorus, anthemic chorus, counter-melody — is now a pedagogically taught formula. The formula without Martin's gift for the specific melodic moment that makes each example feel inevitable produces mechanical hookwriting."
+    severity: major
+
+  - pdna_id: PDNA-000038
+    warning_type: studio_trap
+    description: "Martin's records reflect extensive revision and A/B testing over long development periods. Quick iterations targeting his aesthetic miss the refinement process that separates his finished work from first drafts."
+    severity: moderate
+
+  # ── Shellback (PDNA-000039) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000039
+    warning_type: surface_signifier
+    description: "Shellback's production is always in service of Max Martin's songwriting architecture. The drum sounds and arrangement choices are designed to support a specific melodic and structural vision — they read as generic without that songwriting foundation."
+    severity: moderate
+
+  - pdna_id: PDNA-000039
+    warning_type: tonal_cliche
+    description: "Modern pop production's big, compressed snare and anthemic build conventions largely derive from the Martin/Shellback template. The sound has been so thoroughly absorbed that it is now the baseline expectation for commercial pop, not a distinctive creative choice."
+    severity: minor
+
+  # ── Nile Rodgers (PDNA-000040) ────────────────────────────────────────────
+  - pdna_id: PDNA-000040
+    warning_type: surface_signifier
+    description: "Rodgers's guitar style — the 'chucking' muted rhythm guitar — is instantly recognizable and widely imitated. The actual contribution is harmonic: his chord substitutions and voice leading beneath the rhythm guitar are sophisticated jazz thinking disguised as funk simplicity."
+    severity: major
+
+  - pdna_id: PDNA-000040
+    warning_type: rhythm_trap
+    description: "Chic's groove is a specific relationship between bass, guitar, drums, and strings that evolved over years of touring and recording. Playing any of these elements with studio musicians who don't know each other produces the notes but not the feel."
+    severity: moderate
+
+  # ── Trevor Horn (PDNA-000041) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000041
+    warning_type: surface_signifier
+    description: "Horn's maximalist productions were assembled from the newest, most expensive technology available at the time. That technology is now accessible — but accessibility doesn't confer the curatorial taste that guided Horn's decisions about what to use and when."
+    severity: moderate
+
+  - pdna_id: PDNA-000041
+    warning_type: studio_trap
+    description: "Frankie Goes To Hollywood and Seal records took months of studio time with enormous budgets and the full Sarm West setup. Chasing their production density in a home studio context produces either compression artifacts or a simulacrum that lacks the physical impact of the originals."
+    severity: moderate
+
+  # ── Flood (PDNA-000042) ────────────────────────────────────────────────────
+  - pdna_id: PDNA-000042
+    warning_type: surface_signifier
+    description: "Flood's alternative rock production is characterized by controlled density — layers that feel full without becoming muddy. Adding more tracks to chase fullness without his frequency-separation discipline produces congestion, not power."
+    severity: major
+
+  - pdna_id: PDNA-000042
+    warning_type: studio_trap
+    description: "Flood's best-known records (Nine Inch Nails, Depeche Mode, PJ Harvey) required him to build the sonic vocabulary of each record from scratch, in collaboration with the artist. There is no 'Flood preset' — his aesthetic is relationship-specific."
+    severity: moderate
+
+  # ── Nigel Godrich (PDNA-000043) ───────────────────────────────────────────
+  - pdna_id: PDNA-000043
+    warning_type: surface_signifier
+    description: "Godrich's production on Radiohead records is inseparable from Thom Yorke's creative direction and the band's willingness to deconstruct their own work. Godrich producing other artists produces different records — 'inspired by Godrich' does not mean 'sounds like Radiohead.'"
+    severity: major
+
+  - pdna_id: PDNA-000043
+    warning_type: tonal_cliche
+    description: "The detuned, glitchy alternative production aesthetic of the OK Computer / Kid A era has been thoroughly absorbed. Records made in this mold today read as period homage rather than forward-looking experimentation."
+    severity: moderate
+
+  # ── Steve Albini (PDNA-000044) ────────────────────────────────────────────
+  - pdna_id: PDNA-000044
+    warning_type: surface_signifier
+    description: "Albini's approach — loud drums, bass-forward, minimal processing — sounds straightforward but requires exceptional room acoustics, great instrument sounds, and performers who can deliver complete performances. The philosophy without those prerequisites produces loud, ugly records."
+    severity: major
+
+  - pdna_id: PDNA-000044
+    warning_type: studio_trap
+    description: "Albini's most famous records were made in specific large rooms (Electrical Audio) with meticulously maintained vintage equipment. Digital recreation of his aesthetic tends to capture the dryness without the physical weight that comes from the acoustic environment."
+    severity: moderate
+
+  # ── Linda Perry (PDNA-000045) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000045
+    warning_type: surface_signifier
+    description: "Perry's songs are raw confessional statements wrapped in anthemic arrangements. The emotional directness is the point — producing in her style requires an artist willing to be that exposed. Anthemic arrangements over guarded performances produce bombast."
+    severity: major
+
+  - pdna_id: PDNA-000045
+    warning_type: tonal_cliche
+    description: "Early 2000s female-empowerment anthems have a specific sonic and lyrical template largely shaped by Perry. That template is now dated — new work in her spirit requires the same unflinching emotional honesty applied to contemporary contexts."
+    severity: moderate
+
+  # ── Tainy (PDNA-000046) ───────────────────────────────────────────────────
+  - pdna_id: PDNA-000046
+    warning_type: surface_signifier
+    description: "Tainy's productions are engineered for streaming metrics — the drop placement, intro length, and hook repetition are precisely calculated. Copying these structural choices without that data-informed intentionality produces commercial imitation without the commercial intelligence."
+    severity: moderate
+
+  - pdna_id: PDNA-000046
+    warning_type: tonal_cliche
+    description: "Latin urban pop has become a global mainstream genre. Tainy's early work broke through before that mainstreaming — current production in his style competes in a saturated field where differentiation requires more than competent execution."
+    severity: minor
+
+  # ── Luny Tunes (PDNA-000047) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000047
+    warning_type: surface_signifier
+    description: "The dembow riddim pattern that Luny Tunes codified is now the DNA of an entire genre. Using it without understanding its Jamaican dancehall origins and Puerto Rican transformation produces reggaeton by formula rather than by cultural fluency."
+    severity: major
+
+  - pdna_id: PDNA-000047
+    warning_type: tonal_cliche
+    description: "Reggaeton's basic production template has been so widely adopted that it is now a starting point, not a creative destination. Luny Tunes' actual contribution was stylistic originality within the template — not just competent execution of it."
+    severity: moderate
+
+  # ── Sarz (PDNA-000048) ────────────────────────────────────────────────────
+  - pdna_id: PDNA-000048
+    warning_type: surface_signifier
+    description: "Sarz's Afrobeats and afropop productions are built around specific percussion vocabulary from West African musical traditions. Approximating the rhythmic feel with generic percussion samples produces functional Afrobeats influence without its cultural specificity."
+    severity: moderate
+
+  - pdna_id: PDNA-000048
+    warning_type: tonal_cliche
+    description: "Afrobeats has become a global commercial phenomenon. The authentic cultural weight of the music — its relationship to Lagos street culture, diaspora identity, and specific language/vocal traditions — does not travel with the production aesthetics alone."
+    severity: moderate
+
+  # ── Kabza De Small (PDNA-000049) ──────────────────────────────────────────
+  - pdna_id: PDNA-000049
+    warning_type: surface_signifier
+    description: "Amapiano's log drum and piano/organ bass lines are immediately recognizable — and now widely referenced globally. The specific vocal and performance traditions of South African township culture that give amapiano its social context cannot be replicated by production technique alone."
+    severity: major
+
+  - pdna_id: PDNA-000049
+    warning_type: tonal_cliche
+    description: "Amapiano's rapid global spread has produced international producers adopting its sonic signature as a genre reference. Kabza's work is living culture with specific South African social meaning — international borrowing should acknowledge what isn't portable."
+    severity: major
+
+  # ── DJ Rashad (PDNA-000050) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000050
+    warning_type: rhythm_trap
+    description: "Footwork's 160 BPM and triplet-over-duple polyrhythm creates a specific psychoacoustic effect that requires precise tempo relationships to achieve. Approximating footwork at different tempos loses the specific embodied feeling the form was designed to produce."
+    severity: major
+
+  - pdna_id: PDNA-000050
+    warning_type: surface_signifier
+    description: "DJ Rashad's music was functional — made for specific social situations in Chicago juke and footwork battles. Electronic producers using footwork rhythms as textural reference outside that context produce an aestheticization of music designed to be experienced physically."
+    severity: moderate

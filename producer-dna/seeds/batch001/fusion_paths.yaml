@@ -1,0 +1,436 @@
+fusions:
+
+  # ── J Dilla (PDNA-000013) ──────────────────────────────────────────────────
+  - primary_pdna: PDNA-000013
+    secondary_pdna: PDNA-000033
+    secondary_element: "Kraftwerk — mechanical sequencer grid"
+    fusion_description: "Apply Dilla's loose, intentional swing philosophy to Kraftwerk's sequencer-locked rhythmic architecture. The productive contradiction: human-feel drum programming over machine-perfect basslines. Neither is fully in control — the hybrid space between groove and grid is where the new sound lives."
+    creative_prompt: "Build a beat using Dilla-style MPC programming (off-grid intentional microtiming) over a Kraftwerk-style sequenced synth bassline locked to rigid 4/4. Let the drums breathe while the bass stays mechanical. Don't quantize either to the other — hold the tension."
+
+  - primary_pdna: PDNA-000013
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — generative texture system"
+    fusion_description: "Dilla's sample-based warmth meets Eno's generative indeterminacy. Instead of arranging samples deliberately, let an Eno-style tape loop system feed the sample bank — let process choose which fragments surface. The MPC becomes a generative instrument rather than a compositional tool."
+    creative_prompt: "Set up a tape-loop or modular system that randomly surfaces short sample fragments from a Dilla-style soul and jazz library. Record what emerges without deliberate arrangement. Edit only to remove silence. Let the process create the track rather than curating it."
+
+  - primary_pdna: PDNA-000013
+    secondary_pdna: PDNA-000006
+    secondary_element: "King Tubby — spatial removal and echo architecture"
+    fusion_description: "Dilla's sample-chop vocabulary filtered through Tubby's philosophy of productive absence. Rather than adding elements, build the beat by removing them — the holes between drum hits become compositional statements. Dub echo turns every drop-out into a spatial event."
+    creative_prompt: "Build a Dilla-style beat with full drum and sample arrangement, then begin removing elements: mute the kick for 4 bars, drop the sample chop for 2, pull the snare out entirely. Use short dub delays on whatever remains. The absence should feel intentional, not broken."
+
+  - primary_pdna: PDNA-000013
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — spectral UK ghost atmosphere"
+    fusion_description: "Dilla's vinyl warmth and fragmented hip-hop structure combined with Burial's environmental melancholy and halftime ghost percussion. The bass weight stays — but the hi-hat shuffle becomes metallic rain rather than programmed groove. Samples decay into room tone."
+    creative_prompt: "Take a Dilla-style soul sample flip and process it with heavy convolution reverb in a realistic large space. Program a half-time shuffle hi-hat pattern in the Burial style (pitch-shifted, slightly degraded). Let the sample breathe into long reverb tails rather than looping tightly."
+
+  # ── Madlib (PDNA-000024) ──────────────────────────────────────────────────
+  - primary_pdna: PDNA-000024
+    secondary_pdna: PDNA-000029
+    secondary_element: "Arca — hyperreal deconstruction and body music"
+    fusion_description: "Madlib's archival depth and jazz crate-digging filtered through Arca's deconstruction of rhythm and timbre. The soul sample becomes the target of sonic surgery — chopped not into loops but into molecular fragments that reassemble with Arca's visceral physicality."
+    creative_prompt: "Find a rare jazz or soul record (Madlib-style crate dig). Sample a 2-bar section and run it through extreme pitch and time manipulation until melodic content becomes textural. Layer the result with unpitched percussion clusters — no clear downbeat. The original record should be barely recognizable."
+
+  - primary_pdna: PDNA-000024
+    secondary_pdna: PDNA-000031
+    secondary_element: "Aphex Twin — IDM polyrhythmic programming"
+    fusion_description: "Madlib's psychedelic sampling approach collides with Aphex Twin's complex rhythmic architecture. The soul-jazz loop becomes the harmonic bed for IDM-level drum programming — 32nd-note snare fills, polymetric hi-hats, and tempo micro-variations that turn the sample into an alien artifact."
+    creative_prompt: "Loop a Madlib-style soul-jazz sample (warm, slightly pitch-imperfect). Program drums using Aphex Twin-era complexity: at least 3 independent polyrhythmic lines, snare rolls on fractional beats, tempo modulation by ±2 BPM per section. Let the warm sample and cold drum complexity coexist without resolving."
+
+  - primary_pdna: PDNA-000024
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — Oblique Strategies and process music"
+    fusion_description: "Eno's Oblique Strategies applied to sampling decisions: let process guide crate selection rather than predetermined genre. Madlib's archival warmth governed by constraint cards — 'Use an unacceptable color,' 'Honor thy error as a hidden intention,' 'Work at a different speed.'"
+    creative_prompt: "Draw 3 Oblique Strategies cards before each session. Apply each literally to your sampling process: one to what you search for, one to how you process, one to how you arrange. Sample unusual non-music sources (instrument repair recordings, field recordings) and apply Madlib-style soul-jazz chops."
+
+  - primary_pdna: PDNA-000024
+    secondary_pdna: PDNA-000005
+    secondary_element: "Lee 'Scratch' Perry — dub space philosophy"
+    fusion_description: "Madlib's soul-jazz digging meets Perry's philosophy of transforming source material into unrecognizable psychedelic sculpture. Both are radical crate archaeologists — Perry excavates Jamaican studio history, Madlib excavates global obscure vinyl. Their methods are identical; their source material diverges."
+    creative_prompt: "Crate-dig a rare reggae or rocksteady record rather than soul/jazz. Apply Madlib-style chopping — short, pitched, filtered. But process the result through Perry-style echo and reverb treatment: tape delays, spring reverb, channel dropout. The reggae sample should become unidentifiable but rhythmically alive."
+
+  # ── DJ Premier (PDNA-000014) ──────────────────────────────────────────────
+  - primary_pdna: PDNA-000014
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — spectral UK ghost atmosphere"
+    fusion_description: "Premier's hard-cut New York sample chops and scratched vocal snippets filtered through Burial's environmental melancholy. The boom-bap grid remains intact — but the reverb field expands to industrial scale, and the scratched vocals decay into ghostly smears rather than sharp attacks."
+    creative_prompt: "Build a Premier-style beat: hard-chopped soul loop, neck-snapping kick and snare, scratched vocal sample. Then apply large-room convolution reverb to the entire mix at 20-30% wet — not enough to destroy the groove, but enough that every transient has a visible echo shadow. Slow the tempo to 75 BPM."
+
+  - primary_pdna: PDNA-000014
+    secondary_pdna: PDNA-000050
+    secondary_element: "DJ Rashad — Chicago footwork polyrhythm"
+    fusion_description: "Premier's tight chopping philosophy translated to footwork tempo and polyrhythmic density. The vocal scratch becomes a rhythmic tool rather than an accent — looped and layered at footwork speed. The boom-bap sample chop survives but operates at 160 BPM with multiple competing drum patterns."
+    creative_prompt: "Take a Premier-style sample chop — hard-cut soul loop over kick/snare grid. Double the tempo to 160 BPM. Replace the 4/4 kick-snare with a Rashad-style polyrhythmic pattern: kick patterns independent of the snare, both operating in parallel streams. Use Premier's scratch approach on a vocal sample as rhythmic fill."
+
+  # ── RZA (PDNA-000015) ─────────────────────────────────────────────────────
+  - primary_pdna: PDNA-000015
+    secondary_pdna: PDNA-000035
+    secondary_element: "Ryuichi Sakamoto — orchestral electronic cinematics"
+    fusion_description: "RZA's cinematic soul sampling and martial philosophy combined with Sakamoto's orchestral sensitivity and Japanese aesthetic restraint. Both approach music as architecture — RZA builds with kung-fu movie samples and dirty soul chops; Sakamoto with synthesizers and acoustic piano playing off each other's resonance."
+    creative_prompt: "Sample a Japanese film score or martial arts film soundtrack (not a western source). Apply RZA-style processing: pitch it down, add vinyl crackle simulation, loop the most melancholic 2-bar passage. Layer a Sakamoto-influenced piano melody — minimal, pentatonic-adjacent, with long decay. Program sparse trap-era drums underneath."
+
+  - primary_pdna: PDNA-000015
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient texture and controlled indeterminacy"
+    fusion_description: "RZA's cinematic soul sampling meets Eno's ambient generativity. The classic Wu-Tang stasis — long, meditative loops with deliberate monotony — extends into actual ambient territory. Battle rap becomes meditation. The beat doesn't evolve; it breathes."
+    creative_prompt: "Build a standard RZA-style beat: pitched-down soul loop, heavy 808 kick, minimal snare. Then extend the loop duration to 32 bars with no changes. Add an Eno-inspired slowly modulating pad underneath — not melodic, just tonal — that very gradually shifts harmonic color over 4 minutes. No vocal cue, no hook structure."
+
+  # ── Dr. Dre (PDNA-000012) ─────────────────────────────────────────────────
+  - primary_pdna: PDNA-000012
+    secondary_pdna: PDNA-000007
+    secondary_element: "Giorgio Moroder — Italo-disco synthesizer architecture"
+    fusion_description: "Dre's West Coast G-funk synth vocabulary shares more DNA with Moroder's Italo-disco than is usually acknowledged — both feature melodic synthesizer leads over metronomic groove. The merger makes the lineage explicit: G-funk IS West Coast Moroder, filtered through P-funk. Leaning into it reveals the common ancestor."
+    creative_prompt: "Build a G-funk beat using Moroder's synthesizer approach: moog-style lead with significant portamento, four-on-the-floor kick pattern (not hip-hop swing), disco-era BPM (120-126). Apply Dre's low-end philosophy: massive sub bass that's separate from the melodic bass line. The synth lead should be cheesy-earnest, not ironic."
+
+  - primary_pdna: PDNA-000012
+    secondary_pdna: PDNA-000031
+    secondary_element: "Aphex Twin — chaotic electronic architecture and synthesis"
+    fusion_description: "Dre's meticulous studio perfectionism collides with Aphex Twin's chaos-adjacent synthesis methods. Both are obsessive engineers — but Dre engineers toward commercial power, Aphex Twin toward idiosyncratic beauty. The fusion: apply Dre's low-end rigor and mix clarity to source material generated by Aphex-style modular synthesis."
+    creative_prompt: "Generate drum sounds and melodic material through FM synthesis or modular synthesis with heavy feedback — Aphex-style timbral territory. Then mix and arrange using Dre's low-end philosophy: every element is EQ'd and compressed to sit in its frequency slot with absolute precision. The chaotic source material gets the immaculate treatment."
+
+  # ── Timbaland (PDNA-000016) ───────────────────────────────────────────────
+  - primary_pdna: PDNA-000016
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — spectral atmosphere and ghost percussion"
+    fusion_description: "Timbaland's rhythmic innovation — the off-kilter hi-hat work, the percussion-forward asymmetric programming — filtered through Burial's spectral processing philosophy. The drum complexity survives but the timbral world shifts from synthetic sheen to corroded metal and environmental reverb."
+    creative_prompt: "Program a Timbaland-style beat: asymmetric hi-hat work, syncopated kick against snare, multiple competing percussion lines. Process every element through heavy degradation: bitcrushing, vinyl simulation, large convolution reverb. Pitch-shift the hi-hats slightly sharp. Let the complex rhythm emerge through sonic fog rather than clarity."
+
+  - primary_pdna: PDNA-000016
+    secondary_pdna: PDNA-000029
+    secondary_element: "Arca — body music deconstruction and hyperreal synthesis"
+    fusion_description: "Timbaland's mutant R&B percussion philosophy meets Arca's deconstruction of club music physicality. Both are interested in rhythm as bodily experience rather than musical convention — Timbaland through asymmetric programming, Arca through anti-grid texture. The merger produces rhythm that is simultaneously danceable and disorienting."
+    creative_prompt: "Program Timbaland-style asymmetric kick and snare patterns (syncopated, deliberately off the grid). Replace all synthetic drum sounds with Arca-style timbres: visceral, pitched-noise, physically uncomfortable at high volume. Keep Timbaland's rhythmic structure exactly but swap the sonic palette entirely to hyperreal club territory."
+
+  # ── SOPHIE (PDNA-000028) ──────────────────────────────────────────────────
+  - primary_pdna: PDNA-000028
+    secondary_pdna: PDNA-000033
+    secondary_element: "Kraftwerk — robotic precision and technological utopia"
+    fusion_description: "SOPHIE's synthetic maximalism and Kraftwerk's machine perfectionism share a common belief in technology as liberation — but Kraftwerk is restrained where SOPHIE is exuberant. The merger: apply Kraftwerk's disciplined compositional structure to SOPHIE's hyperreal synthetic palette. The result is an immaculate machine that feels simultaneously cold and overwhelming."
+    creative_prompt: "Choose one SOPHIE-style synthetic timbre: a candy-hard lead, a compressed squeal, or a piercing transient. Build a Kraftwerk-style 4-bar loop around it: perfectly quantized, no swing, every element in its proper frequency slot. Add layers only when the structural logic demands them. No chaos — pure synthetic order in SOPHIE's timbral world."
+
+  - primary_pdna: PDNA-000028
+    secondary_pdna: PDNA-000002
+    secondary_element: "Phil Spector — Wall of Sound density"
+    fusion_description: "Two walls: Spector's human ensemble mass and SOPHIE's synthetic compression. Both architects of overwhelming sonic density — Spector through real-room acoustic stacking, SOPHIE through digital saturation and sidechain pumping. The fusion examines whether overwhelming density created with synthesizers and plug-ins achieves the same emotional gravity as Spector's live ensemble."
+    creative_prompt: "Build a SOPHIE-style maximalist track. Then, instead of using compression and sidechain to create density, layer the same melodic lines 8 times with slight pitch and timing variation — the way Spector doubled strings. No quantization between layers. Let the slight imperfections create Spector-style mass. Compare to a compressed version: which is more overwhelming?"
+
+  # ── Burial (PDNA-000030) ──────────────────────────────────────────────────
+  - primary_pdna: PDNA-000030
+    secondary_pdna: PDNA-000005
+    secondary_element: "Lee 'Scratch' Perry — dub space and psychedelic transformation"
+    fusion_description: "Two producers whose music is fundamentally about what's left after removal: Perry removes the bass, removes the melody, adds echo to the absence; Burial removes the dancefloor, removes the beat, leaves ghost hi-hats in a rain-wet city. Both are fundamentally dub artists — their source material just diverges by 30 years and an ocean."
+    creative_prompt: "Take a short vocal sample and apply Perry's echo treatment: heavy tape delay at dotted 8th, some going into feedback. Then drop the entire musical context — no beat, no bass. Let the reverberating vocal float in negative space. Build the Burial-style ghost percussion underneath the echo, not on top of it."
+
+  - primary_pdna: PDNA-000030
+    secondary_pdna: PDNA-000006
+    secondary_element: "King Tubby — dub mixing as compositional process"
+    fusion_description: "Burial's studio-as-instrument approach and Tubby's dub mixing-board philosophy are separated by 30 years but unified by methodology: both compose at the mixing board, making real-time decisions about what to reveal and conceal. The music lives in the gaps. The merger is natural — Burial IS UK dub, translated to 2-step."
+    creative_prompt: "Build a Burial-style ghost percussion track. Instead of mixing it conventionally, use Tubby's approach: record a 5-minute improvised mix where you're manually opening and closing faders, muting the kick for full bars, dropping the hi-hat suddenly and bringing it back. Each pass is a unique performance. Use the best improvised version."
+
+  # ── Aphex Twin (PDNA-000031) ──────────────────────────────────────────────
+  - primary_pdna: PDNA-000031
+    secondary_pdna: PDNA-000034
+    secondary_element: "Wendy Carlos — synthesis as classical translation"
+    fusion_description: "Two foundational synthesizer-to-classical translators, 25 years apart. Carlos proved the synthesizer could express the full complexity of Bach; Aphex Twin proved it could be used as a personal compositional language with equal depth. The fusion asks: what happens when Aphex's idiosyncratic synthesis methods are directed toward structured classical forms?"
+    creative_prompt: "Choose a simple Bach two-voice invention (one of the 15 standard inventions). Program both voices using Aphex-style FM synthesis: unusual timbres, no attempt at acoustic simulation. Keep the counterpoint structure exactly — no rhythmic or harmonic departure from Bach. Only the timbral world changes. The dissonance of familiar form + alien timbre is the content."
+
+  - primary_pdna: PDNA-000031
+    secondary_pdna: PDNA-000029
+    secondary_element: "Arca — body music and physical deconstruction"
+    fusion_description: "Two experimentalists from different UK/Latin American backgrounds sharing an obsession with using electronic production to document psychological states that normal music can't access. Aphex approaches through technical complexity and harmonic richness; Arca through physical viscera and rhythmic dismemberment. Together they occupy the space between the mind and the body."
+    creative_prompt: "Program an Aphex-style melodic IDM sequence: complex, emotionally ambiguous, technically precise. Process each element through Arca-style physical manipulation: heavy saturation at the point of distortion, tempo instability (not swing but actual micro-tempo variation), volume drops that feel like cardiac events. Keep the melody — destroy the comfort."
+
+  # ── Daft Punk (PDNA-000032) ───────────────────────────────────────────────
+  - primary_pdna: PDNA-000032
+    secondary_pdna: PDNA-000040
+    secondary_element: "Nile Rodgers — live funk guitar and groove architecture"
+    fusion_description: "Daft Punk's Random Access Memories collaboration made this fusion canonical, but the deeper question is what happens when Rodgers' funk rhythm philosophy governs Daft Punk's electronic production rather than being added as a layer on top. Rodgers' guitar is the foundation, not an ornament on a pre-existing electronic track."
+    creative_prompt: "Build a Daft Punk-style electronic dance track from scratch — but delay adding any synthesis until you've established the groove with a Nile Rodgers-style rhythm guitar track. The guitar IS the rhythm section, not the decoration. Build the synthesizers around what the guitar creates rather than filling it in after. Compare the feel to a synth-first approach."
+
+  - primary_pdna: PDNA-000032
+    secondary_pdna: PDNA-000007
+    secondary_element: "Giorgio Moroder — Italo-disco sequencer and electronic futurism"
+    fusion_description: "Daft Punk's explicit debt to Moroder examined through active synthesis rather than homage. Both share the Euro-disco belief in metronomic groove as liberation — but Daft Punk layers it with French hip-hop sensibility and digital production values. The merger asks: what if Daft Punk had Moroder's studio in the late 70s? What is the core structural idea without decades of technology between them?"
+    creative_prompt: "Build a Daft Punk-style track using only synthesis technologies available to Moroder in 1977: analog sequencer, Moog synthesizer, drum machine (Roland CR-78 era). No sampling, no digital processing except basic reverb. The constraint should reveal the shared structural DNA beneath the generational technology gap."
+
+  - primary_pdna: PDNA-000032
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient generativity and oblique process"
+    fusion_description: "Daft Punk's maximalist club perfectionism versus Eno's generative minimalism — both motivated by technological utopianism about what electronic music can be. Daft Punk builds everything toward the drop; Eno removes everything until only the essential texture remains. The fusion: use Eno's oblique compositional process to generate raw material for Daft Punk-style arrangement."
+    creative_prompt: "Set up an Eno-style generative tape loop or algorithmic system. Record 20 minutes of output without intervention. Select the 16 most interesting 2-bar sections. Arrange these into a Daft Punk-style progressive club track structure: intro, build, peak, breakdown, rebuild, outro. The accident becomes the material; the human becomes the DJ."
+
+  # ── Kraftwerk (PDNA-000033) ───────────────────────────────────────────────
+  - primary_pdna: PDNA-000033
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — ghost electronics and spectral UK atmosphere"
+    fusion_description: "Kraftwerk's machine precision and Burial's ghost atmosphere examine opposite ends of electronic music's emotional register — Kraftwerk is certain, technological, utopian; Burial is uncertain, fragile, melancholic. The merger: apply Kraftwerk's compositional grid and structural discipline to Burial's timbral world. Mechanical certainty expressed through corroded, spectral sounds."
+    creative_prompt: "Program a Kraftwerk-style sequence: four-on-the-floor, perfectly quantized, 120 BPM, repetitive 4-bar loop. Process every sound through Burial's timbral approach: bitcrushing, vinyl degradation, large room reverb. The sequencer pattern should remain machine-exact; the timbre should feel like it's dissolving. Certainty expressed in decay."
+
+  - primary_pdna: PDNA-000033
+    secondary_pdna: PDNA-000034
+    secondary_element: "Wendy Carlos — classical synthesis and temperament experimentation"
+    fusion_description: "The two foundational pioneers of electronic music as serious compositional art in the 1970s. Carlos approached through strict classical form and Bach transcription; Kraftwerk approached through pop structure and conceptual art. Both proved the synthesizer was a legitimate compositional instrument, not a novelty. The merger is an unwritten chapter in electronic music history."
+    creative_prompt: "Choose a Baroque counterpoint exercise — one voice is played by a Kraftwerk-style sequencer (quantized, mechanical). The second voice is played by a Carlos-style synthesizer: warmer, more acoustic timbre simulation, slight tempo rubato. The structural tension between mechanical and expressive playing the same musical form is the content."
+
+  # ── Wendy Carlos (PDNA-000034) ────────────────────────────────────────────
+  - primary_pdna: PDNA-000034
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient synthesis and tonal landscape"
+    fusion_description: "Carlos's synthesis mastery directed toward Eno's ambient compositional philosophy. Carlos proved synthesizers could render classical depth; Eno proved they could create self-sufficient atmospheric environments. The fusion: Carlos's technical synthesis precision (careful timbre design, tuning accuracy, acoustic simulation) applied to Eno's non-directional, environment-defining musical goals."
+    creative_prompt: "Design a synthesizer patch with Carlos-level attention to acoustic simulation: model the resonance of a specific acoustic instrument (cello, French horn, whatever you choose) with care. Then use that patch exclusively for an Eno-style ambient piece: no melody, no rhythm, just slowly evolving tonal textures. The craftsmanship is invisible; the atmosphere is everything."
+
+  # ── Ryuichi Sakamoto (PDNA-000035) ───────────────────────────────────────
+  - primary_pdna: PDNA-000035
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient generativity and minimalist texture"
+    fusion_description: "Sakamoto and Eno have an explicit shared history (their 'Thousand Knives' period, ambient collaboration), but the deeper question is what each brings architecturally. Sakamoto brings melodic sensitivity and classical harmonic language; Eno brings anti-narrative process and timbral restraint. Together they define what electronic music as emotion — not entertainment — sounds like."
+    creative_prompt: "Write a 4-note melodic fragment in a Japanese-influenced scale. Set it on a Sakamoto-style piano patch with long decay. Now place that fragment inside an Eno-style generative loop system: the fragment repeats at irregular intervals (not tempo-locked), surrounded by slowly shifting tonal drones. The melody becomes an event rather than a through-line."
+
+  - primary_pdna: PDNA-000035
+    secondary_pdna: PDNA-000024
+    secondary_element: "Madlib — crate-digging and psychedelic sampling"
+    fusion_description: "Sakamoto's orchestral sensitivity applied to non-Western source material through Madlib's sampling philosophy. Rather than sampling soul and jazz, the crate-dig goes into Japanese and Southeast Asian music archives — court music, gagaku, koto recordings. Madlib-style chopping applied to material with Sakamoto's harmonic vocabulary."
+    creative_prompt: "Dig specifically for Japanese or Asian archival recordings: gagaku court music, koto solo recordings, shakuhachi pieces. Apply Madlib-style sampling: short loops, pitch-adjusted, filtered. Arrange them as Sakamoto would — with restraint, space between events, awareness of silence as compositional element. Western hip-hop chop philosophy meeting Eastern musical material."
+
+  - primary_pdna: PDNA-000035
+    secondary_pdna: PDNA-000029
+    secondary_element: "Arca — Venezuelan electronic deconstruction"
+    fusion_description: "Sakamoto's Japanese classical sensitivity and Arca's Venezuelan corporeal deconstruction — both approach electronic music as a way of processing cultural and personal memory, but in radically different registers. Sakamoto is meditative and architectural; Arca is visceral and confessional. Both are highly personal. The fusion examines what happens when restraint and extremity share the same compositional space."
+    creative_prompt: "Record a simple melodic piano sequence in the Sakamoto style: 6-8 notes, long sustain, harmonically rich but restrained. Process the recording through Arca-style manipulation: reverse sections, apply extreme pitch-shift, add physical distortion that feels like tearing. Play the original and the destroyed version simultaneously at different volumes — the tension between them is the composition."
+
+  # ── Brian Eno (PDNA-000004) ───────────────────────────────────────────────
+  - primary_pdna: PDNA-000004
+    secondary_pdna: PDNA-000024
+    secondary_element: "Madlib — archival crate-digging and sample archaeology"
+    fusion_description: "Eno's generative process philosophy applied to the sampling tradition Madlib represents. Both are curators — Eno curates sonic environments through tape loops and oblique systems; Madlib curates from record archives. The fusion: use Eno's Oblique Strategies as the curatorial method for a crate-digging session. Process finds systematically rather than by taste."
+    creative_prompt: "Before the crate-digging session, draw 3 Oblique Strategies cards. Apply them as rigid search constraints: one dictates genre/era, one dictates what portion of the record to sample, one dictates how to process the find. Do not deviate from the card instructions even if the result seems wrong. 'Honor the error as a hidden intention.'"
+
+  # ── Lee "Scratch" Perry (PDNA-000005) ─────────────────────────────────────
+  - primary_pdna: PDNA-000005
+    secondary_pdna: PDNA-000029
+    secondary_element: "Arca — physical chaos and corporeal deconstruction"
+    fusion_description: "Perry's psychedelic chaos and Arca's physical chaos are both extreme music — Perry in the service of spiritual transcendence and Rastafarian mysticism; Arca in the service of bodily identity and emotional extremity. Both are maximalists of disorder. The merger: apply Perry's echo and reverb architecture to Arca's timbral world. Spiritual chaos meets corporeal chaos."
+    creative_prompt: "Generate Arca-style percussion: physically uncomfortable, pitched noise, unpitched attacks. Run everything through Perry-era echo apparatus: heavy spring reverb, tape echo with significant feedback, channel dropout. Let the echo decay into feedback at controlled moments. The chaos becomes layered — timbral chaos plus spatial chaos simultaneously."
+
+  # ── King Tubby (PDNA-000006) ──────────────────────────────────────────────
+  - primary_pdna: PDNA-000006
+    secondary_pdna: PDNA-000031
+    secondary_element: "Aphex Twin — idiosyncratic electronic synthesis"
+    fusion_description: "Tubby's mixing-board-as-instrument philosophy applied to Aphex Twin source material. Instead of using reggae riddims as the raw material for dub transformation, the input is Aphex-style complex IDM. What does dub do to polyrhythmic electronic music? The drop-out structure that works on a 4-bar reggae loop becomes a radically different compositional event when the source is already rhythmically complex."
+    creative_prompt: "Take an Aphex-style complex IDM track with multiple competing rhythmic layers. Apply Tubby's dub approach: begin selectively muting elements — but instead of the bass drop-out creating emptiness, removing one of 6 percussion layers creates different rhythmic emphasis. Work the mixing board as performer. Record a live dub mix of the IDM material."
+
+  # ── Giorgio Moroder (PDNA-000007) ─────────────────────────────────────────
+  - primary_pdna: PDNA-000007
+    secondary_pdna: PDNA-000028
+    secondary_element: "SOPHIE — hyperpop maximalism and synthetic ecstasy"
+    fusion_description: "Moroder's Italo-disco utopianism and SOPHIE's hyperpop maximalism share the belief that electronic music can achieve a kind of joy that acoustic music cannot — a pleasure that is specifically synthetic. Both produce music that feels exhilarating and slightly unreal. The merger examines what Moroder's structural discipline does when applied to SOPHIE's timbral excess."
+    creative_prompt: "Take a classic Moroder-style sequenced synth line (127-130 BPM, 4/4, metronomic, ascending pattern). Process the synthesizer timbre through SOPHIE-style saturation and transient design until it sounds like candy-hard plastic rather than warm Moog. Keep the melodic and structural logic; replace the sonic register entirely."
+
+  # ── Phil Spector (PDNA-000002) ────────────────────────────────────────────
+  - primary_pdna: PDNA-000002
+    secondary_pdna: PDNA-000033
+    secondary_element: "Kraftwerk — mechanical sequencer and technological precision"
+    fusion_description: "Spector's Wall of Sound — built from acoustic mass and studio reverb — examined through Kraftwerk's belief in machine precision and technological utopianism. Both were attempting to make a maximalist statement: Spector that pop music deserved orchestral grandeur, Kraftwerk that machines deserved artistic seriousness. The merger: apply Spector's density philosophy to sequencer-generated material."
+    creative_prompt: "Build a Kraftwerk-style sequencer pattern (melodic bassline, regular pulse). Layer it 8 times with slight pitch detuning between layers (±2 cents each). Add a drum machine but double the kick drum 4 times at fractionally different timings. Apply heavy chamber reverb. The Spector principle (density through layering) applied to synthetic material rather than human ensemble."
+
+  # ── George Martin (PDNA-000001) ───────────────────────────────────────────
+  - primary_pdna: PDNA-000001
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient texture and oblique process"
+    fusion_description: "Martin's classical orchestration precision applied through Eno's generative and oblique compositional philosophy. Martin always knew exactly what he wanted and directed the session to achieve it; Eno's process allows accidents and indeterminacy. The fusion asks: what if Martin's orchestral resources were governed by Oblique Strategies rather than deliberate composition?"
+    creative_prompt: "Score a short string quartet passage (4-8 bars) with Martin-level harmonic complexity and voice leading care. Before writing, draw 2 Oblique Strategies cards and apply them as constraints that modify your initial intention — not as replacements for it. The craft remains; the intention is slightly displaced. Record the result and compare it to what you would have written without the cards."
+
+  - primary_pdna: PDNA-000001
+    secondary_pdna: PDNA-000003
+    secondary_element: "Quincy Jones — jazz orchestration and pop production mastery"
+    fusion_description: "Two of the 20th century's most accomplished pop producers who both came from classical and jazz arrangement traditions. Martin through the British classical and music-hall lineage; Jones through jazz arranging under Lionel Hampton and Dizzy Gillespie. Their production philosophies share a root: arrangement depth as the foundation of pop record quality. The merger is a master class."
+    creative_prompt: "Arrange a standard pop song (simple chord progression, 16-bar form) for a session of studio players. Apply Martin's structural instinct — what does the arrangement do structurally over 3 minutes? — and Jones's jazz harmony: substitute at least 3 chords with extensions or substitutions that open the harmonic space without overwhelming the pop accessibility."
+
+  # ── Quincy Jones (PDNA-000003) ────────────────────────────────────────────
+  - primary_pdna: PDNA-000003
+    secondary_pdna: PDNA-000035
+    secondary_element: "Ryuichi Sakamoto — orchestral electronic synthesis"
+    fusion_description: "Jones's jazz-to-pop orchestration mastery and Sakamoto's classical-to-electronic composition path share an interest in making electronic instruments achieve the expressive depth of acoustic orchestral music. Jones does it with live players; Sakamoto does it with synthesizers. The merger: a Jones-style arrangement with Sakamoto-style synthesizer sections replacing acoustic sections."
+    creative_prompt: "Take a Jones-style string arrangement (full chord voicings, careful voice leading, jazz extensions). Replace half the string parts with Sakamoto-style synthesizer patches: careful acoustic simulation, respectful of the notated lines. Let the two halves of the ensemble (live strings and synthetic strings) coexist without processing one to match the other. The gap between them is compositional information."
+
+  # ── Nile Rodgers (PDNA-000040) ────────────────────────────────────────────
+  - primary_pdna: PDNA-000040
+    secondary_pdna: PDNA-000016
+    secondary_element: "Timbaland — rhythmic innovation and percussion design"
+    fusion_description: "Rodgers' rhythm guitar as percussive instrument philosophy meets Timbaland's drum programming philosophy that treats every percussive element as rhythmic voice. Both are fundamentally about the groove — Rodgers through guitar attack and chord voicing, Timbaland through programmed density and asymmetry. The merger: apply Timbaland's polyrhythmic approach to Rodgers' chord vocabulary."
+    creative_prompt: "Record Rodgers-style rhythm guitar: tight chord voicing, staccato attack, groove-forward playing. Don't add a drum track. Instead, program Timbaland-style percussion that treats the guitar as ONE of several rhythmic voices rather than the rhythm section anchor. The guitar becomes foreground; the drums work around it rather than under it."
+
+  # ── Trevor Horn (PDNA-000041) ─────────────────────────────────────────────
+  - primary_pdna: PDNA-000041
+    secondary_pdna: PDNA-000033
+    secondary_element: "Kraftwerk — minimalist sequencer and mechanistic composition"
+    fusion_description: "Horn's maximalist production philosophy — 'more is more until it's exactly enough' — collides with Kraftwerk's discipline of restraint and repetition. Horn builds elaborate arrangements where every detail is audible; Kraftwerk builds hypnotic loops where repetition IS the content. The fusion: apply Horn's production attention to Kraftwerk-scale minimalism. Every note in the 4-bar loop gets Horn-level treatment."
+    creative_prompt: "Build a Kraftwerk-style 4-bar loop: sequenced bassline, drum machine, one synth melody. Then apply Horn's production philosophy: spend a full session getting every element sounding absolutely perfect. EQ each element individually, process with Horn-level care, layer subtle details that reward listening. The minimalist structure gets maximalist treatment. Then repeat for 5 minutes."
+
+  # ── Nigel Godrich (PDNA-000043) ───────────────────────────────────────────
+  - primary_pdna: PDNA-000043
+    secondary_pdna: PDNA-000031
+    secondary_element: "Aphex Twin — IDM programming and idiosyncratic synthesis"
+    fusion_description: "Godrich's studio architecture philosophy — building texture through tape, subtle processing, and careful arrangement — applied to IDM-sourced material. Godrich makes rock records that breathe like they're alive; Aphex Twin makes electronic records that feel like they're thinking. The merger: Godrich's humanizing production approach applied to Aphex source material to create electronic music with organic texture."
+    creative_prompt: "Take an Aphex Twin-influenced IDM sequence: complex, precisely programmed. Record elements to tape if possible (or use tape saturation simulation carefully). Add subtle room ambiance around electronic elements — not as reverb but as acoustic placement. Apply Godrich's instinct toward acoustic-electronic hybridity: let the electronic elements exist in physical space rather than digital space."
+
+  - primary_pdna: PDNA-000043
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient process and oblique strategy"
+    fusion_description: "Godrich's approach to Radiohead production has always shared Eno's interest in systems and process — using the studio to discover rather than just to record. The merger is a natural one: Godrich's attention to sonic detail and Eno's attention to compositional process. Both value the unexpected outcome. The question is what structure governs those outcomes."
+    creative_prompt: "Set up a recording session with no predetermined compositional material. Use 3 Oblique Strategy cards as the only guide: one for instrumentation, one for process, one for structure. Record with Godrich-level attention to sonic detail: room placement, microphone choice, tape gain. Let the cards determine the content; let the craft determine the sound."
+
+  # ── Steve Albini (PDNA-000044) ────────────────────────────────────────────
+  - primary_pdna: PDNA-000044
+    secondary_pdna: PDNA-000006
+    secondary_element: "King Tubby — mixing board as compositional instrument"
+    fusion_description: "Albini's philosophy of absolute transparency — the record should sound like the band sounds in the room — and Tubby's philosophy of the mixing board as creative instrument are apparently opposite but share a belief in the performance captured at the desk. Both are anti-overdub purists in different ways. The merger asks: what if Albini applied Tubby's live-desk improvisation philosophy to his transparent recordings?"
+    creative_prompt: "Record a band live with Albini-style microphone placement and zero processing during tracking — absolute transparency. Then perform a Tubby-style live dub mix: faders up and down, effects sends varied in real time, without post-production editing. Record the desk performance as a unique artifact. Compare 5 different live mixes of the same recording — each is a unique Tubby-style composition."
+
+  # ── Rick Rubin (PDNA-000011) ──────────────────────────────────────────────
+  - primary_pdna: PDNA-000011
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient minimalism and negative space"
+    fusion_description: "Rubin's philosophy of stripping production to essence and Eno's philosophy of building music from minimal elements toward maximum tonal environment share a common departure point: both distrust excess. Rubin removes what doesn't serve the song; Eno never adds what doesn't serve the texture. The merger: a Rubin-produced track where the space between elements is designed with Eno's attention to tonal environment."
+    creative_prompt: "Start with a full-band arrangement (guitar, bass, drums, vocals). Apply Rubin's reductive method: remove elements until removing the next one would break the song. Stop there. Now, instead of leaving that space as silence, fill it with Eno-style ambient texture — tonal drone, slowly shifting pad — that occupies the negative space without competing with the remaining arrangement."
+
+  # ── Flood (PDNA-000042) ───────────────────────────────────────────────────
+  - primary_pdna: PDNA-000042
+    secondary_pdna: PDNA-000029
+    secondary_element: "Arca — Venezuelan electronic deconstruction"
+    fusion_description: "Flood's industrial atmosphere and Arca's physical electronic deconstruction occupy adjacent sonic territory — both deal in dissonance, distortion, and the productive discomfort of sound that pushes against listener comfort. Flood channels this into song structure; Arca into abstract body music. The merger: Arca's timbral approach inside Flood-style song architecture."
+    creative_prompt: "Write a conventional song structure (verse, chorus, bridge). Produce the track using exclusively Arca-style synthesizer timbres: visceral, pitched-noise, physically uncomfortable. Maintain the song structure completely — no formal experimentation. The content tension (conventional form vs. unconventional timbre) is the point. What does a 'chorus' feel like when it sounds like body horror?"
+
+  # ── Metro Boomin (PDNA-000019) ────────────────────────────────────────────
+  - primary_pdna: PDNA-000019
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — ghost electronics and UK melancholy"
+    fusion_description: "Metro's dark trap aesthetic and Burial's equally dark UK electronic music share an interest in night music — music of surveillance, of moving through urban space after dark. Metro's 808s and hi-hats express Atlanta late-night; Burial's ghost percussion expresses London late-night. The merger: similar emotional register, different rhythmic architecture, same underlying atmosphere."
+    creative_prompt: "Build a Metro-style trap beat: dark 808 sub, sharp hi-hat pattern, minimal melodic sample. Slow the tempo to 130 BPM (between trap and 2-step). Apply Burial's timbral processing: pitch-shift the hi-hats, add vinyl degradation to the 808, let the sample breathe with large reverb. Keep Metro's rhythmic approach; adopt Burial's sonic world. The Atlanta night becomes the London night."
+
+  - primary_pdna: PDNA-000019
+    secondary_pdna: PDNA-000029
+    secondary_element: "Arca — hyperreal club music and physical deconstruction"
+    fusion_description: "Metro's controlled dark energy and Arca's uncontrolled physical deconstruction share a target audience at least in sensibility: listeners who want music that feels dangerous. Metro achieves danger through pitch-black atmosphere and bass weight; Arca through form and rhythm fragmentation. The merger asks what Metro's compositional vocabulary produces when forced through Arca's destabilizing process."
+    creative_prompt: "Build a Metro-style beat with all its characteristic elements intact: 808 pattern, hi-hat rhythm, dark sample, trademark tag. Now systematically destabilize each element Arca-style: pitch the 808 unexpectedly mid-pattern, add irregular rhythmic stutter to the hi-hat, remove the sample at unexpected moments. Maintain the tension of Metro's atmosphere while introducing Arca's instability."
+
+  # ── Zaytoven (PDNA-000021) ────────────────────────────────────────────────
+  - primary_pdna: PDNA-000021
+    secondary_pdna: PDNA-000035
+    secondary_element: "Ryuichi Sakamoto — classical piano composition and sensitivity"
+    fusion_description: "Zaytoven's trap piano style — melodic, semi-classical, introspective — shares more with Sakamoto's minimal classical approach than either producer's mainstream category suggests. Both play piano with careful attention to note spacing and melodic economy. The merger: apply Sakamoto's compositional rigor to the melodic vocabulary Zaytoven developed for trap music."
+    creative_prompt: "Write an 8-bar piano melody in the Zaytoven style: semi-classical movement, emotional directness, trap-adjacent scale choices. Now apply Sakamoto's editing philosophy: remove every note that isn't essential. The result should be the same emotional territory with perhaps 40% of the original notes. Add sparse trap drums under the edited melody at 140 BPM."
+
+  # ── DJ Rashad (PDNA-000050) ───────────────────────────────────────────────
+  - primary_pdna: PDNA-000050
+    secondary_pdna: PDNA-000031
+    secondary_element: "Aphex Twin — IDM polyrhythmic programming and complex synthesis"
+    fusion_description: "Rashad's footwork polyrhythm and Aphex Twin's IDM polyrhythm are two of electronic music's most rhythmically complex traditions — both treating rhythm as architectural rather than dance-function. Rashad's 160 BPM footwork grids and Aphex's complex polymetric IDM patterns share a common interest in rhythm as cognitive experience rather than purely physical."
+    creative_prompt: "Program a standard Rashad-style footwork pattern: 160 BPM, kick pattern independent of snare, vocal sample stutter. Replace all drum sounds with Aphex-style timbres: FM synthesis, unusual attacks and decays, digitally distorted transients. Keep the footwork rhythmic structure exactly; swap the sonic palette to IDM territory. What does a footwork track sound like through IDM ears?"
+
+  - primary_pdna: PDNA-000050
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — spectral UK ghost atmosphere"
+    fusion_description: "Rashad's Chicago footwork and Burial's UK ghost music both emerged from specific urban dance floor contexts that were only partially understood by outside observers. Both use samples in fragmented, destabilized ways. Both operate in the space between dance music and something more introspective. The merger: footwork's rhythmic architecture inside Burial's spectral timbral world."
+    creative_prompt: "Program a Rashad-style footwork rhythm structure (160 BPM, polyrhythmic, track-starting percussion). Process every element through Burial's audio world: degradation, large reverb, pitch-shifting, sample fragmentation. Let the complex footwork pattern emerge from ghost audio rather than sharp transients. The rhythm is Rashad; the atmosphere is Burial."
+
+  # ── Sarz (PDNA-000048) ────────────────────────────────────────────────────
+  - primary_pdna: PDNA-000048
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — spectral UK atmosphere and ghost percussion"
+    fusion_description: "Sarz's Afrobeats rhythmic vocabulary and Burial's UK ghost music share an interest in percussion as the primary compositional voice — both build from rhythm outward. The merger asks what Afrobeats' layered, interlocking drum philosophy produces when filtered through Burial's atmospheric processing and timbral degradation. Lagos night music meets London night music."
+    creative_prompt: "Program Sarz-style Afrobeats percussion: multiple interlocking drum parts, forward groove drive, syncopated bass. Process the entire drum track through Burial-style treatment: pitch-shift hi-hats to metallic shimmer, add reverb tail to the snare, degrade the kick slightly. Keep the Afrobeats rhythmic architecture while adopting Burial's sonic register."
+
+  - primary_pdna: PDNA-000048
+    secondary_pdna: PDNA-000031
+    secondary_element: "Aphex Twin — IDM synthesis and polyrhythmic programming"
+    fusion_description: "Sarz's mastery of African rhythmic interlocking patterns and Aphex Twin's Western European approach to polyrhythmic IDM programming represent two traditions of treating rhythm as architecture. The merger examines what happens when Aphex's synthesis philosophy — unusual timbres, complex programming, emotional ambiguity — operates within Afrobeats' relentlessly forward groove orientation."
+    creative_prompt: "Build a Sarz-style Afrobeats rhythm track: forward-moving, interlocking percussion, bright and warm. Replace all drum sounds with Aphex-style FM synthesis timbres: unusual attack shapes, metallic resonances, digital artifacts. Keep the Afrobeats rhythmic pattern precisely but let Aphex's timbral world transform its emotional register. Forward groove in alien timbre."
+
+  # ── Kabza De Small (PDNA-000049) ─────────────────────────────────────────
+  - primary_pdna: PDNA-000049
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — spectral ghost atmosphere and halftime UK"
+    fusion_description: "Kabza's Amapiano piano logs and Burial's ghost UK piano stabs occupy surprisingly similar harmonic territory: both use piano as atmospheric element rather than melodic lead, both emphasize the resonance and sustain of piano chord voicings. The merger: log drum programming meets ghost percussion; Amapiano's 112 BPM groove meets Burial's halftime philosophy."
+    creative_prompt: "Build a Kabza-style Amapiano foundation: log drums, piano chord stabs, sub bass. Slow from 112 BPM to 95 BPM (Burial range). Process the piano chords with heavy reverb and slight pitch instability. Let the log drums maintain their forward propulsion while the piano becomes ghostly and atmospheric. The Amapiano groove survives the spectral treatment."
+
+  - primary_pdna: PDNA-000049
+    secondary_pdna: PDNA-000033
+    secondary_element: "Kraftwerk — mechanical sequencer grid and technological precision"
+    fusion_description: "Amapiano's organic warmth and Kraftwerk's mechanical precision represent different philosophies of what makes a groove work — Amapiano through human-feeling log drum programming with deliberate organic variation; Kraftwerk through machine exactness that creates hypnosis through repetition. Both are dance music. The merger: apply Kraftwerk's sequencer-lock discipline to Amapiano's melodic piano material."
+    creative_prompt: "Program Kabza-style piano chords using a Kraftwerk-style sequencer: perfectly quantized, zero swing, metronomic. Keep the Amapiano chord voicings and harmonic vocabulary but remove all the human-feel variation. Set it against traditional log drum programming with its organic feel. The contrast between mechanical piano and organic drums IS the rhythmic personality."
+
+  # ── Tainy (PDNA-000046) ───────────────────────────────────────────────────
+  - primary_pdna: PDNA-000046
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — spectral ghost atmosphere and UK melancholy"
+    fusion_description: "Tainy's reggaeton production and Burial's UK ghost music share an underground dance floor heritage — both developed in reaction to mainstream club music, both privileging atmosphere over conventionality. Dembow's two-beat rhythmic pattern and Burial's halftime ghost pattern occupy complementary rhythmic positions. The merger: reggaeton bounce in ghost atmosphere."
+    creative_prompt: "Build a Tainy-style reggaeton production: dembow pattern, melodic hook, tropical synth elements. Process everything through Burial's timbral world: degradation, large reverb, pitch-smeared samples. Slow the tempo slightly (from standard reggaeton BPM to around 135). Keep the dembow rhythmic identity; let the sound world become spectral. Reggaeton for an empty venue at 4am."
+
+  # ── Luny Tunes (PDNA-000047) ─────────────────────────────────────────────
+  - primary_pdna: PDNA-000047
+    secondary_pdna: PDNA-000029
+    secondary_element: "Arca — Venezuelan electronic deconstruction and hyperreal body music"
+    fusion_description: "Two Latin American production traditions that have rarely been placed in dialogue: Luny Tunes' reggaeton maximalism (Puerto Rican pop club) and Arca's deconstructivist electronic music (Venezuelan experimental). Both operate with extreme energy but from opposite compositional philosophies — Luny Tunes toward danceable accessibility, Arca toward formal disintegration. The merger examines what reggaeton becomes when form starts dissolving."
+    creative_prompt: "Build a Luny Tunes-style reggaeton track: full dembow, melodic hook, energetic arrangement. Now systematically apply Arca's disintegration philosophy to the arrangement: delay the drop, break the dembow pattern mid-track, introduce sections where rhythm fragments into noise. Reassemble before the track ends. The pop form and the deconstruction fight for the same space."
+
+  # ── A. R. Rahman (PDNA-000037) ────────────────────────────────────────────
+  - primary_pdna: PDNA-000037
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient generativity and tonal environment"
+    fusion_description: "Rahman's ability to create musical environments that feel culturally specific and emotionally overwhelming, and Eno's mastery of building enveloping tonal atmospheres, share a deep interest in music as emotional landscape rather than entertainment. Both write music designed to surround the listener. Rahman does it through melody and dramatic orchestration; Eno does it through texture and process."
+    creative_prompt: "Choose a Rahman-style raga-influenced scale or mode. Build an Eno-style ambient piece: no melody, no rhythm, only slowly evolving tonal drones in that scale. Use the cultural specificity of the Indian harmonic system (drone, microtonal emphasis, specific ornamentation pitch points) but apply Eno's absolute restraint — no forward momentum, only color change."
+
+  - primary_pdna: PDNA-000037
+    secondary_pdna: PDNA-000024
+    secondary_element: "Madlib — global crate-digging and archival sampling"
+    fusion_description: "Rahman's deep rootedness in Indian classical music and his synthesis of it with Western and global pop, and Madlib's global archival sampling (African, jazz, soul, world records) — both producers are engaged in a conscious project of synthesis across cultural boundaries. The merger: Madlib-style sampling applied to the South Asian music archive that Rahman himself draws from."
+    creative_prompt: "Dig specifically for rare South Asian recordings: Bollywood orchestrations from the 1960s-1970s, Indian classical recordings, regional folk music. Apply Madlib-style sampling: short loops, pitch-adjusted, filtered, layered. Do not try to make the samples sound 'world music authentic' — let the Madlib aesthetic transform them into something new while the source culture remains audible."
+
+  # ── Missy Elliott (PDNA-000018) ───────────────────────────────────────────
+  - primary_pdna: PDNA-000018
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — ghost atmosphere and spectral UK melancholy"
+    fusion_description: "Missy Elliott's futurist R&B vision and Burial's spectral UK club music both emerge from underground dance contexts and share an interest in making music that feels emotionally raw despite heavy electronic production. Missy's forward-facing energy and Burial's backward-looking melancholy represent different relationships to time. The merger: futurism filtered through ghost atmosphere."
+    creative_prompt: "Build a Missy/Timbaland-style futurist R&B beat: asymmetric percussion, forward energy, Timbaland-esque production density. Now apply Burial's timbral processing to everything: degrade the drum sounds, add heavy reverb that pushes the percussion into the distance, pitch-shift vocal samples until they're ghostly. Keep Missy's rhythmic DNA; adopt Burial's sense of distance and loss."
+
+  # ── Pete Rock (PDNA-000025) ───────────────────────────────────────────────
+  - primary_pdna: PDNA-000025
+    secondary_pdna: PDNA-000030
+    secondary_element: "Burial — spectral UK ghost atmosphere"
+    fusion_description: "Pete Rock's soulful New York boom-bap and Burial's UK ghost music both draw from soul and R&B's emotional register but express it through entirely different structural languages. Pete Rock's soul samples breathe with jazz warmth; Burial's soul fragments decompose into spectral atmosphere. The merger: what Pete Rock's crate-digging philosophy produces when the destination is atmosphere rather than groove."
+    creative_prompt: "Find a Pete Rock-style soul sample: warm, jazz-inflected, melodically rich. Instead of building a boom-bap beat around it, apply Burial's processing: slow it down, add large room reverb, let the sample stretch until harmonic content becomes atmospheric. Place ghost percussion underneath — not snap-snare but loose, pitched, and distant. The soul sample becomes the environment."
+
+  - primary_pdna: PDNA-000025
+    secondary_pdna: PDNA-000024
+    secondary_element: "Madlib — psychedelic sampling and Californiadeep digging"
+    fusion_description: "Pete Rock and Madlib represent two strands of the highest-craft sampling tradition in hip-hop: both dig extensively, both prioritize emotional depth over surface familiarity, both use samples as harmonic and melodic substance rather than rhythmic filler. The merger examines what their shared values produce when Pete Rock's soulful NY approach meets Madlib's more psychedelic California aesthetic."
+    creative_prompt: "Pull two samples — one in Pete Rock's style (soul, jazz, warm, NY-adjacent) and one in Madlib's style (obscure, global, more dissonant or unusual). Build a beat that uses both simultaneously: Pete Rock's sample provides the emotional warmth, Madlib's provides the unexpected harmonic content. Don't let either dominate; find the overlap."
+
+  # ── DJ Screw (PDNA-000027) ────────────────────────────────────────────────
+  - primary_pdna: PDNA-000027
+    secondary_pdna: PDNA-000033
+    secondary_element: "Kraftwerk — mechanical precision and tempo discipline"
+    fusion_description: "DJ Screw's technique of slowing records down to reveal their emotional gravity and Kraftwerk's belief in metronomic tempo as compositional statement represent opposite approaches to the same question: what does tempo do to feeling? Screw slows to create heaviness; Kraftwerk locks to create hypnosis. The merger: what does Screw's pitch-and-time processing do to Kraftwerk's precisely quantized source material?"
+    creative_prompt: "Take a Kraftwerk track and apply Screw's technique: slow it to 60-70% of original speed using pitch-preservation processing. The mechanistic sequencer pattern remains intact but the tempo shifts dramatically. Then do the inverse: take a screwed source and pitch-lock it back to Kraftwerk tempo. What survives each operation? What is gained and lost?"
+
+  - primary_pdna: PDNA-000027
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient generativity and time dilation"
+    fusion_description: "Screw's slowed-and-chopped philosophy and Eno's ambient music share a fundamental interest in altering the listener's relationship to time. Screw does it through deliberate tempo reduction; Eno does it through texture that removes pulse and forward momentum. Both create music that expands subjective time. The merger: apply Screw's tempo manipulation to Eno's ambient source material."
+    creative_prompt: "Take an Eno ambient track (or build an Eno-style texture). Apply Screw's technique to it: slow to 70% speed. The already-ambient texture should become even more expanded and weightless. Note the difference between Eno's designed temporal expansion and Screw's mechanical one. Now chop between different slowed Eno sections as Screw would chop between tracks."
+
+  # ── Max Martin (PDNA-000038) ─────────────────────────────────────────────
+  - primary_pdna: PDNA-000038
+    secondary_pdna: PDNA-000004
+    secondary_element: "Brian Eno — ambient process and art music minimalism"
+    fusion_description: "Max Martin's total mastery of pop song craft — the melodic hook, the dynamic build, the chorus release — applied through Eno's compositional philosophy of restraint and process. Both are meticulous craftsmen in different registers. The merger: use Eno's Oblique Strategies to constrain a Max Martin-style songwriting session, and apply Eno's production minimalism to pop's maximalist structural demands."
+    creative_prompt: "Write a pop chorus using strict Martin criteria: melodic hook in the first 5 notes, emotional release, anthemic quality. Now apply Eno's production philosophy: strip the arrangement to the minimum that makes the hook work. No doubling of elements, no layering for thickness, one sonic texture per function. The hook should be exposed, not wrapped. Does the song survive the reduction?"
+
+  # ── Sylvia Robinson (PDNA-000010) ────────────────────────────────────────
+  - primary_pdna: PDNA-000010
+    secondary_pdna: PDNA-000033
+    secondary_element: "Kraftwerk — mechanical sequencer and electronic rhythm"
+    fusion_description: "Robinson's role in creating hip-hop's recorded form — sampling a rhythm section, placing spoken word over it — and Kraftwerk's parallel invention of sequencer-based electronic music with spoken/processed vocals share a 1979 moment when both were fundamentally changing what pop music could be with new technology. The merger makes the historical parallel explicit."
+    creative_prompt: "Build a track that uses Robinson's hip-hop structural logic (rhythm section loop, vocal over the top) but replaces the funk band source material with Kraftwerk's sequencer aesthetic. Program a Kraftwerk-style synth bassline and mechanistic drum machine. Place rap or spoken word over it. You are making hip-hop whose rhythm section is an electronic machine rather than a sampled funk band — examine what changes."
