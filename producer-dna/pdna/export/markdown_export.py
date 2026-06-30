@@ -42,6 +42,33 @@ def export_producer_markdown(pdna_id: str, db_url: str) -> str:
     if profile and profile.get("dna_summary"):
         lines.extend(["## DNA Summary", "", profile["dna_summary"], ""])
 
+    dna = data.get("dna") or {}
+    sonic = dna.get("sonic") or {}
+    if sonic:
+        lines.extend(["## Sonic DNA", ""])
+        sonic_dims = [
+            ("warmth", "Warmth"), ("grit", "Grit"), ("atmosphere", "Atmosphere"),
+            ("darkness", "Darkness"), ("brightness", "Brightness"), ("density", "Density"),
+            ("space", "Space"), ("distortion", "Distortion"),
+            ("synthetic_organic_balance", "Synthetic/Organic"),
+        ]
+        for key, label in sonic_dims:
+            val = sonic.get(key)
+            if val is not None:
+                lines.append(f"- **{label}:** {val}/10")
+        lines.append("")
+
+    rhythmic = dna.get("rhythmic") or {}
+    if rhythmic:
+        lines.extend(["## Rhythmic DNA", ""])
+        if rhythmic.get("swing") is not None:
+            lines.append(f"- **Swing:** {rhythmic['swing']}/10")
+        if rhythmic.get("grid_precision") is not None:
+            lines.append(f"- **Grid Precision:** {rhythmic['grid_precision']}/10")
+        if rhythmic.get("groove_family"):
+            lines.append(f"- **Groove Family:** {rhythmic['groove_family']}")
+        lines.append("")
+
     if data.get("credits"):
         lines.extend(["## Key Works", ""])
         for c in data["credits"][:20]:

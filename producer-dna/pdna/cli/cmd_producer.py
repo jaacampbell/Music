@@ -216,6 +216,86 @@ def producer_add(ctx, yaml_file):
     console.print(f"[green]✓ Added {schema.pdna_id}: {schema.name}[/]")
 
 
+@producer_group.command("graph")
+@click.argument("pdna_id")
+@click.option(
+    "--depth",
+    default=1,
+    show_default=True,
+    help="How many hops to traverse (1 = direct connections only)",
+)
+@click.option(
+    "--dir",
+    "direction",
+    default="both",
+    type=click.Choice(["influences", "influenced-by", "both"]),
+    show_default=True,
+    help="Edge direction to display",
+)
+@click.pass_context
+def producer_graph(ctx, pdna_id, depth, direction):
+    """Display influence graph for a producer."""
+    from sqlalchemy import create_engine, text
+
+    engine = create_engine(ctx.obj["db_url"])
+    with engine.connect() as conn:
+        root = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id}
+        ).fetchone()
+        if not root:
+            console.print(f"[red]Producer {pdna_id} not found.[/]")
+            return
+        root_db_id, root_name = root[0], root[1]
+
+        def _fetch_outgoing(prod_id):
+            return conn.execute(
+                text(
+                    "SELECT p.pdna_id, p.name, ie.strength, ie.confidence "
+                    "FROM influence_edges ie "
+                    "JOIN producers p ON ie.to_producer_id = p.id "
+                    "WHERE ie.from_producer_id = :pid AND ie.direction = 'influenced' "
+                    "ORDER BY ie.strength DESC NULLS LAST"
+                ),
+                {"pid": prod_id},
+            ).fetchall()
+
+        def _fetch_incoming(prod_id):
+            return conn.execute(
+                text(
+                    "SELECT p.pdna_id, p.name, ie.strength, ie.confidence "
+                    "FROM influence_edges ie "
+                    "JOIN producers p ON ie.from_producer_id = p.id "
+                    "WHERE ie.to_producer_id = :pid AND ie.direction = 'influenced' "
+                    "ORDER BY ie.strength DESC NULLS LAST"
+                ),
+                {"pid": prod_id},
+            ).fetchall()
+
+        console.print(f"\n[bold cyan]{pdna_id}[/]  [bold]{root_name}[/]\n")
+
+        if direction in ("influenced-by", "both"):
+            incoming = _fetch_incoming(root_db_id)
+            if incoming:
+                console.print(f"[bold]{root_name}[/] ← [dim]influenced by:[/]")
+                for row in incoming:
+                    strength_str = f"  strength {row[2]}" if row[2] else ""
+                    console.print(f"  └─ [cyan]{row[0]}[/] {row[1]}{strength_str}  [dim][{row[3]}][/]")
+            else:
+                console.print("[dim]  (no incoming influences in database)[/]")
+
+        if direction in ("influences", "both"):
+            outgoing = _fetch_outgoing(root_db_id)
+            if outgoing:
+                console.print(f"\n[bold]{root_name}[/] → [dim]influenced:[/]")
+                for row in outgoing:
+                    strength_str = f"  strength {row[2]}" if row[2] else ""
+                    console.print(f"  └─ [cyan]{row[0]}[/] {row[1]}{strength_str}  [dim][{row[3]}][/]")
+            else:
+                console.print("[dim]  (no outgoing influences in database)[/]")
+
+        console.print()
+
+
 @producer_group.command("link")
 @click.argument("pdna_id")
 @click.option("--mb-id", default=None, help="MusicBrainz artist ID (UUID)")

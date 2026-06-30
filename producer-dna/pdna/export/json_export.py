@@ -2,6 +2,57 @@ import json
 from pathlib import Path
 from sqlalchemy import create_engine, text
 
+_DNA_TABLES = {
+    "sonic": (
+        "SELECT atmosphere, warmth, grit, polish, darkness, brightness, "
+        "density, space, distortion, synthetic_organic_balance, notes "
+        "FROM sonic_dna WHERE producer_id = :pid"
+    ),
+    "rhythmic": (
+        "SELECT swing, grid_precision, drum_density, groove_family, "
+        "kick_language, snare_language, hat_language, percussion_behavior, "
+        "tempo_min, tempo_max, tempo_signature, notes "
+        "FROM rhythmic_dna WHERE producer_id = :pid"
+    ),
+    "melodic": (
+        "SELECT dissonance_level, motif_complexity, chord_mood, modality, "
+        "tonal_center, influences_list, notes "
+        "FROM melodic_harmonic_dna WHERE producer_id = :pid"
+    ),
+    "arrangement": (
+        "SELECT intro_style, drop_behavior, chorus_behavior, loop_evolution, "
+        "transition_style, tension_release, structural_complexity, notes "
+        "FROM arrangement_dna WHERE producer_id = :pid"
+    ),
+    "mixing": (
+        "SELECT low_end_approach, midrange_approach, high_end_approach, "
+        "loudness_level, stereo_width, vocal_placement, reverb_use, delay_use, "
+        "compression, saturation, notes "
+        "FROM mixing_dna WHERE producer_id = :pid"
+    ),
+    "sampling": (
+        "SELECT source_traditions, chopping_style, pitch_shifting, filtering, "
+        "looping_style, ethics_approach, clearance_rate, notes "
+        "FROM sampling_dna WHERE producer_id = :pid"
+    ),
+    "nuance": (
+        "SELECT casual_listener, producer_ear, engineer_ear, artist_ear, "
+        "dj_ear, beginner_ear "
+        "FROM style_nuance_map WHERE producer_id = :pid"
+    ),
+}
+
+
+def _fetch_dna(conn, producer_id: int) -> dict:
+    dna = {}
+    for key, sql in _DNA_TABLES.items():
+        row = conn.execute(text(sql), {"pid": producer_id}).fetchone()
+        if row:
+            dna[key] = {k: v for k, v in dict(row._mapping).items() if v is not None}
+        else:
+            dna[key] = {}
+    return dna
+
 
 def export_producer_json(pdna_id: str, db_url: str) -> dict:
     engine = create_engine(db_url)
@@ -30,6 +81,7 @@ def export_producer_json(pdna_id: str, db_url: str) -> dict:
         profile = conn.execute(
             text("SELECT * FROM producer_profiles WHERE producer_id = :id"), {"id": p["id"]}
         ).fetchone()
+        dna = _fetch_dna(conn, p["id"])
 
     out = {
         "pdna_id": p["pdna_id"],
@@ -53,6 +105,7 @@ def export_producer_json(pdna_id: str, db_url: str) -> dict:
             for c in credits_raw
         ],
         "profile": dict(profile._mapping) if profile else None,
+        "dna": dna,
     }
     return out
 
