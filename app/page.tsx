@@ -392,7 +392,12 @@ export default function HomePage(): React.JSX.Element {
     <main className="page">
       <header className="header">
         <h1>Agentic Beat Lab OS</h1>
-        <p>Parallel interface + agent workflow + token saver command center</p>
+        <p>
+          Parallel interface + agent workflow + token saver command center ·{" "}
+          <a href="/stem-lab" style={{ color: "var(--accent)" }}>
+            Stem Lab →
+          </a>
+        </p>
       </header>
       <section className="controls">
         <div>

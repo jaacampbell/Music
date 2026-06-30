@@ -14,6 +14,12 @@ This repository now includes a production blueprint for a **universal Agentic Be
 
 - [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
 
+### Stem Extraction + DAW Export (planning)
+
+- [`docs/stem-extraction/PROPOSAL.md`](docs/stem-extraction/PROPOSAL.md): Technical proposal for the stem extraction + music editor export module.
+- [`docs/stem-extraction/agent-prompt.md`](docs/stem-extraction/agent-prompt.md): Runtime prompt for the Stem Extraction Agent.
+- [`docs/stem-extraction/build-checklist.md`](docs/stem-extraction/build-checklist.md): Phase 1 "build this first" checklist.
+
 ## Built MVP (interface + APIs)
 
 This repository now contains a runnable **Agentic Beat Lab OS command center** built with Next.js:
