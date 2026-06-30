@@ -1,0 +1,978 @@
+# Batch 001 — 50 Founding Producers
+# Global foundation: pop, hip-hop, electronic, dub, R&B, rock, film/game, Latin, Afrobeats, experimental
+# Era focus: 1950s–2020s
+producers:
+  - pdna_id: PDNA-000001
+    name: "George Martin"
+    real_name: "George Henry Martin"
+    country: "GB"
+    city: "London"
+    region: "England"
+    active_from: 1950
+    active_to: 2016
+    is_active: false
+    musicbrainz_id: "69b39ee6-7b54-4e9e-b64d-3f32b388d4a2"
+    wikidata_id: "Q7504"
+    discogs_id: 27421
+    primary_scenes: ["pop", "rock", "classical", "orchestral"]
+    aliases:
+      - alias: "The Fifth Beatle"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/George_Martin"
+    notes: "Produced virtually all Beatles recordings. Pioneered studio orchestration as a compositional layer."
+
+  - pdna_id: PDNA-000002
+    name: "Phil Spector"
+    real_name: "Harvey Phillip Spector"
+    country: "US"
+    city: "New York"
+    region: "New York"
+    active_from: 1958
+    active_to: 2009
+    is_active: false
+    musicbrainz_id: "4428899e-4935-41d4-af20-3e4b45aa33ea"
+    wikidata_id: "Q311359"
+    discogs_id: 31768
+    primary_scenes: ["pop", "rock", "soul", "girl_groups"]
+    aliases:
+      - alias: "The Tycoon of Teen"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Phil_Spector"
+    notes: "Creator of the Wall of Sound. Dense mono productions using layered orchestras, percussion, and reverb."
+
+  - pdna_id: PDNA-000003
+    name: "Quincy Jones"
+    real_name: "Quincy Delight Jones Jr."
+    country: "US"
+    city: "Chicago"
+    region: "Illinois"
+    active_from: 1951
+    active_to: 2024
+    is_active: false
+    musicbrainz_id: "d6316b2c-4f6f-4b79-8c9d-08dfb1bd92cd"
+    wikidata_id: "Q57761"
+    discogs_id: 59078
+    primary_scenes: ["jazz", "soul", "rnb", "pop", "film_score"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Quincy_Jones"
+    notes: "Unparalleled arranger-producer. Defined the Thriller era of pop production."
+
+  - pdna_id: PDNA-000004
+    name: "Brian Eno"
+    real_name: "Brian Peter George St. John le Baptiste de la Salle Eno"
+    country: "GB"
+    city: "Woodbridge"
+    region: "Suffolk, England"
+    active_from: 1971
+    is_active: true
+    musicbrainz_id: "ff95eb47-41c4-4f7f-a104-cdc30f02a946"
+    wikidata_id: "Q198855"
+    discogs_id: 8760
+    primary_scenes: ["ambient", "art_rock", "electronic", "experimental", "pop"]
+    aliases:
+      - alias: "Eno"
+        alias_type: "solo_alias"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Brian_Eno"
+    notes: "Coined 'ambient music.' Systems-based production logic. Produced U2, Talking Heads, Bowie."
+
+  - pdna_id: PDNA-000005
+    name: "Lee \"Scratch\" Perry"
+    real_name: "Rainford Hugh Perry"
+    country: "JM"
+    city: "Kingston"
+    region: "Jamaica"
+    active_from: 1959
+    active_to: 2021
+    is_active: false
+    musicbrainz_id: "43b69aa4-6f21-4bf0-9ec7-a7d955fcc30d"
+    wikidata_id: "Q1064487"
+    discogs_id: 26983
+    primary_scenes: ["reggae", "dub"]
+    aliases:
+      - alias: "Scratch"
+        alias_type: "solo_alias"
+      - alias: "The Upsetter"
+        alias_type: "solo_alias"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Lee_%22Scratch%22_Perry"
+    notes: "Inventor of the Black Ark studio aesthetic. Studio-as-instrument philosophy."
+
+  - pdna_id: PDNA-000006
+    name: "King Tubby"
+    real_name: "Osbourne Ruddock"
+    country: "JM"
+    city: "Kingston"
+    region: "Jamaica"
+    active_from: 1969
+    active_to: 1989
+    is_active: false
+    musicbrainz_id: "0b06ee96-4174-41b1-a12c-dac43b60c1c9"
+    wikidata_id: "Q978395"
+    discogs_id: 30783
+    primary_scenes: ["dub", "reggae"]
+    aliases:
+      - alias: "Tubby"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/King_Tubby"
+    notes: "Father of dub. Mixer-as-composer. First systematic use of the mixing board as an instrument."
+
+  - pdna_id: PDNA-000007
+    name: "Giorgio Moroder"
+    real_name: "Giovanni Giorgio Moroder"
+    country: "IT"
+    city: "Munich"
+    region: "Bavaria, Germany"
+    active_from: 1966
+    is_active: true
+    musicbrainz_id: "4de47e91-df5e-441a-ab61-c5c7eabcc3d6"
+    wikidata_id: "Q216450"
+    discogs_id: 23760
+    primary_scenes: ["disco", "electronic", "synthpop", "film_score"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Giorgio_Moroder"
+    notes: "Pioneer of sequenced electronic dance music. Machine-locked pulse drove disco production."
+
+  - pdna_id: PDNA-000008
+    name: "Tom Dowd"
+    real_name: "Thomas John Dowd"
+    country: "US"
+    city: "New York"
+    region: "New York"
+    active_from: 1947
+    active_to: 2002
+    is_active: false
+    musicbrainz_id: "f0b6ad86-0e5d-4c5c-94bb-e1b5c96a0a53"
+    wikidata_id: "Q1472095"
+    discogs_id: 72918
+    primary_scenes: ["soul", "rock", "jazz", "rnb"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Tom_Dowd"
+    notes: "Engineering pioneer at Atlantic Records. Introduced multitrack recording to popular music."
+
+  - pdna_id: PDNA-000009
+    name: "Teo Macero"
+    real_name: "Attilio Joseph Macero"
+    country: "US"
+    city: "New York"
+    region: "New York"
+    active_from: 1953
+    active_to: 1999
+    is_active: false
+    musicbrainz_id: "f5e21849-1f53-43ec-9e7c-1e41c3be7c5e"
+    wikidata_id: "Q1270025"
+    discogs_id: 34897
+    primary_scenes: ["jazz", "contemporary_classical", "experimental"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Teo_Macero"
+    notes: "Longtime Miles Davis collaborator. Tape editing as post-performance composition."
+
+  - pdna_id: PDNA-000010
+    name: "Sylvia Robinson"
+    real_name: "Sylvia Vanderpool Robinson"
+    country: "US"
+    city: "New York"
+    region: "New York"
+    active_from: 1950
+    active_to: 2011
+    is_active: false
+    musicbrainz_id: "98cc19ea-da8a-4fc5-9e50-1a8c92c42abc"
+    wikidata_id: "Q1323007"
+    discogs_id: 26989
+    primary_scenes: ["soul", "rnb", "hip_hop"]
+    aliases:
+      - alias: "Little Sylvia"
+        alias_type: "solo_alias"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Sylvia_Robinson"
+    notes: "Produced 'Rapper's Delight' (1979). Foundational figure in bringing hip-hop to radio."
+
+  - pdna_id: PDNA-000011
+    name: "Rick Rubin"
+    real_name: "Frederick Jay Rubin"
+    country: "US"
+    city: "New York"
+    region: "New York"
+    active_from: 1983
+    is_active: true
+    musicbrainz_id: "07c891d6-82da-40cf-9eae-5e7f8c5e7e3c"
+    wikidata_id: "Q310776"
+    discogs_id: 26988
+    primary_scenes: ["hip_hop", "rock", "metal", "pop", "country"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Rick_Rubin"
+    notes: "Co-founder of Def Jam. Reduction and rawness as philosophy. Cross-genre minimalism."
+
+  - pdna_id: PDNA-000012
+    name: "Dr. Dre"
+    real_name: "Andre Romelle Young"
+    country: "US"
+    city: "Compton"
+    region: "Los Angeles, California"
+    active_from: 1984
+    is_active: true
+    musicbrainz_id: "f4a31f0a-51dd-4fa7-986d-3095c40c5ed9"
+    wikidata_id: "Q1032"
+    discogs_id: 14490
+    primary_scenes: ["hip_hop", "g_funk", "trap"]
+    aliases:
+      - alias: "Dre"
+        alias_type: "colloquial"
+      - alias: "The D.O.C."
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Dr._Dre"
+    notes: "Defined West Coast hip-hop sonically. Authority on low-end, vocal pocket, polished menace."
+
+  - pdna_id: PDNA-000013
+    name: "J Dilla"
+    real_name: "James Dewitt Yancey"
+    country: "US"
+    city: "Detroit"
+    region: "Michigan"
+    active_from: 1991
+    active_to: 2006
+    is_active: false
+    musicbrainz_id: "a462b164-3c64-4285-b4b8-c87a4c1ead6d"
+    wikidata_id: "Q193570"
+    discogs_id: 23098
+    primary_scenes: ["hip_hop", "neo_soul", "underground_hip_hop", "boom_bap"]
+    aliases:
+      - alias: "Jay Dee"
+        alias_type: "solo_alias"
+      - alias: "Dilla"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/J_Dilla"
+    notes: "Humanized swing, off-grid microtiming, emotional imperfection. Detroit beat scene icon."
+
+  - pdna_id: PDNA-000014
+    name: "DJ Premier"
+    real_name: "Christopher Edward Martin"
+    country: "US"
+    city: "Brooklyn"
+    region: "New York"
+    active_from: 1989
+    is_active: true
+    musicbrainz_id: "0f9e9d22-00e7-4b05-82ca-a3591a28e9a2"
+    wikidata_id: "Q311387"
+    discogs_id: 23090
+    primary_scenes: ["hip_hop", "boom_bap"]
+    aliases:
+      - alias: "Preem"
+        alias_type: "colloquial"
+      - alias: "Primo"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/DJ_Premier"
+    notes: "Chopped grit, scratched hooks, drum-loop authority. New York boom bap cornerstone."
+
+  - pdna_id: PDNA-000015
+    name: "RZA"
+    real_name: "Robert Fitzgerald Diggs"
+    country: "US"
+    city: "Staten Island"
+    region: "New York"
+    active_from: 1991
+    is_active: true
+    musicbrainz_id: "e130cf83-d1cd-4b10-b7f5-c0d9c3ed2028"
+    wikidata_id: "Q192850"
+    discogs_id: 26967
+    primary_scenes: ["hip_hop", "boom_bap", "underground_hip_hop"]
+    aliases:
+      - alias: "Bobby Digital"
+        alias_type: "solo_alias"
+      - alias: "Prince Rakeem"
+        alias_type: "solo_alias"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/RZA"
+    notes: "Wu-Tang architect. Dusty soul samples, martial arts cinema, minor-key mythology."
+
+  - pdna_id: PDNA-000016
+    name: "Timbaland"
+    real_name: "Timothy Zachery Mosley"
+    country: "US"
+    city: "Norfolk"
+    region: "Virginia"
+    active_from: 1991
+    is_active: true
+    musicbrainz_id: "04952b79-1c56-4e83-93f7-2f8b9ef2b35f"
+    wikidata_id: "Q318802"
+    discogs_id: 50990
+    primary_scenes: ["hip_hop", "rnb", "pop"]
+    aliases:
+      - alias: "Tim"
+        alias_type: "colloquial"
+      - alias: "Timbo"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Timbaland"
+    notes: "Percussive futurism. Negative space. Vocal rhythm as drum language. Virginia Beach sound."
+
+  - pdna_id: PDNA-000017
+    name: "The Neptunes"
+    real_name: null
+    country: "US"
+    city: "Virginia Beach"
+    region: "Virginia"
+    active_from: 1992
+    is_active: true
+    musicbrainz_id: "c2b91c29-1d77-4a88-a30e-0d56d1b15a2a"
+    wikidata_id: "Q1067085"
+    discogs_id: 8706
+    primary_scenes: ["hip_hop", "pop", "rnb", "funk"]
+    aliases:
+      - alias: "N.E.R.D."
+        alias_type: "group_name"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/The_Neptunes"
+    notes: "Pharrell Williams and Chad Hugo. Sparse bounce, synthetic funk, weird minimal hooks."
+
+  - pdna_id: PDNA-000018
+    name: "Missy Elliott"
+    real_name: "Melissa Arnette Elliott"
+    country: "US"
+    city: "Portsmouth"
+    region: "Virginia"
+    active_from: 1991
+    is_active: true
+    musicbrainz_id: "1d02c77d-23e8-4b18-8f74-a80e6f6e4b8f"
+    wikidata_id: "Q224080"
+    discogs_id: 18491
+    primary_scenes: ["hip_hop", "rnb", "pop"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Missy_Elliott"
+    notes: "Vocal-producer imagination. Rhythm-first song design. Playful futurism."
+
+  - pdna_id: PDNA-000019
+    name: "Metro Boomin"
+    real_name: "Leland Wayne Tyler"
+    country: "US"
+    city: "St. Louis"
+    region: "Missouri"
+    active_from: 2012
+    is_active: true
+    musicbrainz_id: "9d3f86fc-1d78-4f41-9af5-3aad95286f36"
+    wikidata_id: "Q17302014"
+    discogs_id: 4613186
+    primary_scenes: ["trap", "hip_hop"]
+    aliases:
+      - alias: "Metro"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Metro_Boomin"
+    notes: "Dark cinematic trap. Negative space. 808 mood architecture."
+
+  - pdna_id: PDNA-000020
+    name: "Mike WiLL Made-It"
+    real_name: "Michael Williams II"
+    country: "US"
+    city: "Atlanta"
+    region: "Georgia"
+    active_from: 2010
+    is_active: true
+    musicbrainz_id: "7e21e967-43be-4c9e-afb9-77a28e5e9a2f"
+    wikidata_id: "Q17104843"
+    discogs_id: 3780524
+    primary_scenes: ["trap", "hip_hop", "pop"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Mike_Will_Made_It"
+    notes: "Elastic 808s, hard minimal loops, hook-forward trap design."
+
+  - pdna_id: PDNA-000021
+    name: "Zaytoven"
+    real_name: "Xavier Dotson"
+    country: "US"
+    city: "Atlanta"
+    region: "Georgia"
+    active_from: 2003
+    is_active: true
+    musicbrainz_id: "e0d1ab40-7e9e-4df0-98cc-0b48c0d1b2c3"
+    wikidata_id: "Q7981055"
+    discogs_id: 3048819
+    primary_scenes: ["trap", "hip_hop"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Zaytoven"
+    notes: "Church chords, loose piano, trap bounce, human gospel touch."
+
+  - pdna_id: PDNA-000022
+    name: "Lex Luger"
+    real_name: "Lexus Lewis"
+    country: "US"
+    city: "Richmond"
+    region: "Virginia"
+    active_from: 2009
+    is_active: true
+    musicbrainz_id: "0d9d5484-3b24-4e7c-9b9e-8dd6b5eb5d97"
+    wikidata_id: "Q6533009"
+    discogs_id: 2988654
+    primary_scenes: ["trap", "hip_hop"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Lex_Luger_(record_producer)"
+    notes: "Maximal brass/synth aggression, hard snare energy. Defined early 2010s trap sound."
+
+  - pdna_id: PDNA-000023
+    name: "Southside"
+    real_name: "Joshua Luellen"
+    country: "US"
+    city: "Atlanta"
+    region: "Georgia"
+    active_from: 2009
+    is_active: true
+    musicbrainz_id: "2bc5e0e7-7cf4-4c42-bddb-e18b5b5d1234"
+    wikidata_id: "Q16213820"
+    discogs_id: 4218653
+    primary_scenes: ["trap", "hip_hop"]
+    aliases:
+      - alias: "808 Mafia"
+        alias_type: "collective"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Southside_(record_producer)"
+    notes: "Dark drum programming, high-energy 808 pressure. 808 Mafia co-founder."
+
+  - pdna_id: PDNA-000024
+    name: "Madlib"
+    real_name: "Otis Jackson Jr."
+    country: "US"
+    city: "Oxnard"
+    region: "California"
+    active_from: 1991
+    is_active: true
+    musicbrainz_id: "95c6e32f-dc25-4ab7-9a28-a65f0cac5bc1"
+    wikidata_id: "Q311406"
+    discogs_id: 23099
+    primary_scenes: ["hip_hop", "underground_hip_hop", "jazz", "experimental"]
+    aliases:
+      - alias: "Quasimoto"
+        alias_type: "solo_alias"
+      - alias: "Lib"
+        alias_type: "colloquial"
+      - alias: "DJ Rels"
+        alias_type: "solo_alias"
+      - alias: "Lootpack"
+        alias_type: "group_name"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Madlib"
+    notes: "Crate-digging collage, raw loops, jazz-damaged texture. Prolific underground icon."
+
+  - pdna_id: PDNA-000025
+    name: "Pete Rock"
+    real_name: "Peter Phillips"
+    country: "US"
+    city: "Mount Vernon"
+    region: "New York"
+    active_from: 1989
+    is_active: true
+    musicbrainz_id: "8e50c267-c0b9-4c71-bcd7-4ee0a9f4a4a2"
+    wikidata_id: "Q522621"
+    discogs_id: 23101
+    primary_scenes: ["hip_hop", "boom_bap"]
+    aliases:
+      - alias: "The Chocolate Boy Wonder"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Pete_Rock"
+    notes: "Warm horn loops, soul-jazz chops, head-nod elegance."
+
+  - pdna_id: PDNA-000026
+    name: "Marley Marl"
+    real_name: "Marlon Williams"
+    country: "US"
+    city: "Queensbridge"
+    region: "New York"
+    active_from: 1984
+    is_active: true
+    musicbrainz_id: "7a6ae6fd-a4b5-4b0e-b89d-7d5c6d8e90a1"
+    wikidata_id: "Q1911052"
+    discogs_id: 26993
+    primary_scenes: ["hip_hop", "boom_bap"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Marley_Marl"
+    notes: "Pioneered drum sampling in hip-hop. Reconstructed drum sounds from existing records."
+
+  - pdna_id: PDNA-000027
+    name: "DJ Screw"
+    real_name: "Robert Earl Davis Jr."
+    country: "US"
+    city: "Houston"
+    region: "Texas"
+    active_from: 1990
+    active_to: 2000
+    is_active: false
+    musicbrainz_id: "78d9e1e4-7c15-4b9c-8f2d-3c7e1e4c8e8f"
+    wikidata_id: "Q1196186"
+    discogs_id: 1028082
+    primary_scenes: ["hip_hop", "chopped_screwed"]
+    aliases:
+      - alias: "Screw"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/DJ_Screw"
+    notes: "Inventor of Chopped and Screwed. Slowed time, syrup atmosphere, remix-as-worldbuilding."
+
+  - pdna_id: PDNA-000028
+    name: "SOPHIE"
+    real_name: "Samuel Long"
+    country: "GB"
+    city: "Glasgow"
+    region: "Scotland"
+    active_from: 2013
+    active_to: 2021
+    is_active: false
+    musicbrainz_id: "9292b8d2-ce80-4b39-9049-5b06c9f0f6be"
+    wikidata_id: "Q21075480"
+    discogs_id: 4084398
+    primary_scenes: ["electronic", "hyperpop", "experimental", "pop"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Sophie_(musician)"
+    notes: "Plastic-metal sound design, extreme synthetic physicality. Redefined electronic texture."
+
+  - pdna_id: PDNA-000029
+    name: "Arca"
+    real_name: "Alejandra Ghersi Rodríguez"
+    country: "VE"
+    city: "Caracas"
+    region: "Venezuela"
+    active_from: 2012
+    is_active: true
+    musicbrainz_id: "9a4e36da-a16b-4e4b-9f0e-6d4c2f8c4f0e"
+    wikidata_id: "Q16200830"
+    discogs_id: 4254534
+    primary_scenes: ["electronic", "experimental", "hyperpop"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Arca_(musician)"
+    notes: "Mutant sound design, body-horror beauty, fractured rhythm. Produced for Björk and Kanye."
+
+  - pdna_id: PDNA-000030
+    name: "Burial"
+    real_name: "William Emmanuel Bevan"
+    country: "GB"
+    city: "London"
+    region: "England"
+    active_from: 2003
+    is_active: true
+    musicbrainz_id: "1b5d18a2-fd90-4c28-9e59-7e3c5e8f6e7d"
+    wikidata_id: "Q556527"
+    discogs_id: 339042
+    primary_scenes: ["dubstep", "uk_garage", "ambient", "electronic"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Burial_(musician)"
+    notes: "Ghostly urban ambience, shuffled 2-step drums, emotional decay. Anonymous producer."
+
+  - pdna_id: PDNA-000031
+    name: "Aphex Twin"
+    real_name: "Richard David James"
+    country: "GB"
+    city: "Lanner"
+    region: "Cornwall, England"
+    active_from: 1988
+    is_active: true
+    musicbrainz_id: "f22942a1-6f70-4263-91a6-2f29b7c6abe3"
+    wikidata_id: "Q312929"
+    discogs_id: 45
+    primary_scenes: ["idm", "ambient", "electronic", "experimental"]
+    aliases:
+      - alias: "AFX"
+        alias_type: "solo_alias"
+      - alias: "The Analogue Bubblebath"
+        alias_type: "solo_alias"
+      - alias: "Polygon Window"
+        alias_type: "solo_alias"
+      - alias: "Caustic Window"
+        alias_type: "solo_alias"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Aphex_Twin"
+    notes: "Algorithmic rhythm, alien melody, playful technical extremity. IDM defining figure."
+
+  - pdna_id: PDNA-000032
+    name: "Daft Punk"
+    real_name: null
+    country: "FR"
+    city: "Paris"
+    region: "France"
+    active_from: 1993
+    active_to: 2021
+    is_active: false
+    musicbrainz_id: "056e4f3e-d505-4dad-8ec1-d04f521cbb56"
+    wikidata_id: "Q184903"
+    discogs_id: 11573
+    primary_scenes: ["house", "electronic", "pop", "disco"]
+    aliases:
+      - alias: "DP"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Daft_Punk"
+    notes: "Robotic funk, filter-house memory, vocoder mythology. Thomas Bangalter and Guy-Manuel de Homem-Christo."
+
+  - pdna_id: PDNA-000033
+    name: "Kraftwerk"
+    real_name: null
+    country: "DE"
+    city: "Düsseldorf"
+    region: "Germany"
+    active_from: 1969
+    is_active: true
+    musicbrainz_id: "e5a609f3-59c3-4f4e-b1f1-b21f15edaebf"
+    wikidata_id: "Q26687"
+    discogs_id: 5081
+    primary_scenes: ["electronic", "synthpop", "experimental"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Kraftwerk"
+    notes: "Machine minimalism, sequencer logic. Foundation of electronic pop, hip-hop, and techno."
+
+  - pdna_id: PDNA-000034
+    name: "Wendy Carlos"
+    real_name: "Wendy Carlos"
+    country: "US"
+    city: "Pawtucket"
+    region: "Rhode Island"
+    active_from: 1966
+    is_active: true
+    musicbrainz_id: "a4c1cf6c-3fd8-44a7-a6a1-cf98e92b07aa"
+    wikidata_id: "Q234279"
+    discogs_id: 35099
+    primary_scenes: ["electronic", "classical", "film_score"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Wendy_Carlos"
+    notes: "Switched-On Bach. Synth timbre discipline, electronic orchestration pioneer."
+
+  - pdna_id: PDNA-000035
+    name: "Ryuichi Sakamoto"
+    real_name: "Ryuichi Sakamoto"
+    country: "JP"
+    city: "Tokyo"
+    region: "Japan"
+    active_from: 1976
+    active_to: 2023
+    is_active: false
+    musicbrainz_id: "61e94f25-7de0-45db-ac83-5bf1daf51bdb"
+    wikidata_id: "Q183213"
+    discogs_id: 37062
+    primary_scenes: ["electronic", "ambient", "film_score", "classical", "jpop"]
+    aliases:
+      - alias: "YMO"
+        alias_type: "group_name"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Ryuichi_Sakamoto"
+    notes: "Elegant harmony, electronic-acoustic fusion, cinematic restraint. Yellow Magic Orchestra."
+
+  - pdna_id: PDNA-000036
+    name: "Yasutaka Nakata"
+    real_name: "Yasutaka Nakata"
+    country: "JP"
+    city: "Kanazawa"
+    region: "Japan"
+    active_from: 2000
+    is_active: true
+    musicbrainz_id: "8cac8de8-e8fc-4b4d-8e89-4c9b1e8e89b4"
+    wikidata_id: "Q1473826"
+    discogs_id: 776282
+    primary_scenes: ["jpop", "electronic", "dance"]
+    aliases:
+      - alias: "capsule"
+        alias_type: "group_name"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Yasutaka_Nakata"
+    notes: "Glossy synthetic pop, heavy vocal processing, kawaii-futurist precision. Produces Perfume, Kyary."
+
+  - pdna_id: PDNA-000037
+    name: "A. R. Rahman"
+    real_name: "Allah Rakha Rahman"
+    country: "IN"
+    city: "Chennai"
+    region: "Tamil Nadu, India"
+    active_from: 1987
+    is_active: true
+    musicbrainz_id: "ec93cbf7-e5e7-4bb4-abc9-4564e7bd9a53"
+    wikidata_id: "Q151608"
+    discogs_id: 198673
+    primary_scenes: ["bollywood", "film_score", "pop", "electronic"]
+    aliases:
+      - alias: "Dileep Kumar"
+        alias_type: "solo_alias"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/A._R._Rahman"
+    notes: "Orchestral-electronic fusion, spiritual melody, cinematic scale. Slumdog Millionaire."
+
+  - pdna_id: PDNA-000038
+    name: "Max Martin"
+    real_name: "Martin Karl Sandberg"
+    country: "SE"
+    city: "Stockholm"
+    region: "Sweden"
+    active_from: 1990
+    is_active: true
+    musicbrainz_id: "d7cf6e15-19fc-45ab-a3d2-3c5e6f8d9a1b"
+    wikidata_id: "Q192960"
+    discogs_id: 124406
+    primary_scenes: ["pop", "rnb", "rock"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Max_Martin"
+    notes: "Most successful pop songwriter-producer of modern era. Hook architecture, melodic math."
+
+  - pdna_id: PDNA-000039
+    name: "Shellback"
+    real_name: "Karl Johan Schuster"
+    country: "SE"
+    city: "Stockholm"
+    region: "Sweden"
+    active_from: 2007
+    is_active: true
+    musicbrainz_id: "e8a5c4d2-0f3e-4c9b-b1a8-5d7c9e3f2b1a"
+    wikidata_id: "Q7495534"
+    discogs_id: 2298440
+    primary_scenes: ["pop", "rnb"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Shellback_(record_producer)"
+    notes: "Max Martin collaborator. Modern pop punch, guitar/synth hybrid hooks."
+
+  - pdna_id: PDNA-000040
+    name: "Nile Rodgers"
+    real_name: "Nile Gregory Rodgers"
+    country: "US"
+    city: "New York"
+    region: "New York"
+    active_from: 1970
+    is_active: true
+    musicbrainz_id: "7fe1b5df-eefe-4f5a-b1f3-d5d7e7f1bcda"
+    wikidata_id: "Q326074"
+    discogs_id: 22659
+    primary_scenes: ["disco", "funk", "pop", "rnb"]
+    aliases:
+      - alias: "Chic"
+        alias_type: "group_name"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Nile_Rodgers"
+    notes: "Guitar groove architecture, live-dance precision, elegant repetition. Co-founded Chic."
+
+  - pdna_id: PDNA-000041
+    name: "Trevor Horn"
+    real_name: "Trevor Charles Horn"
+    country: "GB"
+    city: "Durham"
+    region: "England"
+    active_from: 1977
+    is_active: true
+    musicbrainz_id: "a3c8d4e7-1f2b-4c9e-b1a7-5d3c8f2e1b9a"
+    wikidata_id: "Q317826"
+    discogs_id: 31695
+    primary_scenes: ["synthpop", "pop", "rock", "new_wave"]
+    aliases:
+      - alias: "The Buggles"
+        alias_type: "group_name"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Trevor_Horn"
+    notes: "Hyper-detailed pop production, studio maximalism, digital sheen. Produced ZTT Records."
+
+  - pdna_id: PDNA-000042
+    name: "Flood"
+    real_name: "Mark Ellis"
+    country: "GB"
+    city: "London"
+    region: "England"
+    active_from: 1980
+    is_active: true
+    musicbrainz_id: "b7e3a2c1-4f8d-4b9e-a1c3-7d5e9f3c2b8a"
+    wikidata_id: "Q984063"
+    discogs_id: 220060
+    primary_scenes: ["alternative_rock", "electronic", "industrial"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Flood_(record_producer)"
+    notes: "Industrial space, texture-forward rock, atmospheric mixing. Produced Nine Inch Nails, U2."
+
+  - pdna_id: PDNA-000043
+    name: "Nigel Godrich"
+    real_name: "Nigel Godrich"
+    country: "GB"
+    city: "London"
+    region: "England"
+    active_from: 1994
+    is_active: true
+    musicbrainz_id: "3c9e4b5d-7f2a-4b1e-a3c8-5d7f9e2c1b4a"
+    wikidata_id: "Q337093"
+    discogs_id: 85698
+    primary_scenes: ["alternative_rock", "electronic", "art_pop"]
+    aliases:
+      - alias: "The Radiohead Producer"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Nigel_Godrich"
+    notes: "Intimate abstraction, band texture, emotional digital-era space. Radiohead's producer."
+
+  - pdna_id: PDNA-000044
+    name: "Steve Albini"
+    real_name: "Steve Albini"
+    country: "US"
+    city: "Chicago"
+    region: "Illinois"
+    active_from: 1981
+    active_to: 2024
+    is_active: false
+    musicbrainz_id: "0d7a0ba5-7b6c-4c8e-b1a3-5d9e2f3c1b7a"
+    wikidata_id: "Q551296"
+    discogs_id: 22658
+    primary_scenes: ["alternative_rock", "punk", "noise_rock", "indie_rock"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Steve_Albini"
+    notes: "Raw room sound, anti-gloss recording, performance realism. Preferred 'recording engineer'."
+
+  - pdna_id: PDNA-000045
+    name: "Linda Perry"
+    real_name: "Linda Perry"
+    country: "US"
+    city: "Springfield"
+    region: "Massachusetts"
+    active_from: 1988
+    is_active: true
+    musicbrainz_id: "5d8c2e3a-9f7b-4c1e-b3a8-7d2f9e5c3b1a"
+    wikidata_id: "Q269064"
+    discogs_id: 224462
+    primary_scenes: ["pop", "rock", "rnb"]
+    aliases:
+      - alias: "4 Non Blondes"
+        alias_type: "group_name"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Linda_Perry"
+    notes: "Song-first emotional production, vocal-centered arrangements. Produced Aguilera, Gwen Stefani."
+
+  - pdna_id: PDNA-000046
+    name: "Tainy"
+    real_name: "Marcos Efraín Quiñones Sanabria"
+    country: "PR"
+    city: "San Juan"
+    region: "Puerto Rico"
+    active_from: 2008
+    is_active: true
+    musicbrainz_id: "3b7e5c1a-8f9d-4c2e-b4a7-9d5f2c1e3b8a"
+    wikidata_id: "Q6119551"
+    discogs_id: 3523424
+    primary_scenes: ["reggaeton", "latin_pop"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Tainy"
+    notes: "Futuristic reggaeton, sleek dembow evolution, melodic atmosphere."
+
+  - pdna_id: PDNA-000047
+    name: "Luny Tunes"
+    real_name: null
+    country: "PR"
+    city: "San Juan"
+    region: "Puerto Rico"
+    active_from: 2000
+    is_active: true
+    musicbrainz_id: "4c6f2d3a-7e8b-4c1e-b5a9-8d3f1c2e4b7a"
+    wikidata_id: "Q6697893"
+    discogs_id: 637069
+    primary_scenes: ["reggaeton", "latin_pop"]
+    aliases:
+      - alias: "Francisco Saldaña"
+        alias_type: "colloquial"
+      - alias: "Juan Luis Morera Luna"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Luny_Tunes"
+    notes: "Classic dembow architecture, club-reggaeton foundations. Produced Daddy Yankee, Don Omar."
+
+  - pdna_id: PDNA-000048
+    name: "Sarz"
+    real_name: "Osaretin Osabuohien"
+    country: "NG"
+    city: "Lagos"
+    region: "Nigeria"
+    active_from: 2005
+    is_active: true
+    musicbrainz_id: "5d9e3c2a-6f7b-4c3e-b6a8-9d2f4c3e5b8a"
+    wikidata_id: "Q19949498"
+    discogs_id: 4025896
+    primary_scenes: ["afrobeats", "afropop"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Sarz_(record_producer)"
+    notes: "Clean rhythmic bounce, melodic restraint, Afropop polish."
+
+  - pdna_id: PDNA-000049
+    name: "Kabza De Small"
+    real_name: "Kabelo Motha"
+    country: "ZA"
+    city: "Pampierstad"
+    region: "South Africa"
+    active_from: 2013
+    is_active: true
+    musicbrainz_id: "6e8d4c3b-5f9a-4c4e-b7b9-8d3f5c4e6b9a"
+    wikidata_id: "Q61754543"
+    discogs_id: 7095234
+    primary_scenes: ["amapiano"]
+    aliases:
+      - alias: "King of Amapiano"
+        alias_type: "colloquial"
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/Kabza_De_Small"
+    notes: "Log-drum language, hypnotic piano loops, long-form groove. Amapiano architect."
+
+  - pdna_id: PDNA-000050
+    name: "DJ Rashad"
+    real_name: "Rashad Harden"
+    country: "US"
+    city: "Chicago"
+    region: "Illinois"
+    active_from: 1990
+    active_to: 2014
+    is_active: false
+    musicbrainz_id: "7f9e5d4c-4a8b-4c5e-b8c8-9d4f6c5e7c8a"
+    wikidata_id: "Q7199126"
+    discogs_id: 453695
+    primary_scenes: ["footwork", "electronic"]
+    official_links:
+      - type: "wikipedia"
+        url: "https://en.wikipedia.org/wiki/DJ_Rashad"
+    notes: "Hyperkinetic sampling, battle rhythm, emotional repetition at high speed. Footwork icon."

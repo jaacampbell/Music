@@ -14,6 +14,10 @@ This repository now includes a production blueprint for a **universal Agentic Be
 
 - [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
 
+## Producer DNA Research OS (integrated)
+
+The [`producer-dna/`](producer-dna/) directory vendors the **Producer DNA Research OS** — a Python research project (producer taxonomies, musicological seed data, scoring, and queries) that feeds Song DNA. It is integrated here as a subproject and also maintained standalone on its own branch. See [`producer-dna/README.md`](producer-dna/README.md).
+
 ## Built MVP (interface + APIs)
 
 This repository now contains a runnable **Agentic Beat Lab OS command center** built with Next.js:

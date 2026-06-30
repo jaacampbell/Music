@@ -1,0 +1,338 @@
+genres:
+  # ── Hip-Hop / Rap ──────────────────────────────────────────────────────────
+  - code: hip_hop
+    label: "Hip-Hop"
+  - code: boom_bap
+    label: "Boom Bap"
+    parent: hip_hop
+  - code: trap
+    label: "Trap"
+    parent: hip_hop
+    region: "US South"
+  - code: drill_us
+    label: "Drill (US)"
+    parent: trap
+    region: "US"
+  - code: drill_uk
+    label: "Drill (UK)"
+    parent: hip_hop
+    region: "UK"
+  - code: g_funk
+    label: "G-Funk"
+    parent: hip_hop
+    region: "US West Coast"
+  - code: gangsta_rap
+    label: "Gangsta Rap"
+    parent: hip_hop
+  - code: chopped_screwed
+    label: "Chopped & Screwed"
+    parent: hip_hop
+    region: "Houston, TX"
+  - code: crunk
+    label: "Crunk"
+    parent: hip_hop
+    region: "US South"
+  - code: memphis_rap
+    label: "Memphis Rap"
+    parent: hip_hop
+    region: "Memphis, TN"
+  - code: new_orleans_bounce
+    label: "New Orleans Bounce"
+    parent: hip_hop
+    region: "New Orleans, LA"
+  - code: bay_area_rap
+    label: "Bay Area Rap / Hyphy"
+    parent: hip_hop
+    region: "Bay Area, CA"
+  - code: midwest_rap
+    label: "Midwest Rap"
+    parent: hip_hop
+    region: "Midwest US"
+  - code: melodic_trap
+    label: "Melodic Trap / Emo Rap"
+    parent: trap
+  - code: underground_hip_hop
+    label: "Underground Hip-Hop"
+    parent: hip_hop
+  - code: neo_soul
+    label: "Neo-Soul"
+    parent: hip_hop
+  # ── R&B / Soul / Funk ──────────────────────────────────────────────────────
+  - code: rnb
+    label: "R&B"
+  - code: soul
+    label: "Soul"
+  - code: funk
+    label: "Funk"
+  - code: disco
+    label: "Disco"
+    parent: funk
+  - code: gospel
+    label: "Gospel"
+  - code: contemporary_rnb
+    label: "Contemporary R&B"
+    parent: rnb
+  # ── Electronic ────────────────────────────────────────────────────────────
+  - code: electronic
+    label: "Electronic"
+  - code: techno
+    label: "Techno"
+    parent: electronic
+    region: "Detroit"
+  - code: house
+    label: "House"
+    parent: electronic
+    region: "Chicago"
+  - code: deep_house
+    label: "Deep House"
+    parent: house
+  - code: acid_house
+    label: "Acid House"
+    parent: house
+  - code: footwork
+    label: "Footwork / Juke"
+    parent: electronic
+    region: "Chicago"
+  - code: ambient
+    label: "Ambient"
+    parent: electronic
+  - code: idm
+    label: "IDM (Intelligent Dance Music)"
+    parent: electronic
+  - code: synthpop
+    label: "Synthpop"
+    parent: electronic
+  - code: electro
+    label: "Electro"
+    parent: electronic
+  - code: industrial
+    label: "Industrial"
+    parent: electronic
+  - code: noise
+    label: "Noise"
+    parent: electronic
+  - code: experimental
+    label: "Experimental / Avant-Garde"
+    parent: electronic
+  - code: hyperpop
+    label: "Hyperpop"
+    parent: electronic
+  - code: breakbeat
+    label: "Breakbeat"
+    parent: electronic
+  - code: big_beat
+    label: "Big Beat"
+    parent: breakbeat
+  # ── UK Bass Continuum ─────────────────────────────────────────────────────
+  - code: jungle
+    label: "Jungle"
+    parent: electronic
+    region: "UK"
+  - code: drum_and_bass
+    label: "Drum and Bass"
+    parent: jungle
+    region: "UK"
+  - code: uk_garage
+    label: "UK Garage"
+    parent: electronic
+    region: "UK"
+  - code: grime
+    label: "Grime"
+    parent: uk_garage
+    region: "UK"
+  - code: dubstep
+    label: "Dubstep"
+    parent: uk_garage
+    region: "UK"
+  - code: future_garage
+    label: "Future Garage"
+    parent: uk_garage
+    region: "UK"
+  - code: uk_funky
+    label: "UK Funky"
+    parent: uk_garage
+    region: "UK"
+  - code: bassline
+    label: "Bassline / Speed Garage"
+    parent: uk_garage
+    region: "UK"
+  # ── Reggae / Dub / Dancehall ──────────────────────────────────────────────
+  - code: reggae
+    label: "Reggae"
+    region: "Jamaica"
+  - code: dub
+    label: "Dub"
+    parent: reggae
+    region: "Jamaica"
+  - code: dancehall
+    label: "Dancehall"
+    parent: reggae
+    region: "Jamaica"
+  - code: digital_dancehall
+    label: "Digital Dancehall / Ragga"
+    parent: dancehall
+  - code: roots_reggae
+    label: "Roots Reggae"
+    parent: reggae
+  - code: rocksteady
+    label: "Rocksteady"
+    parent: reggae
+  - code: ska
+    label: "Ska"
+    region: "Jamaica"
+  # ── Latin / Caribbean ─────────────────────────────────────────────────────
+  - code: reggaeton
+    label: "Reggaeton"
+    region: "Puerto Rico"
+  - code: dembow
+    label: "Dembow"
+    parent: reggaeton
+    region: "Dominican Republic"
+  - code: latin_pop
+    label: "Latin Pop"
+  - code: salsa
+    label: "Salsa"
+    region: "Caribbean / NYC"
+  - code: cumbia
+    label: "Cumbia"
+    region: "Colombia"
+  - code: baile_funk
+    label: "Baile Funk / Funk Carioca"
+    region: "Brazil"
+  - code: latin_trap
+    label: "Latin Trap"
+    parent: trap
+    region: "Latin America"
+  - code: afrobeats_latin
+    label: "Afrobeats / Latin Fusion"
+  # ── African ──────────────────────────────────────────────────────────────
+  - code: afrobeats
+    label: "Afrobeats"
+    region: "Nigeria / Ghana"
+  - code: afropop
+    label: "Afropop"
+    parent: afrobeats
+  - code: afroswing
+    label: "Afroswing"
+    parent: afrobeats
+    region: "UK"
+  - code: amapiano
+    label: "Amapiano"
+    region: "South Africa"
+  - code: highlife
+    label: "Highlife"
+    region: "Ghana / Nigeria"
+  - code: bongo_flava
+    label: "Bongo Flava"
+    region: "Tanzania"
+  - code: gengetone
+    label: "Gengetone"
+    region: "Kenya"
+  - code: kuduro
+    label: "Kuduro"
+    region: "Angola"
+  # ── East Asian ────────────────────────────────────────────────────────────
+  - code: kpop
+    label: "K-Pop"
+    region: "South Korea"
+  - code: jpop
+    label: "J-Pop"
+    region: "Japan"
+  - code: city_pop
+    label: "City Pop"
+    parent: jpop
+    region: "Japan"
+  - code: j_electronic
+    label: "Japanese Electronic"
+    parent: electronic
+    region: "Japan"
+  # ── South Asian ───────────────────────────────────────────────────────────
+  - code: bollywood
+    label: "Bollywood / Indian Film Music"
+    region: "India"
+  - code: indian_classical
+    label: "Indian Classical"
+    region: "India"
+  - code: bhangra
+    label: "Bhangra"
+    region: "Punjab / UK"
+  # ── Middle East / North Africa ────────────────────────────────────────────
+  - code: arabic_pop
+    label: "Arabic Pop"
+    region: "Middle East / North Africa"
+  # ── Pop ───────────────────────────────────────────────────────────────────
+  - code: pop
+    label: "Pop"
+  - code: art_pop
+    label: "Art Pop"
+    parent: pop
+  - code: dream_pop
+    label: "Dream Pop"
+    parent: pop
+  - code: indie_pop
+    label: "Indie Pop"
+    parent: pop
+  - code: teen_pop
+    label: "Teen Pop"
+    parent: pop
+  - code: synth_pop
+    label: "Synth-Pop / New Wave"
+    parent: pop
+  # ── Rock / Guitar ─────────────────────────────────────────────────────────
+  - code: rock
+    label: "Rock"
+  - code: alternative_rock
+    label: "Alternative Rock"
+    parent: rock
+  - code: indie_rock
+    label: "Indie Rock"
+    parent: rock
+  - code: punk
+    label: "Punk"
+    parent: rock
+  - code: post_punk
+    label: "Post-Punk"
+    parent: punk
+  - code: metal
+    label: "Metal"
+    parent: rock
+  - code: shoegaze
+    label: "Shoegaze"
+    parent: alternative_rock
+  - code: grunge
+    label: "Grunge"
+    parent: alternative_rock
+  - code: art_rock
+    label: "Art Rock / Prog"
+    parent: rock
+  - code: glam_rock
+    label: "Glam Rock"
+    parent: rock
+  - code: noise_rock
+    label: "Noise Rock"
+    parent: rock
+  # ── Jazz / Classical ──────────────────────────────────────────────────────
+  - code: jazz
+    label: "Jazz"
+  - code: jazz_fusion
+    label: "Jazz Fusion"
+    parent: jazz
+  - code: classical
+    label: "Classical / Orchestral"
+  - code: contemporary_classical
+    label: "Contemporary Classical"
+    parent: classical
+  # ── Film / Game / Score ───────────────────────────────────────────────────
+  - code: film_score
+    label: "Film Score"
+  - code: game_score
+    label: "Game Score / Interactive"
+  - code: library_music
+    label: "Library / Production Music"
+  # ── Country / Folk ────────────────────────────────────────────────────────
+  - code: country
+    label: "Country"
+  - code: folk
+    label: "Folk"
+  - code: americana
+    label: "Americana / Roots"

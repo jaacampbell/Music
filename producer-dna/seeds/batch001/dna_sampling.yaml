@@ -1,0 +1,550 @@
+sampling:
+  - pdna_id: PDNA-000001
+    source_traditions: ["orchestral", "classical"]
+    chopping_style: "N/A — not a sampler; all parts recorded live with session musicians"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "No looping; linear orchestral arrangements"
+    ethics_approach: "Original composition and commissioning; no sampling practice"
+    clearance_rate: "none"
+    notes: "George Martin composed and arranged original parts rather than sampling. His legacy is being heavily sampled BY others."
+    confidence: D
+
+  - pdna_id: PDNA-000002
+    source_traditions: ["pop", "rock", "orchestra"]
+    chopping_style: "N/A — all parts performed live in Wall of Sound sessions"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "No looping; studio performance stacking"
+    ethics_approach: "Live studio performance only; no recorded source material repurposed"
+    clearance_rate: "none"
+    notes: "Phil Spector's approach was additive live performance, not sampling. He layered live musicians across multiple takes."
+    confidence: D
+
+  - pdna_id: PDNA-000003
+    source_traditions: ["jazz", "soul", "funk", "pop"]
+    chopping_style: "Rare; when used, discrete and seamlessly integrated with live arrangement"
+    pitch_shifting: 2
+    filtering: 2
+    looping_style: "Occasional horn and rhythm section loops on later works; brief and precise"
+    ethics_approach: "Full clearance standard; extensive legal team; credits meticulously maintained"
+    clearance_rate: "high"
+    notes: "Quincy Jones was primarily a live recording producer but experimented with sampling on later pop/hip-hop crossover projects."
+    confidence: D
+
+  - pdna_id: PDNA-000004
+    source_traditions: ["ambient", "field_recording", "found_sound", "industrial"]
+    chopping_style: "Tape loops, found sound fragments, environmental audio textures"
+    pitch_shifting: 4
+    filtering: 6
+    looping_style: "Long ambient loops; environmental soundscape cycling"
+    ethics_approach: "Conceptual and experimental; non-musical source material; ambient ethics framework"
+    clearance_rate: "unknown"
+    notes: "Brian Eno pioneered the use of found sounds and environmental recordings as compositional elements, predating formal sampling culture."
+    confidence: D
+
+  - pdna_id: PDNA-000005
+    source_traditions: ["reggae", "dub", "african", "r&b", "field_recording"]
+    chopping_style: "Tape manipulation, echo manipulation of live recordings; creative destruction of source"
+    pitch_shifting: 5
+    filtering: 7
+    looping_style: "Echo-fed loops, tape delay extended loops, dub dropout structures"
+    ethics_approach: "Studio as instrument; works primarily with recordings of his own sessions; original-to-dub pipeline"
+    clearance_rate: "high"
+    notes: "Lee Perry's dub manipulation extended to bizarre found sounds and studio accidents. His approach was more sonic sculpture than sampling."
+    confidence: D
+
+  - pdna_id: PDNA-000006
+    source_traditions: ["reggae", "r&b", "ska"]
+    chopping_style: "Dub processing of pre-recorded vocal and instrumental tracks; not chopping in hip-hop sense"
+    pitch_shifting: 2
+    filtering: 8
+    looping_style: "Extended dub versions; dropout/drop-in looping for effect"
+    ethics_approach: "Works within the riddim system — shared rhythm tracks are industry standard in Jamaican music"
+    clearance_rate: "high"
+    notes: "King Tubby processed existing Jamaican recordings into dub versions. His 'sampling' was the muting/unmuting of multi-track stems."
+    confidence: D
+
+  - pdna_id: PDNA-000007
+    source_traditions: ["electronic", "synthesized"]
+    chopping_style: "No traditional sampling; all synthesizer programming and sequencing"
+    pitch_shifting: 1
+    filtering: 3
+    looping_style: "Sequencer loops; MIDI and analog step-sequence patterns"
+    ethics_approach: "Fully original synthesis; no repurposed recorded material"
+    clearance_rate: "none"
+    notes: "Giorgio Moroder was a synthesist and programmer. His entire sonic vocabulary came from synthesis rather than sampling."
+    confidence: D
+
+  - pdna_id: PDNA-000008
+    source_traditions: ["r&b", "soul", "rock", "jazz"]
+    chopping_style: "Not a sampler; recording engineer and producer working with live session musicians"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "No looping; linear studio tracking"
+    ethics_approach: "Pure live recording ethos; analog tape documentation"
+    clearance_rate: "none"
+    notes: "Tom Dowd's legacy is in capturing performances, not manipulating recordings. He engineered rather than sampled."
+    confidence: D
+
+  - pdna_id: PDNA-000009
+    source_traditions: ["jazz", "avant_garde", "classical"]
+    chopping_style: "Tape splicing and collage; rearranging recorded material in the editing room"
+    pitch_shifting: 3
+    filtering: 3
+    looping_style: "Tape loops for ambient and drone textures on certain Miles Davis sessions"
+    ethics_approach: "Works entirely within owned Columbia Records sessions; internal studio archives"
+    clearance_rate: "high"
+    notes: "Teo Macero's tape collage work on Bitches Brew and On the Corner was avant-garde audio editing before sampling existed as a concept."
+    confidence: D
+
+  - pdna_id: PDNA-000010
+    source_traditions: ["r&b", "funk", "disco", "pop"]
+    chopping_style: "Early drum machine pattern extraction; one of the first to loop drum breaks commercially"
+    pitch_shifting: 2
+    filtering: 3
+    looping_style: "Simple loops; repetitive single-bar patterns; foundational to hip-hop looping conventions"
+    ethics_approach: "Early era pre-clearance; Rapper's Delight used live re-recording of Chic's Good Times rather than direct sample"
+    clearance_rate: "medium"
+    notes: "Sylvia Robinson's Sugarhill Records used live band recreations rather than actual samples, but the looping intent and cultural practice was foundational."
+    confidence: D
+
+  - pdna_id: PDNA-000011
+    source_traditions: ["rock", "metal", "blues", "folk"]
+    chopping_style: "Occasional rock guitar riff samples; briefer than hip-hop choppers"
+    pitch_shifting: 2
+    filtering: 3
+    looping_style: "Short loop segments; mostly incidental riff loops rather than structural"
+    ethics_approach: "Generally clears samples; mainstream major-label oversight ensures legal compliance"
+    clearance_rate: "high"
+    notes: "Rick Rubin uses sampling sparingly. More notable for stripping back and live performance aesthetic than sample-heavy production."
+    confidence: D
+
+  - pdna_id: PDNA-000012
+    source_traditions: ["funk", "soul", "r&b", "jazz"]
+    chopping_style: "Frequently recreates rather than samples; uses live studio musicians to replay funk basslines and drum breaks"
+    pitch_shifting: 3
+    filtering: 4
+    looping_style: "Rolling funk loops; four-bar bass and drum patterns as rhythmic foundation"
+    ethics_approach: "Prefers replay over sampling to avoid clearance issues; recreates classic George Clinton/Parliament/Funkadelic lines"
+    clearance_rate: "medium"
+    notes: "Dr. Dre's G-Funk aesthetic required extensive funk replay sessions. On The Chronic, large portions of P-Funk were recreated by live musicians."
+    confidence: D
+
+  - pdna_id: PDNA-000013
+    source_traditions: ["soul", "jazz", "funk", "r&b", "gospel", "brazilian"]
+    chopping_style: "Non-linear fragmentation; removes melodic resolutions; isolates transitional moments within phrases"
+    pitch_shifting: 6
+    filtering: 7
+    looping_style: "Irregular loop lengths; deliberate incomplete loops that avoid resolution; stutter and hiccup patterns"
+    ethics_approach: "Historically unlicensed; posthumous estate management has been more active in clearances"
+    clearance_rate: "low"
+    notes: "J Dilla's sample selection prioritized emotional texture over melodic clarity. He preferred overlooked B-sides and album cuts to recognizable hits."
+    confidence: D
+
+  - pdna_id: PDNA-000014
+    source_traditions: ["jazz", "soul", "funk", "r&b", "reggae"]
+    chopping_style: "Percussive loop isolation; finds rhythmic pocket in melodic sources; DJ-influenced cut technique"
+    pitch_shifting: 4
+    filtering: 8
+    looping_style: "Two-bar or four-bar foundational loops; heavily filtered for warmth and grit"
+    ethics_approach: "Generally unlicensed in early career; later clearances more common at major-label level"
+    clearance_rate: "low"
+    notes: "DJ Premier's sample selection philosophy: find the ugliest, most obscure version of a sound. He specifically avoids recognizable samples."
+    confidence: D
+
+  - pdna_id: PDNA-000015
+    source_traditions: ["soul", "jazz", "kung_fu_film", "r&b", "classical", "spoken_word"]
+    chopping_style: "Eerie isolated notes; dramatic reverb-treated stabs; film dialogue integration"
+    pitch_shifting: 7
+    filtering: 5
+    looping_style: "Haunted, sparse loops; deliberately unsettling incomplete phrases"
+    ethics_approach: "Historically unlicensed; Wu-Tang's early catalog has complex clearance status"
+    clearance_rate: "low"
+    notes: "RZA's sampling drew from rare soul 45s, Shaw Brothers kung fu films, and classical orchestral libraries. The film sound was often used without license."
+    confidence: D
+
+  - pdna_id: PDNA-000016
+    source_traditions: ["african", "middle_eastern", "asian", "r&b", "electronic"]
+    chopping_style: "Single-note or phrase extraction; one-shot ethnic instrument hits layered as percussion"
+    pitch_shifting: 5
+    filtering: 5
+    looping_style: "Short ethnic melodic fragments deployed as rhythmic elements rather than harmonic sources"
+    ethics_approach: "Mix of original synthesis and brief samples; generally clears material at major-label level"
+    clearance_rate: "medium"
+    notes: "Timbaland's global sound palette borrowed ethnic instrument textures that blurred the line between sampling and synthesis emulation."
+    confidence: D
+
+  - pdna_id: PDNA-000017
+    source_traditions: ["r&b", "electronic"]
+    chopping_style: "Minimal traditional sampling; primarily original synthesis and live tracking"
+    pitch_shifting: 2
+    filtering: 3
+    looping_style: "Pattern sequencing rather than sample looping"
+    ethics_approach: "Songwriting-first approach reduces sampling reliance; intellectual property through composition"
+    clearance_rate: "high"
+    notes: "The Neptunes are primarily composers rather than samplers. Their sonic palette is mostly synthesis and live performance."
+    confidence: D
+
+  - pdna_id: PDNA-000018
+    source_traditions: ["r&b", "hip_hop", "electronic"]
+    chopping_style: "Occasional sonic texture sampling; not a primary compositional tool"
+    pitch_shifting: 3
+    filtering: 4
+    looping_style: "Short texture loops integrated into larger original arrangements"
+    ethics_approach: "Collaborative with Timbaland; clearance handled at Elektra/Atlantic label level"
+    clearance_rate: "medium"
+    notes: "Missy Elliott's production (often with Timbaland) occasionally samples but is more notable for original sonic invention."
+    confidence: D
+
+  - pdna_id: PDNA-000019
+    source_traditions: ["horror_film", "soul", "r&b", "trap"]
+    chopping_style: "Film score stabs; orchestral hits; brief cinematic moments extracted for dramatic effect"
+    pitch_shifting: 4
+    filtering: 5
+    looping_style: "Atmosphere samples looped behind trap rhythm bed; short cycles"
+    ethics_approach: "Generally clears samples; major-label oversight; prefers original production for IP reasons"
+    clearance_rate: "medium"
+    notes: "Metro Boomin's cinematic sampling aesthetic borrows heavily from horror and thriller film scores for dark atmospheric texture."
+    confidence: D
+
+  - pdna_id: PDNA-000020
+    source_traditions: ["r&b", "trap", "soul"]
+    chopping_style: "Minimal sampling; primarily original VST and drum machine programming"
+    pitch_shifting: 2
+    filtering: 3
+    looping_style: "Synth loop patterns rather than sampled loops"
+    ethics_approach: "Original production focused; major-label relationships ensure clearance when samples used"
+    clearance_rate: "high"
+    notes: "Mike WiLL Made-It is primarily a synthesist in the modern trap tradition rather than a crate digger sampler."
+    confidence: D
+
+  - pdna_id: PDNA-000021
+    source_traditions: ["gospel", "soul", "r&b"]
+    chopping_style: "Occasional church organ and gospel choir sample chops"
+    pitch_shifting: 3
+    filtering: 3
+    looping_style: "Gospel loop patterns; simple two-bar organ or piano phrase loops"
+    ethics_approach: "Generally avoids unlicensed samples due to Atlanta major-label relationships"
+    clearance_rate: "medium"
+    notes: "Zaytoven's signature is live piano performance rather than sampling, though gospel influences occasionally appear as brief textural samples."
+    confidence: D
+
+  - pdna_id: PDNA-000022
+    source_traditions: ["electronic", "industrial"]
+    chopping_style: "Minimal sampling; primarily synthesized 808 and Massive presets"
+    pitch_shifting: 1
+    filtering: 2
+    looping_style: "Sequencer-driven patterns; no traditional sample looping"
+    ethics_approach: "Synthesis-only approach; Lex Luger sound is almost entirely synthesized"
+    clearance_rate: "none"
+    notes: "Lex Luger's rattling trap aesthetic is 100% synthesis. His innovation was in 808 programming and synth layering, not sampling."
+    confidence: D
+
+  - pdna_id: PDNA-000023
+    source_traditions: ["trap", "electronic"]
+    chopping_style: "Rare; occasional horror or melodic samples"
+    pitch_shifting: 2
+    filtering: 3
+    looping_style: "Primarily synthesized; occasional sampled melodic loop"
+    ethics_approach: "Major-label production context ensures clearance compliance when samples are used"
+    clearance_rate: "medium"
+    notes: "Southside's production is synthesis-dominant. 808 Mafia producers trend toward synthesis over sampling."
+    confidence: D
+
+  - pdna_id: PDNA-000024
+    source_traditions: ["jazz", "soul", "funk", "world", "african", "latin", "brazilian", "bollywood", "classical", "gospel"]
+    chopping_style: "Deep crate digging; obscure pressing preference; minimal processing to retain source warmth"
+    pitch_shifting: 6
+    filtering: 7
+    looping_style: "Fragmented non-resolving loops; unusual bar lengths; deliberate rhythmic disorientation"
+    ethics_approach: "Historically unlicensed; operates in underground tradition with loose clearance practice"
+    clearance_rate: "low"
+    notes: "Madlib is the most prolific crate digger in recorded history. His Stones Throw output spans global catalogs from Ethiopian jazz to Turkish psych to Bollywood."
+    confidence: D
+
+  - pdna_id: PDNA-000025
+    source_traditions: ["soul", "jazz", "funk", "r&b"]
+    chopping_style: "Warm horn and piano phrase extraction; rhythmic pocket isolation from soul records"
+    pitch_shifting: 4
+    filtering: 6
+    looping_style: "Two-to-four bar soul loops; jazz piano or horn as melodic foundation"
+    ethics_approach: "Underground tradition; some clearances on major releases"
+    clearance_rate: "low"
+    notes: "Pete Rock's sample selection defines the golden era aesthetic. He sources from soul/jazz records and processes with compression and vinyl saturation."
+    confidence: D
+
+  - pdna_id: PDNA-000026
+    source_traditions: ["r&b", "soul", "funk", "disco"]
+    chopping_style: "Drum break extraction; introduced the drum machine sampling accident that defined hip-hop"
+    pitch_shifting: 3
+    filtering: 4
+    looping_style: "Short drum break loops; pioneered the locked drum loop as hip-hop's rhythmic foundation"
+    ethics_approach: "Pre-clearance era; late 1980s sampling predated standardized clearance practice"
+    clearance_rate: "unknown"
+    notes: "Marley Marl accidentally discovered drum sampling when a breakbeat triggered through his Casio, creating the template for all hip-hop drum looping."
+    confidence: D
+
+  - pdna_id: PDNA-000027
+    source_traditions: ["r&b", "soul", "hip_hop", "rap", "funk"]
+    chopping_style: "Speed reduction rather than chopping; entire tracks slowed 30-50% to alter mood and tempo"
+    pitch_shifting: 8
+    filtering: 5
+    looping_style: "Full song loops slowed dramatically; no traditional chop patterns"
+    ethics_approach: "DJ mixtape tradition; unlicensed by convention; Screw tapes distributed informally"
+    clearance_rate: "none"
+    notes: "DJ Screw's technique wasn't chopping — he slowed entire tracks on turntables and tape, creating a narcotic drag that transformed hip-hop's temporal relationship with the beat."
+    confidence: D
+
+  - pdna_id: PDNA-000028
+    source_traditions: ["electronic", "digital_synthesis"]
+    chopping_style: "No traditional sampling; fully synthesized using custom Max/MSP patches and hardware"
+    pitch_shifting: 1
+    filtering: 2
+    looping_style: "Granular synthesis creates loop-like textures without traditional samples"
+    ethics_approach: "All-original synthesis; IP is entirely in synthesis design and programming"
+    clearance_rate: "none"
+    notes: "SOPHIE's entire sound world was synthesized from scratch. She reportedly avoided samples to ensure complete creative and legal ownership."
+    confidence: D
+
+  - pdna_id: PDNA-000029
+    source_traditions: ["electronic", "field_recording", "noise", "digital_synthesis"]
+    chopping_style: "Digital noise fragments; corrupted audio files used as textural material"
+    pitch_shifting: 7
+    filtering: 8
+    looping_style: "Granular texture loops; glitch-patterned fragmented cycles"
+    ethics_approach: "Experimental context; non-musical source material; no traditional clearance issues"
+    clearance_rate: "unknown"
+    notes: "Arca uses digital noise, corrupted files, and found sounds as compositional material rather than musical sampling in the traditional sense."
+    confidence: D
+
+  - pdna_id: PDNA-000030
+    source_traditions: ["uk_garage", "jungle", "ambient", "field_recording", "soul"]
+    chopping_style: "Minimal processing; source material degraded intentionally; brief soul vocal fragments at extreme reverb"
+    pitch_shifting: 5
+    filtering: 8
+    looping_style: "Blurred, decayed loops that dissolve into ambient texture"
+    ethics_approach: "Underground UK anonymous release tradition; clearance status unknown"
+    clearance_rate: "unknown"
+    notes: "Burial samples UK garage, 2-step, and soul vocal fragments, then processes them into near-unrecognizable spectral hazes. His source materials are deliberately obscured."
+    confidence: D
+
+  - pdna_id: PDNA-000031
+    source_traditions: ["electronic", "field_recording", "industrial", "ambient", "classical"]
+    chopping_style: "Found sound manipulation; industrial field recordings; natural acoustic events captured and processed"
+    pitch_shifting: 6
+    filtering: 7
+    looping_style: "Irregular granular loops; asymmetric rhythmic cycles from processed recordings"
+    ethics_approach: "Experimental music tradition; non-commercial found sound use; own field recordings dominate"
+    clearance_rate: "unknown"
+    notes: "Aphex Twin's sampling includes ice cream van music, found recordings, and ambient field capture. His approach transforms sources beyond recognition."
+    confidence: D
+
+  - pdna_id: PDNA-000032
+    source_traditions: ["funk", "soul", "disco", "r&b", "electronic"]
+    chopping_style: "Precise loop extraction from funk and disco records; filtered and pitch-corrected for dance floor use"
+    pitch_shifting: 5
+    filtering: 7
+    looping_style: "Four-to-eight bar funk loops as structural foundation for house-influenced tracks"
+    ethics_approach: "Cleared samples on major releases; label oversight through Virgin and Columbia"
+    clearance_rate: "high"
+    notes: "Daft Punk built early house classics around cleared funk/soul samples. They later moved to live instrumentation but sampling was foundational to their aesthetic identity."
+    confidence: D
+
+  - pdna_id: PDNA-000033
+    source_traditions: ["electronic", "synthesized"]
+    chopping_style: "No sampling; all sounds synthesized from Moog, synthesizers, and electronic sequencers"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "Sequencer loops; motorik repetition programmed rather than sampled"
+    ethics_approach: "Fully original synthesis; Kraftwerk's entire catalog is original electronic composition"
+    clearance_rate: "none"
+    notes: "Kraftwerk explicitly rejected sampling as a compositional method. Ironically, they are one of the most sampled artists in history (particularly Trans-Europe Express)."
+    confidence: D
+
+  - pdna_id: PDNA-000034
+    source_traditions: ["classical", "electronic", "synthesized"]
+    chopping_style: "No traditional sampling; Switched-On Bach is direct synthesis of classical scores"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "No looping; linear synthesized performances"
+    ethics_approach: "Original synthesis and performance of licensed/public domain compositions"
+    clearance_rate: "none"
+    notes: "Wendy Carlos synthesized rather than sampled. Her contribution was demonstrating the Moog synthesizer's expressive capability through Bach transcriptions."
+    confidence: D
+
+  - pdna_id: PDNA-000035
+    source_traditions: ["classical", "electronic", "ambient", "world", "japanese_traditional"]
+    chopping_style: "Occasional digital audio samples integrated into orchestral/electronic hybrid compositions"
+    pitch_shifting: 4
+    filtering: 4
+    looping_style: "Ambient sustain loops; long drone cycles from processed acoustic sources"
+    ethics_approach: "Academic and artistically careful; clearances maintained on commercial releases"
+    clearance_rate: "high"
+    notes: "Ryuichi Sakamoto's sampling practice was selective and conceptual, integrating found sounds and digital fragments into classical-electronic hybrids."
+    confidence: D
+
+  - pdna_id: PDNA-000036
+    source_traditions: ["j_pop", "electronic", "synthesized"]
+    chopping_style: "Occasional vocal sample snippets; mostly synthesized production"
+    pitch_shifting: 3
+    filtering: 4
+    looping_style: "VST and synth loop patterns rather than sampled sources"
+    ethics_approach: "Major-label J-Pop context; clearances handled through Avex label oversight"
+    clearance_rate: "high"
+    notes: "Yasutaka Nakata's production is synthesis-first. His vocoderized Perfume and Kyary Pamyu Pamyu productions are largely original composition."
+    confidence: D
+
+  - pdna_id: PDNA-000037
+    source_traditions: ["indian_classical", "carnatic", "hindustani", "world", "orchestral"]
+    chopping_style: "Rare traditional sampling; mostly original orchestration and synthesis"
+    pitch_shifting: 3
+    filtering: 3
+    looping_style: "Rhythmic tabla and percussion loops are typically live-performed, not sampled"
+    ethics_approach: "Original composition emphasis; orchestral scores are commissioned and original"
+    clearance_rate: "high"
+    notes: "A.R. Rahman composes original music. His multicultural palette comes from live musicians from Carnatic, orchestral, and electronic traditions."
+    confidence: D
+
+  - pdna_id: PDNA-000038
+    source_traditions: ["pop", "electronic"]
+    chopping_style: "No meaningful sampling; pure songwriting and session musician production"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "No looping; linear pop song structure"
+    ethics_approach: "Composition-based royalty framework; no sampling practice"
+    clearance_rate: "none"
+    notes: "Max Martin is a songwriter-producer. His work is entirely original composition and session recording, designed for maximum copyright protection."
+    confidence: D
+
+  - pdna_id: PDNA-000039
+    source_traditions: ["pop", "electronic"]
+    chopping_style: "No traditional sampling; composition-based approach"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "No looping; structured pop songwriting"
+    ethics_approach: "Composition-based IP framework; maximizes songwriting royalties over sample clearances"
+    clearance_rate: "none"
+    notes: "Shellback (Karl Johan Schuster) is a songwriter-producer. Like Max Martin, his approach is composition and arrangement rather than sampling."
+    confidence: D
+
+  - pdna_id: PDNA-000040
+    source_traditions: ["funk", "disco", "soul", "r&b"]
+    chopping_style: "N/A — Nile Rodgers is sampled, not a sampler"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "Live guitar riff patterns; funk pocket played rather than looped"
+    ethics_approach: "Live musician; his guitar work on I'm Coming Out, Le Freak, Good Times defines the funk record that gets sampled"
+    clearance_rate: "none"
+    notes: "Nile Rodgers is one of the most-sampled guitarists in history but does not himself sample. His rhythmic guitar style is original composition and performance."
+    confidence: D
+
+  - pdna_id: PDNA-000041
+    source_traditions: ["pop", "classical", "spoken_word", "electronic"]
+    chopping_style: "Fairlight CMI sampling; pioneered digital sampling in mainstream pop production"
+    pitch_shifting: 6
+    filtering: 5
+    looping_style: "Short digital sample loops from Fairlight's memory constraints; precise and repetitive"
+    ethics_approach: "Early digital era pre-clearance; some retrospective licensing issues"
+    clearance_rate: "medium"
+    notes: "Trevor Horn was among the first to use the Fairlight CMI and Synclavier as sampling instruments, defining the synthetic orchestral sound of 1980s pop."
+    confidence: D
+
+  - pdna_id: PDNA-000042
+    source_traditions: ["rock", "electronic", "ambient"]
+    chopping_style: "Atmospheric texture sampling; found sounds processed into bed layers"
+    pitch_shifting: 4
+    filtering: 5
+    looping_style: "Ambient texture loops integrated behind rock and electronic arrangements"
+    ethics_approach: "Major-label context; clearances maintained on Depeche Mode, Nine Inch Nails, PJ Harvey projects"
+    clearance_rate: "high"
+    notes: "Flood uses sampling as texture and atmosphere rather than structural foundation. His sampling is ambient and processed beyond recognition."
+    confidence: D
+
+  - pdna_id: PDNA-000043
+    source_traditions: ["rock", "ambient", "found_sound", "classical"]
+    chopping_style: "Found sound integration; environmental recordings as textural elements"
+    pitch_shifting: 4
+    filtering: 5
+    looping_style: "Short ambient texture loops; barely perceptible samples woven into arrangements"
+    ethics_approach: "Radiohead context ensures label clearance oversight; often original found-sound recordings"
+    clearance_rate: "high"
+    notes: "Nigel Godrich integrates field recordings and found sounds into Radiohead's sound world. His sampling is subtle, textural, and usually from original captures."
+    confidence: D
+
+  - pdna_id: PDNA-000044
+    source_traditions: ["rock", "punk", "noise"]
+    chopping_style: "Anti-sampling purist; explicitly and vocally opposed to sampling"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "No looping; direct microphone capture of live performance"
+    ethics_approach: "Strongly opposed to sampling on ethical and aesthetic grounds; advocates for live performance documentation"
+    clearance_rate: "none"
+    notes: "Steve Albini has written extensively criticizing sampling culture. His recording philosophy is documentation of live performance without technological mediation."
+    confidence: D
+
+  - pdna_id: PDNA-000045
+    source_traditions: ["pop", "rock"]
+    chopping_style: "No sampling; original composition and live performance"
+    pitch_shifting: 1
+    filtering: 1
+    looping_style: "No looping; verse-chorus pop structure"
+    ethics_approach: "Composition-based approach; singer-songwriter tradition"
+    clearance_rate: "none"
+    notes: "Linda Perry is a songwriter who writes and records original songs. Her production aesthetic is live-performance and studio arrangement, not sampling."
+    confidence: D
+
+  - pdna_id: PDNA-000046
+    source_traditions: ["latin", "reggaeton", "electronic", "r&b"]
+    chopping_style: "Short melodic sample lifts; vocal ad-libs sampled and processed"
+    pitch_shifting: 5
+    filtering: 5
+    looping_style: "Reggaeton dembow loop base often built from sampled percussion patterns"
+    ethics_approach: "Major-label reggaeton context; Sony Latin handles clearances"
+    clearance_rate: "medium"
+    notes: "Tainy builds around the dembow rhythmic pattern with occasional melodic sample elements layered over original synth production."
+    confidence: D
+
+  - pdna_id: PDNA-000047
+    source_traditions: ["reggaeton", "dancehall", "latin", "hip_hop"]
+    chopping_style: "Rhythm pattern extractions from dancehall records; dembow derivations"
+    pitch_shifting: 4
+    filtering: 5
+    looping_style: "Short rhythm loops forming the dembow foundation"
+    ethics_approach: "Early reggaeton tradition with loose clearance practice; pre-major-label infrastructure"
+    clearance_rate: "low"
+    notes: "Luny Tunes helped codify the reggaeton sound partly through sampled and adapted dancehall rhythmic patterns in an era before strict clearance enforcement."
+    confidence: D
+
+  - pdna_id: PDNA-000048
+    source_traditions: ["highlife", "afrobeat", "afrobeats", "r&b", "gospel"]
+    chopping_style: "Melodic guitar and percussion phrase sampling from highlife and Afrobeat records"
+    pitch_shifting: 4
+    filtering: 5
+    looping_style: "Four-to-eight bar Afrobeats groove loops layered with original drums and bass"
+    ethics_approach: "Nigerian music industry context with variable clearance practice; mix of sampled and original elements"
+    clearance_rate: "medium"
+    notes: "Sarz samples the highlife and Afrobeat tradition to anchor Afrobeats productions in historical continuity, blending vintage sources with contemporary synthesis."
+    confidence: D
+
+  - pdna_id: PDNA-000049
+    source_traditions: ["house", "afrohouse", "kwaito", "gospel", "r&b"]
+    chopping_style: "Vocal sample chops; South African gospel and soul fragments processed into Amapiano textures"
+    pitch_shifting: 5
+    filtering: 6
+    looping_style: "Extended Amapiano log-drum patterns often based on looped percussion elements"
+    ethics_approach: "South African music industry context; mix of original composition and sampled elements"
+    clearance_rate: "medium"
+    notes: "Kabza De Small blends Amapiano's characteristic log drum bass with sampled gospel and soul elements that root the genre in South African musical heritage."
+    confidence: D
+
+  - pdna_id: PDNA-000050
+    source_traditions: ["r&b", "soul", "funk", "house", "hip_hop", "gospel"]
+    chopping_style: "Rapid fragmentation; chopped vocals and melodic phrases deployed as rhythmic percussion elements"
+    pitch_shifting: 7
+    filtering: 6
+    looping_style: "Short stuttered loops; footwork's hyper-tempo demands compressed sample cycles"
+    ethics_approach: "Underground Chicago footwork tradition; unlicensed sampling is genre convention"
+    clearance_rate: "low"
+    notes: "DJ Rashad's footwork sampling is kinetically violent — source material is chopped, pitched, and recycled at 160+ BPM in ways that entirely decontextualize the original."
+    confidence: D

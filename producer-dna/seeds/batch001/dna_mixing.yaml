@@ -1,0 +1,708 @@
+# Batch 001 — Mixing DNA
+# All numeric dimensions 1–10
+# loudness_level: 1=quiet/dynamic 10=brick-wall loud
+# stereo_width: 1=mono 10=extreme width
+# reverb_use: 1=dry/no reverb 10=drenched/long reverb
+# delay_use: 1=no delay 10=heavy delay
+# compression: 1=uncompressed/dynamic 10=heavily compressed
+# saturation: 1=clean 10=heavily saturated
+mixing:
+  - pdna_id: PDNA-000001
+    low_end_approach: "Warm acoustic bass with room character; orchestral cellos and bass clarify the harmonic foundation"
+    midrange_approach: "String section and brass occupy midrange with full frequency presence; voice sits clearly above"
+    high_end_approach: "Bright cymbals, pizzicato strings, flute — air without harshness"
+    loudness_level: 6
+    stereo_width: 6
+    vocal_placement: "Center and forward, close-miked, clearly above the orchestral bed"
+    reverb_use: 5
+    delay_use: 3
+    compression: 5
+    saturation: 2
+    notes: "Classic EMI studio sound — balanced and natural, clarity without clinical sterility"
+    confidence: D
+
+  - pdna_id: PDNA-000002
+    low_end_approach: "Multiple bass instruments stacked — piano bass, guitar bass, upright bass — creating a wall of low-mid"
+    midrange_approach: "Instruments are indistinct — all contributing to the mass rather than individual presence"
+    high_end_approach: "Compressed and smeared — the Wall has no sharp edges"
+    loudness_level: 7
+    stereo_width: 2
+    vocal_placement: "Center and forward but not separated from the Wall — embedded in the mass"
+    reverb_use: 9
+    delay_use: 4
+    compression: 8
+    saturation: 4
+    notes: "Mono, reverb-heavy, maximum density — the mix is the Wall of Sound aesthetic"
+    confidence: D
+
+  - pdna_id: PDNA-000003
+    low_end_approach: "Precise bass with kick definition — each occupies its frequency without bleed"
+    midrange_approach: "Horn section and rhythm guitar in the mix with surgical clarity"
+    high_end_approach: "Bright and extended — Thriller era mixes have air and presence"
+    loudness_level: 7
+    stereo_width: 7
+    vocal_placement: "MJ vocal: center, intimate, every breath captured"
+    reverb_use: 5
+    delay_use: 4
+    compression: 6
+    saturation: 3
+    notes: "Quincy and Michael Jackson's mixes are references — dynamic range and clarity both maximized"
+    confidence: D
+
+  - pdna_id: PDNA-000004
+    low_end_approach: "Minimal or drone-based bass — not rhythmically assertive"
+    midrange_approach: "Mid-frequency texture is the primary content — synthesizer pads and evolving timbres"
+    high_end_approach: "Air and shimmer — high frequencies suggest space"
+    loudness_level: 3
+    stereo_width: 9
+    vocal_placement: "When vocals present: distant, processed, part of the texture"
+    reverb_use: 9
+    delay_use: 7
+    compression: 3
+    saturation: 2
+    notes: "Eno's mixes prioritize space and width — the room is the instrument"
+    confidence: D
+
+  - pdna_id: PDNA-000005
+    low_end_approach: "Bass guitar as lead instrument — heavy, present, melodic"
+    midrange_approach: "Vocals and instruments in midrange treated with extreme echo and reverb"
+    high_end_approach: "Guitar skank in high-mid; overall high-end softened by tape"
+    loudness_level: 5
+    stereo_width: 5
+    vocal_placement: "Vocal through multiple echo chains — sound appears to come from multiple points"
+    reverb_use: 10
+    delay_use: 10
+    compression: 5
+    saturation: 7
+    notes: "Black Ark sound: every element treated with reverb and echo as compositional elements"
+    confidence: D
+
+  - pdna_id: PDNA-000006
+    low_end_approach: "Bass is the center of the mix — Tubby's bass drops are architectural events"
+    midrange_approach: "Instruments removed and returned in real time — midrange is Tubby's canvas"
+    high_end_approach: "High frequencies treated with echo trails"
+    loudness_level: 5
+    stereo_width: 5
+    vocal_placement: "Vocal often dropped entirely or treated with echo"
+    reverb_use: 9
+    delay_use: 9
+    compression: 4
+    saturation: 4
+    notes: "Tubby's mix is a performance — levels change in real time as the track plays"
+    confidence: D
+
+  - pdna_id: PDNA-000007
+    low_end_approach: "Four-on-the-floor kick and Moog bass clearly defined; sub-bass not yet dominant"
+    midrange_approach: "Synthesizer melody and orchestration occupy midrange clearly"
+    high_end_approach: "Hi-hat and synthesizer lead crisp and bright"
+    loudness_level: 7
+    stereo_width: 6
+    vocal_placement: "Donna Summer vocal: center, larger than life, intimate even at high volume"
+    reverb_use: 6
+    delay_use: 5
+    compression: 7
+    saturation: 3
+    notes: "1970s disco mix: punchy, clear, designed for nightclub sound systems"
+    confidence: D
+
+  - pdna_id: PDNA-000008
+    low_end_approach: "Natural bass with acoustic resonance — instrument-captured, not synthesized"
+    midrange_approach: "Instruments placed in stereo field with natural separation"
+    high_end_approach: "Extended and natural — tape warmth without sacrifice of clarity"
+    loudness_level: 6
+    stereo_width: 6
+    vocal_placement: "Natural vocal placement in the room, not hyper-processed"
+    reverb_use: 4
+    delay_use: 3
+    compression: 5
+    saturation: 3
+    notes: "Dowd's mixing philosophy: serve the music, not the console"
+    confidence: D
+
+  - pdna_id: PDNA-000009
+    low_end_approach: "Bass and piano in the low register, sometimes edited to appear or disappear"
+    midrange_approach: "Jazz ensemble in full midrange, with tape-splice editing creating discontinuities"
+    high_end_approach: "Cymbal and upper register instruments, sometimes deliberately muffled by tape"
+    loudness_level: 5
+    stereo_width: 5
+    vocal_placement: "No conventional vocal — Miles Davis trumpet as the 'voice'"
+    reverb_use: 5
+    delay_use: 3
+    compression: 4
+    saturation: 4
+    notes: "Macero's mixes reflect his editing — the mix changes character across tape splices"
+    confidence: D
+
+  - pdna_id: PDNA-000010
+    low_end_approach: "Disco/soul bass with warm low-end clarity"
+    midrange_approach: "Live band midrange — guitar, piano, horns sharing space"
+    high_end_approach: "Drums and percussion define high frequency energy"
+    loudness_level: 6
+    stereo_width: 5
+    vocal_placement: "Lead vocal forward and clear above the band"
+    reverb_use: 5
+    delay_use: 3
+    compression: 6
+    saturation: 3
+    notes: "Sugarhill Recording Studio sound: warm, live, radio-ready"
+    confidence: D
+
+  - pdna_id: PDNA-000011
+    low_end_approach: "Big room bass and kick — Rubin wants physical impact from the bottom"
+    midrange_approach: "Guitar and voice occupy midrange without EQ artificiality"
+    high_end_approach: "Cymbals and air captured naturally — no digital harshness"
+    loudness_level: 7
+    stereo_width: 5
+    vocal_placement: "Vocal large and present — the human voice is the focus"
+    reverb_use: 5
+    delay_use: 3
+    compression: 6
+    saturation: 5
+    notes: "Rubin's mixes feel like being in the room — not processed into a different reality"
+    confidence: D
+
+  - pdna_id: PDNA-000012
+    low_end_approach: "Sub-bass and kick carefully separated by frequency — bass in sub, kick in mid-bass"
+    midrange_approach: "G-Funk synthesizer in the upper midrange — warm but not competing with kick"
+    high_end_approach: "Crisp hi-hats, precise synth lead — clean high-end without harshness"
+    loudness_level: 8
+    stereo_width: 6
+    vocal_placement: "Rap vocal: clear, present, slight saturation for authority"
+    reverb_use: 4
+    delay_use: 3
+    compression: 8
+    saturation: 5
+    notes: "Dre's mixing is the industry reference — technically precise, physically impactful"
+    confidence: D
+
+  - pdna_id: PDNA-000013
+    low_end_approach: "Warm bass samples with tape character — not tight but present"
+    midrange_approach: "Lo-fi melodic samples occupy midrange with vinyl texture"
+    high_end_approach: "Dusty, rolled-off high end — intentional warmth over clarity"
+    loudness_level: 6
+    stereo_width: 5
+    vocal_placement: "MCs over the top — samples sit back, voice comes forward"
+    reverb_use: 5
+    delay_use: 3
+    compression: 6
+    saturation: 7
+    notes: "Dilla's mixes are warm and dusty — lo-fi is the aesthetic, not the limitation"
+    confidence: D
+
+  - pdna_id: PDNA-000014
+    low_end_approach: "Sampled kick and bass with Brooklyn crunch — not pristine but present"
+    midrange_approach: "Chopped sample in the midrange, slightly compressed"
+    high_end_approach: "Crisp but gritty — vinyl character in the high end"
+    loudness_level: 7
+    stereo_width: 4
+    vocal_placement: "Rap vocal clear and authoritative above the sample"
+    reverb_use: 3
+    delay_use: 2
+    compression: 7
+    saturation: 6
+    notes: "Premier's mixes have a specific New York crunch — not hi-fi, not lo-fi, just right"
+    confidence: D
+
+  - pdna_id: PDNA-000015
+    low_end_approach: "Dusty sub-bass from kung-fu and soul samples — warm and imprecise"
+    midrange_approach: "Minor-key piano and string samples in midrange with lo-fi character"
+    high_end_approach: "Rolled off high end — Wu-Tang records are intentionally warm rather than bright"
+    loudness_level: 6
+    stereo_width: 4
+    vocal_placement: "Multiple MCs require clear separation — vocals stacked and distinct"
+    reverb_use: 5
+    delay_use: 3
+    compression: 6
+    saturation: 7
+    notes: "Wu-Tang mixes have a specific dusty warmth — influenced by the sample sources themselves"
+    confidence: D
+
+  - pdna_id: PDNA-000016
+    low_end_approach: "Precise synthetic bass with unusual frequency placement — not standard sub"
+    midrange_approach: "Percussion-heavy midrange; melodic elements sparse but well-defined"
+    high_end_approach: "Bright but unusual — synthesizer tones in the high register behave unexpectedly"
+    loudness_level: 7
+    stereo_width: 7
+    vocal_placement: "Vocal processing as effect — pitch correction and delay used as texture"
+    reverb_use: 6
+    delay_use: 5
+    compression: 7
+    saturation: 4
+    notes: "Timbaland's mixes serve the rhythm — every frequency decision is a rhythmic decision"
+    confidence: D
+
+  - pdna_id: PDNA-000017
+    low_end_approach: "Spare but present bass — a single note per bar, perfectly placed"
+    midrange_approach: "Synthesizer or live instrument in midrange, isolated and clear"
+    high_end_approach: "Crisp hi-hat and minimal high-end — nothing clutters the space"
+    loudness_level: 7
+    stereo_width: 6
+    vocal_placement: "Rap or pop vocal clearly forward in a sparse mix"
+    reverb_use: 3
+    delay_use: 3
+    compression: 6
+    saturation: 4
+    notes: "Neptunes mixes achieve presence through selection rather than density"
+    confidence: D
+
+  - pdna_id: PDNA-000018
+    low_end_approach: "Funky bass with R&B warmth — moves rhythmically not just harmonically"
+    midrange_approach: "Vocal-heavy midrange with unusual sound design elements"
+    high_end_approach: "Bright and playful — high frequencies used as rhythm instruments"
+    loudness_level: 7
+    stereo_width: 7
+    vocal_placement: "Missy's voice processed as instrument and lead simultaneously"
+    reverb_use: 5
+    delay_use: 5
+    compression: 7
+    saturation: 4
+    notes: "Missy and Timbaland's collaborative mixes are rhythmically three-dimensional"
+    confidence: D
+
+  - pdna_id: PDNA-000019
+    low_end_approach: "808 sub dominates — low end is the primary sonic event"
+    midrange_approach: "Atmospheric pads in the midrange — they create mood not melody"
+    high_end_approach: "Hi-hats and synth textures, controlled brightness"
+    loudness_level: 8
+    stereo_width: 7
+    vocal_placement: "Rap vocal dry and intimate — close to the listener's ear"
+    reverb_use: 7
+    delay_use: 4
+    compression: 8
+    saturation: 5
+    notes: "Metro's mixes are atmospherically heavy — the 808 is both bass and emotional anchor"
+    confidence: D
+
+  - pdna_id: PDNA-000020
+    low_end_approach: "Elastic 808 with pitch movement — bass is melodic and rhythmic simultaneously"
+    midrange_approach: "Minimal melodic loops in midrange"
+    high_end_approach: "Hi-hat rolls dominant in high frequency"
+    loudness_level: 8
+    stereo_width: 6
+    vocal_placement: "Vocal hook prominent and clear"
+    reverb_use: 5
+    delay_use: 3
+    compression: 8
+    saturation: 4
+    notes: "Mike WiLL's mixes hit hard — 808 and hook are the mix priorities"
+    confidence: D
+
+  - pdna_id: PDNA-000021
+    low_end_approach: "808 sub with piano harmony above — bass and piano share low-mid territory"
+    midrange_approach: "Piano chords are the midrange content — warm gospel harmonics"
+    high_end_approach: "Hi-hat and piano upper register bright and present"
+    loudness_level: 7
+    stereo_width: 5
+    vocal_placement: "Rapper's voice clear above piano and 808"
+    reverb_use: 4
+    delay_use: 3
+    compression: 7
+    saturation: 3
+    notes: "Zaytoven's mix balance between gospel piano and trap template"
+    confidence: D
+
+  - pdna_id: PDNA-000022
+    low_end_approach: "Maximum 808 low-end — loud and uncompromising"
+    midrange_approach: "Brass synth stabs dominate midrange aggressively"
+    high_end_approach: "Hard snare and bright synths — everything at maximum"
+    loudness_level: 9
+    stereo_width: 6
+    vocal_placement: "Vocal assertive and loud in the mix"
+    reverb_use: 4
+    delay_use: 3
+    compression: 9
+    saturation: 6
+    notes: "Lex Luger's mixes are maximally aggressive — loudness as aesthetic statement"
+    confidence: D
+
+  - pdna_id: PDNA-000023
+    low_end_approach: "Dark 808 sub, heavy and pressure-focused"
+    midrange_approach: "Minimal midrange content — darkness defined by its absence"
+    high_end_approach: "Hi-hat energy in the high frequencies"
+    loudness_level: 8
+    stereo_width: 5
+    vocal_placement: "Vocal present in the dark atmosphere"
+    reverb_use: 6
+    delay_use: 4
+    compression: 8
+    saturation: 5
+    notes: "808 Mafia mixes prioritize bass pressure and atmospheric darkness"
+    confidence: D
+
+  - pdna_id: PDNA-000024
+    low_end_approach: "Dusty bass samples with vinyl warmth — imprecise but present"
+    midrange_approach: "Lo-fi sample layers in midrange — texture is the goal"
+    high_end_approach: "Rolled off highs — tape and vinyl character reduce brightness"
+    loudness_level: 5
+    stereo_width: 4
+    vocal_placement: "MC vocal sits in the lo-fi environment — not separated from the texture"
+    reverb_use: 5
+    delay_use: 3
+    compression: 5
+    saturation: 7
+    notes: "Madlib's mixes are underground lo-fi — the roughness is correct"
+    confidence: D
+
+  - pdna_id: PDNA-000025
+    low_end_approach: "Warm sampled bass from soul/jazz sources — rounded and present"
+    midrange_approach: "Horn loops and jazz piano samples in warm midrange"
+    high_end_approach: "Natural cymbal and high-register samples"
+    loudness_level: 6
+    stereo_width: 5
+    vocal_placement: "Vocal clear but in a warm environment"
+    reverb_use: 4
+    delay_use: 3
+    compression: 6
+    saturation: 5
+    notes: "Pete Rock's mixes have a soul-warmth — not hi-fi, not lo-fi, just right"
+    confidence: D
+
+  - pdna_id: PDNA-000026
+    low_end_approach: "Punchy reconstructed bass from sampled hits"
+    midrange_approach: "Sample loop and melodic content in midrange"
+    high_end_approach: "Drum sample highs — crisp individual hits"
+    loudness_level: 6
+    stereo_width: 4
+    vocal_placement: "MC vocal clear and dry"
+    reverb_use: 3
+    delay_use: 2
+    compression: 6
+    saturation: 4
+    notes: "Early hip-hop mix aesthetic — punchy and direct"
+    confidence: D
+
+  - pdna_id: PDNA-000027
+    low_end_approach: "Bass pitch-lowered by tempo reduction — creates unusual sub-bass resonances"
+    midrange_approach: "Slowed midrange — vocals become instruments, instruments become drones"
+    high_end_approach: "High frequencies lost in the pitch reduction process"
+    loudness_level: 6
+    stereo_width: 4
+    vocal_placement: "Vocal pitch dropped — between speech and song"
+    reverb_use: 5
+    delay_use: 3
+    compression: 5
+    saturation: 5
+    notes: "Chopped and Screwed mix is the sonic result of pitch reduction — a complete frequency transformation"
+    confidence: D
+
+  - pdna_id: PDNA-000028
+    low_end_approach: "Sub-bass as physical event — extreme transient design"
+    midrange_approach: "Synthetic midrange with extreme processing — nothing is natural"
+    high_end_approach: "Extreme high-frequency presence — brightness as aggression"
+    loudness_level: 9
+    stereo_width: 8
+    vocal_placement: "Vocal processed to match the synthetic world — pitch correction as aesthetics"
+    reverb_use: 5
+    delay_use: 4
+    compression: 9
+    saturation: 6
+    notes: "SOPHIE's mixes are maximally synthetic and maximally loud — the physical impact is the point"
+    confidence: D
+
+  - pdna_id: PDNA-000029
+    low_end_approach: "Bass events are unpredictable — sub-bass appears and disappears"
+    midrange_approach: "Fractured and extreme — sounds appear and vanish without warning"
+    high_end_approach: "High frequencies can reach painful levels in Arca's work — intentionally"
+    loudness_level: 7
+    stereo_width: 7
+    vocal_placement: "Vocal may be stretched, pitched, fragmented"
+    reverb_use: 6
+    delay_use: 5
+    compression: 6
+    saturation: 7
+    notes: "Arca's mixes serve her compositional vision — the mix is part of the composition"
+    confidence: D
+
+  - pdna_id: PDNA-000030
+    low_end_approach: "Sub-bass rumble beneath the shuffle — weight without definition"
+    midrange_approach: "Vinyl crackle and filtered vocal fragments in the midrange"
+    high_end_approach: "Rolled off and melancholic — no brightness in Burial's world"
+    loudness_level: 5
+    stereo_width: 6
+    vocal_placement: "Vocal chopped and pitched — emotional signal not linguistic content"
+    reverb_use: 7
+    delay_use: 6
+    compression: 5
+    saturation: 4
+    notes: "Burial's mix is atmospheric and melancholic — every frequency decision serves the emotional world"
+    confidence: D
+
+  - pdna_id: PDNA-000031
+    low_end_approach: "Varies enormously: drone sub (ambient) to extreme bass transient (drill and bass)"
+    midrange_approach: "Wide range: evolving midrange timbres in ambient work, hyperactive in IDM"
+    high_end_approach: "Sometimes very bright (high-BPM tracks), sometimes completely absent (ambient)"
+    loudness_level: 6
+    stereo_width: 8
+    vocal_placement: "Rarely conventional vocal — when present, heavily processed"
+    reverb_use: 7
+    delay_use: 5
+    compression: 6
+    saturation: 5
+    notes: "Aphex Twin's mixing range equals his compositional range — no single approach"
+    confidence: D
+
+  - pdna_id: PDNA-000032
+    low_end_approach: "Filtered disco bass — present but processed through filter sweeps"
+    midrange_approach: "Vocoder and synthesizer occupy midrange with French house character"
+    high_end_approach: "Filtered high end — the filter is the primary mixing tool"
+    loudness_level: 7
+    stereo_width: 7
+    vocal_placement: "Robot vocal processed to be both human and machine simultaneously"
+    reverb_use: 6
+    delay_use: 5
+    compression: 7
+    saturation: 5
+    notes: "Daft Punk's mixing: filter as compositional element, the sweep is a crescendo"
+    confidence: D
+
+  - pdna_id: PDNA-000033
+    low_end_approach: "Sequenced bass note — precise and cold"
+    midrange_approach: "Synthesizer melody and chord patterns in midrange"
+    high_end_approach: "Minimal high frequency — clean and precise"
+    loudness_level: 6
+    stereo_width: 5
+    vocal_placement: "Vocoder vocal — human content expressed through machine timbre"
+    reverb_use: 3
+    delay_use: 3
+    compression: 6
+    saturation: 2
+    notes: "Kraftwerk's mixes are clean and precise — machine music sounds like machines made it"
+    confidence: D
+
+  - pdna_id: PDNA-000034
+    low_end_approach: "Moog bass — warm, articulate, modeled on orchestral bass"
+    midrange_approach: "Moog lead melody in midrange with Bach counterpoint clearly voiced"
+    high_end_approach: "Upper register clarity — synthesizer harpsichord articulation"
+    loudness_level: 5
+    stereo_width: 4
+    vocal_placement: "No conventional vocal"
+    reverb_use: 4
+    delay_use: 2
+    compression: 4
+    saturation: 3
+    notes: "Carlos's mixes prioritize harmonic clarity — every voice of Bach's counterpoint audible"
+    confidence: D
+
+  - pdna_id: PDNA-000035
+    low_end_approach: "Piano bass or synthesizer bass, depending on the work — always deliberate"
+    midrange_approach: "Balanced acoustic and electronic in the midrange — neither dominant"
+    high_end_approach: "Elegant high frequency — air without harshness"
+    loudness_level: 5
+    stereo_width: 7
+    vocal_placement: "When present: intimate, close, Japanese pop conventions"
+    reverb_use: 6
+    delay_use: 4
+    compression: 4
+    saturation: 2
+    notes: "Sakamoto's mixes are architectural — space and proportion carefully designed"
+    confidence: D
+
+  - pdna_id: PDNA-000036
+    low_end_approach: "Synthetic bass, clean and defined — J-pop low-end is precise"
+    midrange_approach: "Heavily processed vocal and synthesizer in midrange"
+    high_end_approach: "Bright and polished — maximum high frequency clarity"
+    loudness_level: 8
+    stereo_width: 7
+    vocal_placement: "Vocal processed with heavy auto-tune — treated as an electronic instrument"
+    reverb_use: 5
+    delay_use: 4
+    compression: 8
+    saturation: 4
+    notes: "Nakata's mixes are maximally polished — the synthetic perfection is the aesthetic"
+    confidence: D
+
+  - pdna_id: PDNA-000037
+    low_end_approach: "Orchestra and synthesizer bass combined — weight from both acoustic and electronic"
+    midrange_approach: "Rich orchestral midrange with Indian instruments adding unique harmonic character"
+    high_end_approach: "Orchestral brightness — strings and Indian melodic instruments"
+    loudness_level: 6
+    stereo_width: 9
+    vocal_placement: "Indian vocal tradition — the singer is a soloist above the ensemble"
+    reverb_use: 7
+    delay_use: 4
+    compression: 5
+    saturation: 3
+    notes: "Rahman's mixes are cinematic scale — designed for large speakers and emotional impact"
+    confidence: D
+
+  - pdna_id: PDNA-000038
+    low_end_approach: "Clear and punchy low end — serves the hook"
+    midrange_approach: "Voice and harmonic content clear in midrange"
+    high_end_approach: "Bright and commercial — maximum radio clarity"
+    loudness_level: 8
+    stereo_width: 6
+    vocal_placement: "Lead vocal at absolute maximum clarity — the hook is the product"
+    reverb_use: 4
+    delay_use: 3
+    compression: 8
+    saturation: 3
+    notes: "Max Martin's mixes are commercial perfection — everything serves the hook delivery"
+    confidence: D
+
+  - pdna_id: PDNA-000039
+    low_end_approach: "Pop-rock low end — guitar-influenced"
+    midrange_approach: "Guitar and synthesizer balanced"
+    high_end_approach: "Bright pop production"
+    loudness_level: 8
+    stereo_width: 6
+    vocal_placement: "Lead vocal clear and prominent"
+    reverb_use: 4
+    delay_use: 3
+    compression: 8
+    saturation: 4
+    notes: "Shellback's mixes follow the Max Martin playbook"
+    confidence: D
+
+  - pdna_id: PDNA-000040
+    low_end_approach: "Live bass guitar — Chic's bass player Bernard Edwards defined a style"
+    midrange_approach: "Guitar rhythm and full ensemble in the midrange"
+    high_end_approach: "Drums and orchestral hits bright and present"
+    loudness_level: 7
+    stereo_width: 7
+    vocal_placement: "Lead vocal clear above the groove"
+    reverb_use: 5
+    delay_use: 3
+    compression: 6
+    saturation: 3
+    notes: "Nile Rodgers' mixes sound live — the band in a room together"
+    confidence: D
+
+  - pdna_id: PDNA-000041
+    low_end_approach: "Designed bass — every element of the low end is a production decision"
+    midrange_approach: "Dense and detailed — every frequency occupied with intention"
+    high_end_approach: "Polished digital sheen — 1980s digital brightness"
+    loudness_level: 8
+    stereo_width: 8
+    vocal_placement: "Vocal dramatic and present — ZTT records are theatrical"
+    reverb_use: 7
+    delay_use: 5
+    compression: 7
+    saturation: 4
+    notes: "Trevor Horn's mixes are maximalist achievements — nothing left to chance"
+    confidence: D
+
+  - pdna_id: PDNA-000042
+    low_end_approach: "Industrial low end — weight and texture rather than pure tonality"
+    midrange_approach: "Atmospheric midrange — the sound of air and space"
+    high_end_approach: "Industrial harshness can appear — not always comfortable"
+    loudness_level: 7
+    stereo_width: 7
+    vocal_placement: "Vocal embedded in the atmospheric environment"
+    reverb_use: 8
+    delay_use: 6
+    compression: 7
+    saturation: 6
+    notes: "Flood's mixes are atmospheric — the frequency content creates the emotional environment"
+    confidence: D
+
+  - pdna_id: PDNA-000043
+    low_end_approach: "Low-end that supports the emotional and harmonic content — not just a rhythm element"
+    midrange_approach: "Complex midrange with multiple layers of electronic and acoustic content"
+    high_end_approach: "Carefully managed high end — nothing pierces, everything contributes"
+    loudness_level: 6
+    stereo_width: 8
+    vocal_placement: "Thom Yorke's vocal placed within the mix rather than above it"
+    reverb_use: 7
+    delay_use: 6
+    compression: 6
+    saturation: 4
+    notes: "Godrich's mixes treat the voice as part of the texture — not always the loudest element"
+    confidence: D
+
+  - pdna_id: PDNA-000044
+    low_end_approach: "Room bass — what the bass guitar sounds like in the room"
+    midrange_approach: "Instrument midrange preserved as recorded — no surgical EQ"
+    high_end_approach: "Cymbal and room character in high frequencies"
+    loudness_level: 5
+    stereo_width: 5
+    vocal_placement: "Vocal as recorded — no EQ, no compression beyond what's natural"
+    reverb_use: 3
+    delay_use: 1
+    compression: 2
+    saturation: 4
+    notes: "Albini's mixes are anti-mix — preserve the signal, serve the performance"
+    confidence: D
+
+  - pdna_id: PDNA-000045
+    low_end_approach: "Pop-rock bass supporting the vocal song"
+    midrange_approach: "Piano and guitar in the midrange supporting the vocal"
+    high_end_approach: "Air and clarity for the vocal"
+    loudness_level: 7
+    stereo_width: 5
+    vocal_placement: "Vocal dominant — everything else is support"
+    reverb_use: 5
+    delay_use: 3
+    compression: 6
+    saturation: 3
+    notes: "Linda Perry's mixes serve the song and the singer — nothing competes with the vocal"
+    confidence: D
+
+  - pdna_id: PDNA-000046
+    low_end_approach: "Modern sub-bass beneath the dembow — controlled and clean"
+    midrange_approach: "Atmospheric synthesizer pads in midrange"
+    high_end_approach: "Bright, urban, Latin pop production"
+    loudness_level: 8
+    stereo_width: 7
+    vocal_placement: "Lead vocal polished and modern"
+    reverb_use: 5
+    delay_use: 4
+    compression: 8
+    saturation: 4
+    notes: "Tainy's mixes are radio-ready modern reggaeton — polished but rhythmically distinct"
+    confidence: D
+
+  - pdna_id: PDNA-000047
+    low_end_approach: "Classic dembow sub — bass note on the syncopation defines the genre"
+    midrange_approach: "Synthesizer and melodic elements supporting the rhythm"
+    high_end_approach: "Bright club production"
+    loudness_level: 8
+    stereo_width: 5
+    vocal_placement: "Vocal clear over the dembow"
+    reverb_use: 4
+    delay_use: 3
+    compression: 8
+    saturation: 4
+    notes: "Luny Tunes mixes are club-standard reggaeton — clear and powerful"
+    confidence: D
+
+  - pdna_id: PDNA-000048
+    low_end_approach: "Clean Afrobeats bass — present but not overwhelming"
+    midrange_approach: "Melodic Afropop content in midrange"
+    high_end_approach: "Bright and punchy — modern Nigerian production"
+    loudness_level: 7
+    stereo_width: 6
+    vocal_placement: "Vocal clear and upfront"
+    reverb_use: 4
+    delay_use: 3
+    compression: 7
+    saturation: 3
+    notes: "Sarz's mixes are clean and modern — professional Afrobeats production"
+    confidence: D
+
+  - pdna_id: PDNA-000049
+    low_end_approach: "Log drum sub-bass — the defining sound of amapiano; round, warm, very low"
+    midrange_approach: "Jazz piano in the midrange — warm and harmonic"
+    high_end_approach: "Percussive high-mid elements supporting the groove"
+    loudness_level: 6
+    stereo_width: 6
+    vocal_placement: "Vocalist sits in the groove rather than above it"
+    reverb_use: 5
+    delay_use: 4
+    compression: 6
+    saturation: 3
+    notes: "Kabza's mixes are built around the log drum — it defines the frequency and emotional center"
+    confidence: D
+
+  - pdna_id: PDNA-000050
+    low_end_approach: "Multiple bass events at 160 BPM — bass is percussive rather than harmonic"
+    midrange_approach: "Dense sample chops in midrange — vocal fragments as midrange content"
+    high_end_approach: "Percussive high-frequency density"
+    loudness_level: 7
+    stereo_width: 5
+    vocal_placement: "Vocal samples used rhythmically — emotion over linguistics"
+    reverb_use: 4
+    delay_use: 3
+    compression: 7
+    saturation: 5
+    notes: "Rashad's mixes are dense and fast — every frequency is rhythmically active"
+    confidence: D
