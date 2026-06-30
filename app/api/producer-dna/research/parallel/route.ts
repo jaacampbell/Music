@@ -10,7 +10,7 @@ import { getProducer } from "@/lib/producer-dna/store";
 const stepSchema = z.enum(PROFILE_GENERATION_ORDER as unknown as [string, ...string[]]);
 
 const bodySchema = z.object({
-  producerIds: z.array(z.string().regex(/^PDNA-\d{6}$/)).min(1).max(50),
+  producerIds: z.array(z.string().regex(/^PDNA-\d{6}$/)).min(1).max(80),
   concurrency: z.number().int().min(1).max(10).optional(),
   steps: z.array(stepSchema).optional()
 });

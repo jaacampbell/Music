@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getStoreStats, listProducers } from "@/lib/producer-dna/store";
+import { getStoreStats, listProducers, getBatchingProgress } from "@/lib/producer-dna/store";
 
 export async function GET(): Promise<NextResponse> {
   const producers = listProducers().map((record) => ({
@@ -17,6 +17,7 @@ export async function GET(): Promise<NextResponse> {
 
   return NextResponse.json({
     producers,
-    stats: getStoreStats()
+    stats: getStoreStats(),
+    batching: getBatchingProgress()
   });
 }

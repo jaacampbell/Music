@@ -34,6 +34,23 @@ interface BatchInfo {
   regionFocus: string;
   eraFocus: string;
   producerCount: number;
+  status?: string;
+}
+
+interface BatchingProgress {
+  totalProducers: number;
+  seededBatches: number;
+  plannedBatches: number;
+  researchedBatches: number;
+  nextBatchToSeed?: string;
+  nextBatchToResearch?: string;
+}
+
+interface BatchQueueItem {
+  batchNumber: string;
+  title: string;
+  producerCount: number;
+  status?: string;
 }
 
 interface StoreStats {
@@ -109,19 +126,36 @@ export function ProducerDnaPanel(): React.JSX.Element {
   const [latestParallelBatch, setLatestParallelBatch] = useState<ParallelWorkBatch | null>(null);
   const [parallelStats, setParallelStats] = useState<ParallelStats | null>(null);
   const [parallelError, setParallelError] = useState<string | null>(null);
+  const [batchingProgress, setBatchingProgress] = useState<BatchingProgress | null>(null);
+  const [batchQueue, setBatchQueue] = useState<BatchQueueItem[]>([]);
+  const [catalogueBusy, setCatalogueBusy] = useState(false);
+  const [catalogueMessage, setCatalogueMessage] = useState<string | null>(null);
+  const [selectedCatalogueBatch, setSelectedCatalogueBatch] = useState("002");
 
   const loadBase = async (): Promise<void> => {
-    const [dnaData, batchData, parallelData] = await Promise.all([
-      api<{ producers: ProducerSummary[]; stats: StoreStats }>("/api/producer-dna"),
-      api<{ batches: BatchInfo[]; roadmapTarget: number }>("/api/producer-dna/batches"),
+    const [dnaData, batchData, parallelData, queueData] = await Promise.all([
+      api<{ producers: ProducerSummary[]; stats: StoreStats; batching: BatchingProgress }>(
+        "/api/producer-dna"
+      ),
+      api<{ batches: BatchInfo[]; roadmapTarget: number; batching: BatchingProgress }>(
+        "/api/producer-dna/batches"
+      ),
       api<{ batches: ParallelWorkBatch[]; stats: ParallelStats }>(
         "/api/producer-dna/research/parallel"
-      ).catch(() => ({ batches: [], stats: null }))
+      ).catch(() => ({ batches: [], stats: null })),
+      api<{ progress: BatchingProgress; queue: BatchQueueItem[] }>(
+        "/api/producer-dna/batches/run-next"
+      ).catch(() => ({ progress: null, queue: [] }))
     ]);
     setProducers(dnaData.producers);
     setStats(dnaData.stats);
     setBatches(batchData.batches);
     setRoadmapTarget(batchData.roadmapTarget);
+    setBatchingProgress(dnaData.batching ?? batchData.batching ?? queueData.progress);
+    setBatchQueue(queueData.queue);
+    if (queueData.progress?.nextBatchToResearch) {
+      setSelectedCatalogueBatch(queueData.progress.nextBatchToResearch);
+    }
     if (parallelData.stats) setParallelStats(parallelData.stats);
     if (parallelData.batches.length > 0) setLatestParallelBatch(parallelData.batches[0]);
     if (!selectedId && dnaData.producers.length > 0) {
@@ -166,6 +200,54 @@ export function ProducerDnaPanel(): React.JSX.Element {
     }
   };
 
+  const runCatalogueBatch = async (batchNumber: string): Promise<void> => {
+    setCatalogueBusy(true);
+    setCatalogueMessage(null);
+    try {
+      const data = await api<{
+        result: {
+          catalogueBatchNumber: string;
+          catalogueTitle: string;
+          producerCount: number;
+          parallelBatch: ParallelWorkBatch;
+        };
+      }>(`/api/producer-dna/batches/${batchNumber}/run`, {
+        method: "POST",
+        body: JSON.stringify({ concurrency: parallelConcurrency })
+      });
+      setLatestParallelBatch(data.result.parallelBatch);
+      setCatalogueMessage(
+        `Batch ${data.result.catalogueBatchNumber} researched: ${data.result.producerCount} producers, ${data.result.parallelBatch.result?.completedTasks ?? 0} agent tasks.`
+      );
+      await loadBase();
+    } catch (error) {
+      setCatalogueMessage(error instanceof Error ? error.message : "Catalogue batch failed");
+    } finally {
+      setCatalogueBusy(false);
+    }
+  };
+
+  const runNextBatches = async (count: number): Promise<void> => {
+    setCatalogueBusy(true);
+    setCatalogueMessage(null);
+    try {
+      const data = await api<{
+        result: { batchesRun: Array<{ catalogueBatchNumber: string; producerCount: number }>; totalProducersResearched: number; totalTasksCompleted: number };
+      }>("/api/producer-dna/batches/run-next", {
+        method: "POST",
+        body: JSON.stringify({ count, concurrency: parallelConcurrency })
+      });
+      setCatalogueMessage(
+        `Researched ${data.result.batchesRun.length} catalogue batch(es), ${data.result.totalProducersResearched} producers, ${data.result.totalTasksCompleted} tasks.`
+      );
+      await loadBase();
+    } catch (error) {
+      setCatalogueMessage(error instanceof Error ? error.message : "Continuous batching failed");
+    } finally {
+      setCatalogueBusy(false);
+    }
+  };
+
   useEffect(() => {
     void loadBase().finally(() => setLoading(false));
   }, []);
@@ -207,18 +289,71 @@ export function ProducerDnaPanel(): React.JSX.Element {
             Roadmap: {roadmapTarget.toLocaleString()} producers
           </p>
         )}
+        {batchingProgress && (
+          <p className="meta">
+            Catalogue: {batchingProgress.seededBatches} seeded | {batchingProgress.researchedBatches}{" "}
+            researched | Next to research: {batchingProgress.nextBatchToResearch ?? "none"}
+          </p>
+        )}
         <p className="meta">
           Three layers: verified metadata, analytical DNA, creative direction. Every claim carries a
           confidence tier (A–E).
         </p>
         <div style={{ marginTop: "0.75rem" }}>
-          {batches.slice(0, 3).map((batch) => (
+          {batches.slice(0, 4).map((batch) => (
             <span className="pill" key={batch.batchNumber}>
               Batch {batch.batchNumber}: {batch.title}
               {batch.producerCount > 0 ? ` (${batch.producerCount})` : " (planned)"}
+              {batch.status ? ` [${batch.status}]` : ""}
             </span>
           ))}
         </div>
+      </div>
+
+      <div className="card">
+        <h3>Catalogue batching</h3>
+        <p className="meta">
+          Run agent research across an entire catalogue batch, or keep batching with run-next.
+        </p>
+        <select
+          value={selectedCatalogueBatch}
+          onChange={(e) => setSelectedCatalogueBatch(e.target.value)}
+          style={{ width: "100%", marginBottom: "0.5rem" }}
+        >
+          {batchQueue
+            .filter((b) => b.producerCount > 0)
+            .map((b) => (
+              <option key={b.batchNumber} value={b.batchNumber}>
+                Batch {b.batchNumber}: {b.title} ({b.producerCount}) — {b.status}
+              </option>
+            ))}
+        </select>
+        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          <button
+            onClick={() => void runCatalogueBatch(selectedCatalogueBatch)}
+            disabled={catalogueBusy}
+          >
+            Research batch
+          </button>
+          <button onClick={() => void runNextBatches(1)} disabled={catalogueBusy}>
+            Run next batch
+          </button>
+          <button onClick={() => void runNextBatches(2)} disabled={catalogueBusy} className="secondary">
+            Run next 2
+          </button>
+        </div>
+        {catalogueMessage && (
+          <p className="meta" style={{ marginTop: "0.5rem" }}>
+            {catalogueMessage}
+          </p>
+        )}
+        <ul className="list" style={{ marginTop: "0.75rem", maxHeight: "140px", overflowY: "auto" }}>
+          {batchQueue.map((b) => (
+            <li key={b.batchNumber}>
+              Batch {b.batchNumber}: {b.title} — {b.producerCount > 0 ? `${b.producerCount} producers` : "planned"} [{b.status}]
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="card">

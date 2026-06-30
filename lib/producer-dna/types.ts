@@ -364,6 +364,12 @@ export interface ProducerDnaCapsule {
 
 // ─── Batch & full record ──────────────────────────────────────────────────────
 
+export type CatalogueBatchStatus =
+  | "planned"
+  | "seeded"
+  | "researching"
+  | "researched";
+
 export interface ProducerBatch {
   batchNumber: string;
   title: string;
@@ -372,6 +378,9 @@ export interface ProducerBatch {
   eraFocus: string;
   producerCount: number;
   selectionCriteria: string[];
+  status?: CatalogueBatchStatus;
+  lastResearchedAt?: string;
+  lastResearchBatchId?: string;
 }
 
 export interface ProducerDnaRecord {

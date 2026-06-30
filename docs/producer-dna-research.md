@@ -154,6 +154,43 @@ Originality Twist: Dilla rhythm logic + New Orleans bounce or ambient pads
 Research Confidence: Mixed — facts need citation; analysis is D-tier
 ```
 
+## Batch 002 — Hip-Hop Foundations (30 producers)
+
+Seeded producers PDNA-000051 through PDNA-000080 covering Bronx, Queens, Brooklyn, LA, Houston, Memphis, New Orleans, Bay Area, Chicago, and Atlanta foundations.
+
+## Catalogue batching
+
+Research runs at two levels:
+
+1. **Catalogue batch** — all producers in Batch 001, 002, etc.
+2. **Parallel agents** — concurrent producer pipelines within each batch
+
+### Batch status
+
+| Status | Meaning |
+|--------|---------|
+| planned | Batch defined, not yet seeded |
+| seeded | Producers loaded with DNA capsules |
+| researching | Agent pipeline in progress |
+| researched | Full 10-step pipeline completed |
+
+### API
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/producer-dna/batches/run-next` | GET | Batch queue + progress |
+| `/api/producer-dna/batches/run-next` | POST | Research next N catalogue batches |
+| `/api/producer-dna/batches/[batchNumber]/run` | POST | Research one catalogue batch |
+
+### Keep batching
+
+```json
+POST /api/producer-dna/batches/run-next
+{ "count": 2, "concurrency": 5 }
+```
+
+Processes the next unresearched seeded batches in sequence (001, then 002, …).
+
 ## Next Steps
 
 1. Expand each Batch 001 producer with MusicBrainz/Discogs/Wikidata citations (Tier A–C)

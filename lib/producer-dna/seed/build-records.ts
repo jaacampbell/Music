@@ -3,11 +3,11 @@ import type {
   ProducerDnaRecord,
   ProducerProfile
 } from "@/lib/producer-dna/types";
-import { BATCH_001_SEED, type Batch001SeedEntry } from "@/lib/producer-dna/seed/batch-001";
+import type { BatchSeedEntry } from "@/lib/producer-dna/seed/types";
 
 const now = (): string => new Date().toISOString();
 
-const buildCapsule = (entry: Batch001SeedEntry): ProducerDnaCapsule => ({
+const buildCapsule = (entry: BatchSeedEntry): ProducerDnaCapsule => ({
   producerId: entry.id,
   name: entry.name,
   countryRegion: entry.country
@@ -26,7 +26,7 @@ const buildCapsule = (entry: Batch001SeedEntry): ProducerDnaCapsule => ({
   researchConfidence: entry.researchConfidence
 });
 
-const buildProfile = (entry: Batch001SeedEntry): ProducerProfile => ({
+const buildProfile = (entry: BatchSeedEntry): ProducerProfile => ({
   id: `profile-${entry.id}`,
   producerId: entry.id,
   profileText: `${entry.signatureSoundSummary} ${entry.artisticDna}`,
@@ -38,7 +38,10 @@ const buildProfile = (entry: Batch001SeedEntry): ProducerProfile => ({
   updatedAt: now()
 });
 
-export const buildRecordFromSeed = (entry: Batch001SeedEntry): ProducerDnaRecord => {
+export const buildRecordFromSeed = (
+  entry: BatchSeedEntry,
+  batchId: string
+): ProducerDnaRecord => {
   const timestamp = now();
   const capsule = buildCapsule(entry);
 
@@ -51,7 +54,7 @@ export const buildRecordFromSeed = (entry: Batch001SeedEntry): ProducerDnaRecord
       region: entry.region ?? entry.regionScene,
       primaryScenes: [entry.sceneMovement],
       officialLinks: [],
-      batchId: "001",
+      batchId,
       coreDnaAngle: entry.coreDnaAngle,
       createdAt: timestamp,
       updatedAt: timestamp
@@ -158,4 +161,7 @@ export const buildRecordFromSeed = (entry: Batch001SeedEntry): ProducerDnaRecord
   };
 };
 
-export const BATCH_001_RECORDS: ProducerDnaRecord[] = BATCH_001_SEED.map(buildRecordFromSeed);
+export const buildRecordsFromSeed = (
+  entries: BatchSeedEntry[],
+  batchId: string
+): ProducerDnaRecord[] => entries.map((entry) => buildRecordFromSeed(entry, batchId));

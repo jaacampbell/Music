@@ -3,27 +3,12 @@
  * Each entry includes verified-metadata stubs and analytical DNA capsules.
  */
 
-export interface Batch001SeedEntry {
-  id: string;
-  name: string;
-  regionScene: string;
-  coreDnaAngle: string;
-  country?: string;
-  region?: string;
-  primaryGenres: string[];
-  sceneMovement: string;
-  signatureSoundSummary: string;
-  artisticDna: string;
-  technicalDna: string;
-  rhythmicDna: string;
-  melodicHarmonicDna: string;
-  arrangementDna: string;
-  typeBeatInspiredDirection: string;
-  originalityTwist: string;
-  researchConfidence: string;
-}
+import type { BatchSeedEntry } from "@/lib/producer-dna/seed/types";
 
-export const BATCH_001_SEED: Batch001SeedEntry[] = [
+/** @deprecated Use BatchSeedEntry */
+export type Batch001SeedEntry = BatchSeedEntry;
+
+export const BATCH_001_SEED: BatchSeedEntry[] = [
   {
     id: "PDNA-000001",
     name: "George Martin",

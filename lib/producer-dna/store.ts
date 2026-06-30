@@ -5,7 +5,7 @@ import type {
   ProducerSearchResult
 } from "@/lib/producer-dna/types";
 import { ALL_BATCHES } from "@/lib/producer-dna/seed/batches";
-import { BATCH_001_RECORDS } from "@/lib/producer-dna/seed/build-records";
+import { ALL_SEED_RECORDS } from "@/lib/producer-dna/seed/index";
 
 interface ProducerDnaStoreState {
   records: Map<string, ProducerDnaRecord>;
@@ -14,13 +14,13 @@ interface ProducerDnaStoreState {
 
 const createInitialState = (): ProducerDnaStoreState => {
   const records = new Map<string, ProducerDnaRecord>();
-  for (const record of BATCH_001_RECORDS) {
+  for (const record of ALL_SEED_RECORDS) {
     records.set(record.producer.id, record);
   }
 
   const batches = new Map<string, ProducerBatch>();
   for (const batch of ALL_BATCHES) {
-    batches.set(batch.batchNumber, batch);
+    batches.set(batch.batchNumber, { ...batch });
   }
 
   return { records, batches };
@@ -52,6 +52,48 @@ export const getBatch = (batchNumber: string): ProducerBatch | undefined =>
 
 export const getProducersByBatch = (batchNumber: string): ProducerDnaRecord[] =>
   listProducers().filter((r) => r.producer.batchId === batchNumber);
+
+export const updateBatchStatus = (
+  batchNumber: string,
+  update: Partial<Pick<ProducerBatch, "status" | "lastResearchedAt" | "lastResearchBatchId">>
+): ProducerBatch | undefined => {
+  const batch = state.batches.get(batchNumber);
+  if (!batch) return undefined;
+  const updated = { ...batch, ...update };
+  state.batches.set(batchNumber, updated);
+  return updated;
+};
+
+export const getSeededBatchNumbers = (): string[] =>
+  listBatches()
+    .filter((b) => b.producerCount > 0)
+    .map((b) => b.batchNumber);
+
+export const getBatchingProgress = (): {
+  totalProducers: number;
+  seededBatches: number;
+  plannedBatches: number;
+  researchedBatches: number;
+  nextBatchToSeed: string | undefined;
+  nextBatchToResearch: string | undefined;
+} => {
+  const batches = listBatches();
+  const seeded = batches.filter((b) => b.producerCount > 0);
+  const researched = batches.filter((b) => b.status === "researched");
+  const nextToResearch = batches.find(
+    (b) => b.producerCount > 0 && b.status !== "researched" && b.status !== "researching"
+  );
+  const nextToSeed = batches.find((b) => b.producerCount === 0);
+
+  return {
+    totalProducers: listProducers().length,
+    seededBatches: seeded.length,
+    plannedBatches: batches.length,
+    researchedBatches: researched.length,
+    nextBatchToSeed: nextToSeed?.batchNumber,
+    nextBatchToResearch: nextToResearch?.batchNumber
+  };
+};
 
 export const getStoreStats = (): {
   totalProducers: number;

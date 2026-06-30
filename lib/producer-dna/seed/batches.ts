@@ -16,19 +16,23 @@ export const BATCH_001: ProducerBatch = {
     "Cultural impact",
     "Diversity of region/scene",
     "Future database value"
-  ]
+  ],
+  status: "seeded"
+};
+
+export const BATCH_002: ProducerBatch = {
+  batchNumber: "002",
+  title: "Hip-Hop Foundations",
+  genreSceneFocus:
+    "Bronx, Queens, Brooklyn, LA, Houston, Detroit, Memphis, New Orleans, Bay Area, Chicago",
+  regionFocus: "United States",
+  eraFocus: "1970s–2000s",
+  producerCount: 30,
+  selectionCriteria: ["Regional scene founders", "Sampling pioneers", "Drum architecture innovators"],
+  status: "seeded"
 };
 
 export const FUTURE_BATCHES: ProducerBatch[] = [
-  {
-    batchNumber: "002",
-    title: "Hip-Hop Foundations",
-    genreSceneFocus: "Bronx, Queens, Brooklyn, LA, Houston, Detroit, Memphis, New Orleans, Bay Area, Chicago",
-    regionFocus: "United States",
-    eraFocus: "1970s–2000s",
-    producerCount: 0,
-    selectionCriteria: ["Regional scene founders", "Sampling pioneers", "Drum architecture innovators"]
-  },
   {
     batchNumber: "003",
     title: "Atlanta Trap / Modern Rap Production Trees",
@@ -114,6 +118,6 @@ export const FUTURE_BATCHES: ProducerBatch[] = [
   }
 ];
 
-export const ALL_BATCHES: ProducerBatch[] = [BATCH_001, ...FUTURE_BATCHES];
+export const ALL_BATCHES: ProducerBatch[] = [BATCH_001, BATCH_002, ...FUTURE_BATCHES];
 
 export const ROADMAP_TARGET_PRODUCERS = 100_000;
