@@ -32,17 +32,19 @@ export const BATCH_002: ProducerBatch = {
   status: "seeded"
 };
 
+export const BATCH_003: ProducerBatch = {
+  batchNumber: "003",
+  title: "Atlanta Trap / Modern Rap Production Trees",
+  genreSceneFocus:
+    "Organized Noize, Shawty Redd, Zaytoven, Drumma Boy, Lex Luger, 808 Mafia, Metro lineage, modern melodic trap",
+  regionFocus: "Atlanta, Southern US",
+  eraFocus: "1990s–2020s",
+  producerCount: 25,
+  selectionCriteria: ["Trap architecture", "808 evolution", "Production lineage mapping"],
+  status: "seeded"
+};
+
 export const FUTURE_BATCHES: ProducerBatch[] = [
-  {
-    batchNumber: "003",
-    title: "Atlanta Trap / Modern Rap Production Trees",
-    genreSceneFocus:
-      "Organized Noize, Shawty Redd, Zaytoven, Drumma Boy, Lex Luger, 808 Mafia, Metro lineage, modern melodic trap",
-    regionFocus: "Atlanta, Southern US",
-    eraFocus: "1990s–2020s",
-    producerCount: 0,
-    selectionCriteria: ["Trap architecture", "808 evolution", "Production lineage mapping"]
-  },
   {
     batchNumber: "004",
     title: "Dub, Reggae, Dancehall, Soundsystem Producers",
@@ -118,6 +120,6 @@ export const FUTURE_BATCHES: ProducerBatch[] = [
   }
 ];
 
-export const ALL_BATCHES: ProducerBatch[] = [BATCH_001, BATCH_002, ...FUTURE_BATCHES];
+export const ALL_BATCHES: ProducerBatch[] = [BATCH_001, BATCH_002, BATCH_003, ...FUTURE_BATCHES];
 
 export const ROADMAP_TARGET_PRODUCERS = 100_000;
