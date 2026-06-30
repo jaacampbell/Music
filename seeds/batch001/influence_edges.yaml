@@ -1,0 +1,853 @@
+edges:
+
+  # ── Phil Spector (PDNA-000002) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000002
+    to_pdna: PDNA-000001
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Spector's wall of sound directly shaped Martin's orchestral layering on Beatles records"
+
+  - from_pdna: PDNA-000002
+    to_pdna: PDNA-000011
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Rubin has cited Spector's dense, maximalist approach as foundational to his aesthetic"
+
+  - from_pdna: PDNA-000002
+    to_pdna: PDNA-000040
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Spector's layered pop production influenced Rodgers's rich arrangement style"
+
+  - from_pdna: PDNA-000002
+    to_pdna: PDNA-000041
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Horn has called Spector's 'Be My Baby' one of the greatest productions ever made; evident in Frankie Goes To Hollywood records"
+
+  # ── George Martin (PDNA-000001) ────────────────────────────────────────────
+  - from_pdna: PDNA-000001
+    to_pdna: PDNA-000003
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Martin's studio-as-instrument philosophy cross-pollinated with Jones's arrangement experimentation"
+
+  - from_pdna: PDNA-000001
+    to_pdna: PDNA-000004
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Eno has cited Beatles records as catalytic — Martin's studio innovations set the template Eno later deconstructed"
+
+  - from_pdna: PDNA-000001
+    to_pdna: PDNA-000041
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Trevor Horn has cited Martin's orchestral production approach and use of the studio as a compositional tool"
+
+  - from_pdna: PDNA-000001
+    to_pdna: PDNA-000043
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Godrich has referenced Martin's studio experimentation as foundational to his work with Radiohead"
+
+  # ── Quincy Jones (PDNA-000003) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000003
+    to_pdna: PDNA-000011
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Rubin studied Jones's blend of commercial sheen and artistic depth"
+
+  - from_pdna: PDNA-000003
+    to_pdna: PDNA-000012
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Dre has directly cited Jones's arranging and pop-construction sensibility; evident in Chronic production sweep"
+
+  - from_pdna: PDNA-000003
+    to_pdna: PDNA-000038
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "Martin studied Jones's pop-craft approach to hooky melodic writing and pristine production"
+
+  - from_pdna: PDNA-000003
+    to_pdna: PDNA-000040
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Rodgers cites Jones as a formative influence in bridging jazz arrangement and pop production"
+
+  # ── Brian Eno (PDNA-000004) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000004
+    to_pdna: PDNA-000030
+    direction: influenced
+    strength: 10
+    confidence: A
+    notes: "Burial's ambient textures and oblique structural approach are directly indebted to Eno's ambient series"
+
+  - from_pdna: PDNA-000004
+    to_pdna: PDNA-000031
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Aphex Twin has cited Eno's ambient records as definitive; Selected Ambient Works II is often read as a response to Music for Airports"
+
+  - from_pdna: PDNA-000004
+    to_pdna: PDNA-000029
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Arca's use of studio texture as compositional material draws directly on Eno's Oblique Strategies thinking"
+
+  - from_pdna: PDNA-000004
+    to_pdna: PDNA-000028
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "SOPHIE's conception of pop as pure constructed sound relates to Eno's 'studio as instrument' framing"
+
+  - from_pdna: PDNA-000004
+    to_pdna: PDNA-000042
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Flood has worked extensively alongside Eno; Eno's process-based approach is foundational to Flood's methods"
+
+  - from_pdna: PDNA-000004
+    to_pdna: PDNA-000043
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Godrich has cited Eno's ambient work and studio philosophy as central to Radiohead's post-OK Computer sound"
+
+  - from_pdna: PDNA-000004
+    to_pdna: PDNA-000035
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Eno and Sakamoto collaborated directly; Sakamoto absorbed Eno's ambient and oblique-structure approach"
+
+  # ── Lee 'Scratch' Perry (PDNA-000005) ─────────────────────────────────────
+  - from_pdna: PDNA-000005
+    to_pdna: PDNA-000006
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Perry brought recordings to Tubby's Dromilly Avenue studio; their collaboration defined dub's techniques"
+
+  - from_pdna: PDNA-000005
+    to_pdna: PDNA-000004
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Eno has cited Perry's studio-as-instrument and echo-as-structure approach; dub echo influenced Eno's tape loop work"
+
+  # ── King Tubby (PDNA-000006) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000006
+    to_pdna: PDNA-000005
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Tubby's mixing-board innovations fed back into Perry's recording approach; their collaboration was genuinely mutual"
+
+  - from_pdna: PDNA-000006
+    to_pdna: PDNA-000030
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Burial has cited dub — specifically Tubby's use of space, drop-out, and echo — as a core reference for Untrue"
+
+  # ── Giorgio Moroder (PDNA-000007) ─────────────────────────────────────────
+  - from_pdna: PDNA-000007
+    to_pdna: PDNA-000032
+    direction: influenced
+    strength: 10
+    confidence: A
+    notes: "Daft Punk worked directly with Moroder on Random Access Memories; cited him as the godfather of their sound"
+
+  - from_pdna: PDNA-000007
+    to_pdna: PDNA-000035
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Moroder's synthesizer-driven pop production influenced Sakamoto's YMO work in the late 1970s"
+
+  - from_pdna: PDNA-000007
+    to_pdna: PDNA-000016
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "Moroder's driving synth bass and sequencer patterns reappear in Timbaland's bass-heavy production style"
+
+  # ── Tom Dowd (PDNA-000008) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000008
+    to_pdna: PDNA-000011
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Rubin's preference for capturing authentic performances traces to Dowd's recording philosophy"
+
+  - from_pdna: PDNA-000008
+    to_pdna: PDNA-000044
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Albini's commitment to live acoustic accuracy echoes Dowd's early multitrack naturalism"
+
+  # ── Teo Macero (PDNA-000009) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000009
+    to_pdna: PDNA-000004
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Macero's tape-splice assembly of Bitches Brew is widely cited as a precursor to Eno's tape-loop and studio composition methods"
+
+  - from_pdna: PDNA-000009
+    to_pdna: PDNA-000042
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Flood's process-based approach to editing draws on Macero's radical treatment of recorded material"
+
+  - from_pdna: PDNA-000009
+    to_pdna: PDNA-000043
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Godrich has referenced Macero's Miles Davis work as exemplary in treating the studio as a compositional space"
+
+  # ── Sylvia Robinson (PDNA-000010) ─────────────────────────────────────────
+  - from_pdna: PDNA-000010
+    to_pdna: PDNA-000012
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Sugarhill Gang's 'Rapper's Delight' established the blueprint that shaped hip-hop production Dre later refined"
+
+  - from_pdna: PDNA-000010
+    to_pdna: PDNA-000011
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Robinson's early hip-hop records on Sugarhill preceded and informed Rubin's Def Jam production model"
+
+  # ── Rick Rubin (PDNA-000011) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000011
+    to_pdna: PDNA-000044
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Both Rubin and Albini advocate for capturing live band energy with minimal post-processing"
+
+  - from_pdna: PDNA-000011
+    to_pdna: PDNA-000042
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Rubin's stripped, powerful aesthetic influenced Flood's approach to rock production"
+
+  # ── Dr. Dre (PDNA-000012) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000012
+    to_pdna: PDNA-000017
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "The Neptunes have cited Dre's production as setting a bar for cinematic hip-hop sound design"
+
+  - from_pdna: PDNA-000012
+    to_pdna: PDNA-000016
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Timbaland and Dre pushed hip-hop production toward high-budget studio craft simultaneously"
+
+  - from_pdna: PDNA-000012
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Metro has cited Dre's Chronic-era sound design as the gold standard for atmospheric trap production"
+
+  - from_pdna: PDNA-000012
+    to_pdna: PDNA-000020
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Mike WiLL's layered, cinematic sound references Dre's West Coast production aesthetics"
+
+  # ── Marley Marl (PDNA-000026) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000026
+    to_pdna: PDNA-000014
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "DJ Premier credits Marley Marl as the architect of the drum-sampling approach that defined East Coast hip-hop"
+
+  - from_pdna: PDNA-000026
+    to_pdna: PDNA-000025
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Pete Rock grew up studying Marley Marl's productions; his golden-era sampling style descends directly from Marl's In Control era"
+
+  - from_pdna: PDNA-000026
+    to_pdna: PDNA-000013
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "J Dilla absorbed Marley Marl's soulful drum-sampling approach as a foundational reference"
+
+  - from_pdna: PDNA-000026
+    to_pdna: PDNA-000024
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Madlib's crate-digging ethos traces in part to Marley Marl's pioneering of drum-machine sampling over live music"
+
+  # ── DJ Premier (PDNA-000014) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000014
+    to_pdna: PDNA-000013
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "J Dilla grew up studying Premier's hard chopped sample style and kick-snare placement"
+
+  - from_pdna: PDNA-000014
+    to_pdna: PDNA-000015
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "RZA has cited Premier as a formative reference for boom-bap construction in the early Wu-Tang era"
+
+  # ── Pete Rock (PDNA-000025) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000025
+    to_pdna: PDNA-000013
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "J Dilla has cited Pete Rock as the single biggest influence on his soulful sampling and live-feel drum programming"
+
+  - from_pdna: PDNA-000025
+    to_pdna: PDNA-000024
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Madlib's soul-jazz sampling approach directly references Pete Rock's mellow, horn-rich aesthetic"
+
+  - from_pdna: PDNA-000025
+    to_pdna: PDNA-000014
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Pete Rock and Premier emerged from the same golden-era NYC scene; their approaches cross-pollinated"
+
+  # ── J Dilla (PDNA-000013) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000013
+    to_pdna: PDNA-000024
+    direction: influenced
+    strength: 10
+    confidence: A
+    notes: "Madlib has cited Dilla as his primary influence; they collaborated on Jaylib (2003) and their approaches were deeply intertwined"
+
+  - from_pdna: PDNA-000013
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Metro Boomin has cited Dilla's swing-less quantization and emotional depth as formative"
+
+  # ── Madlib (PDNA-000024) ──────────────────────────────────────────────────
+  - from_pdna: PDNA-000024
+    to_pdna: PDNA-000013
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Dilla absorbed Madlib's more psychedelic crate-digging approach; their influence was genuinely mutual and peer-level"
+
+  # ── RZA (PDNA-000015) ─────────────────────────────────────────────────────
+  - from_pdna: PDNA-000015
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Metro Boomin has cited RZA as the biggest influence on his cinematic, dark, loop-based aesthetic"
+
+  - from_pdna: PDNA-000015
+    to_pdna: PDNA-000022
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Lex Luger's dark orchestral trap descends partly from RZA's grim kung-fu sample aesthetic"
+
+  - from_pdna: PDNA-000015
+    to_pdna: PDNA-000021
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Zaytoven's taste for cinematic, unconventional sounds references RZA's willingness to use unexpected loops"
+
+  # ── Timbaland (PDNA-000016) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000016
+    to_pdna: PDNA-000018
+    direction: influenced
+    strength: 10
+    confidence: A
+    notes: "Timbaland and Missy Elliott developed their sound in total symbiosis; Timbaland's rhythmic experiments are inseparable from her vocal choices"
+
+  - from_pdna: PDNA-000016
+    to_pdna: PDNA-000017
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Timbaland and Neptunes shaped the same 2000s sound; their production approaches cross-pollinated"
+
+  - from_pdna: PDNA-000016
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Metro Boomin references Timbaland's rhythmic minimalism and unconventional hi-hat programming"
+
+  # ── The Neptunes (PDNA-000017) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000017
+    to_pdna: PDNA-000016
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Timbaland and the Neptunes were commercial contemporaries who influenced each other's approach to sparse production"
+
+  - from_pdna: PDNA-000017
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Metro has cited Pharrell's ear for space and minimalism as a reference"
+
+  # ── Missy Elliott (PDNA-000018) ───────────────────────────────────────────
+  - from_pdna: PDNA-000018
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Missy's adventurous arrangement sensibility has been cited by Metro Boomin as an influence on non-conventional structure"
+
+  # ── Lex Luger (PDNA-000022) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000022
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Metro Boomin has directly cited Lex Luger's orchestral trap as the primary reference for his early aesthetic"
+
+  - from_pdna: PDNA-000022
+    to_pdna: PDNA-000023
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Southside collaborated with Lex Luger and absorbed his 808-heavy orchestral trap approach"
+
+  - from_pdna: PDNA-000022
+    to_pdna: PDNA-000020
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Mike WiLL's trap production style was directly shaped by his study of Luger's hard-hitting orchestral templates"
+
+  # ── Zaytoven (PDNA-000021) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000021
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Metro Boomin trained partly under Zaytoven's mentorship; Zay's melodic trap blueprint is foundational to Metro's sound"
+
+  - from_pdna: PDNA-000021
+    to_pdna: PDNA-000023
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Southside's piano-driven trap sensibility draws on Zaytoven's melodic approach"
+
+  # ── DJ Screw (PDNA-000027) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000027
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Metro's slow, syrupy 808 aesthetic and Houston influences are partly rooted in DJ Screw's chopped-and-screwed technique"
+
+  - from_pdna: PDNA-000027
+    to_pdna: PDNA-000020
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Mike WiLL's slow, dark Southern beats reflect DJ Screw's slowed-down hip-hop sensibility"
+
+  # ── Mike WiLL Made-It (PDNA-000020) ──────────────────────────────────────
+  - from_pdna: PDNA-000020
+    to_pdna: PDNA-000023
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Southside has cited Mike WiLL's melodic construction and drum patterns as a key reference"
+
+  - from_pdna: PDNA-000020
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Mike WiLL and Metro grew up in the same Southern trap scene and mutually influenced each other"
+
+  # ── Southside (PDNA-000023) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000023
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 5
+    confidence: B
+    notes: "Southside and Metro co-produced extensively on Future projects; cross-influence is documented across their catalogue"
+
+  # ── Kraftwerk (PDNA-000033) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000033
+    to_pdna: PDNA-000007
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Moroder has cited Autobahn as a turning point that showed him pure sequencer-driven electronic music was commercially viable"
+
+  - from_pdna: PDNA-000033
+    to_pdna: PDNA-000032
+    direction: influenced
+    strength: 10
+    confidence: A
+    notes: "Daft Punk explicitly named Kraftwerk as their foundational influence; Thomas Bangalter has called them the most important electronic group"
+
+  - from_pdna: PDNA-000033
+    to_pdna: PDNA-000031
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Aphex Twin grew up listening to Kraftwerk; their sequencer-based minimalism is a direct ancestor of IDM's grid-logic"
+
+  - from_pdna: PDNA-000033
+    to_pdna: PDNA-000030
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Burial's urban, machine-made textures and sense of industrial space carry Kraftwerk's influence"
+
+  - from_pdna: PDNA-000033
+    to_pdna: PDNA-000015
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "RZA has cited Kraftwerk's robotic drum programming as an influence on his MPC-based production approach"
+
+  - from_pdna: PDNA-000033
+    to_pdna: PDNA-000016
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "Timbaland has referenced Kraftwerk's mechanical rhythm patterns and minimal bass as structural influences"
+
+  - from_pdna: PDNA-000033
+    to_pdna: PDNA-000035
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Sakamoto and YMO were heavily influenced by Kraftwerk's machine-aesthetic; YMO is often called the Japanese Kraftwerk"
+
+  # ── Wendy Carlos (PDNA-000034) ────────────────────────────────────────────
+  - from_pdna: PDNA-000034
+    to_pdna: PDNA-000033
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Switched-On Bach (1968) demonstrated the synthesizer as a serious compositional instrument; Kraftwerk have cited it as a foundational reference"
+
+  - from_pdna: PDNA-000034
+    to_pdna: PDNA-000031
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Aphex Twin has cited Carlos's classical synthesis work as influential to his own electro-acoustic approach"
+
+  - from_pdna: PDNA-000034
+    to_pdna: PDNA-000035
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Sakamoto's synthesis of classical form and electronic timbre closely parallels Carlos's pioneering approach"
+
+  # ── Ryuichi Sakamoto (PDNA-000035) ────────────────────────────────────────
+  - from_pdna: PDNA-000035
+    to_pdna: PDNA-000004
+    direction: influenced
+    strength: 6
+    confidence: B
+    notes: "Eno and Sakamoto collaborated on Merry Christmas Mr. Lawrence (1983); the influence flowed in both directions"
+
+  - from_pdna: PDNA-000035
+    to_pdna: PDNA-000036
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Yasutaka Nakata has cited Sakamoto as a major influence on his approach to synthesizer melody and arrangement"
+
+  - from_pdna: PDNA-000035
+    to_pdna: PDNA-000037
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "Rahman has acknowledged cinematic electronic composers including Sakamoto as formative influences on his orchestral synthesis"
+
+  # ── Aphex Twin (PDNA-000031) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000031
+    to_pdna: PDNA-000030
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Burial has cited Aphex Twin's Selected Ambient Works II as a primary influence on his approach to texture and space"
+
+  - from_pdna: PDNA-000031
+    to_pdna: PDNA-000029
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Arca has explicitly cited Aphex Twin as a foundational influence on their approach to distortion and rhythm deconstruction"
+
+  - from_pdna: PDNA-000031
+    to_pdna: PDNA-000028
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "SOPHIE's interest in timbral extremes and structural dissonance draws on Aphex Twin's Come to Daddy-era approach"
+
+  - from_pdna: PDNA-000031
+    to_pdna: PDNA-000032
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "Daft Punk's early electronic experimentation references the texture palette that Aphex Twin helped establish in the UK scene"
+
+  - from_pdna: PDNA-000031
+    to_pdna: PDNA-000036
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "Yasutaka Nakata's interest in IDM textures and off-grid rhythms reflects Aphex Twin's influence on J-pop production"
+
+  # ── Burial (PDNA-000030) ──────────────────────────────────────────────────
+  - from_pdna: PDNA-000030
+    to_pdna: PDNA-000029
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Arca has cited Burial's deconstructed garage and ambient approach as foundational to their early experimental work"
+
+  - from_pdna: PDNA-000030
+    to_pdna: PDNA-000028
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "SOPHIE's interest in vinyl crackle, vinyl warmth, and broken structure draws on Burial's physical-texture approach"
+
+  # ── SOPHIE (PDNA-000028) ──────────────────────────────────────────────────
+  - from_pdna: PDNA-000028
+    to_pdna: PDNA-000029
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "SOPHIE and Arca were close collaborators and mutual influences; Arca has cited SOPHIE as one of the most important artists in her life"
+
+  # ── Arca (PDNA-000029) ────────────────────────────────────────────────────
+  - from_pdna: PDNA-000029
+    to_pdna: PDNA-000028
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "SOPHIE and Arca co-produced, exchanged ideas, and pushed each other into increasingly radical territory"
+
+  # ── Daft Punk (PDNA-000032) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000032
+    to_pdna: PDNA-000036
+    direction: influenced
+    strength: 9
+    confidence: A
+    notes: "Yasutaka Nakata has repeatedly cited Daft Punk as the primary influence on his vocoded, electronic-pop production approach"
+
+  - from_pdna: PDNA-000032
+    to_pdna: PDNA-000019
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Metro Boomin's interest in synthesized atmospheres and French touch clarity has a Daft Punk trace"
+
+  # ── Nile Rodgers (PDNA-000040) ────────────────────────────────────────────
+  - from_pdna: PDNA-000040
+    to_pdna: PDNA-000032
+    direction: influenced
+    strength: 10
+    confidence: A
+    notes: "Daft Punk worked directly with Rodgers on Random Access Memories; his Chic groove is the backbone of Get Lucky"
+
+  - from_pdna: PDNA-000040
+    to_pdna: PDNA-000038
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "Max Martin's understanding of groove-driven pop is partly informed by Rodgers's Chic blueprint"
+
+  - from_pdna: PDNA-000040
+    to_pdna: PDNA-000017
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "The Neptunes' funk-inflected production references Rodgers's rhythmic guitar-lock approach on Chic records"
+
+  # ── Trevor Horn (PDNA-000041) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000041
+    to_pdna: PDNA-000038
+    direction: influenced
+    strength: 8
+    confidence: A
+    notes: "Max Martin grew up listening to Horn's Frankie Goes To Hollywood productions; Horn's maximalist synth-pop is a blueprint for Martin's wall-of-hooks style"
+
+  - from_pdna: PDNA-000041
+    to_pdna: PDNA-000042
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Flood has cited Horn as an influence; both share an interest in technology-driven production and dense layering"
+
+  - from_pdna: PDNA-000041
+    to_pdna: PDNA-000043
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "Godrich's orchestral studio thinking has roots in the Horn-era synth pop landmark records"
+
+  # ── Flood (PDNA-000042) ────────────────────────────────────────────────────
+  - from_pdna: PDNA-000042
+    to_pdna: PDNA-000043
+    direction: influenced
+    strength: 8
+    confidence: B
+    notes: "Godrich worked alongside Flood on various alternative records; Flood's process-oriented production philosophy is visible in Godrich's Radiohead work"
+
+  # ── Steve Albini (PDNA-000044) ────────────────────────────────────────────
+  - from_pdna: PDNA-000044
+    to_pdna: PDNA-000042
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Both Albini and Flood share a philosophy of minimising artificial enhancement; cross-influence is stylistic rather than direct"
+
+  - from_pdna: PDNA-000044
+    to_pdna: PDNA-000043
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Godrich's live-band recording approach on In Rainbows reflects Albini's naturalistic aesthetic"
+
+  # ── Max Martin (PDNA-000038) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000038
+    to_pdna: PDNA-000039
+    direction: influenced
+    strength: 10
+    confidence: A
+    notes: "Shellback is Max Martin's primary co-producer and collaborator; Martin directly trained and shaped Shellback's production approach"
+
+  - from_pdna: PDNA-000038
+    to_pdna: PDNA-000046
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Tainy's pop-production polish on Spanish-language crossover records draws on Martin's melodic hook construction"
+
+  # ── DJ Rashad (PDNA-000050) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000050
+    to_pdna: PDNA-000028
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "SOPHIE's interest in hyperkinetic rhythm and club-music fragmentation connects to DJ Rashad's footwork innovations"
+
+  - from_pdna: PDNA-000050
+    to_pdna: PDNA-000029
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Arca has cited footwork and DJ Rashad as a structural influence on their fractured rhythmic approach"
+
+  - from_pdna: PDNA-000050
+    to_pdna: PDNA-000030
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Burial and Rashad both draw from underground UK and Chicago dance-music lineages; cross-influence is aesthetic"
+
+  # ── Luny Tunes (PDNA-000047) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000047
+    to_pdna: PDNA-000046
+    direction: influenced
+    strength: 10
+    confidence: A
+    notes: "Luny Tunes defined the dembow-driven reggaeton template that Tainy grew up on and later refined"
+
+  # ── Tainy (PDNA-000046) ───────────────────────────────────────────────────
+  - from_pdna: PDNA-000046
+    to_pdna: PDNA-000047
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Tainy's crossover success has fed back into how Luny Tunes positions themselves in the contemporary reggaeton landscape"
+
+  # ── Sarz (PDNA-000048) ────────────────────────────────────────────────────
+  - from_pdna: PDNA-000048
+    to_pdna: PDNA-000049
+    direction: influenced
+    strength: 7
+    confidence: B
+    notes: "Sarz's Afrobeats production influenced Kabza De Small's hybridisation of amapiano with West African electronic sounds"
+
+  # ── Kabza De Small (PDNA-000049) ──────────────────────────────────────────
+  - from_pdna: PDNA-000049
+    to_pdna: PDNA-000048
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Kabza's amapiano dominance has influenced how Sarz frames his own electronic production for pan-African audiences"
+
+  # ── A. R. Rahman (PDNA-000037) ────────────────────────────────────────────
+  - from_pdna: PDNA-000037
+    to_pdna: PDNA-000048
+    direction: influenced
+    strength: 5
+    confidence: C
+    notes: "Rahman's non-Western harmonic palette and film-score sensibility influenced Sarz's approach to mood-driven production"
+
+  # ── Yasutaka Nakata (PDNA-000036) ─────────────────────────────────────────
+  - from_pdna: PDNA-000036
+    to_pdna: PDNA-000028
+    direction: influenced
+    strength: 6
+    confidence: C
+    notes: "SOPHIE's hyper-produced, candy-coated maximalism shares an aesthetic lineage with Nakata's Perfume productions"
+
+  # ── Linda Perry (PDNA-000045) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000045
+    to_pdna: PDNA-000038
+    direction: influenced
+    strength: 4
+    confidence: D
+    notes: "Both Perry and Martin operated at the top of the songwriter-producer spectrum in the 2000s; Perry's melodic directness is a parallel to Martin's hook economy"
