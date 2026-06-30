@@ -198,15 +198,31 @@ def dna_profile(ctx, pdna_id):
         if not p:
             console.print(f"[red]Producer {pdna_id} not found.[/]")
             return
+        pid = p[0]
 
         profile = conn.execute(
-            text("SELECT * FROM producer_profiles WHERE producer_id = :pid"), {"pid": p[0]}
+            text("SELECT * FROM producer_profiles WHERE producer_id = :pid"), {"pid": pid}
         ).fetchone()
         sonic = conn.execute(
-            text("SELECT * FROM sonic_dna WHERE producer_id = :pid"), {"pid": p[0]}
+            text("SELECT * FROM sonic_dna WHERE producer_id = :pid"), {"pid": pid}
         ).fetchone()
         rhythmic = conn.execute(
-            text("SELECT * FROM rhythmic_dna WHERE producer_id = :pid"), {"pid": p[0]}
+            text("SELECT * FROM rhythmic_dna WHERE producer_id = :pid"), {"pid": pid}
+        ).fetchone()
+        melodic = conn.execute(
+            text("SELECT * FROM melodic_harmonic_dna WHERE producer_id = :pid"), {"pid": pid}
+        ).fetchone()
+        arrangement = conn.execute(
+            text("SELECT * FROM arrangement_dna WHERE producer_id = :pid"), {"pid": pid}
+        ).fetchone()
+        mixing = conn.execute(
+            text("SELECT * FROM mixing_dna WHERE producer_id = :pid"), {"pid": pid}
+        ).fetchone()
+        sampling = conn.execute(
+            text("SELECT * FROM sampling_dna WHERE producer_id = :pid"), {"pid": pid}
+        ).fetchone()
+        nuance = conn.execute(
+            text("SELECT * FROM style_nuance_map WHERE producer_id = :pid"), {"pid": pid}
         ).fetchone()
 
     console.print(f"\n[bold cyan]{pdna_id}[/]  [bold]{p[1]}[/]")
@@ -229,15 +245,108 @@ def dna_profile(ctx, pdna_id):
 
     if sonic:
         s = dict(sonic._mapping)
-        dims = ["atmosphere", "warmth", "grit", "polish", "darkness", "brightness",
-                "density", "space", "distortion", "synthetic_organic_balance"]
-        table2 = Table(title="Sonic DNA")
-        table2.add_column("Dimension")
-        table2.add_column("Score", justify="right")
-        for d in dims:
+        t = Table(title="Sonic DNA")
+        t.add_column("Dimension")
+        t.add_column("Score", justify="right")
+        for d in ["atmosphere", "warmth", "grit", "polish", "darkness", "brightness",
+                  "density", "space", "distortion", "synthetic_organic_balance"]:
             val = s.get(d)
-            table2.add_row(d.replace("_", " ").title(), str(val) if val else "[dim]—[/]")
-        console.print(table2)
+            t.add_row(d.replace("_", " ").title(), str(val) if val is not None else "[dim]—[/]")
+        if s.get("notes"):
+            t.add_row("[dim]Notes[/]", f"[dim]{s['notes']}[/]")
+        console.print(t)
+
+    if rhythmic:
+        r = dict(rhythmic._mapping)
+        t = Table(title="Rhythmic DNA")
+        t.add_column("Dimension")
+        t.add_column("Value", justify="right")
+        for d, label in [("swing", "Swing"), ("grid_precision", "Grid Precision"),
+                         ("drum_density", "Drum Density")]:
+            val = r.get(d)
+            t.add_row(label, str(val) if val is not None else "[dim]—[/]")
+        for d, label in [("groove_family", "Groove Family"), ("kick_language", "Kick"),
+                         ("snare_language", "Snare"), ("hat_language", "Hi-Hat")]:
+            val = r.get(d)
+            if val:
+                t.add_row(label, val)
+        if r.get("tempo_min") or r.get("tempo_max"):
+            t.add_row("Tempo", f"{r.get('tempo_min', '?')}–{r.get('tempo_max', '?')} BPM")
+        console.print(t)
+
+    if melodic:
+        m = dict(melodic._mapping)
+        t = Table(title="Melodic/Harmonic DNA")
+        t.add_column("Dimension")
+        t.add_column("Value", justify="right")
+        for d, label in [("dissonance_level", "Dissonance"), ("motif_complexity", "Motif Complexity")]:
+            val = m.get(d)
+            t.add_row(label, str(val) if val is not None else "[dim]—[/]")
+        for d, label in [("chord_mood", "Chord Mood"), ("modality", "Modality"), ("tonal_center", "Tonal Center")]:
+            val = m.get(d)
+            if val:
+                t.add_row(label, val)
+        infl = m.get("influences_list")
+        if infl:
+            t.add_row("Influences", ", ".join(infl))
+        console.print(t)
+
+    if arrangement:
+        a = dict(arrangement._mapping)
+        t = Table(title="Arrangement DNA")
+        t.add_column("Dimension")
+        t.add_column("Value", justify="right")
+        for d, label in [("loop_evolution", "Loop Evolution"), ("tension_release", "Tension/Release"),
+                         ("structural_complexity", "Structural Complexity")]:
+            val = a.get(d)
+            t.add_row(label, str(val) if val is not None else "[dim]—[/]")
+        for d, label in [("intro_style", "Intro Style"), ("drop_behavior", "Drop Behavior"),
+                         ("transition_style", "Transitions")]:
+            val = a.get(d)
+            if val:
+                t.add_row(label, val)
+        console.print(t)
+
+    if mixing:
+        mx = dict(mixing._mapping)
+        t = Table(title="Mixing DNA")
+        t.add_column("Dimension")
+        t.add_column("Value", justify="right")
+        for d, label in [("loudness_level", "Loudness"), ("stereo_width", "Stereo Width"),
+                         ("reverb_use", "Reverb"), ("delay_use", "Delay"),
+                         ("compression", "Compression"), ("saturation", "Saturation")]:
+            val = mx.get(d)
+            t.add_row(label, str(val) if val is not None else "[dim]—[/]")
+        for d, label in [("low_end_approach", "Low End"), ("vocal_placement", "Vocal Placement")]:
+            val = mx.get(d)
+            if val:
+                t.add_row(label, val)
+        console.print(t)
+
+    if sampling:
+        sa = dict(sampling._mapping)
+        t = Table(title="Sampling DNA")
+        t.add_column("Dimension")
+        t.add_column("Value", justify="right")
+        for d, label in [("pitch_shifting", "Pitch Shifting"), ("filtering", "Filtering")]:
+            val = sa.get(d)
+            t.add_row(label, str(val) if val is not None else "[dim]—[/]")
+        trad = sa.get("source_traditions")
+        if trad:
+            t.add_row("Source Traditions", ", ".join(trad))
+        for d, label in [("clearance_rate", "Clearance Rate"), ("chopping_style", "Chopping Style"),
+                         ("looping_style", "Looping Style")]:
+            val = sa.get(d)
+            if val:
+                t.add_row(label, val)
+        console.print(t)
+
+    if nuance:
+        n = dict(nuance._mapping)
+        if n.get("producer_ear"):
+            console.print(Panel(n["producer_ear"], title="Producer Ear"))
+        if n.get("casual_listener"):
+            console.print(Panel(n["casual_listener"], title="Casual Listener"))
 
 
 @dna_group.command("missing")
