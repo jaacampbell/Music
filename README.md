@@ -20,6 +20,10 @@ This repository now includes a production blueprint for a **universal Agentic Be
 - [`docs/stem-extraction/agent-prompt.md`](docs/stem-extraction/agent-prompt.md): Runtime prompt for the Stem Extraction Agent.
 - [`docs/stem-extraction/build-checklist.md`](docs/stem-extraction/build-checklist.md): Phase 1 "build this first" checklist.
 
+## Producer DNA Research OS (integrated + standalone)
+
+The [`producer-dna/`](producer-dna/) directory vendors the **Producer DNA Research OS** — a Python research project (producer taxonomies, 3-layer musicological DNA, Batch 001 seed of 50 producers, ingestion adapters, scoring, and CLI) that feeds Song DNA. It is integrated here as a subproject **and** maintained as its own standalone repository. See [`producer-dna/README.md`](producer-dna/README.md).
+
 ## Built MVP (interface + APIs)
 
 This repository now contains a runnable **Agentic Beat Lab OS command center** built with Next.js:

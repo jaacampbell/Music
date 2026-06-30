@@ -1,0 +1,1206 @@
+# Batch 001 — DNA Rubric Profiles (15-dimension scores, confidence D)
+# All scores 1–10. confidence D = musicological analysis (analyst-assigned).
+profiles:
+  - pdna_id: PDNA-000001
+    score_innovation: 9
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 9
+    score_arrangement_skill: 10
+    score_rhythm_design: 6
+    score_melodic_harmonic: 9
+    score_sound_design: 7
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 10
+    score_commercial_impact: 10
+    score_underground_impact: 6
+    score_longevity: 10
+    score_adaptability: 8
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      George Martin fused classical conservatoire training with commercial studio intuition,
+      building orchestral counterpoint directly into pop songs at a time when strings were
+      decoration. His work with The Beatles showed that a producer could function as a
+      compositional co-author, shaping harmonic language and texture rather than just balancing
+      faders — a model nearly every subsequent pop producer has inherited.
+
+  - pdna_id: PDNA-000002
+    score_innovation: 10
+    score_influence: 9
+    score_technical_craft: 8
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 7
+    score_melodic_harmonic: 7
+    score_sound_design: 9
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 9
+    score_commercial_impact: 8
+    score_underground_impact: 5
+    score_longevity: 7
+    score_adaptability: 5
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Phil Spector invented the Wall of Sound by layering redundant instrumental parts — multiple
+      pianos, guitars, basses, and strings — through a single mono reverb chamber, creating a
+      compression of frequency and space that was simultaneously massive and intimate. The approach
+      was not a technique but a worldview: density as emotion, mono as truth.
+
+  - pdna_id: PDNA-000003
+    score_innovation: 9
+    score_influence: 10
+    score_technical_craft: 10
+    score_sonic_identity: 8
+    score_arrangement_skill: 10
+    score_rhythm_design: 8
+    score_melodic_harmonic: 10
+    score_sound_design: 7
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 10
+    score_commercial_impact: 10
+    score_underground_impact: 6
+    score_longevity: 10
+    score_adaptability: 10
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Quincy Jones is the supreme arranger-producer: capable of writing horn charts that breathe
+      like conversation, programming electronic rhythm sections with funk precision, and combining
+      both within a single commercially perfect track. Thriller is merely the apex of a seventy-year
+      career spanning jazz, soul, film scoring, and pop — each discipline informing the others.
+
+  - pdna_id: PDNA-000004
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 7
+    score_sonic_identity: 10
+    score_arrangement_skill: 8
+    score_rhythm_design: 5
+    score_melodic_harmonic: 7
+    score_sound_design: 10
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 10
+    score_commercial_impact: 6
+    score_underground_impact: 9
+    score_longevity: 10
+    score_adaptability: 9
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Brian Eno replaced intent with system, using generative processes, oblique strategies, and
+      chance operations to create music that feels discovered rather than composed. As a producer
+      he imports this philosophy outward — liberating Bowie, U2, and Talking Heads from conventional
+      song grammar while shaping ambient as a genre that redefines what recorded music can do to
+      a room and a listener's nervous system.
+
+  - pdna_id: PDNA-000005
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 8
+    score_sonic_identity: 10
+    score_arrangement_skill: 7
+    score_rhythm_design: 8
+    score_melodic_harmonic: 6
+    score_sound_design: 10
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 10
+    score_commercial_impact: 5
+    score_underground_impact: 10
+    score_longevity: 10
+    score_adaptability: 7
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Lee "Scratch" Perry conceived the recording studio as an alchemical instrument, treating echo
+      units, tape delays, and the mixing board as extensions of ritual and vision. His Black Ark
+      productions built an aesthetic of purposeful disintegration — tracks where reverb bleeds into
+      reverb and instruments appear to phase through walls — that prefigured both industrial music
+      and ambient by treating imperfection as the signal, not the noise.
+
+  - pdna_id: PDNA-000006
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 7
+    score_rhythm_design: 7
+    score_melodic_harmonic: 5
+    score_sound_design: 10
+    score_mixing_aesthetics: 10
+    score_cultural_importance: 10
+    score_commercial_impact: 4
+    score_underground_impact: 10
+    score_longevity: 7
+    score_adaptability: 5
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      King Tubby elevated the mixing console from technical apparatus to musical instrument, pulling
+      bass frequencies in and out with theatrical precision, opening channels to empty space at the
+      moment of maximum tension. Dub as a genre exists because Tubby understood that the absence of
+      a sound — its ghost — communicates as powerfully as its presence.
+
+  - pdna_id: PDNA-000007
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 9
+    score_arrangement_skill: 8
+    score_rhythm_design: 9
+    score_melodic_harmonic: 7
+    score_sound_design: 9
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 9
+    score_commercial_impact: 8
+    score_underground_impact: 7
+    score_longevity: 9
+    score_adaptability: 8
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Giorgio Moroder proved that a machine-locked sequencer could generate not just precision but
+      desire — his Moog basslines and drum machine pulses gave Donna Summer's vocal something to
+      resist and surrender to simultaneously. By locking the tempo absolutely and layering synthetic
+      timbres against it, he built the structural grammar that runs through house, techno, and all
+      subsequent electronic dance music.
+
+  - pdna_id: PDNA-000008
+    score_innovation: 9
+    score_influence: 8
+    score_technical_craft: 10
+    score_sonic_identity: 7
+    score_arrangement_skill: 8
+    score_rhythm_design: 6
+    score_melodic_harmonic: 7
+    score_sound_design: 7
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 8
+    score_commercial_impact: 8
+    score_underground_impact: 5
+    score_longevity: 9
+    score_adaptability: 9
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Tom Dowd brought a physicist's rigor to recording, developing multitrack methodology at Atlantic
+      while other studios still cut direct-to-disc. His gift was transparency: the ability to document
+      a performance so faithfully that production became invisible, letting Ray Charles's gospel shout
+      or Aretha Franklin's piano-voice relationship dominate without the room getting in the way.
+
+  - pdna_id: PDNA-000009
+    score_innovation: 10
+    score_influence: 8
+    score_technical_craft: 9
+    score_sonic_identity: 8
+    score_arrangement_skill: 9
+    score_rhythm_design: 5
+    score_melodic_harmonic: 6
+    score_sound_design: 8
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 8
+    score_commercial_impact: 5
+    score_underground_impact: 8
+    score_longevity: 7
+    score_adaptability: 7
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Teo Macero treated studio tape as a compositional medium rather than a capture device, splicing
+      and editing Miles Davis sessions post-performance to create works of jazz that would have been
+      physically impossible live. Bitches Brew and In a Silent Way are as much Macero's constructions
+      as Davis's improvisations — early demonstrations that the editing room is a compositional space.
+
+  - pdna_id: PDNA-000010
+    score_innovation: 9
+    score_influence: 9
+    score_technical_craft: 7
+    score_sonic_identity: 7
+    score_arrangement_skill: 7
+    score_rhythm_design: 7
+    score_melodic_harmonic: 6
+    score_sound_design: 6
+    score_mixing_aesthetics: 6
+    score_cultural_importance: 10
+    score_commercial_impact: 7
+    score_underground_impact: 7
+    score_longevity: 7
+    score_adaptability: 6
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Sylvia Robinson's production of "Rapper's Delight" (1979) introduced hip-hop to radio and vinyl,
+      building the track from a live band replicating the Chic bassline — a commercial intuition that
+      simultaneously validated the genre and established the aesthetic tension between live performance
+      and recorded sample that would define hip-hop production for decades.
+
+  - pdna_id: PDNA-000011
+    score_innovation: 9
+    score_influence: 10
+    score_technical_craft: 7
+    score_sonic_identity: 8
+    score_arrangement_skill: 7
+    score_rhythm_design: 7
+    score_melodic_harmonic: 6
+    score_sound_design: 7
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 9
+    score_commercial_impact: 10
+    score_underground_impact: 8
+    score_longevity: 9
+    score_adaptability: 10
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Rick Rubin's production philosophy is subtractive: strip away until only what is essential
+      remains, then let the room and the performance breathe. Across hip-hop (LL Cool J, Public Enemy),
+      metal (Slayer), rock (Red Hot Chili Peppers), and country (Johnny Cash), this principle of
+      productive restraint yields a consistent rawness — the sense that you are witnessing something
+      rather than consuming a manufactured product.
+
+  - pdna_id: PDNA-000012
+    score_innovation: 9
+    score_influence: 10
+    score_technical_craft: 10
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 9
+    score_melodic_harmonic: 8
+    score_sound_design: 9
+    score_mixing_aesthetics: 10
+    score_cultural_importance: 10
+    score_commercial_impact: 10
+    score_underground_impact: 8
+    score_longevity: 8
+    score_adaptability: 7
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Dr. Dre fused P-Funk's harmonic architecture with a West Coast menace defined by sub-bass
+      physicality and meticulous arrangement precision. His low-end approach — kick and bass tuned to
+      specific semitones, occupying distinct frequency bands — became the reference standard against
+      which hip-hop and subsequently trap mixed their bottom end. The Chronic defined a regional
+      aesthetics and launched careers that reshaped American music.
+
+  - pdna_id: PDNA-000013
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 8
+    score_rhythm_design: 10
+    score_melodic_harmonic: 8
+    score_sound_design: 8
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 10
+    score_commercial_impact: 5
+    score_underground_impact: 10
+    score_longevity: 9
+    score_adaptability: 8
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      J Dilla's defining innovation was the systematic destabilization of the grid — his MPC
+      programming placed drum hits slightly ahead or behind the quantize line with a precision that
+      felt human rather than mechanical, creating a push-pull urgency that no programmed drum machine
+      had previously achieved. This micro-timing approach, combined with his crate-dug melodic
+      samples filtered through wax, lo-fi tape, and emotional taste, established a new aesthetic
+      vocabulary for hip-hop that producers are still mining twenty years after his death.
+
+  - pdna_id: PDNA-000014
+    score_innovation: 8
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 7
+    score_rhythm_design: 9
+    score_melodic_harmonic: 7
+    score_sound_design: 8
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 9
+    score_commercial_impact: 7
+    score_underground_impact: 10
+    score_longevity: 10
+    score_adaptability: 6
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      DJ Premier established the boom bap grammar: a loop of vinyl-sourced drums running beneath
+      chopped melodic samples, interrupted by Premier's own turntable scratches in place of a
+      conventional hook. The formula is rigorous and intentionally limiting — its power comes from
+      depth within constraints, every Premier production identifiable within seconds by the
+      combination of a specific crunch, a specific pocket, and the Primo stab.
+
+  - pdna_id: PDNA-000015
+    score_innovation: 10
+    score_influence: 9
+    score_technical_craft: 8
+    score_sonic_identity: 10
+    score_arrangement_skill: 8
+    score_rhythm_design: 8
+    score_melodic_harmonic: 7
+    score_sound_design: 9
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 10
+    score_commercial_impact: 7
+    score_underground_impact: 10
+    score_longevity: 8
+    score_adaptability: 6
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      RZA built the Wu-Tang sonic world from dusty soul 45s, kung-fu film soundtracks, and minor-key
+      minor-mode piano samples filtered through lo-fi hardware until they resembled memory more than
+      music. His arrangements leave space for MCs to inhabit — not tight, not cluttered, but organized
+      around the voice as anchor — while the mythology he constructed around Wu-Tang gave the music an
+      ideological frame that made every beat feel like a chapter in a larger doctrine.
+
+  - pdna_id: PDNA-000016
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 10
+    score_melodic_harmonic: 7
+    score_sound_design: 10
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 9
+    score_commercial_impact: 9
+    score_underground_impact: 7
+    score_longevity: 8
+    score_adaptability: 9
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Timbaland rewired rhythm-and-blues production around non-Western percussion — tabla patterns,
+      Indian vocal ornaments, synthetic African polyrhythm — combined with deliberate negative space
+      where a Western producer would have filled the downbeat. His late-1990s and 2000s productions
+      for Aaliyah, Missy Elliott, and Justin Timberlake introduced a percussive architecture that was
+      simultaneously danceable and alien, and no subsequent pop rhythm has been fully free of his influence.
+
+  - pdna_id: PDNA-000017
+    score_innovation: 9
+    score_influence: 9
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 8
+    score_melodic_harmonic: 8
+    score_sound_design: 9
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 8
+    score_commercial_impact: 10
+    score_underground_impact: 7
+    score_longevity: 8
+    score_adaptability: 9
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Pharrell Williams and Chad Hugo (The Neptunes) built a production language from contradiction:
+      spare arrangements with saturated timbres, synth-dominant sounds with organic swing, repetitive
+      hooks that feel surprising on every repetition. Their minimalism was not austerity but selection —
+      each sound placed with the confidence that it was the only sound needed, creating pop and hip-hop
+      tracks that sound uncluttered even when they are sonically adventurous.
+
+  - pdna_id: PDNA-000018
+    score_innovation: 9
+    score_influence: 9
+    score_technical_craft: 8
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 9
+    score_melodic_harmonic: 7
+    score_sound_design: 8
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 9
+    score_commercial_impact: 8
+    score_underground_impact: 7
+    score_longevity: 8
+    score_adaptability: 7
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Missy Elliott (frequently in collaboration with Timbaland) treats the vocal as a percussion
+      instrument, constructing rhythm from phoneme and stutter as much as from the drum track beneath.
+      Her production sensibility is simultaneously playful and exact — a cartoon physicality that
+      never loses track of groove, building arrangements where even the strangest sonic event lands
+      on the one and pulls you forward.
+
+  - pdna_id: PDNA-000019
+    score_innovation: 8
+    score_influence: 9
+    score_technical_craft: 8
+    score_sonic_identity: 9
+    score_arrangement_skill: 8
+    score_rhythm_design: 8
+    score_melodic_harmonic: 7
+    score_sound_design: 9
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 7
+    score_commercial_impact: 9
+    score_underground_impact: 8
+    score_longevity: 6
+    score_adaptability: 6
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Metro Boomin codified dark cinematic trap production, building instrumentals around deep 808
+      sub-bass pulses and atmosphere-heavy synthesizers that create psychological weight before a
+      single word is rapped. His tag ("Metro Boomin want some more") functions as both brand mark
+      and genre signal — a short-hand that immediately primes the listener's body for a specific
+      kind of post-Lex Luger, film-score-inflected trap tension.
+
+  - pdna_id: PDNA-000020
+    score_innovation: 7
+    score_influence: 8
+    score_technical_craft: 7
+    score_sonic_identity: 8
+    score_arrangement_skill: 7
+    score_rhythm_design: 7
+    score_melodic_harmonic: 6
+    score_sound_design: 8
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 7
+    score_commercial_impact: 8
+    score_underground_impact: 6
+    score_longevity: 5
+    score_adaptability: 7
+    score_originality: 7
+    score_confidence: D
+    dna_summary: >-
+      Mike WiLL Made-It specializes in elastic 808 programming — sub-bass notes that bend and
+      wobble against a minimal hi-hat framework — combined with minimal melodic loops that leave
+      room for heavily-delivered rap vocal cadences. His peak period (2012–2017) defined a strand
+      of Atlanta trap focused on hook-forward construction and extreme low-end pressure.
+
+  - pdna_id: PDNA-000021
+    score_innovation: 8
+    score_influence: 8
+    score_technical_craft: 8
+    score_sonic_identity: 9
+    score_arrangement_skill: 7
+    score_rhythm_design: 7
+    score_melodic_harmonic: 8
+    score_sound_design: 6
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 7
+    score_commercial_impact: 7
+    score_underground_impact: 8
+    score_longevity: 7
+    score_adaptability: 5
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Zaytoven fused the gospel piano tradition — block chords, call-and-response voicings, and a
+      loose improvisational feel — with Atlanta trap's drum template, creating a hybrid where the piano
+      functions as both harmonic anchor and emotional warmth in an otherwise cold sonic environment.
+      His productions for Gucci Mane established a church-influenced trap syntax that balanced
+      spiritual gravity with street momentum.
+
+  - pdna_id: PDNA-000022
+    score_innovation: 8
+    score_influence: 8
+    score_technical_craft: 6
+    score_sonic_identity: 9
+    score_arrangement_skill: 6
+    score_rhythm_design: 7
+    score_melodic_harmonic: 5
+    score_sound_design: 8
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 6
+    score_commercial_impact: 7
+    score_underground_impact: 8
+    score_longevity: 5
+    score_adaptability: 4
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Lex Luger defined early 2010s trap with maximal brass synth stabs, hard snare flams, and a
+      general aggression that felt like a martial soundtrack for street nihilism. His productions for
+      Waka Flocka Flame, Rick Ross, and Jay-Z established an aesthetic of overwhelming intensity —
+      every element turned up, every frequency contested — that influenced a wave of producers before
+      the genre pivoted toward atmospheric minimalism.
+
+  - pdna_id: PDNA-000023
+    score_innovation: 7
+    score_influence: 7
+    score_technical_craft: 7
+    score_sonic_identity: 7
+    score_arrangement_skill: 6
+    score_rhythm_design: 7
+    score_melodic_harmonic: 5
+    score_sound_design: 7
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 6
+    score_commercial_impact: 7
+    score_underground_impact: 7
+    score_longevity: 6
+    score_adaptability: 5
+    score_originality: 7
+    score_confidence: D
+    dna_summary: >-
+      Southside (808 Mafia co-founder) operates in dark 808 pressure — sub-bass architecture
+      combined with high-energy snare programming and minimal melodic elements that leave space
+      for aggressive vocal delivery. Within the Atlanta trap ecosystem he occupies the pole of
+      maximum rhythmic and low-end impact rather than melodic sophistication.
+
+  - pdna_id: PDNA-000024
+    score_innovation: 9
+    score_influence: 9
+    score_technical_craft: 8
+    score_sonic_identity: 10
+    score_arrangement_skill: 8
+    score_rhythm_design: 8
+    score_melodic_harmonic: 8
+    score_sound_design: 7
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 8
+    score_commercial_impact: 5
+    score_underground_impact: 10
+    score_longevity: 9
+    score_adaptability: 8
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Madlib approaches production as a listener first: his crate contains jazz, Brazilian, African,
+      library music, and obscure funk, and he loops sections for their textural and emotional quality
+      rather than their recognizability. The resulting beats are lo-fi in the sense that imperfection
+      is accepted and often amplified — tape hiss, vinyl noise, and off-beat timing treated as
+      character — creating an underground idiom so influential that it effectively split hip-hop
+      production into commercial and Madlib-school lineages.
+
+  - pdna_id: PDNA-000025
+    score_innovation: 8
+    score_influence: 9
+    score_technical_craft: 8
+    score_sonic_identity: 9
+    score_arrangement_skill: 8
+    score_rhythm_design: 8
+    score_melodic_harmonic: 8
+    score_sound_design: 7
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 8
+    score_commercial_impact: 6
+    score_underground_impact: 9
+    score_longevity: 9
+    score_adaptability: 6
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Pete Rock's production is characterized by a warmth of melodic source material — soul horns,
+      jazz piano, gospel-laced strings — chopped and pitched until they occupy a mid-register pocket
+      that sits naturally behind a MC. His drum programming is head-nod driven, with snare placement
+      slightly behind the beat in the J Dilla school, and the overall aesthetic is one of tasteful
+      soulfulness: deeply sampled, deliberately human, never technically impressive at the expense
+      of feel.
+
+  - pdna_id: PDNA-000026
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 8
+    score_arrangement_skill: 7
+    score_rhythm_design: 9
+    score_melodic_harmonic: 6
+    score_sound_design: 7
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 10
+    score_commercial_impact: 6
+    score_underground_impact: 9
+    score_longevity: 7
+    score_adaptability: 7
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Marley Marl's accidental discovery that individual drum hits could be isolated from a sampler
+      and reprogrammed — rather than looped as a complete break — established the fundamental method
+      of hip-hop drum construction. This technical breakthrough enabled every producer who followed
+      to build custom rhythmic patterns from the drum sounds of any existing record, effectively
+      making all of recorded percussion history available as raw material.
+
+  - pdna_id: PDNA-000027
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 7
+    score_sonic_identity: 10
+    score_arrangement_skill: 5
+    score_rhythm_design: 7
+    score_melodic_harmonic: 5
+    score_sound_design: 9
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 10
+    score_commercial_impact: 4
+    score_underground_impact: 10
+    score_longevity: 8
+    score_adaptability: 4
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      DJ Screw invented Chopped and Screwed by running cassette tapes at reduced speed and inserting
+      vinyl scratches (chops) at regular intervals, creating a meditative, syrup-soaked parallel
+      universe where tempo itself becomes the primary sonic dimension. The aesthetic — slowed vocal
+      pitch, stretched percussion, dreamy repetition — maps directly onto the altered consciousness
+      of Houston's lean culture and became a globally recognized genre despite originating entirely
+      within a regional mixtape tradition.
+
+  - pdna_id: PDNA-000028
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 10
+    score_sonic_identity: 10
+    score_arrangement_skill: 8
+    score_rhythm_design: 8
+    score_melodic_harmonic: 7
+    score_sound_design: 10
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 9
+    score_commercial_impact: 6
+    score_underground_impact: 10
+    score_longevity: 6
+    score_adaptability: 7
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      SOPHIE developed a sonic vocabulary based on the physical properties of synthetic materials —
+      plastic, rubber, latex, metal — translated into audio: textures that feel tactile, that you
+      could imagine touching. By combining extreme compression, hyper-precise transient design, and
+      a conceptual framework that drew on fashion, trans identity, and post-internet aesthetics,
+      SOPHIE built hyperpop as a genre and a theory simultaneously.
+
+  - pdna_id: PDNA-000029
+    score_innovation: 10
+    score_influence: 9
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 8
+    score_rhythm_design: 9
+    score_melodic_harmonic: 8
+    score_sound_design: 10
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 8
+    score_commercial_impact: 4
+    score_underground_impact: 10
+    score_longevity: 7
+    score_adaptability: 7
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Arca builds music from rupture — rhythms that refuse to resolve, textures that suggest the body
+      without representing it, harmonic environments that feel simultaneously beautiful and threatening.
+      Her collaborative work with Björk and FKA twigs established her as a primary voice in
+      post-internet experimental music, while her solo albums develop an increasingly personal idiom
+      of Venezuelan cumbia, noise, opera, and digital fragmentation.
+
+  - pdna_id: PDNA-000030
+    score_innovation: 9
+    score_influence: 10
+    score_technical_craft: 8
+    score_sonic_identity: 10
+    score_arrangement_skill: 8
+    score_rhythm_design: 8
+    score_melodic_harmonic: 7
+    score_sound_design: 10
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 9
+    score_commercial_impact: 5
+    score_underground_impact: 10
+    score_longevity: 7
+    score_adaptability: 5
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Burial's Untrue (2007) established a mood-production methodology: shuffle-patterned 2-step drums
+      beneath vinyl crackle and field recordings, with vocal samples chopped into fragments that
+      communicate emotion without language. His anonymity was integral — the music comes from nowhere,
+      from urban infrastructure and 3am buses and rain on windows, and does not need a face. The
+      influence on UK electronic music (grime, UK garage, ambient techno) is pervasive and still expanding.
+
+  - pdna_id: PDNA-000031
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 10
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 10
+    score_melodic_harmonic: 8
+    score_sound_design: 10
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 10
+    score_commercial_impact: 5
+    score_underground_impact: 10
+    score_longevity: 9
+    score_adaptability: 8
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Aphex Twin operates at the edge of what is physically possible to program and process,
+      combining mathematical polyrhythm (his Druqks compositions use time signatures that no human
+      could perform) with melodic writing of genuine emotional depth. Selected Ambient Works Volume II
+      defined a mode of sound design — evolving timbres, minimal pitch, maximal texture — while
+      tracks like "Come to Daddy" proved that the same sensibility could produce horror. The range
+      is the point.
+
+  - pdna_id: PDNA-000032
+    score_innovation: 9
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 8
+    score_melodic_harmonic: 8
+    score_sound_design: 10
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 10
+    score_commercial_impact: 9
+    score_underground_impact: 7
+    score_longevity: 8
+    score_adaptability: 7
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Daft Punk (Thomas Bangalter and Guy-Manuel de Homem-Christo) built a career from two
+      productive myths: the robot and the archive. The robot gave them permission to be mechanical,
+      compressed, and repetitive. The archive gave them permission to quote disco, funk, rock, and
+      German electronic music with reverence rather than irony. Random Access Memories represents
+      the synthesis: live musicians, analog warmth, and the memory of an idealized past encoded in
+      digital precision.
+
+  - pdna_id: PDNA-000033
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 10
+    score_melodic_harmonic: 7
+    score_sound_design: 10
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 10
+    score_commercial_impact: 7
+    score_underground_impact: 9
+    score_longevity: 10
+    score_adaptability: 5
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Kraftwerk replaced expression with function, building music from sequencer-driven repetition,
+      synthesized vocal timbres, and a graphic design language of machinery and transit systems.
+      Their decision to treat the computer as collaborator rather than tool — programming rather than
+      playing — established the structural logic of techno, hip-hop, and electronic pop simultaneously.
+      Trans-Europe Express alone contains the DNA of a thousand subsequent records.
+
+  - pdna_id: PDNA-000034
+    score_innovation: 10
+    score_influence: 9
+    score_technical_craft: 10
+    score_sonic_identity: 9
+    score_arrangement_skill: 10
+    score_rhythm_design: 5
+    score_melodic_harmonic: 10
+    score_sound_design: 9
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 8
+    score_commercial_impact: 7
+    score_underground_impact: 7
+    score_longevity: 8
+    score_adaptability: 7
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Wendy Carlos's Switched-On Bach (1968) demonstrated that the Moog synthesizer could achieve
+      timbral specificity and expressive nuance comparable to acoustic instruments, and that
+      electronic music could interpret the Western classical canon rather than rejecting it. Her
+      subsequent work in electronic orchestration and film scoring (A Clockwork Orange, The Shining)
+      established disciplined approaches to synthesizer articulation that influenced every subsequent
+      composer working at the electronic-acoustic boundary.
+
+  - pdna_id: PDNA-000035
+    score_innovation: 9
+    score_influence: 9
+    score_technical_craft: 10
+    score_sonic_identity: 9
+    score_arrangement_skill: 10
+    score_rhythm_design: 6
+    score_melodic_harmonic: 10
+    score_sound_design: 9
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 9
+    score_commercial_impact: 7
+    score_underground_impact: 7
+    score_longevity: 10
+    score_adaptability: 10
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Ryuichi Sakamoto occupied the space between electronic and acoustic with a grace that made the
+      distinction seem artificial — his arrangements combine piano, orchestral instruments, and
+      synthesizers in proportions determined by emotional requirement rather than genre convention.
+      From Yellow Magic Orchestra's playful synthpop to the raw piano works of his final illness,
+      his output charts a half-century of electronic music maturing alongside him.
+
+  - pdna_id: PDNA-000036
+    score_innovation: 8
+    score_influence: 8
+    score_technical_craft: 9
+    score_sonic_identity: 9
+    score_arrangement_skill: 8
+    score_rhythm_design: 8
+    score_melodic_harmonic: 7
+    score_sound_design: 9
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 7
+    score_commercial_impact: 8
+    score_underground_impact: 5
+    score_longevity: 7
+    score_adaptability: 6
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Yasutaka Nakata constructs J-pop production as a system of hyper-precise synthetic timbres,
+      heavily processed and pitch-corrected vocals treated as texture, and melody designed for
+      maximum memorability within a compressed pop format. His work with Perfume and Kyary Pamyu
+      Pamyu defines a distinctly Japanese futurist aesthetic — kawaii surface, technical depth —
+      that influenced both domestic pop production and international hyperpop.
+
+  - pdna_id: PDNA-000037
+    score_innovation: 9
+    score_influence: 9
+    score_technical_craft: 10
+    score_sonic_identity: 9
+    score_arrangement_skill: 10
+    score_rhythm_design: 8
+    score_melodic_harmonic: 10
+    score_sound_design: 8
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 10
+    score_commercial_impact: 9
+    score_underground_impact: 5
+    score_longevity: 9
+    score_adaptability: 9
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      A. R. Rahman synthesizes Carnatic classical theory, Sufi devotional practice, Western orchestral
+      arrangement, and electronic production into a uniquely Indian cinematic language that communicates
+      across linguistic and cultural boundaries. His Slumdog Millionaire score introduced this approach
+      globally, but the depth of his fusion — modal melody over quantized rhythm, acoustic ensemble
+      over synthesized texture — was already fully developed in Tamil and Hindi film music across
+      the preceding decade.
+
+  - pdna_id: PDNA-000038
+    score_innovation: 8
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 8
+    score_arrangement_skill: 9
+    score_rhythm_design: 7
+    score_melodic_harmonic: 10
+    score_sound_design: 7
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 9
+    score_commercial_impact: 10
+    score_underground_impact: 3
+    score_longevity: 9
+    score_adaptability: 9
+    score_originality: 7
+    score_confidence: D
+    dna_summary: >-
+      Max Martin has produced more Billboard Hot 100 number-ones than any producer in history, a
+      statistic that reflects not commercial cynicism but a genuine mathematical understanding of
+      melodic hook construction. His signature technique — the melodic pre-chorus that recontextualizes
+      the verse and sets up a chorus that feels both inevitable and surprising — operates across pop,
+      R&B, and rock with the consistency of a mathematical proof.
+
+  - pdna_id: PDNA-000039
+    score_innovation: 6
+    score_influence: 7
+    score_technical_craft: 8
+    score_sonic_identity: 7
+    score_arrangement_skill: 8
+    score_rhythm_design: 7
+    score_melodic_harmonic: 8
+    score_sound_design: 7
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 6
+    score_commercial_impact: 8
+    score_underground_impact: 3
+    score_longevity: 6
+    score_adaptability: 7
+    score_originality: 6
+    score_confidence: D
+    dna_summary: >-
+      Shellback (Karl Johan Schuster) operates as Max Martin's primary collaborative partner,
+      contributing guitar-driven song construction and a sharp ear for the tension between organic
+      and synthetic elements in contemporary pop. His arrangements integrate live-sounding guitar
+      with synthesizer pads and processed drums in ways that give Max Martin productions a rock
+      energy without sacrificing radio-ready clarity.
+
+  - pdna_id: PDNA-000040
+    score_innovation: 9
+    score_influence: 10
+    score_technical_craft: 10
+    score_sonic_identity: 10
+    score_arrangement_skill: 9
+    score_rhythm_design: 9
+    score_melodic_harmonic: 8
+    score_sound_design: 7
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 9
+    score_commercial_impact: 9
+    score_underground_impact: 6
+    score_longevity: 10
+    score_adaptability: 10
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Nile Rodgers builds groove from the space between guitar notes — his right-hand rhythm playing
+      is a study in strategic silence, using muted hits and precise chord voicings to create momentum
+      through restraint. As co-founder of Chic and as a producer (Madonna's Like a Virgin, David Bowie's
+      Let's Dance, Daft Punk's Get Lucky) he demonstrates that the same rhythmic philosophy functions
+      across disco, pop, and electronic music because it is fundamentally about the body's relationship
+      with time.
+
+  - pdna_id: PDNA-000041
+    score_innovation: 9
+    score_influence: 8
+    score_technical_craft: 10
+    score_sonic_identity: 9
+    score_arrangement_skill: 9
+    score_rhythm_design: 7
+    score_melodic_harmonic: 8
+    score_sound_design: 9
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 7
+    score_commercial_impact: 9
+    score_underground_impact: 6
+    score_longevity: 8
+    score_adaptability: 7
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Trevor Horn approached the recording studio as a laboratory for sonic maximalism, layering
+      and processing sounds with a level of detail that was unprecedented in commercial pop.
+      His productions for Frankie Goes to Hollywood, ABC, and Grace Jones through ZTT Records in
+      the early 1980s established a philosophy of hyper-produced digital sheen — every sound
+      auditioned, shaped, and layered until the arrangement achieved a density that paradoxically
+      felt effortless.
+
+  - pdna_id: PDNA-000042
+    score_innovation: 8
+    score_influence: 8
+    score_technical_craft: 9
+    score_sonic_identity: 8
+    score_arrangement_skill: 8
+    score_rhythm_design: 7
+    score_melodic_harmonic: 6
+    score_sound_design: 9
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 7
+    score_commercial_impact: 7
+    score_underground_impact: 8
+    score_longevity: 9
+    score_adaptability: 8
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Flood (Mark Ellis) specializes in the production of sonic atmosphere — the space between and
+      around sounds treated as a primary compositional element. His work with Nine Inch Nails, Depeche
+      Mode, and U2 demonstrates a consistent approach: industrial texture and electronic processing
+      combined with live instrumentation at a scale that feels physically present. The result is
+      music that occupies physical space rather than merely filling it.
+
+  - pdna_id: PDNA-000043
+    score_innovation: 9
+    score_influence: 8
+    score_technical_craft: 9
+    score_sonic_identity: 9
+    score_arrangement_skill: 9
+    score_rhythm_design: 8
+    score_melodic_harmonic: 9
+    score_sound_design: 9
+    score_mixing_aesthetics: 10
+    score_cultural_importance: 8
+    score_commercial_impact: 7
+    score_underground_impact: 9
+    score_longevity: 8
+    score_adaptability: 7
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Nigel Godrich built Radiohead's production language from the inside, developing a collaborative
+      process in which electronic textures, live band performance, and abstract sound design are
+      treated as equal compositional materials. From The Bends through A Moon Shaped Pool, his
+      mixes achieve a paradox: intimate and vast simultaneously, the band sounding both close enough
+      to touch and impossibly distant.
+
+  - pdna_id: PDNA-000044
+    score_innovation: 9
+    score_influence: 9
+    score_technical_craft: 10
+    score_sonic_identity: 9
+    score_arrangement_skill: 5
+    score_rhythm_design: 6
+    score_melodic_harmonic: 4
+    score_sound_design: 6
+    score_mixing_aesthetics: 10
+    score_cultural_importance: 9
+    score_commercial_impact: 5
+    score_underground_impact: 10
+    score_longevity: 9
+    score_adaptability: 6
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      Steve Albini refused the title of producer, insisting on "recording engineer" — a distinction
+      that encoded his philosophy: document what happens in the room at maximum fidelity, without
+      compression, enhancement, or intervention. His technique of placing microphones for maximum
+      room character rather than signal isolation gave records like Pixies' Surfer Rosa and PJ
+      Harvey's Rid of Me a physical rawness that became the defining sound of independent rock
+      and proved that anti-production is itself a production aesthetic.
+
+  - pdna_id: PDNA-000045
+    score_innovation: 7
+    score_influence: 7
+    score_technical_craft: 7
+    score_sonic_identity: 7
+    score_arrangement_skill: 8
+    score_rhythm_design: 5
+    score_melodic_harmonic: 8
+    score_sound_design: 5
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 6
+    score_commercial_impact: 8
+    score_underground_impact: 4
+    score_longevity: 7
+    score_adaptability: 6
+    score_originality: 7
+    score_confidence: D
+    dna_summary: >-
+      Linda Perry brings a songwriter's logic to production, building arrangements that serve the
+      emotional arc of a vocal performance rather than imposing production concepts from outside.
+      Her work with Christina Aguilera, Pink, and Gwen Stefani prioritizes emotional directness —
+      the feeling of a song first, sonic texture second — producing commercial pop that connects
+      through performance authenticity rather than studio sophistication.
+
+  - pdna_id: PDNA-000046
+    score_innovation: 8
+    score_influence: 8
+    score_technical_craft: 8
+    score_sonic_identity: 9
+    score_arrangement_skill: 8
+    score_rhythm_design: 8
+    score_melodic_harmonic: 7
+    score_sound_design: 8
+    score_mixing_aesthetics: 9
+    score_cultural_importance: 7
+    score_commercial_impact: 8
+    score_underground_impact: 6
+    score_longevity: 6
+    score_adaptability: 7
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Tainy evolved the reggaeton production template from the classic dembow grid of Luny Tunes
+      toward a more melodic, atmospheric construction — bass-forward but with synthesizer pads and
+      melodic hooks that create emotional depth alongside rhythmic drive. His productions for Bad
+      Bunny, J Balvin, and international collaborators represent the genre's crossover moment:
+      reggaeton as global pop without loss of Caribbean rhythmic identity.
+
+  - pdna_id: PDNA-000047
+    score_innovation: 8
+    score_influence: 9
+    score_technical_craft: 8
+    score_sonic_identity: 9
+    score_arrangement_skill: 7
+    score_rhythm_design: 9
+    score_melodic_harmonic: 6
+    score_sound_design: 7
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 8
+    score_commercial_impact: 8
+    score_underground_impact: 7
+    score_longevity: 7
+    score_adaptability: 5
+    score_originality: 8
+    score_confidence: D
+    dna_summary: >-
+      Luny Tunes (Francisco Saldaña and Juan Luis Morera Luna) established the classic reggaeton
+      rhythmic template: the dembow pattern — a distinctive syncopated kick-snare figure — layered
+      over synthesized bass and melodic loops. Their productions for Daddy Yankee, Don Omar, and
+      Tego Calderón codified the genre as a commercial force and built the structural vocabulary
+      that every subsequent reggaeton producer inherited.
+
+  - pdna_id: PDNA-000048
+    score_innovation: 7
+    score_influence: 7
+    score_technical_craft: 8
+    score_sonic_identity: 8
+    score_arrangement_skill: 7
+    score_rhythm_design: 8
+    score_melodic_harmonic: 7
+    score_sound_design: 7
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 7
+    score_commercial_impact: 7
+    score_underground_impact: 7
+    score_longevity: 6
+    score_adaptability: 6
+    score_originality: 7
+    score_confidence: D
+    dna_summary: >-
+      Sarz produces Afrobeats and Afropop with a focus on clean rhythmic bounce and melodic
+      restraint — where many Afrobeats productions pile on layers, Sarz favors careful selection
+      of interlocking elements that give each component room to breathe. His approach bridges
+      traditional Nigerian musical structures with contemporary production techniques, creating
+      a polished sound that maintains rhythmic authenticity.
+
+  - pdna_id: PDNA-000049
+    score_innovation: 9
+    score_influence: 9
+    score_technical_craft: 8
+    score_sonic_identity: 10
+    score_arrangement_skill: 8
+    score_rhythm_design: 9
+    score_melodic_harmonic: 8
+    score_sound_design: 8
+    score_mixing_aesthetics: 8
+    score_cultural_importance: 9
+    score_commercial_impact: 8
+    score_underground_impact: 8
+    score_longevity: 6
+    score_adaptability: 6
+    score_originality: 9
+    score_confidence: D
+    dna_summary: >-
+      Kabza De Small built amapiano's global identity through hypnotic log-drum programming and
+      piano loops that extend across long-form DJ-set structures — music designed to evolve and
+      breathe over time rather than to deliver a four-minute peak. His productions combine South
+      African deep house foundations with jazz piano harmony and the specifically South African log
+      drum bass sound, creating an idiom that is simultaneously local and globally transmissible.
+
+  - pdna_id: PDNA-000050
+    score_innovation: 10
+    score_influence: 10
+    score_technical_craft: 9
+    score_sonic_identity: 10
+    score_arrangement_skill: 7
+    score_rhythm_design: 10
+    score_melodic_harmonic: 5
+    score_sound_design: 8
+    score_mixing_aesthetics: 7
+    score_cultural_importance: 9
+    score_commercial_impact: 4
+    score_underground_impact: 10
+    score_longevity: 6
+    score_adaptability: 5
+    score_originality: 10
+    score_confidence: D
+    dna_summary: >-
+      DJ Rashad accelerated footwork — the Chicago ghetto house tradition of battle-dance music —
+      to 160 BPM and saturated it with dense sample chopping, emotional vocal fragments, and
+      polyrhythmic drum programming that creates a sensation of perpetual forward momentum without
+      resolution. Double Cup (2013) documented a complete genre's technical and emotional vocabulary
+      and introduced footwork as international avant-garde electronic music while remaining rooted
+      in Chicago's social infrastructure.

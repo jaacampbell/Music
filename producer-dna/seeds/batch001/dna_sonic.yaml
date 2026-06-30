@@ -1,0 +1,711 @@
+# Batch 001 — Sonic DNA (10 dimensions, 1–10, confidence D)
+# atmosphere: 1=dry/clinical 10=immersive/dense ambience
+# warmth: 1=cold/harsh 10=warm/inviting
+# grit: 1=pristine/clean 10=rough/dirty
+# polish: 1=raw/unfinished 10=highly polished
+# darkness: 1=bright/uplifting 10=dark/heavy
+# brightness: 1=dark/muffled 10=bright/airy
+# density: 1=sparse/minimal 10=dense/layered
+# space: 1=tight/close 10=vast/spacious
+# distortion: 1=clean/undistorted 10=heavily distorted
+# synthetic_organic_balance: 1=fully organic 10=fully synthetic
+sonic:
+  - pdna_id: PDNA-000001
+    atmosphere: 7
+    warmth: 8
+    grit: 2
+    polish: 9
+    darkness: 3
+    brightness: 7
+    density: 7
+    space: 6
+    distortion: 1
+    synthetic_organic_balance: 2
+    notes: "Warm acoustic chambers, string-heavy orchestral depth. Beatles mono era through late-career stereo."
+    confidence: D
+
+  - pdna_id: PDNA-000002
+    atmosphere: 8
+    warmth: 7
+    grit: 3
+    polish: 7
+    darkness: 4
+    brightness: 5
+    density: 10
+    space: 2
+    distortion: 3
+    synthetic_organic_balance: 2
+    notes: "Maximum density in mono — Wall of Sound compresses space to near-zero, everything reverberating into everything else."
+    confidence: D
+
+  - pdna_id: PDNA-000003
+    atmosphere: 6
+    warmth: 8
+    grit: 2
+    polish: 10
+    darkness: 3
+    brightness: 8
+    density: 7
+    space: 7
+    distortion: 1
+    synthetic_organic_balance: 2
+    notes: "Impeccably clean, live-instrument warmth, bright mastered dynamics. Thriller-era sheen is the benchmark."
+    confidence: D
+
+  - pdna_id: PDNA-000004
+    atmosphere: 10
+    warmth: 6
+    grit: 2
+    polish: 7
+    darkness: 5
+    brightness: 6
+    density: 4
+    space: 10
+    distortion: 2
+    synthetic_organic_balance: 7
+    notes: "Maximum atmosphere and space. Ambient works feel like being inside weather. Not cold, not warm — suspended."
+    confidence: D
+
+  - pdna_id: PDNA-000005
+    atmosphere: 9
+    warmth: 6
+    grit: 7
+    polish: 4
+    darkness: 7
+    brightness: 4
+    density: 5
+    space: 8
+    distortion: 5
+    synthetic_organic_balance: 3
+    notes: "Black Ark echo chambers, tape saturation, intentional degradation. Studio as haunted environment."
+    confidence: D
+
+  - pdna_id: PDNA-000006
+    atmosphere: 9
+    warmth: 5
+    grit: 5
+    polish: 4
+    darkness: 6
+    brightness: 4
+    density: 3
+    space: 10
+    distortion: 4
+    synthetic_organic_balance: 3
+    notes: "Maximum space created by dropping elements — bass disappears, drums echo in the void, emptiness becomes texture."
+    confidence: D
+
+  - pdna_id: PDNA-000007
+    atmosphere: 7
+    warmth: 6
+    grit: 2
+    polish: 9
+    darkness: 3
+    brightness: 8
+    density: 7
+    space: 6
+    distortion: 2
+    synthetic_organic_balance: 8
+    notes: "Machine-clean Moog sequences, bright disco mix, synthetic pulse. Donna Summer era defines the timbre."
+    confidence: D
+
+  - pdna_id: PDNA-000008
+    atmosphere: 5
+    warmth: 9
+    grit: 4
+    polish: 8
+    darkness: 4
+    brightness: 7
+    density: 5
+    space: 7
+    distortion: 2
+    synthetic_organic_balance: 2
+    notes: "Atlantic warmth — room microphone placement capturing natural instrument resonance. Transparent without being clinical."
+    confidence: D
+
+  - pdna_id: PDNA-000009
+    atmosphere: 8
+    warmth: 6
+    grit: 5
+    polish: 5
+    darkness: 5
+    brightness: 5
+    density: 4
+    space: 8
+    distortion: 3
+    synthetic_organic_balance: 3
+    notes: "Tape splice artifacts, controlled decay, jazz improvisation captured and re-assembled into dream-logic sequence."
+    confidence: D
+
+  - pdna_id: PDNA-000010
+    atmosphere: 4
+    warmth: 7
+    grit: 4
+    polish: 7
+    darkness: 3
+    brightness: 7
+    density: 6
+    space: 6
+    distortion: 2
+    synthetic_organic_balance: 4
+    notes: "Disco-soul hybrid warmth, live-band recorded feel, clean enough for radio without losing body."
+    confidence: D
+
+  - pdna_id: PDNA-000011
+    atmosphere: 6
+    warmth: 6
+    grit: 7
+    polish: 6
+    darkness: 6
+    brightness: 6
+    density: 5
+    space: 7
+    distortion: 5
+    synthetic_organic_balance: 2
+    notes: "Room sound, anti-gloss. Hip-hop work has drums-in-the-room presence; rock work lets amps breathe."
+    confidence: D
+
+  - pdna_id: PDNA-000012
+    atmosphere: 6
+    warmth: 5
+    grit: 4
+    polish: 10
+    darkness: 6
+    brightness: 6
+    density: 7
+    space: 6
+    distortion: 4
+    synthetic_organic_balance: 6
+    notes: "Reference-quality precision mix. Sub-bass sits in a distinct frequency band below kick. G-Funk synth adds synthetic warmth."
+    confidence: D
+
+  - pdna_id: PDNA-000013
+    atmosphere: 7
+    warmth: 9
+    grit: 7
+    polish: 5
+    darkness: 5
+    brightness: 5
+    density: 5
+    space: 6
+    distortion: 3
+    synthetic_organic_balance: 4
+    notes: "Dusty vinyl warmth, wax texture, lo-fi intentional grit. Humanity in the imperfection — drum machine that breathes."
+    confidence: D
+
+  - pdna_id: PDNA-000014
+    atmosphere: 5
+    warmth: 5
+    grit: 9
+    polish: 6
+    darkness: 7
+    brightness: 5
+    density: 7
+    space: 4
+    distortion: 5
+    synthetic_organic_balance: 5
+    notes: "Gritty sampled vinyl, compressed drum hits, NYC dark claustrophobia. Premo crunch is the defining timbral quality."
+    confidence: D
+
+  - pdna_id: PDNA-000015
+    atmosphere: 8
+    warmth: 4
+    grit: 8
+    polish: 4
+    darkness: 9
+    brightness: 3
+    density: 6
+    space: 6
+    distortion: 4
+    synthetic_organic_balance: 4
+    notes: "Dark, dusty, cinematic minor-key menace. Kung-fu sample crackle, lo-fi drum machine, intentional rawness."
+    confidence: D
+
+  - pdna_id: PDNA-000016
+    atmosphere: 7
+    warmth: 5
+    grit: 4
+    polish: 9
+    darkness: 5
+    brightness: 7
+    density: 6
+    space: 7
+    distortion: 3
+    synthetic_organic_balance: 8
+    notes: "Futuristic negative-space production. Synthetic percussion sits in unusual frequency pockets. Sounds clean but alien."
+    confidence: D
+
+  - pdna_id: PDNA-000017
+    atmosphere: 5
+    warmth: 6
+    grit: 3
+    polish: 9
+    darkness: 4
+    brightness: 7
+    density: 4
+    space: 7
+    distortion: 2
+    synthetic_organic_balance: 7
+    notes: "Sparse bounce — each sound has room. Synthetic funk with organic swing feel. Minimalism as confidence."
+    confidence: D
+
+  - pdna_id: PDNA-000018
+    atmosphere: 6
+    warmth: 6
+    grit: 4
+    polish: 8
+    darkness: 4
+    brightness: 7
+    density: 7
+    space: 6
+    distortion: 3
+    synthetic_organic_balance: 8
+    notes: "Playful synthetic futurism. Weird sounds placed with conviction. Body music built from strange materials."
+    confidence: D
+
+  - pdna_id: PDNA-000019
+    atmosphere: 9
+    warmth: 3
+    grit: 5
+    polish: 8
+    darkness: 10
+    brightness: 3
+    density: 6
+    space: 7
+    distortion: 4
+    synthetic_organic_balance: 8
+    notes: "Cinematic dark atmosphere. 808 sub-bass sits low and heavy. Synthesizer pads create dread before a word is rapped."
+    confidence: D
+
+  - pdna_id: PDNA-000020
+    atmosphere: 6
+    warmth: 4
+    grit: 5
+    polish: 8
+    darkness: 7
+    brightness: 4
+    density: 5
+    space: 7
+    distortion: 4
+    synthetic_organic_balance: 8
+    notes: "Elastic 808 programming, minimal melodic loops, heavy low-end emphasis. Atlanta trap darkness without Metro's cinema."
+    confidence: D
+
+  - pdna_id: PDNA-000021
+    atmosphere: 5
+    warmth: 8
+    grit: 4
+    polish: 7
+    darkness: 5
+    brightness: 6
+    density: 6
+    space: 6
+    distortion: 2
+    synthetic_organic_balance: 5
+    notes: "Gospel piano warmth cuts through trap cold. Church-house hybrid where the piano brings Sunday into the street."
+    confidence: D
+
+  - pdna_id: PDNA-000022
+    atmosphere: 5
+    warmth: 3
+    grit: 6
+    polish: 7
+    darkness: 7
+    brightness: 6
+    density: 8
+    space: 4
+    distortion: 6
+    synthetic_organic_balance: 8
+    notes: "Aggressive, dense, brass-stab saturated. Maximum volume, maximum presence. Early trap maximalism."
+    confidence: D
+
+  - pdna_id: PDNA-000023
+    atmosphere: 7
+    warmth: 3
+    grit: 6
+    polish: 7
+    darkness: 9
+    brightness: 3
+    density: 6
+    space: 5
+    distortion: 5
+    synthetic_organic_balance: 8
+    notes: "808 Mafia pressure. Dark, heavy, 808-dominant with aggressive snare programming."
+    confidence: D
+
+  - pdna_id: PDNA-000024
+    atmosphere: 7
+    warmth: 7
+    grit: 8
+    polish: 3
+    darkness: 6
+    brightness: 5
+    density: 5
+    space: 5
+    distortion: 4
+    synthetic_organic_balance: 3
+    notes: "Lo-fi as deliberate aesthetic. Vinyl warmth, tape hiss, imperfect sampling. Grit is the signal not the noise."
+    confidence: D
+
+  - pdna_id: PDNA-000025
+    atmosphere: 6
+    warmth: 9
+    grit: 6
+    polish: 6
+    darkness: 4
+    brightness: 6
+    density: 6
+    space: 5
+    distortion: 3
+    synthetic_organic_balance: 3
+    notes: "Warm horn-loop soul, jazzy mid-register melody, head-nod drum warmth. Soul texture as production philosophy."
+    confidence: D
+
+  - pdna_id: PDNA-000026
+    atmosphere: 4
+    warmth: 6
+    grit: 7
+    polish: 6
+    darkness: 5
+    brightness: 6
+    density: 6
+    space: 5
+    distortion: 3
+    synthetic_organic_balance: 4
+    notes: "Punchy sampled drums, stripped arrangement. Queens sound — confident, direct, no excess."
+    confidence: D
+
+  - pdna_id: PDNA-000027
+    atmosphere: 9
+    warmth: 6
+    grit: 5
+    polish: 4
+    darkness: 7
+    brightness: 4
+    density: 5
+    space: 8
+    distortion: 4
+    synthetic_organic_balance: 5
+    notes: "Slowed pitch creates timbral depth — bass becomes sub-bass, voices become instruments. Syrup-soaked sonic world."
+    confidence: D
+
+  - pdna_id: PDNA-000028
+    atmosphere: 7
+    warmth: 2
+    grit: 5
+    polish: 10
+    darkness: 5
+    brightness: 10
+    density: 8
+    space: 5
+    distortion: 7
+    synthetic_organic_balance: 10
+    notes: "Extreme synthetic. Plastic-metal textures, hyper-compressed transients, brightness that feels sharp to the touch."
+    confidence: D
+
+  - pdna_id: PDNA-000029
+    atmosphere: 8
+    warmth: 3
+    grit: 7
+    polish: 8
+    darkness: 9
+    brightness: 5
+    density: 7
+    space: 6
+    distortion: 7
+    synthetic_organic_balance: 9
+    notes: "Fractured and extreme. Textures that feel like biological matter processed through machinery. Beautiful violence."
+    confidence: D
+
+  - pdna_id: PDNA-000030
+    atmosphere: 10
+    warmth: 4
+    grit: 5
+    polish: 5
+    darkness: 8
+    brightness: 3
+    density: 5
+    space: 9
+    distortion: 4
+    synthetic_organic_balance: 6
+    notes: "Ghostly urban ambience. Vinyl crackle and field recordings as texture. Emotional space, physical distance."
+    confidence: D
+
+  - pdna_id: PDNA-000031
+    atmosphere: 8
+    warmth: 4
+    grit: 5
+    polish: 8
+    darkness: 6
+    brightness: 6
+    density: 7
+    space: 7
+    distortion: 5
+    synthetic_organic_balance: 8
+    notes: "Extreme range — drill and bass to pure ambient silence. Alien timbres that don't reference real-world acoustic objects."
+    confidence: D
+
+  - pdna_id: PDNA-000032
+    atmosphere: 8
+    warmth: 7
+    grit: 3
+    polish: 9
+    darkness: 4
+    brightness: 7
+    density: 7
+    space: 6
+    distortion: 4
+    synthetic_organic_balance: 9
+    notes: "Retro-futuristic warmth. Filter sweeps, vocoder, analog warmth processed through digital precision."
+    confidence: D
+
+  - pdna_id: PDNA-000033
+    atmosphere: 6
+    warmth: 3
+    grit: 2
+    polish: 8
+    darkness: 4
+    brightness: 6
+    density: 5
+    space: 7
+    distortion: 2
+    synthetic_organic_balance: 10
+    notes: "Machine cold, sequencer-pure. No warmth intended — the inhuman quality is the aesthetic content."
+    confidence: D
+
+  - pdna_id: PDNA-000034
+    atmosphere: 7
+    warmth: 5
+    grit: 1
+    polish: 9
+    darkness: 3
+    brightness: 8
+    density: 5
+    space: 6
+    distortion: 1
+    synthetic_organic_balance: 9
+    notes: "Clinical electronic precision. Moog articulation modeled on harpsichord — clean attacks, defined releases."
+    confidence: D
+
+  - pdna_id: PDNA-000035
+    atmosphere: 8
+    warmth: 7
+    grit: 2
+    polish: 9
+    darkness: 4
+    brightness: 6
+    density: 4
+    space: 8
+    distortion: 2
+    synthetic_organic_balance: 6
+    notes: "Elegant restraint — space between notes as composition. Electronic and acoustic balanced with architectural care."
+    confidence: D
+
+  - pdna_id: PDNA-000036
+    atmosphere: 7
+    warmth: 4
+    grit: 2
+    polish: 10
+    darkness: 3
+    brightness: 9
+    density: 8
+    space: 5
+    distortion: 3
+    synthetic_organic_balance: 10
+    notes: "Hyper-glossy synthetic J-pop. Vocal processing as texture. Kawaii-brightness paired with technical density."
+    confidence: D
+
+  - pdna_id: PDNA-000037
+    atmosphere: 9
+    warmth: 8
+    grit: 3
+    polish: 9
+    darkness: 4
+    brightness: 7
+    density: 8
+    space: 7
+    distortion: 2
+    synthetic_organic_balance: 5
+    notes: "Lush Indian-orchestral-electronic fusion. Sitar, strings, and synthesizer inhabit the same space naturally."
+    confidence: D
+
+  - pdna_id: PDNA-000038
+    atmosphere: 5
+    warmth: 6
+    grit: 2
+    polish: 10
+    darkness: 2
+    brightness: 9
+    density: 7
+    space: 5
+    distortion: 2
+    synthetic_organic_balance: 7
+    notes: "Commercial brightness, maximum polish. Hook-forward arrangements built for radio and streaming clarity."
+    confidence: D
+
+  - pdna_id: PDNA-000039
+    atmosphere: 5
+    warmth: 6
+    grit: 2
+    polish: 9
+    darkness: 3
+    brightness: 8
+    density: 7
+    space: 5
+    distortion: 2
+    synthetic_organic_balance: 7
+    notes: "Guitar-synth hybrid polish. Live guitar energy within Max Martin's electronic pop structure."
+    confidence: D
+
+  - pdna_id: PDNA-000040
+    atmosphere: 5
+    warmth: 8
+    grit: 4
+    polish: 8
+    darkness: 3
+    brightness: 8
+    density: 6
+    space: 7
+    distortion: 2
+    synthetic_organic_balance: 3
+    notes: "Live guitar groove warmth. Chic recordings feel like a room full of musicians playing for a dancefloor."
+    confidence: D
+
+  - pdna_id: PDNA-000041
+    atmosphere: 7
+    warmth: 5
+    grit: 2
+    polish: 10
+    darkness: 3
+    brightness: 7
+    density: 9
+    space: 5
+    distortion: 3
+    synthetic_organic_balance: 8
+    notes: "Hyper-dense layering with digital sheen. ZTT-era productions feel like everything running at maximum simultaneously."
+    confidence: D
+
+  - pdna_id: PDNA-000042
+    atmosphere: 9
+    warmth: 4
+    grit: 7
+    polish: 7
+    darkness: 8
+    brightness: 4
+    density: 7
+    space: 7
+    distortion: 6
+    synthetic_organic_balance: 6
+    notes: "Industrial atmosphere, texture as primary element. Space used architecturally — you feel the size of the room."
+    confidence: D
+
+  - pdna_id: PDNA-000043
+    atmosphere: 8
+    warmth: 6
+    grit: 3
+    polish: 9
+    darkness: 6
+    brightness: 6
+    density: 6
+    space: 7
+    distortion: 4
+    synthetic_organic_balance: 6
+    notes: "Intimate and vast simultaneously. Radiohead mixes sit the band close while the room stretches behind them."
+    confidence: D
+
+  - pdna_id: PDNA-000044
+    atmosphere: 5
+    warmth: 7
+    grit: 9
+    polish: 2
+    darkness: 5
+    brightness: 6
+    density: 5
+    space: 7
+    distortion: 6
+    synthetic_organic_balance: 1
+    notes: "Room sound as the product. Anti-compression philosophy: grit is faithful documentation, not enhancement."
+    confidence: D
+
+  - pdna_id: PDNA-000045
+    atmosphere: 5
+    warmth: 8
+    grit: 4
+    polish: 7
+    darkness: 4
+    brightness: 7
+    density: 5
+    space: 6
+    distortion: 3
+    synthetic_organic_balance: 3
+    notes: "Vocal-centered warmth. Songs built outward from the voice — arrangement serves emotion rather than sonic concept."
+    confidence: D
+
+  - pdna_id: PDNA-000046
+    atmosphere: 7
+    warmth: 5
+    grit: 3
+    polish: 9
+    darkness: 4
+    brightness: 7
+    density: 6
+    space: 6
+    distortion: 3
+    synthetic_organic_balance: 8
+    notes: "Sleek futuristic reggaeton. Clean dembow bass with atmospheric melodic layers above — urban Caribbean modernity."
+    confidence: D
+
+  - pdna_id: PDNA-000047
+    atmosphere: 5
+    warmth: 5
+    grit: 4
+    polish: 8
+    darkness: 4
+    brightness: 7
+    density: 6
+    space: 5
+    distortion: 3
+    synthetic_organic_balance: 7
+    notes: "Classic dembow energy. Club-ready clarity with enough grit to retain street credibility."
+    confidence: D
+
+  - pdna_id: PDNA-000048
+    atmosphere: 6
+    warmth: 7
+    grit: 3
+    polish: 8
+    darkness: 3
+    brightness: 7
+    density: 5
+    space: 6
+    distortion: 2
+    synthetic_organic_balance: 5
+    notes: "Clean Afropop bounce. Melodic restraint and rhythmic clarity — each element has room to speak."
+    confidence: D
+
+  - pdna_id: PDNA-000049
+    atmosphere: 9
+    warmth: 8
+    grit: 3
+    polish: 7
+    darkness: 4
+    brightness: 6
+    density: 5
+    space: 8
+    distortion: 2
+    synthetic_organic_balance: 5
+    notes: "Hypnotic warmth and space. Log drum sits low and round. Piano loops extend across long temporal structures."
+    confidence: D
+
+  - pdna_id: PDNA-000050
+    atmosphere: 5
+    warmth: 4
+    grit: 7
+    polish: 7
+    darkness: 6
+    brightness: 6
+    density: 9
+    space: 3
+    distortion: 5
+    synthetic_organic_balance: 6
+    notes: "Hyperkinetic density at 160 BPM. Sample chops stack relentlessly. Compressed urgency — no space allowed."
+    confidence: D

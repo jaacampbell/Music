@@ -1,0 +1,503 @@
+# Batch 001 — Melodic/Harmonic DNA
+# dissonance_level: 1=consonant/tonal 10=extreme dissonance
+# motif_complexity: 1=simple/single-note 10=complex/multi-layered
+melodic:
+  - pdna_id: PDNA-000001
+    chord_mood: "warm, sophisticated, emotionally direct"
+    modality: "major and minor, classical voice-leading"
+    tonal_center: "stable, rarely ambiguous"
+    dissonance_level: 3
+    motif_complexity: 7
+    influences_list: ["Western classical", "music hall", "jazz harmony", "French chanson"]
+    notes: "Martin's harmonic language comes from classical training — secondary dominants, chromatic mediants, borrowed chords used for emotional effect"
+    confidence: D
+
+  - pdna_id: PDNA-000002
+    chord_mood: "soaring, romantic, melodramatic"
+    modality: "major-dominant with romantic chromaticism"
+    tonal_center: "clearly established, harmonically rich"
+    dissonance_level: 2
+    motif_complexity: 6
+    influences_list: ["Tin Pan Alley", "Hollywood orchestral", "doo-wop", "Broadway"]
+    notes: "Spector's melodies are simple and singable — the harmonic richness is in the arrangement, not the song structure"
+    confidence: D
+
+  - pdna_id: PDNA-000003
+    chord_mood: "sophisticated, soulful, cosmopolitan"
+    modality: "jazz harmony, blues-inflected major/minor"
+    tonal_center: "stable but harmonically mobile"
+    dissonance_level: 3
+    motif_complexity: 8
+    influences_list: ["bebop jazz", "blues", "bossa nova", "film scoring", "gospel"]
+    notes: "Quincy's harmonic language is the most sophisticated in pop — extended chords, jazz substitutions, modal passages"
+    confidence: D
+
+  - pdna_id: PDNA-000004
+    chord_mood: "floating, ambiguous, meditative"
+    modality: "modal, often Dorian or pentatonic, sometimes atonal"
+    tonal_center: "deliberately ambiguous, drone-based"
+    dissonance_level: 4
+    motif_complexity: 5
+    influences_list: ["minimalism", "gamelan", "musique concrète", "Satie", "avant-garde"]
+    notes: "Eno avoids functional harmony — his chords suggest rather than declare, creating open interpretive space"
+    confidence: D
+
+  - pdna_id: PDNA-000005
+    chord_mood: "mystic, rootsy, spiritual"
+    modality: "minor pentatonic, reggae harmony, blues-inflected"
+    tonal_center: "grounded but echoing outward"
+    dissonance_level: 4
+    motif_complexity: 5
+    influences_list: ["Rastafarian spiritual music", "rhythm and blues", "American soul", "African music"]
+    notes: "Perry's harmony is secondary to texture — melody provides framework, studio processing provides meaning"
+    confidence: D
+
+  - pdna_id: PDNA-000006
+    chord_mood: "sparse, hypnotic, bass-fundamental"
+    modality: "reggae minor, bass-melody prominent"
+    tonal_center: "bass-defined, often a single chord or drone"
+    dissonance_level: 3
+    motif_complexity: 3
+    influences_list: ["Jamaican music hall", "rhythm and blues", "gospel", "African rhythmic traditions"]
+    notes: "In dub, the bass becomes melody — melody instruments recede into reverb and the bass note is the harmonic statement"
+    confidence: D
+
+  - pdna_id: PDNA-000007
+    chord_mood: "euphoric, propulsive, synthetic"
+    modality: "major, with disco-era minor interludes"
+    tonal_center: "stable and assertive"
+    dissonance_level: 2
+    motif_complexity: 5
+    influences_list: ["Italian pop", "European classical", "American soul", "film scoring"]
+    notes: "Moroder's melodies are optimistic and functional — designed to propel the body forward on the dancefloor"
+    confidence: D
+
+  - pdna_id: PDNA-000008
+    chord_mood: "warm, honest, emotionally transparent"
+    modality: "blues-rock major/minor"
+    tonal_center: "clear and grounded"
+    dissonance_level: 3
+    motif_complexity: 5
+    influences_list: ["rhythm and blues", "jazz", "rock and roll", "gospel"]
+    notes: "Dowd's harmonic sensibility follows the artist — his job is documentation, not harmonic invention"
+    confidence: D
+
+  - pdna_id: PDNA-000009
+    chord_mood: "abstract, searching, jazz-modal"
+    modality: "modal jazz, sometimes atonal"
+    tonal_center: "deliberately unstable"
+    dissonance_level: 6
+    motif_complexity: 8
+    influences_list: ["free jazz", "post-bop", "contemporary classical", "Impressionism"]
+    notes: "Macero edited Miles Davis's most harmonically advanced sessions — the harmony is the artists', the structure is Macero's"
+    confidence: D
+
+  - pdna_id: PDNA-000010
+    chord_mood: "warm, accessible, dance-driven"
+    modality: "major with soul inflection"
+    tonal_center: "stable and clear"
+    dissonance_level: 2
+    motif_complexity: 4
+    influences_list: ["soul", "rhythm and blues", "disco", "gospel"]
+    notes: "Robinson's melodic sensibility is commercial and instinctive — hooks that work on first listen"
+    confidence: D
+
+  - pdna_id: PDNA-000011
+    chord_mood: "raw, direct, emotional"
+    modality: "rock major/minor, blues-based"
+    tonal_center: "clearly established"
+    dissonance_level: 4
+    motif_complexity: 5
+    influences_list: ["American roots music", "rock", "hip-hop", "country", "metal"]
+    notes: "Rubin works across traditions — his harmonic language matches the artist's genre"
+    confidence: D
+
+  - pdna_id: PDNA-000012
+    chord_mood: "menacing, confident, G-Funk warm"
+    modality: "minor with G-Funk synthesizer melody"
+    tonal_center: "clear but threatening"
+    dissonance_level: 4
+    motif_complexity: 6
+    influences_list: ["Parliament-Funkadelic", "soul", "jazz", "West Coast R&B"]
+    notes: "G-Funk melody: single-oscillator synthesizer lead melody above minor-key chord sequence — warm but dark"
+    confidence: D
+
+  - pdna_id: PDNA-000013
+    chord_mood: "warm, melancholic, soulful, introspective"
+    modality: "minor, jazz-inflected, blues-touched"
+    tonal_center: "emotionally stable but harmonically rich"
+    dissonance_level: 4
+    motif_complexity: 6
+    influences_list: ["soul", "jazz", "funk", "Detroit R&B", "gospel"]
+    notes: "Dilla samples soul and jazz records for their melodic content, filtering them until the original harmony is transformed"
+    confidence: D
+
+  - pdna_id: PDNA-000014
+    chord_mood: "dark, assertive, urban"
+    modality: "minor, blues-inflected"
+    tonal_center: "clear and grounded"
+    dissonance_level: 4
+    motif_complexity: 5
+    influences_list: ["jazz", "soul", "blues", "film scores", "James Brown"]
+    notes: "Premier's melodic samples are chosen for their grit as much as their harmony — tone over theory"
+    confidence: D
+
+  - pdna_id: PDNA-000015
+    chord_mood: "dark, mythological, minor-modal"
+    modality: "natural minor, Phrygian inflections"
+    tonal_center: "minor, often emphasizing the flat 2nd (Phrygian)"
+    dissonance_level: 5
+    motif_complexity: 5
+    influences_list: ["soul", "kung-fu film soundtracks", "classical Chinese music", "American R&B"]
+    notes: "RZA's minor-key samples create an atmosphere of ancient struggle — melody as mythology"
+    confidence: D
+
+  - pdna_id: PDNA-000016
+    chord_mood: "alien, futuristic, sensual"
+    modality: "minor, often modal or synthetic scale"
+    tonal_center: "clear but unfamiliar"
+    dissonance_level: 5
+    motif_complexity: 6
+    influences_list: ["Indian classical", "electronic", "R&B", "African music", "pop"]
+    notes: "Timbaland's melodic choices are unusual — notes and scales that don't come from standard Western pop vocabulary"
+    confidence: D
+
+  - pdna_id: PDNA-000017
+    chord_mood: "cool, minimal, funky"
+    modality: "minor and major mixed, funk-derived"
+    tonal_center: "clear but sparse"
+    dissonance_level: 3
+    motif_complexity: 5
+    influences_list: ["funk", "jazz", "electronic", "African music"]
+    notes: "Neptunes melodic content is minimal by design — a few notes chosen for maximum effect"
+    confidence: D
+
+  - pdna_id: PDNA-000018
+    chord_mood: "playful, energetic, surprising"
+    modality: "major with modal departures"
+    tonal_center: "clear but treated as playground"
+    dissonance_level: 3
+    motif_complexity: 6
+    influences_list: ["R&B", "hip-hop", "funk", "electronic", "international pop"]
+    notes: "Missy's melodic imagination matches her rhythmic playfulness — expects the unexpected"
+    confidence: D
+
+  - pdna_id: PDNA-000019
+    chord_mood: "dark, cinematic, foreboding"
+    modality: "minor, often pentatonic or modal"
+    tonal_center: "clear but threatening"
+    dissonance_level: 5
+    motif_complexity: 6
+    influences_list: ["film scores", "horror soundtracks", "hip-hop", "dark ambient"]
+    notes: "Metro's melodic content is atmospheric rather than melodically sophisticated — mood over harmony"
+    confidence: D
+
+  - pdna_id: PDNA-000020
+    chord_mood: "minimal, hard, functional"
+    modality: "minor or pentatonic"
+    tonal_center: "clear"
+    dissonance_level: 3
+    motif_complexity: 3
+    influences_list: ["trap", "hip-hop", "Southern rap"]
+    notes: "Mike WiLL's melodic content is minimal — the loop repeats; the hook is in the rhythm and 808"
+    confidence: D
+
+  - pdna_id: PDNA-000021
+    chord_mood: "warm, devotional, gospel-funk"
+    modality: "major and minor mixed, gospel harmony"
+    tonal_center: "firm and uplifting"
+    dissonance_level: 2
+    motif_complexity: 6
+    influences_list: ["gospel", "Southern soul", "church music", "funk", "R&B"]
+    notes: "Zaytoven's piano voicings are gospel-informed — seventh chords, suspended chords, deceptive resolutions"
+    confidence: D
+
+  - pdna_id: PDNA-000022
+    chord_mood: "aggressive, confrontational"
+    modality: "minor"
+    tonal_center: "clear"
+    dissonance_level: 4
+    motif_complexity: 3
+    influences_list: ["trap", "Southern hip-hop", "horror film music"]
+    notes: "Lex Luger's melodic content is subordinate to texture — the brass sound is more important than the notes"
+    confidence: D
+
+  - pdna_id: PDNA-000023
+    chord_mood: "dark, minimal, pressure"
+    modality: "minor"
+    tonal_center: "clear"
+    dissonance_level: 4
+    motif_complexity: 3
+    influences_list: ["trap", "Southern hip-hop", "808 culture"]
+    notes: "Southside's melodic elements are functional — dark minor loops supporting 808 bass pressure"
+    confidence: D
+
+  - pdna_id: PDNA-000024
+    chord_mood: "warm, dusty, abstract"
+    modality: "jazz harmony, Brazilian, African"
+    tonal_center: "often ambiguous through crate-diving source material"
+    dissonance_level: 5
+    motif_complexity: 7
+    influences_list: ["jazz", "Brazilian music", "African music", "library music", "soul", "funk"]
+    notes: "Madlib's harmonic language is borrowed from the sources he samples — jazz, world, and classical textures"
+    confidence: D
+
+  - pdna_id: PDNA-000025
+    chord_mood: "warm, soulful, optimistic"
+    modality: "minor and major, jazz-soul"
+    tonal_center: "clearly established"
+    dissonance_level: 3
+    motif_complexity: 6
+    influences_list: ["jazz", "soul", "R&B", "gospel", "funk"]
+    notes: "Pete Rock's samples feature horn melodies and jazz piano — harmonic warmth is his primary melodic tool"
+    confidence: D
+
+  - pdna_id: PDNA-000026
+    chord_mood: "energetic, direct, classic hip-hop"
+    modality: "minor and major mixed"
+    tonal_center: "clear"
+    dissonance_level: 3
+    motif_complexity: 4
+    influences_list: ["soul", "funk", "R&B", "early hip-hop"]
+    notes: "Marley Marl's melodic sources are from classic soul records — the harmony comes with the sample"
+    confidence: D
+
+  - pdna_id: PDNA-000027
+    chord_mood: "dreamy, melancholic, drugged"
+    modality: "minor, often ambiguous due to pitch-shifting"
+    tonal_center: "unstable due to tempo reduction effect on pitch"
+    dissonance_level: 4
+    motif_complexity: 4
+    influences_list: ["Houston rap", "hip-hop", "R&B", "soul"]
+    notes: "Screw's pitch reduction transforms major-key melodies into something more ambiguous and melancholic"
+    confidence: D
+
+  - pdna_id: PDNA-000028
+    chord_mood: "euphoric, extreme, synthetic"
+    modality: "major, often simple intervals with extreme processing"
+    tonal_center: "clear but sonically transformed"
+    dissonance_level: 5
+    motif_complexity: 6
+    influences_list: ["hyperpop", "electronic", "bubblegum pop", "noise", "UK bass"]
+    notes: "SOPHIE's melodic lines are simple — the sophistication is entirely timbral and textural"
+    confidence: D
+
+  - pdna_id: PDNA-000029
+    chord_mood: "fractured, beautiful, threatening"
+    modality: "chromatic, atonal, post-tonal"
+    tonal_center: "deliberately absent"
+    dissonance_level: 8
+    motif_complexity: 7
+    influences_list: ["contemporary classical", "electronic", "Venezuelan cumbia", "noise", "R&B"]
+    notes: "Arca's harmonic language refuses comfort — moments of beauty surrounded by deliberate threat"
+    confidence: D
+
+  - pdna_id: PDNA-000030
+    chord_mood: "melancholic, yearning, urban"
+    modality: "minor, with Dorian inflections"
+    tonal_center: "clear but emotional rather than assertive"
+    dissonance_level: 4
+    motif_complexity: 5
+    influences_list: ["UK garage", "dubstep", "jungle", "soul", "gospel"]
+    notes: "Burial's vocal samples carry the melodic weight — chopped and pitched fragments of emotional expression"
+    confidence: D
+
+  - pdna_id: PDNA-000031
+    chord_mood: "alien, playful, melancholic, threatening"
+    modality: "wide range: pure ambient drones to complex polytonal writing"
+    tonal_center: "varies from none (ambient) to clear (Drukqs piano)"
+    dissonance_level: 6
+    motif_complexity: 8
+    influences_list: ["contemporary classical", "electronic", "ambient", "folk", "mathematical music"]
+    notes: "Aphex Twin's melodic range is enormous — from pure atmospheric drone to emotionally complex piano composition"
+    confidence: D
+
+  - pdna_id: PDNA-000032
+    chord_mood: "nostalgic, euphoric, warm"
+    modality: "major, disco-influenced, with chromatic passing chords"
+    tonal_center: "clearly established"
+    dissonance_level: 2
+    motif_complexity: 6
+    influences_list: ["disco", "funk", "rock", "German electronic", "French pop"]
+    notes: "Daft Punk's melodic sensibility quotes from the archive — recognizable chord progressions made new through processing"
+    confidence: D
+
+  - pdna_id: PDNA-000033
+    chord_mood: "cold, precise, urban-mechanical"
+    modality: "minor, pentatonic, with Teutonic austerity"
+    tonal_center: "clear but emotionally detached"
+    dissonance_level: 3
+    motif_complexity: 5
+    influences_list: ["German Romanticism", "minimalism", "electronic music", "futurism"]
+    notes: "Kraftwerk's melodies are simple and functional — they exist to define the machine, not to express emotion"
+    confidence: D
+
+  - pdna_id: PDNA-000034
+    chord_mood: "classical, precise, elegant"
+    modality: "Western classical: major, minor, modal"
+    tonal_center: "rigorously defined, Bach-derived"
+    dissonance_level: 3
+    motif_complexity: 9
+    influences_list: ["J.S. Bach", "Baroque", "classical", "electronic synthesis"]
+    notes: "Carlos performs existing classical works — the harmonic sophistication is Bach's, the timbre is Carlos's"
+    confidence: D
+
+  - pdna_id: PDNA-000035
+    chord_mood: "elegant, melancholic, searching"
+    modality: "Western classical and Japanese modal traditions"
+    tonal_center: "clearly defined, often with modal ambiguity"
+    dissonance_level: 4
+    motif_complexity: 8
+    influences_list: ["Western classical", "Japanese traditional", "ambient", "jazz", "electronic"]
+    notes: "Sakamoto's harmonic language integrates Japanese musical thinking with Western classical voice-leading"
+    confidence: D
+
+  - pdna_id: PDNA-000036
+    chord_mood: "bright, synthetic, emotionally direct"
+    modality: "major, pop-functional"
+    tonal_center: "clearly established"
+    dissonance_level: 2
+    motif_complexity: 6
+    influences_list: ["Western pop", "electronic dance", "J-pop", "French house"]
+    notes: "Nakata's melodic writing is maximally catchy — hooks designed for immediate memorability"
+    confidence: D
+
+  - pdna_id: PDNA-000037
+    chord_mood: "devotional, cinematic, spiritual"
+    modality: "Carnatic ragas, Western major/minor, Arabic maqam"
+    tonal_center: "modal raga-based or Western"
+    dissonance_level: 4
+    motif_complexity: 9
+    influences_list: ["Carnatic classical", "Hindustani classical", "Sufi music", "Western orchestral", "electronic"]
+    notes: "Rahman fuses Indian modal melody with Western harmonic progressions — a synthesis no one else achieves at this scale"
+    confidence: D
+
+  - pdna_id: PDNA-000038
+    chord_mood: "uplifting, hooky, commercial"
+    modality: "major-dominant, pop-functional"
+    tonal_center: "clearly and urgently established"
+    dissonance_level: 2
+    motif_complexity: 7
+    influences_list: ["Western pop", "AOR rock", "Scandinavian pop", "R&B"]
+    notes: "Max Martin's hook design: melodic pre-chorus that recontextualizes verse, chorus that feels inevitable"
+    confidence: D
+
+  - pdna_id: PDNA-000039
+    chord_mood: "bright, punchy, commercial"
+    modality: "major, pop-rock"
+    tonal_center: "clear"
+    dissonance_level: 2
+    motif_complexity: 6
+    influences_list: ["rock", "pop", "R&B", "electronic"]
+    notes: "Shellback's melodic writing serves Max Martin's hook framework"
+    confidence: D
+
+  - pdna_id: PDNA-000040
+    chord_mood: "funky, elegant, confident"
+    modality: "minor and major, funk-derived"
+    tonal_center: "firmly established"
+    dissonance_level: 2
+    motif_complexity: 6
+    influences_list: ["funk", "jazz", "soul", "disco", "R&B"]
+    notes: "Nile Rodgers' melodic language is guitar-derived — chords voiced for maximum rhythmic impact on a single instrument"
+    confidence: D
+
+  - pdna_id: PDNA-000041
+    chord_mood: "sophisticated, dramatic, aspirational"
+    modality: "major with chromatic extensions"
+    tonal_center: "clearly established"
+    dissonance_level: 3
+    motif_complexity: 7
+    influences_list: ["British pop", "art rock", "classical influences", "electronic"]
+    notes: "Trevor Horn's productions have orchestral harmonic ambition dressed in electronic timbres"
+    confidence: D
+
+  - pdna_id: PDNA-000042
+    chord_mood: "dark, industrial, textured"
+    modality: "minor, with chromatic industrial touches"
+    tonal_center: "established but often oppressive"
+    dissonance_level: 6
+    motif_complexity: 6
+    influences_list: ["industrial", "electronic", "rock", "post-punk"]
+    notes: "Flood's harmonic world leans dark — melody serves texture rather than the other way around"
+    confidence: D
+
+  - pdna_id: PDNA-000043
+    chord_mood: "searching, melancholic, complex"
+    modality: "Radiohead's evolving harmonic language: from rock to electronic to orchestral"
+    tonal_center: "often ambiguous, deliberately so"
+    dissonance_level: 6
+    motif_complexity: 8
+    influences_list: ["rock", "electronic", "contemporary classical", "jazz harmony"]
+    notes: "Godrich works with Radiohead's evolving harmonic vision — Kid A's electronic chords, Pablo Honey's rock"
+    confidence: D
+
+  - pdna_id: PDNA-000044
+    chord_mood: "raw, honest, minimal"
+    modality: "rock, blues, noise"
+    tonal_center: "varies by artist"
+    dissonance_level: 5
+    motif_complexity: 4
+    influences_list: ["noise rock", "punk", "post-punk", "indie rock", "folk"]
+    notes: "Albini records what the artist brings — his harmonic contribution is preservation, not invention"
+    confidence: D
+
+  - pdna_id: PDNA-000045
+    chord_mood: "emotional, direct, warm"
+    modality: "rock major/minor, emotionally governed"
+    tonal_center: "clear and familiar"
+    dissonance_level: 2
+    motif_complexity: 6
+    influences_list: ["rock", "pop", "soul", "folk"]
+    notes: "Linda Perry's melodic writing prioritizes emotional communication over harmonic complexity"
+    confidence: D
+
+  - pdna_id: PDNA-000046
+    chord_mood: "atmospheric, melodic, urban Caribbean"
+    modality: "minor, with Latin harmonic inflections"
+    tonal_center: "clear"
+    dissonance_level: 3
+    motif_complexity: 6
+    influences_list: ["reggaeton", "Latin pop", "R&B", "electronic"]
+    notes: "Tainy's melodic content is more developed than classic reggaeton — atmospheric pads carry harmonic content"
+    confidence: D
+
+  - pdna_id: PDNA-000047
+    chord_mood: "simple, effective, dance-functional"
+    modality: "minor, simple Latin harmony"
+    tonal_center: "clear"
+    dissonance_level: 2
+    motif_complexity: 4
+    influences_list: ["Puerto Rican music", "Latin dance", "hip-hop", "reggaeton"]
+    notes: "Luny Tunes' harmonic content is functional and minimal — the groove carries the music, not the harmony"
+    confidence: D
+
+  - pdna_id: PDNA-000048
+    chord_mood: "warm, accessible, African-pop"
+    modality: "major, pentatonic-influenced"
+    tonal_center: "clear and inviting"
+    dissonance_level: 2
+    motif_complexity: 5
+    influences_list: ["Yoruba music", "afrobeats", "highlife", "R&B", "dancehall"]
+    notes: "Sarz blends West African melodic traditions with contemporary production — familiar but distinctive"
+    confidence: D
+
+  - pdna_id: PDNA-000049
+    chord_mood: "warm, hypnotic, jazz-inflected"
+    modality: "jazz-influenced, often major with added 9ths and 7ths"
+    tonal_center: "clear but harmonically sophisticated for the genre"
+    dissonance_level: 3
+    motif_complexity: 6
+    influences_list: ["South African jazz", "deep house", "Afrobeats", "gospel"]
+    notes: "Kabza's piano loops use jazz chord vocabulary in a dance music context — unexpected sophistication"
+    confidence: D
+
+  - pdna_id: PDNA-000050
+    chord_mood: "urgent, emotional, minimal"
+    modality: "minor, often pentatonic"
+    tonal_center: "clear when present, sometimes absent"
+    dissonance_level: 4
+    motif_complexity: 4
+    influences_list: ["Chicago house", "ghetto house", "soul", "R&B", "gospel"]
+    notes: "Rashad uses vocal samples emotionally — melodic content comes from chopped voices not melodic instruments"
+    confidence: D

@@ -1,0 +1,56 @@
+eras:
+  - code: pre_tape
+    label: "Pre-Tape Studio Era"
+    year_start: 1877
+    year_end: 1945
+    sort_order: 1
+  - code: tape
+    label: "Tape / Early Console Era"
+    year_start: 1945
+    year_end: 1963
+    sort_order: 2
+  - code: multitrack
+    label: "Multitrack / Wall of Sound Era"
+    year_start: 1963
+    year_end: 1978
+    sort_order: 3
+  - code: dub_soundsystem
+    label: "Dub / Soundsystem Era"
+    year_start: 1968
+    year_end: 1985
+    sort_order: 4
+  - code: disco_electronic
+    label: "Disco / Electronic Studio Era"
+    year_start: 1974
+    year_end: 1985
+    sort_order: 5
+  - code: early_hiphop_sampling
+    label: "Early Hip-Hop Sampling Era"
+    year_start: 1979
+    year_end: 1992
+    sort_order: 6
+  - code: midi_sampler
+    label: "MIDI / Sampler Era"
+    year_start: 1983
+    year_end: 1996
+    sort_order: 7
+  - code: daw_early
+    label: "Early DAW Era"
+    year_start: 1991
+    year_end: 2005
+    sort_order: 8
+  - code: internet_beatmaker
+    label: "Internet Beatmaker Era"
+    year_start: 2000
+    year_end: 2015
+    sort_order: 9
+  - code: streaming_social
+    label: "Streaming / Social Platform Era"
+    year_start: 2015
+    year_end: 2023
+    sort_order: 10
+  - code: ai_assisted
+    label: "AI-Assisted Production Era"
+    year_start: 2023
+    year_end: null
+    sort_order: 11
