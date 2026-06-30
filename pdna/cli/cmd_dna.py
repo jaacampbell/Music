@@ -431,6 +431,187 @@ def dna_similar(ctx, pdna_id, n, dims):
     console.print(table)
 
 
+@dna_group.command("warnings")
+@click.argument("pdna_id")
+@click.pass_context
+def dna_warnings(ctx, pdna_id):
+    """Display originality warnings for a producer (what NOT to copy)."""
+    from sqlalchemy import create_engine, text
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        p = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id}
+        ).fetchone()
+        if not p:
+            console.print(f"[red]Producer {pdna_id} not found.[/]")
+            return
+        pid = p[0]
+
+        rows = conn.execute(
+            text(
+                "SELECT warning_type, severity, description "
+                "FROM originality_warnings WHERE producer_id = :pid "
+                "ORDER BY CASE severity WHEN 'major' THEN 1 WHEN 'moderate' THEN 2 ELSE 3 END"
+            ),
+            {"pid": pid},
+        ).fetchall()
+
+    if not rows:
+        console.print(f"[yellow]No originality warnings for {pdna_id}.[/]")
+        return
+
+    _SEV_COLOR = {"major": "red", "moderate": "yellow", "minor": "dim"}
+
+    table = Table(title=f"Originality Warnings — {pdna_id}  {p[1]}")
+    table.add_column("Warning Type")
+    table.add_column("Severity", justify="center")
+    table.add_column("Description")
+
+    for row in rows:
+        wtype, severity, desc = row[0], row[1], row[2]
+        color = _SEV_COLOR.get(severity, "white")
+        table.add_row(
+            wtype.replace("_", " ").title(),
+            f"[{color}]{severity}[/]",
+            desc,
+        )
+    console.print(table)
+
+
+def lookup_fusion(conn, primary_id: int, secondary_id: int):
+    """Return a seeded fusion row for (primary, secondary) or None."""
+    from sqlalchemy import text
+    return conn.execute(
+        text(
+            "SELECT fusion_description, creative_prompt, secondary_element "
+            "FROM fusion_paths "
+            "WHERE primary_producer_id = :pid AND secondary_producer_id = :sid"
+        ),
+        {"pid": primary_id, "sid": secondary_id},
+    ).fetchone()
+
+
+@dna_group.command("fusion")
+@click.argument("pdna_id_a")
+@click.argument("pdna_id_b")
+@click.pass_context
+def dna_fusion(ctx, pdna_id_a, pdna_id_b):
+    """Show pre-seeded fusion for two producers, or fall back to distance analysis."""
+    from sqlalchemy import create_engine, text
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        pa = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id_a}
+        ).fetchone()
+        pb = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id_b}
+        ).fetchone()
+        if not pa:
+            console.print(f"[red]Producer {pdna_id_a} not found.[/]")
+            return
+        if not pb:
+            console.print(f"[red]Producer {pdna_id_b} not found.[/]")
+            return
+
+        fusion = lookup_fusion(conn, pa[0], pb[0])
+
+        if fusion:
+            console.print(f"\n[bold cyan]{pdna_id_a} {pa[1]}[/]  ×  [bold cyan]{pdna_id_b} {pb[1]}[/]")
+            console.print(Panel(fusion[0], title="Fusion Description"))
+            if fusion[1]:
+                console.print(Panel(fusion[1], title="Creative Prompt"))
+            return
+
+        # Fallback: distance-based output
+        vectors = load_dna_vectors(conn)
+
+    if pdna_id_a not in vectors or pdna_id_b not in vectors:
+        console.print("[yellow]DNA vectors not available for one or both producers.[/]")
+        return
+
+    dim_cols = DIM_SETS["all"]
+    a, b = vectors[pdna_id_a], vectors[pdna_id_b]
+    dist = euclidean_distance(a["dims"], b["dims"], dim_cols)
+    diverge = top_diverging(a["dims"], b["dims"], dim_cols, n=3)
+
+    console.print(f"\n[bold cyan]{pdna_id_a} {pa[1]}[/]  ×  [bold cyan]{pdna_id_b} {pb[1]}[/]")
+    console.print(f"[yellow]No pre-seeded fusion — distance-based analysis:[/]")
+    console.print(f"DNA distance (all dims): [bold]{dist:.2f}[/]")
+
+    if diverge:
+        t = Table(title="Top diverging dimensions")
+        t.add_column("Dimension")
+        t.add_column(pa[1], justify="right")
+        t.add_column(pb[1], justify="right")
+        t.add_column("Δ", justify="right")
+        for dim, va, vb in diverge:
+            label = _DIM_LABELS.get(dim, dim.replace("_", " ").title())
+            delta = vb - va
+            delta_str = f"[green]+{delta}[/]" if delta > 0 else f"[red]{delta}[/]"
+            t.add_row(label, str(va), str(vb), delta_str)
+        console.print(t)
+
+    console.print(Panel(
+        f"Try combining {pa[1]}'s approach with {pb[1]}'s approach.\n"
+        f"Focus on the {diverge[0][0].replace('_', ' ')} dimension gap ({diverge[0][1]} vs {diverge[0][2]}) "
+        f"as the productive creative tension." if diverge else
+        f"Try combining {pa[1]}'s approach with {pb[1]}'s approach.",
+        title="Fusion Suggestion",
+    ))
+
+
+@dna_group.command("fusions")
+@click.argument("pdna_id")
+@click.pass_context
+def dna_fusions_list(ctx, pdna_id):
+    """List all pre-seeded fusions where PDNA_ID is the primary producer."""
+    from sqlalchemy import create_engine, text
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        p = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id}
+        ).fetchone()
+        if not p:
+            console.print(f"[red]Producer {pdna_id} not found.[/]")
+            return
+
+        rows = conn.execute(
+            text(
+                "SELECT fp.secondary_element, fp.fusion_description, "
+                "fp.creative_prompt IS NOT NULL as has_prompt, "
+                "p2.pdna_id as secondary_pdna_id "
+                "FROM fusion_paths fp "
+                "LEFT JOIN producers p2 ON p2.id = fp.secondary_producer_id "
+                "WHERE fp.primary_producer_id = :pid "
+                "ORDER BY fp.secondary_element"
+            ),
+            {"pid": p[0]},
+        ).fetchall()
+
+    if not rows:
+        console.print(f"[yellow]No fusion paths seeded for {pdna_id}.[/]")
+        return
+
+    table = Table(title=f"Fusion Paths — {pdna_id}  {p[1]}")
+    table.add_column("Secondary Element")
+    table.add_column("PDNA ID", style="cyan")
+    table.add_column("Description (preview)")
+    table.add_column("Prompt?", justify="center")
+
+    for row in rows:
+        desc_preview = (row[1][:80] + "…") if row[1] and len(row[1]) > 80 else (row[1] or "")
+        table.add_row(
+            row[0],
+            row[3] or "[dim]—[/]",
+            desc_preview,
+            "[green]✓[/]" if row[2] else "[dim]—[/]",
+        )
+    console.print(table)
+
+
 @dna_group.command("compare")
 @click.argument("pdna_id_a")
 @click.argument("pdna_id_b")
