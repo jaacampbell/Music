@@ -1,4 +1,5 @@
 import json
+import math
 from pathlib import Path
 from typing import Optional
 
@@ -27,6 +28,92 @@ RUBRIC_DIMS = [
     ("score_adaptability", "Adaptability"),
     ("score_originality", "Originality"),
 ]
+
+# ── Similarity engine ──────────────────────────────────────────────────────────
+
+_SONIC_COLS = [
+    "atmosphere", "warmth", "grit", "polish", "darkness", "brightness",
+    "density", "space", "distortion", "synthetic_organic_balance",
+]
+_RHYTHMIC_COLS = ["swing", "grid_precision", "drum_density"]
+_MELODIC_COLS = ["dissonance_level", "motif_complexity"]
+_MIXING_COLS = ["loudness_level", "stereo_width", "reverb_use", "delay_use", "compression", "saturation"]
+_RUBRIC_COLS = [f for f, _ in RUBRIC_DIMS]
+
+DIM_SETS: dict[str, list[str]] = {
+    "rubric": _RUBRIC_COLS,
+    "sonic": _SONIC_COLS,
+    "rhythmic": _RHYTHMIC_COLS,
+    "all": _RUBRIC_COLS + _SONIC_COLS + _RHYTHMIC_COLS + _MELODIC_COLS + _MIXING_COLS,
+}
+
+_DIM_LABELS: dict[str, str] = {
+    **{f: l for f, l in RUBRIC_DIMS},
+    "atmosphere": "Atmosphere", "warmth": "Warmth", "grit": "Grit",
+    "polish": "Polish", "darkness": "Darkness", "brightness": "Brightness",
+    "density": "Density", "space": "Space", "distortion": "Distortion",
+    "synthetic_organic_balance": "Synthetic/Organic",
+    "swing": "Swing", "grid_precision": "Grid Precision", "drum_density": "Drum Density",
+    "dissonance_level": "Dissonance", "motif_complexity": "Motif Complexity",
+    "loudness_level": "Loudness", "stereo_width": "Stereo Width",
+    "reverb_use": "Reverb", "delay_use": "Delay",
+    "compression": "Compression", "saturation": "Saturation",
+}
+
+_VECTOR_SQL = (
+    "SELECT p.pdna_id, p.name, "
+    "pp.score_innovation, pp.score_influence, pp.score_technical_craft, "
+    "pp.score_sonic_identity, pp.score_arrangement_skill, pp.score_rhythm_design, "
+    "pp.score_melodic_harmonic, pp.score_sound_design, pp.score_mixing_aesthetics, "
+    "pp.score_cultural_importance, pp.score_commercial_impact, pp.score_underground_impact, "
+    "pp.score_longevity, pp.score_adaptability, pp.score_originality, "
+    "sd.atmosphere, sd.warmth, sd.grit, sd.polish, sd.darkness, sd.brightness, "
+    "sd.density, sd.space, sd.distortion, sd.synthetic_organic_balance, "
+    "rd.swing, rd.grid_precision, rd.drum_density, "
+    "mhd.dissonance_level, mhd.motif_complexity, "
+    "md.loudness_level, md.stereo_width, md.reverb_use, md.delay_use, md.compression, md.saturation "
+    "FROM producers p "
+    "LEFT JOIN producer_profiles pp ON pp.producer_id = p.id "
+    "LEFT JOIN sonic_dna sd ON sd.producer_id = p.id "
+    "LEFT JOIN rhythmic_dna rd ON rd.producer_id = p.id "
+    "LEFT JOIN melodic_harmonic_dna mhd ON mhd.producer_id = p.id "
+    "LEFT JOIN mixing_dna md ON md.producer_id = p.id "
+    "ORDER BY p.pdna_id"
+)
+
+
+def load_dna_vectors(conn) -> dict[str, dict]:
+    """Return {pdna_id: {"name": str, "dims": {col: value}}} for all producers."""
+    from sqlalchemy import text
+    rows = conn.execute(text(_VECTOR_SQL)).fetchall()
+    result: dict[str, dict] = {}
+    for row in rows:
+        r = dict(row._mapping)
+        pid = r.pop("pdna_id")
+        name = r.pop("name")
+        result[pid] = {"name": name, "dims": r}
+    return result
+
+
+def euclidean_distance(vec_a: dict, vec_b: dict, dims: list[str]) -> float:
+    """Euclidean distance over the given dimension columns (skips None values)."""
+    total = 0.0
+    for d in dims:
+        a, b = vec_a.get(d), vec_b.get(d)
+        if a is not None and b is not None:
+            total += (a - b) ** 2
+    return math.sqrt(total)
+
+
+def top_diverging(vec_a: dict, vec_b: dict, dims: list[str], n: int = 3) -> list[tuple]:
+    """Return the n dimensions with the largest absolute score difference."""
+    diffs = []
+    for d in dims:
+        a, b = vec_a.get(d), vec_b.get(d)
+        if a is not None and b is not None and a != b:
+            diffs.append((abs(a - b), d, int(a), int(b)))
+    diffs.sort(reverse=True)
+    return [(d, a, b) for _, d, a, b in diffs[:n]]
 
 
 @click.group(name="dna")
@@ -179,4 +266,114 @@ def dna_missing(ctx):
             "[green]✓[/]" if row[2] else "[red]✗[/]",
             "[green]✓[/]" if row[3] else "[red]✗[/]",
         )
+    console.print(table)
+
+
+@dna_group.command("similar")
+@click.argument("pdna_id")
+@click.option("--n", default=5, show_default=True, help="Number of results")
+@click.option(
+    "--dims",
+    default="all",
+    type=click.Choice(list(DIM_SETS.keys())),
+    show_default=True,
+    help="Dimension set used for distance calculation",
+)
+@click.pass_context
+def dna_similar(ctx, pdna_id, n, dims):
+    """Rank all producers by DNA distance to PDNA_ID."""
+    from sqlalchemy import create_engine
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        vectors = load_dna_vectors(conn)
+
+    if pdna_id not in vectors:
+        console.print(f"[red]Producer {pdna_id} not found.[/]")
+        return
+
+    target = vectors[pdna_id]
+    dim_cols = DIM_SETS[dims]
+
+    ranked = []
+    for other_id, other in vectors.items():
+        if other_id == pdna_id:
+            continue
+        dist = euclidean_distance(target["dims"], other["dims"], dim_cols)
+        diverge = top_diverging(target["dims"], other["dims"], dim_cols, n=3)
+        ranked.append((dist, other_id, other["name"], diverge))
+    ranked.sort(key=lambda x: x[0])
+
+    table = Table(
+        title=f"Most similar to [cyan]{pdna_id}[/] — {target['name']}  (dims: {dims})"
+    )
+    table.add_column("Rank", justify="right", style="dim")
+    table.add_column("PDNA ID", style="cyan")
+    table.add_column("Name")
+    table.add_column("Distance", justify="right")
+    table.add_column("Top differences")
+
+    for rank, (dist, other_id, name, diverge) in enumerate(ranked[:n], 1):
+        diff_str = "  ".join(
+            f"{_DIM_LABELS.get(d, d)} {a}→{b}" for d, a, b in diverge
+        )
+        table.add_row(str(rank), other_id, name, f"{dist:.2f}", diff_str or "—")
+
+    console.print(table)
+
+
+@dna_group.command("compare")
+@click.argument("pdna_id_a")
+@click.argument("pdna_id_b")
+@click.option(
+    "--dims",
+    default="all",
+    type=click.Choice(list(DIM_SETS.keys())),
+    show_default=True,
+)
+@click.pass_context
+def dna_compare(ctx, pdna_id_a, pdna_id_b, dims):
+    """Side-by-side DNA comparison of two producers."""
+    from sqlalchemy import create_engine
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        vectors = load_dna_vectors(conn)
+
+    for pid in (pdna_id_a, pdna_id_b):
+        if pid not in vectors:
+            console.print(f"[red]Producer {pid} not found.[/]")
+            return
+
+    a, b = vectors[pdna_id_a], vectors[pdna_id_b]
+    dim_cols = DIM_SETS[dims]
+    dist = euclidean_distance(a["dims"], b["dims"], dim_cols)
+
+    table = Table(
+        title=f"[cyan]{a['name']}[/] vs [cyan]{b['name']}[/]  distance: {dist:.2f} (dims: {dims})"
+    )
+    table.add_column("Dimension")
+    table.add_column(f"{pdna_id_a} {a['name']}", justify="right")
+    table.add_column(f"{pdna_id_b} {b['name']}", justify="right")
+    table.add_column("Δ", justify="right")
+
+    for d in dim_cols:
+        va, vb = a["dims"].get(d), b["dims"].get(d)
+        if va is None and vb is None:
+            continue
+        label = _DIM_LABELS.get(d, d.replace("_", " ").title())
+        va_str = str(va) if va is not None else "[dim]—[/]"
+        vb_str = str(vb) if vb is not None else "[dim]—[/]"
+        if va is not None and vb is not None:
+            delta = vb - va
+            if delta > 0:
+                delta_str = f"[green]+{delta}[/]"
+            elif delta < 0:
+                delta_str = f"[red]{delta}[/]"
+            else:
+                delta_str = "[dim]0[/]"
+        else:
+            delta_str = "[dim]—[/]"
+        table.add_row(label, va_str, vb_str, delta_str)
+
     console.print(table)
