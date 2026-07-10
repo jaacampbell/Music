@@ -51,6 +51,20 @@ def _build_dna_context(data: dict) -> str:
     if producer_ear:
         lines.append(f"\nProducer ear (how other producers hear this approach):\n{producer_ear}")
 
+    warnings = data.get("warnings") or []
+    major = next((w for w in warnings if w.get("severity") == "major"), None)
+    if major:
+        lines.append(f"Avoid: {major['description']}")
+
+    directions = data.get("directions") or []
+    for d in directions[:2]:
+        lines.append(f"Channel: {d['direction_text'][:120]}")
+
+    iterations = data.get("iterations") or []
+    beat = next((i for i in iterations if i.get("target_context") == "beat_production"), None)
+    if beat:
+        lines.append(f"Session: {beat['prompt_text'][:200]}")
+
     return "\n".join(lines) if lines else ""
 
 

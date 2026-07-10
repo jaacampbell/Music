@@ -612,6 +612,99 @@ def dna_fusions_list(ctx, pdna_id):
     console.print(table)
 
 
+@dna_group.command("directions")
+@click.argument("pdna_id")
+@click.pass_context
+def dna_directions(ctx, pdna_id):
+    """Show inspired directions for a producer (how to channel their approach)."""
+    from sqlalchemy import create_engine, text
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        p = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id}
+        ).fetchone()
+        if not p:
+            console.print(f"[red]Producer {pdna_id} not found.[/]")
+            return
+
+        rows = conn.execute(
+            text(
+                "SELECT title, direction_text, direction_type, sort_order "
+                "FROM inspired_directions WHERE producer_id = :pid "
+                "ORDER BY sort_order NULLS LAST, id"
+            ),
+            {"pid": p[0]},
+        ).fetchall()
+
+    if not rows:
+        console.print(f"[yellow]No inspired directions for {pdna_id}.[/]")
+        return
+
+    console.print(f"\n[bold cyan]{pdna_id}[/]  [bold]{p[1]}[/] — Inspired Directions\n")
+
+    for row in rows:
+        title, direction_text, direction_type, _ = row[0], row[1], row[2], row[3]
+        console.print(f"[dim]{direction_type or 'general'}[/]")
+        console.print(Panel(direction_text, title=title))
+
+
+@dna_group.command("iterate")
+@click.argument("pdna_id")
+@click.option("--context", "ctx_filter", default=None,
+              help="Filter by target_context (beat_production, mix_reference, sound_design, artist_session, collaboration)")
+@click.pass_context
+def dna_iterate(ctx, pdna_id, ctx_filter):
+    """Show creative iteration prompts for a producer, optionally filtered by context."""
+    from sqlalchemy import create_engine, text
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        p = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id}
+        ).fetchone()
+        if not p:
+            console.print(f"[red]Producer {pdna_id} not found.[/]")
+            return
+
+        if ctx_filter:
+            rows = conn.execute(
+                text(
+                    "SELECT iteration_number, title, prompt_text, target_context "
+                    "FROM creative_iterations WHERE producer_id = :pid AND target_context = :ctx "
+                    "ORDER BY iteration_number"
+                ),
+                {"pid": p[0], "ctx": ctx_filter},
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                text(
+                    "SELECT iteration_number, title, prompt_text, target_context "
+                    "FROM creative_iterations WHERE producer_id = :pid "
+                    "ORDER BY iteration_number"
+                ),
+                {"pid": p[0]},
+            ).fetchall()
+
+    if not rows:
+        msg = f"No creative iterations for {pdna_id}"
+        if ctx_filter:
+            msg += f" with context '{ctx_filter}'"
+        console.print(f"[yellow]{msg}.[/]")
+        return
+
+    header = f"{pdna_id}  {p[1]} — Creative Iterations"
+    if ctx_filter:
+        header += f" [{ctx_filter}]"
+    console.print(f"\n[bold cyan]{header}[/]\n")
+
+    for row in rows:
+        iteration_number, title, prompt_text, target_context = row[0], row[1], row[2], row[3]
+        panel_title = title or f"Iteration {iteration_number}"
+        console.print(f"[dim]{target_context or 'general'}[/]")
+        console.print(Panel(prompt_text, title=panel_title))
+
+
 @dna_group.command("compare")
 @click.argument("pdna_id_a")
 @click.argument("pdna_id_b")

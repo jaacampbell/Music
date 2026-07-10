@@ -1,0 +1,951 @@
+iterations:
+
+  # ── George Martin (PDNA-000001) ────────────────────────────────────────────
+  - pdna_id: PDNA-000001
+    iteration_number: 1
+    title: "Orchestral arrangement session"
+    prompt_text: "Score a string or brass arrangement for a pop track without using any existing arrangement as reference. Listen to the song solo — piano or guitar only — then write the orchestral parts as a response to the bare bones. Each instrument part must have a melodic argument of its own, not just padding."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000001
+    iteration_number: 2
+    title: "Studio experiment brief"
+    prompt_text: "Pick one piece of studio equipment and spend 30 minutes discovering what it does at settings you would normally never use. Document three unexpected textures. Martin's best innovations came from misuse — backward tape, variable speed, room ambience as instrument."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000001
+    iteration_number: 3
+    title: "Mix restraint brief"
+    prompt_text: "Build your mix by removing, not adding. Start with everything present and mute until the track breathes. Martin's mixes work because of space, not because of layering. Aim for a mix where you can hear the room and the silence between notes."
+    target_context: mix_reference
+
+  # ── Phil Spector (PDNA-000002) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000002
+    iteration_number: 1
+    title: "Wall of Sound density session"
+    prompt_text: "Layer three or more instruments playing the same harmonic role simultaneously — multiple pianos, multiple guitars, multiple strings on the same part. Pan them slightly differently. The goal is to make a single chord feel like a physical mass, not a transparent sound."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000002
+    iteration_number: 2
+    title: "Reverb as architecture"
+    prompt_text: "Apply a long room or hall reverb to your full mix bus, then mix into that reverb rather than treating it as an effect. The reverb is the space; your instruments live inside it. Spector recorded in rooms with long natural decay — everything was mixed to be heard inside that space."
+    target_context: mix_reference
+
+  - pdna_id: PDNA-000002
+    iteration_number: 3
+    title: "Artist session: maximize the moment"
+    prompt_text: "Work with the artist to find the single line or moment in the song that carries maximum emotional weight. Then build everything else — arrangement, tempo, dynamics — in service of that one moment landing as hard as possible. Spector's productions are monuments to one climactic point."
+    target_context: artist_session
+
+  # ── Quincy Jones (PDNA-000003) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000003
+    iteration_number: 1
+    title: "Genre fusion session"
+    prompt_text: "Begin a session by choosing two genres that don't obviously belong together. Spend the first hour finding the rhythmic or harmonic element they share — that shared element is your foundation. Jones built off-Broadway, jazz, soul, and funk into cohesive records because he found the structural commonality underneath genre labels."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000003
+    iteration_number: 2
+    title: "Studio ensemble direction"
+    prompt_text: "If working with multiple musicians, give each player one specific direction about feel or intention — not about notes. 'Play like you're nervous,' or 'play like the last note matters more than the first.' Jones directed performances at the emotional and intentional level, not the technical one."
+    target_context: collaboration
+
+  - pdna_id: PDNA-000003
+    iteration_number: 3
+    title: "Mix polish brief"
+    prompt_text: "Your mix should have zero harshness in the 2–6kHz range. Jones productions are defined by warmth and clarity coexisting. Identify every element that creates listener fatigue and either notch it out or replace it with a warmer alternative. Smooth is not the same as dull — the transients can still snap."
+    target_context: mix_reference
+
+  # ── Rick Rubin (PDNA-000004) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000004
+    iteration_number: 1
+    title: "Strip the arrangement session"
+    prompt_text: "Take a track that feels overproduced and remove every element that isn't load-bearing. Rubin's production often starts by taking things away. Keep removing until removing one more element would break the song's identity. That's your minimum viable arrangement — often the best one."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000004
+    iteration_number: 2
+    title: "Artist-serving session setup"
+    prompt_text: "Before the session begins, decide that your job is to help the artist make the record they need to make — not the record you think they should make. Rubin creates space for artists to discover what they actually want. Your primary tool is listening, not suggesting."
+    target_context: artist_session
+
+  - pdna_id: PDNA-000004
+    iteration_number: 3
+    title: "Raw performance mix brief"
+    prompt_text: "Mix with the performance's imperfections preserved. Don't auto-tune, don't quantize, don't smooth out rough edges that are part of the emotional delivery. Rubin-aligned productions trust that authenticity in performance outweighs technical perfection."
+    target_context: mix_reference
+
+  # ── Brian Eno (PDNA-000005) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000005
+    iteration_number: 1
+    title: "Oblique strategy session"
+    prompt_text: "Begin the session by stating one constraint you will not break — a harmonic rule, a textural rule, a structural rule. Then work entirely within that constraint for the full session. Eno's ambient and production work operated under self-imposed systems that generated unexpected results precisely because of their limitation."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000005
+    iteration_number: 2
+    title: "Texture-first sound design"
+    prompt_text: "Build a 60-second soundscape using only non-melodic elements — field recordings, processed noise, drones, room tones. No drums, no identifiable pitched instruments. This is the sonic environment in which your eventual track will live. Design the atmosphere before the music."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000005
+    iteration_number: 3
+    title: "Collaboration without direction"
+    prompt_text: "Set up a session where you and a collaborator record simultaneously without discussing what you're playing. Allow the sounds to react to each other in real time. Play back and select 30 seconds that sounds like it was planned. Eno's collaborations operated on trust in emergent structure."
+    target_context: collaboration
+
+  # ── Dr. Dre (PDNA-000006) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000006
+    iteration_number: 1
+    title: "Low-end architecture session"
+    prompt_text: "Design your track's low end before adding any other element. Sub bass, kick, and bass sample or instrument must coexist without masking. Use a spectrum analyzer to verify separation. Dre's mixes are built from the bottom up — the low end is the foundation, not an afterthought."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000006
+    iteration_number: 2
+    title: "Sample interpolation brief"
+    prompt_text: "Choose a reference track from a different genre. Re-record its most distinctive melodic or harmonic element using live instruments or synthesis — no direct sample. Transform the source material until it sounds like yours. This is interpolation as creative process, not just legal strategy."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000006
+    iteration_number: 3
+    title: "Mix clarity standard"
+    prompt_text: "Play your mix on the worst speaker system you have access to. Every element that can no longer be heard distinctly needs attention. Dre's productions translate because they were built on massive studio systems but verified on smaller ones. Clarity at low volume is the test."
+    target_context: mix_reference
+
+  # ── J Dilla (PDNA-000013) ───────────────────────────────────────────────────
+  - pdna_id: PDNA-000013
+    iteration_number: 1
+    title: "MPC timing session"
+    prompt_text: "Load 4–6 sample chops from a single soul or jazz record. Program a 2-bar drum pattern where every element is placed ±20ms from the grid by hand. No quantize. Loop for 4 minutes without arrangement. The goal is a locked, swinging groove that feels alive, not corrected."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000013
+    iteration_number: 2
+    title: "Mix reference brief"
+    prompt_text: "Sub bass sits below the sample, not competing with it. Stereo image is narrow — mono bass, near-mono drums. The sample loop is the widest element. No high-shelf air boost. Reference Donuts: dense, warm, mid-forward, with punch coming from transient shaping not compression ratio."
+    target_context: mix_reference
+
+  - pdna_id: PDNA-000013
+    iteration_number: 3
+    title: "Artist direction: space and patience"
+    prompt_text: "Tell the artist to leave space after every phrase. Dilla-influenced productions breathe — vocals and instruments enter late, leave early, and allow the loop to be heard as a world, not just accompaniment. Resist the urge to fill every bar."
+    target_context: artist_session
+
+  # ── Timbaland (PDNA-000007) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000007
+    iteration_number: 1
+    title: "Rhythm complexity session"
+    prompt_text: "Build a drum pattern that implies at least two different feels simultaneously — 4/4 on one level and a contrasting subdivision (triplet, 6/8, or 3+3+2) implied by another layer. Timbaland's signature is rhythmic complexity that sounds effortless because the underlying parts are clear individually."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000007
+    iteration_number: 2
+    title: "Eastern and world percussion integration"
+    prompt_text: "Incorporate a non-Western rhythmic element — tabla, taiko, oud, balafon — as a structural drum layer, not a texture. It should carry rhythmic weight equal to the kick or snare. Map it to a MIDI controller and program it into the pattern the same way you would any drum element."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000007
+    iteration_number: 3
+    title: "Vocal production brief"
+    prompt_text: "Treat the artist's voice as a rhythmic instrument before a melodic one. Build the vocal arrangement with the rhythm pattern in mind — where does the delivery land relative to the grid? Timbaland productions have vocalists who are rhythmically precise; coach that precision in session."
+    target_context: artist_session
+
+  # ── Pharrell Williams (PDNA-000008) ─────────────────────────────────────────
+  - pdna_id: PDNA-000008
+    iteration_number: 1
+    title: "Joy as production parameter"
+    prompt_text: "Before starting the session, ask: what is the single emotional state this track should make the listener feel? Then make every production decision in service of that state. Pharrell's productions don't have confused emotional registers — every element serves the emotional argument."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000008
+    iteration_number: 2
+    title: "Minimal melodic synth design"
+    prompt_text: "Design a synth patch that sounds playful but not cartoonish. Use a medium attack, slight pitch drift, and a cutoff that opens slightly over the note's sustain. Pharrell's keyboard sounds are simple in construction but have character — character comes from movement, not complexity."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000008
+    iteration_number: 3
+    title: "Happy mix brief"
+    prompt_text: "Boost the mid-high frequencies (1–4kHz) very slightly to add presence and forward energy. Keep the low end tight and punchy, not booming. Pharrell's mixes are bright without being harsh, warm without being muddy. The mix should make you want to move before you consciously process what you're hearing."
+    target_context: mix_reference
+
+  # ── Kanye West (PDNA-000009) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000009
+    iteration_number: 1
+    title: "Soul chop architecture"
+    prompt_text: "Find a vocal sample from a 1960s–70s soul record. Chop it into individual syllables. Rearrange those syllables into a new melodic phrase that the original performer never sang. Build a track where this rearranged phrase is the central melodic element — no other melodic layer needed."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000009
+    iteration_number: 2
+    title: "Conceptual A&R session"
+    prompt_text: "Map the emotional arc of the album you're working on before producing a single track. What does it feel like at the beginning? Where does it break? How does it resolve? Kanye's albums are designed as emotional journeys — individual tracks serve the arc, not just themselves."
+    target_context: collaboration
+
+  - pdna_id: PDNA-000009
+    iteration_number: 3
+    title: "808 bass design brief"
+    prompt_text: "Tune your 808 kick to the key of the track. Pitch-bend the tail to give it harmonic movement. The 808 in Kanye's productions (especially post-808s) is a bass instrument that also carries rhythmic weight — it must work on both dimensions simultaneously."
+    target_context: sound_design
+
+  # ── RZA (PDNA-000010) ────────────────────────────────────────────────────────
+  - pdna_id: PDNA-000010
+    iteration_number: 1
+    title: "Dusty sample excavation"
+    prompt_text: "Sample only from vinyl with audible surface noise. Do not clean the sample. The crackle is a production element — it places the listener in a specific physical and temporal space. RZA's sample aesthetic is inseparable from the medium's deterioration."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000010
+    iteration_number: 2
+    title: "Sparse arrangement brief"
+    prompt_text: "Build a track with fewer than 4 simultaneous elements at any point. Kick, sample loop, bass (optional), and one textural or melodic element maximum. RZA's early Wu productions work because of space and restraint — density is the enemy of impact."
+    target_context: mix_reference
+
+  - pdna_id: PDNA-000010
+    iteration_number: 3
+    title: "Cinematic scene design"
+    prompt_text: "Before programming the beat, describe the scene your track should score. Time of day, location, weather, emotional state of the protagonist. RZA's beats are cinematic — they score specific emotional situations. Let that scene guide every sound choice."
+    target_context: sound_design
+
+  # ── Madlib (PDNA-000011) ─────────────────────────────────────────────────────
+  - pdna_id: PDNA-000011
+    iteration_number: 1
+    title: "Crate dig and chop session"
+    prompt_text: "Source material only from recordings made before 1980. No contemporary samples. Chop the samples into segments no longer than 2 seconds each. Combine segments from at least 3 different source recordings into a single loop. The goal is a loop that sounds coherent but has no single obvious source."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000011
+    iteration_number: 2
+    title: "Genre archaeology brief"
+    prompt_text: "Research one musical tradition you know nothing about. Source 5 recordings. Build one beat using only material from that tradition. Your job is to translate the energy of an unfamiliar genre into hip-hop production logic. This is Madlib's method for generating new sounds."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000011
+    iteration_number: 3
+    title: "Volume and texture mix"
+    prompt_text: "Mix at lower volume than usual. Madlib's mixes have a lo-fi warmth that comes partly from not over-driving the signal chain. Target a mix that feels intimate and slightly distant — as if heard through a wall or from another room. Clarity is not the goal; character is."
+    target_context: mix_reference
+
+  # ── Flying Lotus (PDNA-000012) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000012
+    iteration_number: 1
+    title: "Polyrhythmic foundation session"
+    prompt_text: "Layer two drum patterns in different subdivisions — one in 4/4 and one in 3/4 or 7/8 — and find the point where they align. That alignment point is your structural anchor. Flying Lotus beats feel like they're about to fall apart but don't — the internal math is sound."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000012
+    iteration_number: 2
+    title: "Cosmic texture design"
+    prompt_text: "Synthesize a texture using only sine waves and white noise run through a reverb with a 10+ second tail. The goal is a sound that feels like space — vast, still, with occasional movement. Use this as a continuous layer underneath every other element in the track."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000012
+    iteration_number: 3
+    title: "Avant collaboration brief"
+    prompt_text: "Bring a jazz musician into your electronic production session. Give them no sheet music and no click track. Record 20 minutes of improvisation. Choose 2-bar segments to use as samples in your production. The improvisation becomes source material, not the final performance."
+    target_context: collaboration
+
+  # ── Kraftwerk (PDNA-000033) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000033
+    iteration_number: 1
+    title: "Machine sequence precision session"
+    prompt_text: "Build a 4-bar pattern using only synthesizer sequences — no improvisation, no deviation from the programmed pattern. Every element should loop identically on each repetition. The discipline is in the programming: make every note in the sequence purposeful before you start the loop."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000033
+    iteration_number: 2
+    title: "Minimalist sound design"
+    prompt_text: "Design 8 sounds using only subtractive synthesis — oscillator, filter, envelope, done. No effects except a single clean reverb or delay. Each sound should be immediately identifiable by its timbre alone. Kraftwerk's sonic palette is identifiable because each element is tonally distinctive and pure."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000033
+    iteration_number: 3
+    title: "Robotic vocal processing brief"
+    prompt_text: "Process a vocal through vocoder or talk box so it sits between speech and instrument. The vocal should feel mechanical but not inhuman — it should have emotional content that the mechanical processing restrains rather than removes. Mix it level with the lead synthesizer, not above it."
+    target_context: mix_reference
+
+  # ── Giorgio Moroder (PDNA-000014) ───────────────────────────────────────────
+  - pdna_id: PDNA-000014
+    iteration_number: 1
+    title: "Four-on-the-floor architecture"
+    prompt_text: "Build your track from the kick drum outward. Every other element — bass, synth, hi-hat, melody — should be timed relative to the four-on-the-floor pulse. Moroder's productions feel inevitable because the pulse is the foundation everything else locks to."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000014
+    iteration_number: 2
+    title: "Sequenced bass design"
+    prompt_text: "Program a 16th-note sequenced bass line in a minor key with a one-octave range. Vary only the velocity of individual notes to create dynamics — keep the pitch sequence constant. This is the Moroder bass model: the movement comes from velocity and timing, not harmonic variation."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000014
+    iteration_number: 3
+    title: "Dance floor mix standard"
+    prompt_text: "Mix for the dance floor by prioritizing kick-to-bass clarity above all else. The kick and bass should never compete in the same frequency range. Sidechain the bass lightly to the kick for pulse clarity. The rest of the mix sits above this foundation — bright, wide, clear."
+    target_context: mix_reference
+
+  # ── Aphex Twin (PDNA-000015) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000015
+    iteration_number: 1
+    title: "Broken beat design session"
+    prompt_text: "Program a drum pattern in which no consecutive beat aligns with the grid. Every hit should land between the 16th-note positions. The pattern should still function as rhythm — the listener should feel a pulse even though nothing aligns with where the pulse 'should' be."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000015
+    iteration_number: 2
+    title: "Synthesis extremes brief"
+    prompt_text: "Design a sound using FM synthesis pushed to an extreme — high modulator ratios, feedback, distortion in the algorithm itself. The goal is a sound that couldn't be made any other way and doesn't resemble any recognizable instrument. Aphex Twin's palette is built from the outer limits of synthesis parameters."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000015
+    iteration_number: 3
+    title: "Ambient counterpart session"
+    prompt_text: "For every aggressive track you make, create a companion ambient piece using similar source material processed beyond recognition. Aphex Twin's career has parallel tracks — the violent and the peaceful coexist as expressions of the same aesthetic sensibility."
+    target_context: collaboration
+
+  # ── Four Tet (PDNA-000016) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000016
+    iteration_number: 1
+    title: "Found sound integration session"
+    prompt_text: "Record 10 minutes of sound in an environment outside a studio — street, kitchen, park. Choose 3 clips and pitch-shift them into a common key. Use these as melodic or harmonic elements in the track alongside your instruments. The goal is to make the found sound feel composed, not found."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000016
+    iteration_number: 2
+    title: "Organic texture design"
+    prompt_text: "Process an acoustic instrument — guitar, piano, voice — through granular synthesis until it no longer sounds like the source instrument. Keep one quality that is audibly connected to the original (the decay, the breath, the resonance). This bridge between acoustic and synthetic is Four Tet's textural signature."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000016
+    iteration_number: 3
+    title: "Intimate mix brief"
+    prompt_text: "Mix for headphones first. The mix should feel like it's happening inside your skull — close, warm, slightly asymmetric in the stereo field. Four Tet mixes have a personal quality; they feel like they were made for one person to hear. Translate that to speakers by keeping the center image clean and the sides detailed."
+    target_context: mix_reference
+
+  # ── Boards of Canada (PDNA-000017) ──────────────────────────────────────────
+  - pdna_id: PDNA-000017
+    iteration_number: 1
+    title: "Degraded nostalgia session"
+    prompt_text: "Record your sequence and then run it through tape saturation, slight wow and flutter, and a gentle low-pass filter. Pull the high frequencies down so the track sounds like it's been stored in a warm room for 20 years. This is Boards of Canada's aesthetic: memory distorted by time."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000017
+    iteration_number: 2
+    title: "Sub-frequency harmony brief"
+    prompt_text: "Tune every bass and low-mid element to the same fundamental. Boards of Canada tracks have an uncanny harmonic coherence in the low end — everything resonates together as a single mass. Verify with a spectrum analyzer: the sub frequencies should reinforce, not fight each other."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000017
+    iteration_number: 3
+    title: "Childhood memory mix"
+    prompt_text: "Play your mix to someone who has no context for your genre. Ask them how it makes them feel emotionally and what images it creates. If the response isn't specific and a little uncomfortable in a nostalgic way, the mix isn't finished. Boards of Canada is designed to provoke a specific emotional memory."
+    target_context: mix_reference
+
+  # ── Daft Punk (PDNA-000018) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000018
+    iteration_number: 1
+    title: "Sample loop architecture"
+    prompt_text: "Choose a 2–4 bar funk or disco loop. Chop, pitch-shift, and re-sequence it until it sounds like a new composition rather than a sample. Add a drum machine pattern tuned to the sample's key. This is the Discovery-era method: the original loop is the foundation but the construction is entirely new."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000018
+    iteration_number: 2
+    title: "Vocoder and harmonizer brief"
+    prompt_text: "Apply a vocoder to a vocal performance so it sounds mechanical but retains the emotional content of the delivery. The carrier should be a rich synth chord, not a single tone. The result should feel robotic and human simultaneously. Reference Harder Better Faster Stronger: the voice is the message, the machine is the medium."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000018
+    iteration_number: 3
+    title: "Club mix standard"
+    prompt_text: "Your mix must hit hard on a large system but remain clear on home speakers. Verify at both levels before calling it done. The kick should be felt at 60Hz and heard at 120Hz simultaneously. The bass should support without obscuring. Daft Punk mixes are engineered for the dance floor — test them there."
+    target_context: mix_reference
+
+  # ── Burial (PDNA-000019) ────────────────────────────────────────────────────
+  - pdna_id: PDNA-000019
+    iteration_number: 1
+    title: "Ghost percussion session"
+    prompt_text: "Build a drum pattern using only ghost notes and off-beats — no downbeats, no obvious grid anchors. The percussion should feel implied rather than stated. Burial's beats create momentum through what's absent as much as what's present. Add one low sub hit every 2–4 bars as the only grounding element."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000019
+    iteration_number: 2
+    title: "Vinyl and rain texture design"
+    prompt_text: "Layer vinyl crackle, rain or ambient environmental sound, and a deep sub rumble. Process the vinyl crackle with a long reverb so it feels like it's coming from a space, not a speaker. This is the Burial atmosphere: urban, wet, nocturnal. Use this bed under any track for immediate tonal authenticity."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000019
+    iteration_number: 3
+    title: "Pitched vocal ghost brief"
+    prompt_text: "Time-stretch a vocal sample until it no longer retains the original timing but keeps the pitch content. Pitch-shift fragments of it to sit in the key. Let the vocal feel like a memory of singing rather than singing itself. Burial's vocal approach: the voice is haunted, not present."
+    target_context: artist_session
+
+  # ── Skrillex (PDNA-000020) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000020
+    iteration_number: 1
+    title: "Drop architecture session"
+    prompt_text: "Design the drop before anything else. The drop is the track's reason for existing — every other element is in service of making that drop land as hard as possible. Build the build-up only after you know exactly what you're building toward. The anticipation is only as good as what it anticipates."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000020
+    iteration_number: 2
+    title: "Wobble bass design"
+    prompt_text: "Automate a filter's cutoff frequency at a subdivision rate (1/4, 1/8, or 1/16 note) over a detuned saw oscillator. The wobble rate is the rhythm within the bass sound. Layer two instances with slightly different cutoff automation timing to create a more complex internal movement."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000020
+    iteration_number: 3
+    title: "Loudness war survivor mix"
+    prompt_text: "Limit aggressively but check for distortion artifacts at every stage. Skrillex mixes are loud by design — the loudness is part of the energy. But the loudness must be clean: check LUFS, check true peak, and verify that the compression isn't turning transients into smears. Punch, not squash."
+    target_context: mix_reference
+
+  # ── Diplo (PDNA-000021) ─────────────────────────────────────────────────────
+  - pdna_id: PDNA-000021
+    iteration_number: 1
+    title: "Global rhythm fusion session"
+    prompt_text: "Sample or program a rhythmic element from a non-Western tradition — baile funk, dancehall, cumbia, afrobeats. Map it to a trap or house drum grid, but let the original subdivision live inside the new framework. Diplo's production creates a rhythmic tension between global source material and Western club formats."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000021
+    iteration_number: 2
+    title: "Party-ready collaboration brief"
+    prompt_text: "Bring a vocalist or rapper from a different cultural background than the production's source material. Let the collision be the point. The creative friction between the vocal tradition and the beat tradition is what makes the record interesting — don't try to smooth the collision out."
+    target_context: collaboration
+
+  - pdna_id: PDNA-000021
+    iteration_number: 3
+    title: "Festival mix brief"
+    prompt_text: "Mix for a large outdoor sound system. Sub frequencies must be felt at distance. The midrange must cut through bass rumble. Keep the mix bright — outdoor environments rob high-frequency energy. Reference your mix outdoors before finalizing. Diplo's mixes are designed for the festival main stage."
+    target_context: mix_reference
+
+  # ── Calvin Harris (PDNA-000022) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000022
+    iteration_number: 1
+    title: "Radio-ready construction session"
+    prompt_text: "Build a track where every section has a clear function: intro (8 bars), verse (16), pre-chorus (8), chorus (16), bridge (8), outro (8). Every element serves the vocal hook. Harris's production is architecturally precise — structure is a feature, not a constraint."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000022
+    iteration_number: 2
+    title: "Artist hook session"
+    prompt_text: "Write the hook before producing the track. The hook should work acapella — if it doesn't, the production can't save it. Calvin Harris's most successful collaborations start from a great vocal hook that he then builds a track around, not the other way."
+    target_context: artist_session
+
+  - pdna_id: PDNA-000022
+    iteration_number: 3
+    title: "Commercial mix standard"
+    prompt_text: "Compare your mix to 5 current commercial dance releases at matching loudness levels. Identify one element in each reference that yours lacks and address it. Harris mixes are competitive with current commercial production — they aspire to the loudest, clearest, most impactful mix in the genre at the time of release."
+    target_context: mix_reference
+
+  # ── Max Martin (PDNA-000023) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000023
+    iteration_number: 1
+    title: "Melodic hook architecture"
+    prompt_text: "Write a hook where the title of the song appears in the first 8 notes. The lyric must be singable by a 12-year-old on first hearing. The melody must resolve emotionally on the word that carries the song's concept. This is Max Martin's hook formula — it's a formula because it works."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000023
+    iteration_number: 2
+    title: "Topline collaboration brief"
+    prompt_text: "Produce the track to the point of 60% completion before bringing in the topline writer. Leave space in the arrangement where the vocal should be — don't produce vocals in your head while tracking. The vocal writer needs room to find what the track actually wants, not what you imagined."
+    target_context: collaboration
+
+  - pdna_id: PDNA-000023
+    iteration_number: 3
+    title: "Radio pop mix standard"
+    prompt_text: "The vocal must sit 3dB above every other element in the mix and still feel natural. It should never be perceived as too loud even though it's dominant. This requires precise compression on the vocal, precise sidechain ducking of competing midrange elements, and careful high-frequency enhancement. Martin mixes are vocal mixes."
+    target_context: mix_reference
+
+  # ── David Bowie/Tony Visconti (PDNA-000024) ──────────────────────────────────
+  - pdna_id: PDNA-000024
+    iteration_number: 1
+    title: "Reinvention session"
+    prompt_text: "Begin by deciding that everything you've made before this session is irrelevant to what you're making now. The only constraint is forward movement. Visconti's work with Bowie was always defined by deliberate departure from what came before — not incremental evolution but category change."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000024
+    iteration_number: 2
+    title: "Orchestral and electronic integration"
+    prompt_text: "Layer a live string or brass section with synthesizers in the same frequency range. The goal is not to separate them but to merge them until the listener can't identify where the acoustic elements end and the electronic ones begin. This is the Berlin Trilogy aesthetic: the hybrid is the identity."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000024
+    iteration_number: 3
+    title: "Room capture mix brief"
+    prompt_text: "Record a live performance in a real room and use the room's natural reverb rather than a plugin reverb as your primary spatial element. The room sound should be visible in the mix — audible as a space, not as an effect. Visconti pioneered this approach with real-room ambience as a production feature."
+    target_context: mix_reference
+
+  # ── Mutt Lange (PDNA-000025) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000025
+    iteration_number: 1
+    title: "Guitar texture layering session"
+    prompt_text: "Record 6 guitar tracks for the same rhythm part: each slightly different in EQ, tuning, or performance intensity. Blend them so no single guitar is audible but the combined sound is massive. Lange's wall-of-guitars technique creates depth through accumulation — each track adds texture, not presence."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000025
+    iteration_number: 2
+    title: "Vocal harmony stack brief"
+    prompt_text: "Stack a lead vocal with harmonies at thirds, fifths, and octave. Each harmony should be performed separately, not pitch-shifted. Blend the harmonies 6–10dB below the lead. The lead should sound bigger but not obviously harmonized. Lange's vocal production makes singles sound like 20 people."
+    target_context: artist_session
+
+  - pdna_id: PDNA-000025
+    iteration_number: 3
+    title: "Rock production mix"
+    prompt_text: "The guitar amp sound should fill the center channel wall-to-wall. Bass and kick should coexist in the low end without stepping on each other — gate the kick tightly and leave the bass notes full. Lange mixes are enormously powerful in the midrange where the guitars live."
+    target_context: mix_reference
+
+  # ── Steve Albini (PDNA-000026) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000026
+    iteration_number: 1
+    title: "Live room performance session"
+    prompt_text: "Record the band live in the same room simultaneously with minimal isolation. The bleed between microphones is a feature, not a problem. Albini's recording philosophy: capture what the band sounds like playing together, not what each instrument sounds like in isolation. The interaction is the performance."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000026
+    iteration_number: 2
+    title: "Signal chain minimalism brief"
+    prompt_text: "Use the minimum signal processing necessary to get sound from instrument to recording. No unnecessary EQ, no compression on instruments that don't need it, no reverb unless the room provides it. Every piece of gear in the chain adds noise and colors the sound — justify each addition."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000026
+    iteration_number: 3
+    title: "Documentation mix standard"
+    prompt_text: "Mix for accuracy: your job is to document what happened in the room, not to make it sound better than it was. Any mix decision that makes something sound different from the source performance is a choice you need to justify. Albini's mixes are honest first and flattering second — or not flattering at all."
+    target_context: mix_reference
+
+  # ── Joe Meek (PDNA-000027) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000027
+    iteration_number: 1
+    title: "Primitive electronics session"
+    prompt_text: "Build a track using only equipment you've built or modified yourself, or equipment that was designed for a purpose other than music production. Meek's innovations came from using non-studio tools in studio contexts. The constraint of using the wrong tool often generates the right sound."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000027
+    iteration_number: 2
+    title: "Spring reverb texture design"
+    prompt_text: "Use a spring reverb unit (hardware or authentic emulation) as your primary spatial tool. Drive it harder than its designed operating level to get harmonic distortion in the reverb tail. This is Meek's signature: reverb that sounds like a physical space because the spring is a physical object being overdriven."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000027
+    iteration_number: 3
+    title: "Primitive psychedelic mix"
+    prompt_text: "Run your full mix through a single piece of analog gear that introduces harmonic color — a tape machine, a transformer, a tube preamp. The coloration should be audible. Meek mixes sound like they came through equipment, not through software. The machine's character is part of the record."
+    target_context: mix_reference
+
+  # ── Nile Rodgers (PDNA-000028) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000028
+    iteration_number: 1
+    title: "Rhythm guitar as percussion session"
+    prompt_text: "Record a rhythm guitar part treating the instrument as a percussion element — focused entirely on rhythmic precision and attack. The chord voicings should be clean and unambiguous, the muting between chords complete, the timing perfect. Rodgers's guitar parts are rhythm section, not accompaniment."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000028
+    iteration_number: 2
+    title: "Funk ensemble collaboration"
+    prompt_text: "Rehearse the instrumental track until every player knows every other player's part. The ensemble interaction should be so tight that any player could drop out and the groove would still hold. This is the CHIC model: the band is the production, and the production is the band's communication."
+    target_context: collaboration
+
+  - pdna_id: PDNA-000028
+    iteration_number: 3
+    title: "Dance floor funk mix"
+    prompt_text: "The groove must come from the low midrange — the bass and rhythm guitar interaction in the 200–500Hz range. EQ the kick and bass so they sit slightly back of the rhythm guitar to create space. The Nile Rodgers mix feel comes from this relationship: the rhythm guitar pushes, everything else settles underneath."
+    target_context: mix_reference
+
+  # ── Teddy Riley (PDNA-000029) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000029
+    iteration_number: 1
+    title: "New jack swing rhythm session"
+    prompt_text: "Layer a tight hip-hop drum machine pattern with R&B chord voicings and a bass line that follows the kick rhythm rather than the chord changes. The rhythm guitar or keyboard stab should hit on the off-beats. This is the new jack swing template — the rhythm is the hybrid, everything else is groove."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000029
+    iteration_number: 2
+    title: "Vocal group layering brief"
+    prompt_text: "Record lead, harmony, and background vocal parts separately. Layer the backgrounds 3–4 voices deep. The vocal stack should create a wall of sound that still has clarity on the lead. Riley productions have an opulent vocal sound — the R&B richness comes from stacking and blending, not from single takes."
+    target_context: artist_session
+
+  - pdna_id: PDNA-000029
+    iteration_number: 3
+    title: "R&B swing mix standard"
+    prompt_text: "The snare and clap should hit simultaneously but with the clap slightly louder than the snare to give it a bright pop. Tune the kick sub to the key of the track. The bass should groove with the drums, not against them — same rhythm, different pitch. Teddy Riley mixes are rhythmically specific at every frequency."
+    target_context: mix_reference
+
+  # ── Prince (PDNA-000030) ────────────────────────────────────────────────────
+  - pdna_id: PDNA-000030
+    iteration_number: 1
+    title: "One-person band session"
+    prompt_text: "Record every instrument in a single session by yourself. No overdubs from other players. The constraint forces you to make every part serve the song rather than each other — you can't rely on ensemble chemistry that isn't there. Prince's recordings are coherent because a single intelligence made every decision."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000030
+    iteration_number: 2
+    title: "Genre hybrid design"
+    prompt_text: "Begin with a funk groove. Add a rock guitar riff. Then add a synth pad from electronic music. Then write an R&B vocal hook over all three. Each addition should feel natural, not like fusion for its own sake. Prince's genre hybrids work because each element serves the song's emotional core, not the genre it came from."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000030
+    iteration_number: 3
+    title: "Sensuality mix brief"
+    prompt_text: "Mix for intimacy: every element should feel close and physical. The vocals should feel like they're in the same room as the listener, not projected at them. Warmth in the 200–400Hz range, air on the top end but not brightness. Prince mixes feel personal and direct — they don't broadcast, they communicate."
+    target_context: mix_reference
+
+  # ── Butch Vig (PDNA-000031) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000031
+    iteration_number: 1
+    title: "Alt-rock energy session"
+    prompt_text: "Record the drums as loud and dynamically as possible without triggering distortion. Let the drummer play through the entire track twice without stopping — the takes that weren't perfect are often more emotionally compelling than the corrected ones. Butch Vig productions have energy that comes from performance, not from editing."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000031
+    iteration_number: 2
+    title: "Sludge guitar brief"
+    prompt_text: "Stack two guitar tracks playing the same part: one tuned down a half-step, one at standard tuning. Blend them equally. The slight pitch tension creates a denser, more complex guitar sound without obvious detuning artifacts. This layering technique is part of what made Nevermind's guitar sound so large."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000031
+    iteration_number: 3
+    title: "Alternative rock mix standard"
+    prompt_text: "The mix should sound powerful at low volume. If you have to turn it up to make it feel good, the mix isn't working — the energy needs to be in the recording and the arrangement, not in the playback volume. Butch Vig mixes are energetic at any level because the performances carry the power."
+    target_context: mix_reference
+
+  # ── Trent Reznor (PDNA-000032) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000032
+    iteration_number: 1
+    title: "Industrial deconstruction session"
+    prompt_text: "Take a clean, pleasant sound — a piano chord, a major-key melody — and process it through distortion, bitcrushing, and ring modulation until it sounds threatening. The contrast between source and result is the creative content. Reznor's productions create meaning through the violence done to pleasant sounds."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000032
+    iteration_number: 2
+    title: "Noise as texture design"
+    prompt_text: "Record 20 seconds of industrial noise: machinery, metal scraping, construction sounds. Pitch-shift and layer three versions of this recording in different registers. Use this as a continuous textural bed. The noise should feel structural, not incidental — it should carry harmonic content through its spectral character."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000032
+    iteration_number: 3
+    title: "Catharsis mix brief"
+    prompt_text: "Mix for maximum dynamic contrast: the quietest moments should be near-silent, the loudest should be aggressive. The dynamic range itself carries emotional meaning — the quiet is resignation, the loud is rage. Reznor mixes are emotional journeys as much as recordings. Design the arc, then mix to serve it."
+    target_context: mix_reference
+
+  # ── Hank Shocklee / Public Enemy (PDNA-000034) ───────────────────────────────
+  - pdna_id: PDNA-000034
+    iteration_number: 1
+    title: "Sample collage session"
+    prompt_text: "Layer 10 or more samples simultaneously: drums from one source, horns from another, bass from a third, noise from a fourth. No single sample should dominate — the wall of sound is the point. The Bomb Squad aesthetic: density is the message, and the message is inescapable."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000034
+    iteration_number: 2
+    title: "Political sound design"
+    prompt_text: "Before designing sounds for a track, identify the political or emotional argument the track makes. Then choose sounds that serve that argument — sirens if the track is about police, horns if it's about triumph, noise if it's about chaos. Sound design can be rhetorical. Make it argue for something."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000034
+    iteration_number: 3
+    title: "Chaos mix brief"
+    prompt_text: "Your mix should sound like it's almost out of control but is precisely not. Every element competing, but none winning. The listener should feel surrounded and slightly overwhelmed without losing the central rhythmic thread. This is the Bomb Squad mix: confrontational density, structural precision underneath."
+    target_context: mix_reference
+
+  # ── Pete Rock (PDNA-000035) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000035
+    iteration_number: 1
+    title: "Jazz sample integration session"
+    prompt_text: "Sample from a jazz record specifically from the transition between two sections — the four bars where the band is setting up the next phrase. These transitional moments contain melodic and harmonic information that doesn't resolve, which gives your loop an internal movement. Pete Rock finds energy in jazz's structural joints."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000035
+    iteration_number: 2
+    title: "Horn arrangement brief"
+    prompt_text: "Write or sample a 2-bar horn figure that serves as a call-and-response to the MC's lyric. The horn should answer the question the lyric asks, or echo the lyric's emotional state. Pete Rock productions use horns rhetorically — they're not decoration, they're commentary."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000035
+    iteration_number: 3
+    title: "Classic boom-bap mix"
+    prompt_text: "The kick should be felt below 80Hz and heard above it simultaneously. The snare should crack at 200Hz and snap at 4kHz. The sample loop sits in the mid-upper frequency band. Mix the individual elements so they each have a distinct frequency home — overlap creates mud, separation creates punch."
+    target_context: mix_reference
+
+  # ── DJ Premier (PDNA-000036) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000036
+    iteration_number: 1
+    title: "Two-bar loop architecture"
+    prompt_text: "Build an entire track from a 2-bar sample loop and a drum pattern. No additional melodic or harmonic elements. The complexity must come from the DJ Premier technique: the loop provides the harmonic and melodic content, the drums provide the rhythmic architecture, and the MC provides everything else."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000036
+    iteration_number: 2
+    title: "Scratch integration brief"
+    prompt_text: "Program a scratch or turntable element as a melodic or rhythmic hook in the arrangement. It should appear at a specific moment — the verse break, the pre-hook, or as a recurring motif. DJ Premier treats the scratch as an instrument with a compositional role, not a performance flourish."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000036
+    iteration_number: 3
+    title: "Hard NYC mix"
+    prompt_text: "The snare should hurt. High-pass the kick tight so the snare crack dominates the mid-upper range. The sample loop should sit back slightly in the mix — the drums are in front, the sample is behind. DJ Premier mixes have a physical impact in the midrange that's different from low-end pressure: they punch."
+    target_context: mix_reference
+
+  # ── Large Professor (PDNA-000037) ───────────────────────────────────────────
+  - pdna_id: PDNA-000037
+    iteration_number: 1
+    title: "Soulful boom-bap session"
+    prompt_text: "Find a sample with genuine emotional warmth — strings, vocals, a piano passage with natural decay. Build around that warmth rather than contrasting with it. Large Professor's production philosophy: the beat should feel as good as the sample, not harder than it."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000037
+    iteration_number: 2
+    title: "Emotional authenticity brief"
+    prompt_text: "Make a production decision based entirely on emotional response, not technical correctness. If a slightly off-tempo loop feels better than a corrected one, use the uncorrected version. Large Professor's work trusts feeling over perfection — the listener responds to authenticity, not accuracy."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000037
+    iteration_number: 3
+    title: "Warm sample-based mix"
+    prompt_text: "Do not over-brighten the sample. Let the source material's natural warmth define the mix's character. If the sample sounds warm and low-mid-heavy, mix the drums to complement that frequency profile rather than fighting it with a bright, snappy drum sound. The sample leads; the drums support."
+    target_context: mix_reference
+
+  # ── Erick Sermon / EPMD (PDNA-000038) ─────────────────────────────────────
+  - pdna_id: PDNA-000038
+    iteration_number: 1
+    title: "Funk loop excavation session"
+    prompt_text: "Source exclusively from 1970s funk records. Find the moments in the track that aren't the main groove — intros, outros, drum breaks, transition sections. These underused moments have the rarest samples. Erick Sermon's production is built on the parts of funk records that other producers skipped."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000038
+    iteration_number: 2
+    title: "Layered groove design"
+    prompt_text: "Layer two funk samples from different records that share the same tempo. Find the rhythmic common ground — usually the kick and snare relationship — and align them. The two loops should reinforce each other's groove rather than competing. The result is a denser, more complex rhythm bed."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000038
+    iteration_number: 3
+    title: "Slow burn mix brief"
+    prompt_text: "Mix at a tempo 10–15 BPM slower than you'd normally consider. The mix should still feel energetic at that tempo — if it doesn't, the arrangement is doing the work the mix should be doing. EPMD's slow groove is compelling because the production has weight at a low pace."
+    target_context: mix_reference
+
+  # ── Swizz Beatz (PDNA-000039) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000039
+    iteration_number: 1
+    title: "Simple aggressive pattern session"
+    prompt_text: "Design a drum pattern with the minimum number of elements that creates maximum energy. Kick, snare, and one additional percussion element maximum. The pattern should sound huge by the quality of the sounds chosen, not by the complexity of the arrangement. Swizz Beatz: less elements, more impact."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000039
+    iteration_number: 2
+    title: "Aggressive piano hook brief"
+    prompt_text: "Record a piano or keyboard hook with the sustain pedal off, playing staccato notes. Pitch-shift the recording up or down until it sounds threatening rather than musical. Then use this as the lead melodic element. Swizz Beatz keyboard sounds work because they're played with percussion intent."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000039
+    iteration_number: 3
+    title: "Hype mix standard"
+    prompt_text: "The mix should sound confrontational on first listen. Peaks should be allowed to be loud. The transients of drums should not be over-compressed. Swizz Beatz mixes work in the club because they're aggressive at the mix stage — they're designed to demand attention, not to sit comfortably."
+    target_context: mix_reference
+
+  # ── Just Blaze (PDNA-000040) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000040
+    iteration_number: 1
+    title: "Orchestral hip-hop session"
+    prompt_text: "Layer live or sampled orchestral strings over a hard drum pattern. The strings should provide harmonic and emotional content that the drums don't — the strings lift, the drums anchor. Just Blaze's signature: the contrast between orchestral opulence and hip-hop punch creates a specific kind of grandeur."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000040
+    iteration_number: 2
+    title: "Soulful chop construction"
+    prompt_text: "Chop a vocal sample from a gospel or soul record into a melodic phrase that the original performer never sang. Use the vocal chop as the track's melodic lead rather than a background element. Just Blaze frequently centers the sampled vocal, making it the emotional core rather than a texture."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000040
+    iteration_number: 3
+    title: "Big-room rap mix"
+    prompt_text: "Mix for the radio, the car, and the arena simultaneously. The kick should punch in the car. The strings should be audible on earbuds. The vocal should translate over phone speakers. Just Blaze productions had to work everywhere — test yours in all three contexts before calling it done."
+    target_context: mix_reference
+
+  # ── Missy Elliott (PDNA-000041) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000041
+    iteration_number: 1
+    title: "Rhythmic vocal integration session"
+    prompt_text: "Design the drum pattern and vocal rhythm simultaneously. The artist's delivery should be treated as a percussion instrument during the production phase — map the syllable rhythm of the hook against the drum pattern and find the spaces where they interact most interestingly. Missy's productions are rhythmically architected around her delivery."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000041
+    iteration_number: 2
+    title: "Unconventional sound brief"
+    prompt_text: "Find three sounds in your session that you've never used in production before. These could be foley, household objects recorded on your phone, or synthesis presets you've always avoided. Use all three in the track. Missy Elliott's productions contain constantly unexpected sonic choices — the weirdness is intentional."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000041
+    iteration_number: 3
+    title: "Fun mix standard"
+    prompt_text: "Play the mix to someone who doesn't make music and watch their physical reaction. If they don't react physically to the groove or the drop or the hook, the mix isn't working. Missy Elliott productions are designed to produce physical responses — movement, laughter, excitement. If it doesn't move the body, it's not mixed right."
+    target_context: mix_reference
+
+  # ── Linda Perry (PDNA-000042) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000042
+    iteration_number: 1
+    title: "Raw emotion capture session"
+    prompt_text: "Set up the recording environment so the artist is as comfortable as possible, then ask them to sing about something real — not the song's narrative, but a real emotion underneath it. Record that moment. The best version of any song exists in the performance that accesses genuine feeling. Production is in service of that moment."
+    target_context: artist_session
+
+  - pdna_id: PDNA-000042
+    iteration_number: 2
+    title: "Song first, production second"
+    prompt_text: "Write or finalize the song on acoustic guitar or piano before adding any production elements. The song must work stripped bare. Linda Perry's co-writes succeed because the songs work without production — what she adds enhances rather than compensates."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000042
+    iteration_number: 3
+    title: "Artist truth mix brief"
+    prompt_text: "The vocal must be the most important element in the mix by a large margin. Every production decision should be evaluated by whether it helps or hurts the vocal's emotional delivery. Perry's mixes serve the artist's identity — the production is visible but the artist is primary."
+    target_context: mix_reference
+
+  # ── Rick Nowels (PDNA-000043) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000043
+    iteration_number: 1
+    title: "Atmospheric pop session"
+    prompt_text: "Begin with a synth pad that establishes the emotional key before any other element enters. This atmospheric foundation should define the song's emotional register — melancholy, hopeful, searching, at peace. Rick Nowels's productions begin from an emotional atmosphere that the song then inhabits."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000043
+    iteration_number: 2
+    title: "Cinematic production brief"
+    prompt_text: "Think of the song as a film scene. What visual moment does it score? What's happening to the protagonist? Let that scene guide every production decision — the tempo, the density, the emotional arc of the arrangement. Nowels works cinematic ally: production tells a visual story."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000043
+    iteration_number: 3
+    title: "Emotional precision mix"
+    prompt_text: "The mix should produce a single identifiable emotion in the listener. If you can't describe that emotion in one word, the mix has too many competing emotional registers. Nowels co-writes have very specific emotional targets — clarity of feeling comes from discipline in the mix."
+    target_context: mix_reference
+
+  # ── Mark Ronson (PDNA-000044) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000044
+    iteration_number: 1
+    title: "Vintage soul update session"
+    prompt_text: "Record a live horn or string section playing a phrase inspired by a 1960s soul arrangement. Then layer that recording with contemporary digital production — precise drum programming, modern bass synthesis. The collision between the vintage performance and the modern production is the Ronson aesthetic."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000044
+    iteration_number: 2
+    title: "Musician collaboration brief"
+    prompt_text: "Write the horn, string, or keyboard arrangement before the session and distribute parts to players. Then record in a room where everyone can hear each other. The arrangement should be specific enough to guide the performance but loose enough for players to bring their own feel to it."
+    target_context: collaboration
+
+  - pdna_id: PDNA-000044
+    iteration_number: 3
+    title: "Vintage-modern hybrid mix"
+    prompt_text: "The mix should feel warm and analog in the low end but crisp and modern in the high end. Achieve this by saturating the bass and drums through tape emulation while keeping the top-end elements bright and clean. Ronson mixes feel simultaneously nostalgic and current — they're calibrated to honor both."
+    target_context: mix_reference
+
+  # ── Danger Mouse (PDNA-000045) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000045
+    iteration_number: 1
+    title: "Cinematic hip-hop session"
+    prompt_text: "Score a scene rather than make a beat. Imagine the specific scene — location, time, emotional state of the character — and build production that would accompany that scene in a film. Danger Mouse's productions work because they're already imagining a visual context."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000045
+    iteration_number: 2
+    title: "Genre collision brief"
+    prompt_text: "Sample from a source recording that no one would expect in hip-hop or electronic production — Italian film score, British invasion guitar, Soviet folk music. The less obvious the source, the more transformative the use needs to be. Danger Mouse's source selections are intentionally surprising."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000045
+    iteration_number: 3
+    title: "Atmospheric depth mix"
+    prompt_text: "Build your mix with multiple depth planes: elements that feel close, elements that feel mid-distance, elements that feel far away. Use reverb size and pre-delay to create the depth illusion. Danger Mouse mixes feel three-dimensional — the space is a production element, not a side effect of mixing."
+    target_context: mix_reference
+
+  # ── Hudson Mohawke (PDNA-000046) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000046
+    iteration_number: 1
+    title: "Maximum density beat session"
+    prompt_text: "Layer more elements than you think are necessary, then decide which to remove after. Hudson Mohawke's production philosophy runs counter to 'less is more' — he starts with excess and edits toward the right level of density. The richness comes from starting full, not from building up."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000046
+    iteration_number: 2
+    title: "Pitch bend drama brief"
+    prompt_text: "Apply heavy pitch-bend to synth elements at specific moments — drop a bass by a fourth during a breakdown, sweep a lead up an octave at the climax. Pitch movement as drama is Hudson Mohawke's tool: the bend creates anticipation and release in the same gesture."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000046
+    iteration_number: 3
+    title: "Future R&B mix standard"
+    prompt_text: "The mix should feel simultaneously emotional and mechanical. Precise drum programming but warm synth pads. Thick bass but clear vocal. Achieve this balance by dedicating specific frequency ranges to each character: emotional warmth lives below 400Hz and above 8kHz; mechanical precision lives in the 1–4kHz attack range."
+    target_context: mix_reference
+
+  # ── Arca (PDNA-000047) ──────────────────────────────────────────────────────
+  - pdna_id: PDNA-000047
+    iteration_number: 1
+    title: "Deconstruction as composition session"
+    prompt_text: "Begin with a conventional musical phrase — a 4-bar melody, a chord progression. Then progressively deconstruct it: remove notes, add glitches, stretch individual elements, compress others. Document each stage. The final track may use any stage of the deconstruction process, not necessarily the most extreme."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000047
+    iteration_number: 2
+    title: "Body and machine sound design"
+    prompt_text: "Process the human body as a sound source: breath, heartbeat, vocal textures, movement sounds. Run these through extreme pitch shifting, granular processing, and distortion. Arca's sonic aesthetic maps the human body through machines — the result should feel biological and technological simultaneously."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000047
+    iteration_number: 3
+    title: "No-genre mix brief"
+    prompt_text: "Make your mix decisions based solely on how the sound makes you feel, not on what genre reference you're trying to match. Reference no other mixes during this process. Arca's production exists outside genre frameworks — you can only achieve that by ignoring genre mix conventions while you work."
+    target_context: mix_reference
+
+  # ── Actress (PDNA-000048) ───────────────────────────────────────────────────
+  - pdna_id: PDNA-000048
+    iteration_number: 1
+    title: "Abstract electronics session"
+    prompt_text: "Build a 4-minute composition where the structural logic is not rhythm or harmony but density — increasing and decreasing the number of simultaneous elements over time. No consistent tempo, no consistent key, but a clear trajectory from sparse to dense to sparse again. Actress structures time rather than sequences notes."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000048
+    iteration_number: 2
+    title: "Lo-fi maximalism brief"
+    prompt_text: "Run full-resolution audio through a bitcrusher, a low sample rate converter, and a mild tape saturation. Add a subtle vinyl crackle layer. The lo-fi processing should degrade the signal enough to create character without destroying the harmonic and rhythmic content. Actress uses degradation as a tonal tool."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000048
+    iteration_number: 3
+    title: "Alien landscape mix"
+    prompt_text: "Your mix should sound like it was recorded in a space that doesn't exist. Use convolution reverb from unusual impulse responses — parking garages, server rooms, cave systems. The reverb tail should be part of the composition's atmosphere, not an effect added to sounds that would otherwise be dry."
+    target_context: mix_reference
+
+  # ── Jai Paul (PDNA-000049) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000049
+    iteration_number: 1
+    title: "Layered lo-fi pop session"
+    prompt_text: "Record a pop song with clean melodic and harmonic content, then deliberately degrade the recording quality: run stems through cassette, apply noise, drop sample rate on certain elements. The pop structure should be fully audible beneath the lo-fi treatment — the clarity of the song and the chaos of the production are equally present."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000049
+    iteration_number: 2
+    title: "Bedroom studio aesthetic brief"
+    prompt_text: "Deliberately leave some sonic imperfections that indicate the recording was made in a non-studio environment: some room noise, some microphone character, some natural ambience. Jai Paul's recordings feel personal partly because you can hear where they were made. The environment is part of the production."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000049
+    iteration_number: 3
+    title: "Intimate demo mix"
+    prompt_text: "Mix as if the listener is sitting next to you while you play the track. The mix should feel unfinished in a way that invites the listener in — not polished to a commercial standard, but polished enough to be heard clearly. Jai Paul's aesthetic sits between demo and release: the intimacy is intentional."
+    target_context: mix_reference
+
+  # ── Hiatus Kaiyote/Paul Bender (PDNA-000050) ────────────────────────────────
+  - pdna_id: PDNA-000050
+    iteration_number: 1
+    title: "Neo-soul polyrhythm session"
+    prompt_text: "Program a drum pattern that implies a time signature not explicitly stated — a 5/4 pattern that can be heard as 4/4 with emphasis shifts, or a 7/8 pattern that flows without feeling odd. Then add a bass line that implies a third rhythmic reading. Hiatus Kaiyote productions layer rhythmic possibilities on top of each other."
+    target_context: beat_production
+
+  - pdna_id: PDNA-000050
+    iteration_number: 2
+    title: "Microtonal harmony brief"
+    prompt_text: "Detune one or more harmonic elements by 15–20 cents below the 12-tone equal temperament pitch. This microtonal deviation creates a specific emotional quality — not out of tune, but slightly outside the Western harmonic system. Hiatus Kaiyote uses microtonality as emotional color, not as dissonance."
+    target_context: sound_design
+
+  - pdna_id: PDNA-000050
+    iteration_number: 3
+    title: "Ensemble mix standard"
+    prompt_text: "Mix so that every instrument in the ensemble is audible at the same time without any one instrument dominating. The mix should feel like a conversation where every voice is heard. Hiatus Kaiyote mixes give equal weight to bass, drums, guitar, keys, and vocals — it's an ensemble production, not a lead-and-accompaniment model."
+    target_context: collaboration

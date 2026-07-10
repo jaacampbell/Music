@@ -1,0 +1,1023 @@
+directions:
+
+  # ── George Martin (PDNA-000001) ────────────────────────────────────────────
+  - pdna_id: PDNA-000001
+    title: "Arrangement is argument, not decoration"
+    direction_text: "Treat every arrangement element as a second voice in a conversation with the song. Martin's string writing doesn't decorate the melody — it argues with it, completes it, or contradicts it productively. Ask what each part is saying, not just how it sounds."
+    direction_type: conceptual
+    sort_order: 1
+
+  - pdna_id: PDNA-000001
+    title: "Exploit the specific capabilities of the room"
+    direction_text: "Martin's Mellotron experiments, backward tape, and vari-speed recording all came from using the Abbey Road studio's specific tools creatively. Don't simulate tools you don't have — discover what your actual tools do that nothing else can."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000001
+    title: "Restraint at the moment of maximum drama"
+    direction_text: "The most remarkable thing about Martin's most dramatic arrangements is what they withhold. When strings enter, their entrance has been earned by silence. Build toward maximum orchestration, then pull back one degree from what would be overwhelming."
+    direction_type: emotional
+    sort_order: 3
+
+  - pdna_id: PDNA-000001
+    title: "Serve the song's identity, not your expertise"
+    direction_text: "Martin had enough technique to overwhelm any song with orchestral complexity. He consistently chose not to. The standard: every decision should make the listener more focused on the song's emotional core, not more aware of the producer."
+    direction_type: channel
+    sort_order: 4
+
+  # ── Phil Spector (PDNA-000002) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000002
+    title: "Density as emotional argument"
+    direction_text: "Every layer you add should have a structural reason to exist — but when they combine, the effect should feel inevitable. Build density not by stacking but by finding what each layer provides that no other layer provides, then add them all until the room is full."
+    direction_type: conceptual
+    sort_order: 1
+
+  - pdna_id: PDNA-000002
+    title: "Use ensemble imprecision as the sound"
+    direction_text: "Record nothing that could be programmed. The natural variation of 10–15 musicians playing the same part simultaneously creates a beating, living mass that electronic doubling cannot replicate. The imprecision IS the wall — not a problem to fix."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000002
+    title: "Design for physical overwhelm"
+    direction_text: "Spector's productions were designed to be too much — the excess is intentional. Build toward the point where the music is threatening to escape the speakers, then master for that level of compression. The emotional target is awe, not comfort."
+    direction_type: emotional
+    sort_order: 3
+
+  # ── Quincy Jones (PDNA-000003) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000003
+    title: "Pre-production is the production"
+    direction_text: "The session should capture a fully thought-through conception, not discover it in real time. Jones charted every session in advance: part assignments, harmonic substitutions, dynamic shape. The musicians arrived to execute a vision, not participate in finding one."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000003
+    title: "Use jazz harmony in service of pop accessibility"
+    direction_text: "Add chord extensions not to show jazz fluency but to create emotional space. A 9th or suspended 4th makes room for the song's emotion to breathe without the listener needing harmonic sophistication to feel the difference. Let the complexity serve the feeling."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000003
+    title: "Cross-pollinate formal principles across genres"
+    direction_text: "Jones moved between jazz, film, and R&B not as a stylist but as a structuralist — taking formal compositional principles from each context and applying them where unexpected. Identify one principle from outside your genre and apply it seriously to an in-genre project."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Brian Eno (PDNA-000004) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000004
+    title: "Design the process, then follow it"
+    direction_text: "Eno's music doesn't emerge from inspiration — it emerges from rules that surprise even the person who wrote them. Before the session: write 3 constraints. During: follow them even when they produce unexpected results. The unexpected result IS the content."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000004
+    title: "Build for both attending and ignoring"
+    direction_text: "The best ambient music disappears and reappears — interesting to attend to and rewarding to ignore. Build for both states simultaneously: enough foreground detail for active listening, enough background coherence for passive listening. Test the track at low volume while reading."
+    direction_type: conceptual
+    sort_order: 2
+
+  - pdna_id: PDNA-000004
+    title: "Use constraint as a generative tool, not a limitation"
+    direction_text: "Oblique Strategies work because they interrupt compositional habit. Before starting, eliminate one core tool from your session — a specific plug-in, your primary synthesizer, the most-used drum sound. Work around the absence. The absence defines the sound."
+    direction_type: technical
+    sort_order: 3
+
+  - pdna_id: PDNA-000004
+    title: "Target emotional ambiguity"
+    direction_text: "Music that tells you exactly how to feel is less powerful than music that creates a space where you discover how you feel. Build tracks that don't announce their emotional content — leave enough space for the listener's mood to enter and shape the experience."
+    direction_type: emotional
+    sort_order: 4
+
+  # ── Lee "Scratch" Perry (PDNA-000005) ─────────────────────────────────────
+  - pdna_id: PDNA-000005
+    title: "Transform the source beyond recognition"
+    direction_text: "Perry's principle: the source material is raw material, not the content. Run every element through at least one process that changes its identity — echo, reversal, pitch shift, filtering. The finished track should only dimly suggest what you started with."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000005
+    title: "Use the mixing board as a real-time instrument"
+    direction_text: "Perform the mix as a live event. Bring up faders, add echo at unpredicted moments, drop channels completely for 4 bars. Record the desk performance. Each pass is a unique improvised composition. The best improvised mix IS the final mix."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000005
+    title: "Let the spiritual direct the sonic"
+    direction_text: "Perry worked from an internally consistent worldview that gave every sonic decision a metaphysical rationale. Define your own conceptual framework before the session — it doesn't need to be Perry's — then make sonic decisions based on that framework rather than taste alone."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── King Tubby (PDNA-000006) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000006
+    title: "Removal as composition"
+    direction_text: "Build a complete arrangement with every element present. Then begin removing elements: the drop-out IS the composition. What you remove and when you restore it is the creative act. The fully present arrangement is just source material for this editing process."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000006
+    title: "Space between sounds has frequency"
+    direction_text: "Use echo and reverb to fill the space created by removed elements — not to add atmosphere but to maintain frequency content when the element is absent. The echo of the bass fills the bass's frequency range after the bass drops. Silence should have a tonal quality."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000006
+    title: "The mix is the performance"
+    direction_text: "Tubby's dub versions weren't produced — they were performed at the mixing board in real time. Set up your session, record a 5-minute live desk mix with no punch-ins or edits. Perform the version. Then keep the best performance, not the most technically perfect one."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Giorgio Moroder (PDNA-000007) ─────────────────────────────────────────
+  - pdna_id: PDNA-000007
+    title: "Tempo as emotional argument"
+    direction_text: "Moroder's disco groove makes the case that metronomic precision at the right tempo is liberating, not mechanical. Find the exact tempo where your kick drum creates forward momentum rather than marking time. 1-2 BPM makes a difference — test at 125, 126, 127 and feel the shift."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000007
+    title: "Synthesizer as soloist"
+    direction_text: "Moroder's synth leads don't accompany the track — they are the featured instrument with the same status as a guitar solo. Design a synthesizer sound with solo character: portamento, expressive timbre, dynamic attack. Then write a melody that rewards that attention."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000007
+    title: "Future nostalgia: believe your technology is utopian"
+    direction_text: "Moroder's productions sound like the future because he believed they were the future. Use your current tools with genuine enthusiasm for their capabilities, not ironic distance. The moment electronic music became self-aware of its own clichés it lost the utopian charge Moroder had naturally."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Tom Dowd (PDNA-000008) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000008
+    title: "Engineering as musical collaboration"
+    direction_text: "Dowd treated every technical decision as a musical one. Every microphone placement, every EQ choice, every reverb decision was in service of the music's emotional content. Ask: what does this technical choice do to the feeling of the record?"
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000008
+    title: "Capture performance before perfection"
+    direction_text: "Dowd worked in eras where the performance energy was the primary value, with technical imperfection acceptable. Record first, optimize second. A perfect-sounding take with no energy is worse than an energetic take with audible imperfections. Fix the fixable; keep the irreplaceable."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000008
+    title: "Serve the genre's emotional truth"
+    direction_text: "Dowd worked across jazz, R&B, and rock without imposing a signature sound — he found the production philosophy native to each genre and served it. Before working in a new genre, identify its fundamental emotional purpose and orient every decision toward that purpose."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Teo Macero (PDNA-000009) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000009
+    title: "The edit is the composition"
+    direction_text: "Macero's work with Miles Davis established that tape editing can be compositional, not just corrective. Splice freely between sessions, take unexpected transitions, repeat sections for structural reasons. The recorded material is raw clay; the final edit is the sculpture."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000009
+    title: "Impose structure on improvised material"
+    direction_text: "Record long, unstructured improvised sessions. Then approach the recordings as a composer: identify the most interesting moments, determine their relationship, and cut between them to create a structure that improvisation alone couldn't produce."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000009
+    title: "Electronic processing as compositional layer"
+    direction_text: "Apply studio processing not as polish but as compositional material. Echo, reverb, loop repeat — these are additional voices added to the composition after the players leave. The studio's effect chain is an instrument you play after everyone else goes home."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Sylvia Robinson (PDNA-000010) ─────────────────────────────────────────
+  - pdna_id: PDNA-000010
+    title: "Identify what technology enables that wasn't possible before"
+    direction_text: "Robinson used the drum machine and the sampling concept at the moment hip-hop needed a recorded form. Ask: what does your current toolset enable that couldn't exist 10 years ago? Build that thing, not a version of what existed before."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000010
+    title: "Documentary approach to emerging culture"
+    direction_text: "Robinson captured a scene at the moment it was forming itself. Find a culture or community whose sound isn't yet recorded as itself — not through a mainstream filter — and create the record they would make if they had full creative control."
+    direction_type: conceptual
+    sort_order: 2
+
+  - pdna_id: PDNA-000010
+    title: "Repetition as trance induction"
+    direction_text: "The Sugarhill groove works because it repeats beyond the point where habit-based listening would normally require change. Don't cut away from a good groove when your instinct says to. Let it run until the listener enters a different relationship to the sound."
+    direction_type: technical
+    sort_order: 3
+
+  # ── Rick Rubin (PDNA-000011) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000011
+    title: "Remove until removal would break the song"
+    direction_text: "Start with a fully arranged track. Remove elements one by one. Stop when removing the next element would damage the song's core identity. That's your finished arrangement. What's left after systematic reduction is the essential song."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000011
+    title: "The room is part of the instrument"
+    direction_text: "Rubin's choice to use Shangri-La and Broken Box wasn't aesthetic — each room has a sound that shapes the performances in it. If your room sounds wrong, the performances will feel wrong. Either fix the room or move. Never fight the room acoustically — use it."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000011
+    title: "Context collapse: cross-genre through authentic simplicity"
+    direction_text: "Rubin produced metal, hip-hop, and country using the same philosophy because simplicity and directness work everywhere. When approaching any genre, identify its most essential, least mannered form. Ignore the production conventions layered on top of that essence."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Dr. Dre (PDNA-000012) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000012
+    title: "The low end is the foundation of everything"
+    direction_text: "Dre designs from the bottom up: the sub bass and kick relationship is established before any melodic element is added. Every subsequent element must coexist with the low-end without competing. Build the bottom first; build everything else in service of it."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000012
+    title: "Each element occupies a specific frequency slot"
+    direction_text: "Dre's mixes are clear because every sound has a defined territory. EQ every element with a purpose: what does it exclusively own? High-pass everything that doesn't need sub information. Identify overlaps and resolve them by deciding which element owns the contested frequency range."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000012
+    title: "West Coast groove: P-Funk filtered through synthesizer"
+    direction_text: "G-funk's melodic language comes from P-Funk's harmonic vocabulary played on synthesizers rather than live instruments. To channel Dre, understand that lineage: the Parliaments and Funkadelics are the harmonic library. Use that vocabulary — sustained bass chords, call-and-response between melodic elements."
+    direction_type: conceptual
+    sort_order: 3
+
+  - pdna_id: PDNA-000012
+    title: "Obsessive iteration toward a specific sonic vision"
+    direction_text: "Dre is famous for spending years on records until every element sounds exactly right by his internal standard. Define that internal standard before you start: what does this track sound like when it's finished? Work until you can answer yes."
+    direction_type: emotional
+    sort_order: 4
+
+  # ── J Dilla (PDNA-000013) ─────────────────────────────────────────────────
+  - pdna_id: PDNA-000013
+    title: "Program intention, not correction"
+    direction_text: "Treat the MPC as an instrument of intention. Every off-grid placement is a decision — program each hit with deliberate timing, then fine-shift individually. The grid is the starting point, not the destination. Ask: where do I want this hit to land relative to the feel, not relative to the grid?"
+    direction_type: technical
+    sort_order: 1
+
+  - pdna_id: PDNA-000013
+    title: "Build moments, not arrangements"
+    direction_text: "Loop-based composition built on 2–4 bar passages that sustain through repetition. The sample IS the chord, the bass, the texture — the whole world, not a layer. Don't add elements to make it interesting; find a sample rich enough that repetition reveals depth rather than boredom."
+    direction_type: conceptual
+    sort_order: 2
+
+  - pdna_id: PDNA-000013
+    title: "Interior space over external energy"
+    direction_text: "Dilla's beats feel like interior space — they're for listening to yourself think, not for performing energy to an audience. Mix for headphone listening at low volume. The beats should work at 3am in a quiet room. Not every track needs to work in a club."
+    direction_type: emotional
+    sort_order: 3
+
+  - pdna_id: PDNA-000013
+    title: "Let absence carry weight"
+    direction_text: "A hi-hat that doesn't appear in bar 3 is as intentional as the one that does. Build a drum pattern with a full complement of elements, then systematically remove some for entire bars. The holes you create carry as much compositional weight as what remains."
+    direction_type: channel
+    sort_order: 4
+
+  # ── DJ Premier (PDNA-000014) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000014
+    title: "The chop is the composition"
+    direction_text: "Premier doesn't sample for harmonic content — he samples for the specific timbral character of a 2–4 note sequence chopped from a particular moment in a particular record. The chop's grain, attack, and room character are as compositional as its pitch. Find the exact moment that has the character you need."
+    direction_type: technical
+    sort_order: 1
+
+  - pdna_id: PDNA-000014
+    title: "Drums that snap with physical authority"
+    direction_text: "Premier's kick and snare have physical presence — they feel like objects hitting objects. Choose drum samples with transient attacks that snap rather than bloom. Layer two snares if needed: one for the body, one for the crack. The downbeat should feel like a fist on a table."
+    direction_type: channel
+    sort_order: 2
+
+  - pdna_id: PDNA-000014
+    title: "Gritty vocals as rhythmic texture"
+    direction_text: "Scratched vocal samples are rhythmic instruments, not accent effects. Pick a 2-syllable vocal snippet with interesting consonant sounds. Program it into a rhythmic loop that works independently of the rest of the beat. Then layer it in and out as a fill element."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── RZA (PDNA-000015) ─────────────────────────────────────────────────────
+  - pdna_id: PDNA-000015
+    title: "Dark samples require dark processing"
+    direction_text: "RZA's production philosophy: sample from the most melancholic source material available — horror film scores, blaxploitation soundtracks, soul records in minor keys — and process them toward greater darkness. Pitch them down, add vinyl degradation, filter the highs. Begin dark, process darker."
+    direction_type: technical
+    sort_order: 1
+
+  - pdna_id: PDNA-000015
+    title: "Cinematic stasis over groove momentum"
+    direction_text: "Wu-Tang beats don't move forward — they hover in place. The tempo is deliberately slow, the loop is deliberately long, the groove doesn't build or release. This suspension is intentional: the music creates a space for verbal performance rather than competing with it for energy."
+    direction_type: conceptual
+    sort_order: 2
+
+  - pdna_id: PDNA-000015
+    title: "Channel the Five Percenter mathematical philosophy"
+    direction_text: "RZA's production comes from a system: numeric symbolism, martial arts philosophy, Nation of Gods and Earths cosmology. The sounds reference the ideas. Build your own conceptual framework before the session — any internally consistent philosophy — and let it govern sample selection and arrangement."
+    direction_type: channel
+    sort_order: 3
+
+  # ── Timbaland (PDNA-000016) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000016
+    title: "Rhythm as foreground, melody as background"
+    direction_text: "Timbaland inverts the conventional relationship: the percussion is the primary compositional voice, and the melody serves the rhythm rather than the other way around. Build the drum programming first as a complete compositional statement, then find a melody that fits into the rhythmic architecture."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000016
+    title: "Asymmetric hi-hat as rhythmic signature"
+    direction_text: "Program hi-hats that don't follow the kick and snare grid. Use at least 3 independent hi-hat placements in each bar, positioned where the kick and snare are not. Create a separate rhythmic voice that runs across the downbeats rather than with them. The hi-hat pattern should be readable as an independent melody."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000016
+    title: "Global percussion vocabulary as source material"
+    direction_text: "Timbaland drew from African drumming, Latin percussion, and Middle Eastern rhythmic patterns as equally valid source material alongside American hip-hop. Identify a percussion tradition outside your primary genre and learn its fundamental rhythmic pattern. Apply that pattern to your production context."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── The Neptunes (PDNA-000017) ────────────────────────────────────────────
+  - pdna_id: PDNA-000017
+    title: "Negative space as luxury"
+    direction_text: "The Neptunes' most distinctive production choice is what they don't include. A 2-note bass pattern with a single kick drum and a vocal is more expensive-sounding than a full arrangement, because it requires confidence in the few elements chosen. Cut until cutting more would feel reckless."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000017
+    title: "Synthetic sounds with organic character"
+    direction_text: "Neptunes synths don't sound like presets — they sound like instruments invented specifically for the track. Design sounds from scratch with a specific timbral character in mind rather than modifying presets toward a general category. Each sound should be unrepeatable."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000017
+    title: "Pop structure with experimental sonic DNA"
+    direction_text: "The genius of the Neptunes production model: songs that meet every commercial expectation at the structural level — verse, pre-chorus, chorus — built from sounds that are genuinely unusual. Satisfy the structure; subvert the timbre. This is how experimental ideas reach mainstream audiences."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Missy Elliott (PDNA-000018) ───────────────────────────────────────────
+  - pdna_id: PDNA-000018
+    title: "Treat the voice as a drum machine"
+    direction_text: "Elliott uses her voice — and Timbaland's production responds — as a rhythmic instrument. Nonsense syllables, chants, and cadences are percussion elements as much as words. Build a vocal arrangement that would work as a drum pattern if you removed all the melodic content."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000018
+    title: "Future as aesthetic principle, not prediction"
+    direction_text: "Elliott and Timbaland's early work sounds like the future not because it predicted what music would become, but because it committed fully to sounds that didn't yet exist as genres. Find sounds that have no established category and build toward them without looking back at precedent."
+    direction_type: conceptual
+    sort_order: 2
+
+  - pdna_id: PDNA-000018
+    title: "Humor and darkness in equal measure"
+    direction_text: "Elliott's productions contain genuine comedy and genuine menace simultaneously. Neither is ironic toward the other. Build tracks that make you laugh and unsettle you at the same time. The emotional register that holds both without canceling either is specifically what she mastered."
+    direction_type: emotional
+    sort_order: 3
+
+  # ── Metro Boomin (PDNA-000019) ────────────────────────────────────────────
+  - pdna_id: PDNA-000019
+    title: "Dark atmosphere as producer identity"
+    direction_text: "Metro's consistent sonic identity across artists comes from a specific atmospheric register: cinematic, night-appropriate, slightly threatening. Establish your signature atmosphere before worrying about individual tracks. Every production should be identifiable as yours by its emotional temperature."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000019
+    title: "808 as the harmonic center"
+    direction_text: "Metro's 808 bass isn't rhythmic support — it's the harmonic foundation. The 808 pitch IS the chord. Tune the 808 to specific pitches and treat it with the same harmonic attention you'd give a chord progression. The sample or synth above it responds to the 808's key, not the other way around."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000019
+    title: "Cinematic reference over musical reference"
+    direction_text: "When designing a Metro-style track, reference film scores rather than other music productions. Horror film texture, thriller atmosphere, war film weight — these emotional registers translate directly to trap production but arrive fresher from the film context than from existing trap records."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Mike WiLL Made-It (PDNA-000020) ─────────────────────────────────────
+  - pdna_id: PDNA-000020
+    title: "Energy through momentum, not density"
+    direction_text: "Mike WiLL's beats create energy through tempo placement and rhythmic momentum rather than layer density. The beat feels energetic because the kick is placed exactly where it creates forward pull, not because there are many elements. Find the rhythmic placement that creates physical momentum."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000020
+    title: "Tag as brand, not interruption"
+    direction_text: "A producer tag works when it has become synonymous with a specific sonic world. Before placing a tag, ensure the sound design of the tag is consistent with the track's atmosphere. The tag should feel like a signature, not an advertisement."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000020
+    title: "Atlanta trap: the geography of sound"
+    direction_text: "Atlanta trap has a geographic identity as specific as New Orleans jazz. Study the specific production choices native to that geography: the 808 character, the snare texture, the hi-hat patterns. Then either commit to the form as it exists, or consciously depart from it. There is no middle ground."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Zaytoven (PDNA-000021) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000021
+    title: "Piano as street instrument"
+    direction_text: "Zaytoven's genius is treating the piano — classical music's prestige instrument — with the emotional directness of trap music. Play piano phrases that feel immediate and personal, not compositionally sophisticated. The notes should feel chosen by feeling rather than harmonic theory."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000021
+    title: "Repetition as identity"
+    direction_text: "A Zaytoven piano phrase repeats exactly until the listener has completely internalized it, then repeats further. The length of repetition before variation is longer than conventional instinct suggests. Trust the phrase enough to let it play until it has fully established itself."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000021
+    title: "Church and trap as the same emotional spectrum"
+    direction_text: "Zaytoven's background in church music and his Atlanta trap production aren't separate categories — they're the same emotionality at different tempos and in different social contexts. The emotional directness of gospel translates directly to trap. Find your own cross-genre emotional equivalence."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Lex Luger (PDNA-000022) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000022
+    title: "Maximalist energy through repetitive structure"
+    direction_text: "Luger's beats feel massive through the combination of energy level and structural simplicity. The complexity is in the sonic design of each element, not in the arrangement. Make two or three elements sound so powerful that their repetition builds rather than diminishes."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000022
+    title: "Brass stabs as energy punctuation"
+    direction_text: "Luger's signature orchestral hits punctuate transitions and downbeats. Use brass or orchestral sounds not for harmonic content but for physical impact — the transient of a brass stab landing on beat 1 creates a physical event in the listener's body. Design for physical impact."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000022
+    title: "Trap maximalism over trap minimalism"
+    direction_text: "While many trap producers achieve distinction through restraint, Luger achieves it through controlled excess. Every element should be at maximum impact within its register. The question isn't 'what do I remove?' but 'how do I make each element hit harder?'"
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Southside (PDNA-000023) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000023
+    title: "Melodic samples over synthetic pads"
+    direction_text: "Southside's productions use sampled melodic material — obscure soul and R&B records — as the primary harmonic content rather than synthesized pads. The sample's grain and character is part of the composition. Find a source record with the right emotional character before building."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000023
+    title: "The hi-hat is the primary rhythmic voice"
+    direction_text: "In Southside's trap framework, hi-hat patterns carry more rhythmic information than the kick and snare. Program the hi-hat first as the complete rhythmic statement of the beat. Then build kick and snare around it to support what the hi-hat establishes."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000023
+    title: "Collaborative building as production philosophy"
+    direction_text: "Southside's best work comes from co-production relationships — with Metro, 808 Mafia, artists. Design sessions for collaboration: begin a track, leave intentional gaps for a second producer to fill, then build from what they add. The unfinished beat is an invitation."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Madlib (PDNA-000024) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000024
+    title: "Dig globally, not generically"
+    direction_text: "Madlib's crates span Brazilian jazz, Yoruba music, obscure American soul, Japanese funk, Ethiopian records. Go somewhere unexpected in your sample sources — one culture or era outside your default range — and find the specific record that has the character you're looking for. The rarer the source, the more original the result."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000024
+    title: "Psychedelic processing of harmonic source material"
+    direction_text: "Pitch the sample down until the key barely survives. Filter until only the essence of the harmonic content remains. Add slight vinyl distortion. The sample should retain its emotional character but lose its specificity — it should feel familiar but unidentifiable. Process until you couldn't say what record it came from."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000024
+    title: "Volume and prolificacy as philosophy"
+    direction_text: "Madlib's output volume is itself a compositional strategy — he doesn't curate in advance, he curates through quantity. Make 10 beat sketches before selecting 1 to finish. Let the editing process happen after creation, not during. Kill the internal critic during creation and activate it during selection."
+    direction_type: conceptual
+    sort_order: 3
+
+  - pdna_id: PDNA-000024
+    title: "Obscurity as aesthetic value"
+    direction_text: "The unfamiliar sample creates a genuinely new musical object. The listener brings no preconceptions. Build tracks from sources so obscure that even experienced listeners can't identify them — the unfamiliarity creates a space for the sample to mean something new."
+    direction_type: emotional
+    sort_order: 4
+
+  # ── Pete Rock (PDNA-000025) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000025
+    title: "Soulful chops require soulful sources"
+    direction_text: "Pete Rock's sonic identity begins in the record store. He finds samples with emotional warmth embedded in the performance — live musicians, analog recording, a specific moment in a specific session. The warmth is pre-existing in the source; his job is to reveal it. Dig for warmth first."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000025
+    title: "The loop edit as compositional gesture"
+    direction_text: "Cutting between two moments in the same record — the verse and the breakdown, two adjacent phrases — creates a loop that didn't exist as a loop in the original. Find a record where the most interesting 2-bar passage can be extended or varied by cutting from one part of the same record to another."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000025
+    title: "Horn breaks as compositional peak"
+    direction_text: "Pete Rock positions horns and melodic phrases the same way jazz musicians use them: as peak moments in a compositional arc. Don't use melodic samples as loops — use them as events. Place them at the structural moments that benefit from a melodic peak, then return to the drum foundation."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Marley Marl (PDNA-000026) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000026
+    title: "The drum machine sample as discovery"
+    direction_text: "Marl discovered by accident that sampling a drum machine produced a different, more interesting sound than using the drum machine directly. Actively look for this kind of discovery: use your tools in ways they weren't designed for, and pay attention when the accident is better than the intention."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000026
+    title: "Human timing in programmed drums"
+    direction_text: "Marl's drum programming has a looseness that makes it feel live even when it's not. Add slight timing variation (within 10ms) to every drum hit individually. The variation should be inconsistent, not swung — irregular enough to feel human rather than algorithmic."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000026
+    title: "Build the scene, not just the track"
+    direction_text: "Marl's production was inseparable from the Juice Crew scene — his productions were designed for specific voices, specific competitive contexts, a specific geography. Define the community your music serves before defining the sound. The sound should feel like it could only come from that community."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── DJ Screw (PDNA-000027) ────────────────────────────────────────────────
+  - pdna_id: PDNA-000027
+    title: "Deceleration as revelation"
+    direction_text: "Slowing a track to 60–70% reveals harmonic and timbral content that normal playback obscures. Pitches separate into their component partials; drum attacks become audible events rather than transients. Use pitch-preservation tempo reduction as an exploratory tool before deciding whether to release the slowed version."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000027
+    title: "Chopped transitions as compositional editing"
+    direction_text: "Screw's chopped technique — stopping and restarting playback at specific moments — creates a stutter effect that is simultaneously rhythmic and textural. Program stutter edits into a track as compositional moments, not technical effects. The chop should happen where the rhythm benefits from a micro-pause."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000027
+    title: "Houston geography as sonic identity"
+    direction_text: "Screw's sound is Houston — the heat, the size, the car culture, the specific emotional register of the South. Every sonic aesthetic carries geographic DNA. Identify what geographic or cultural context your music comes from, and let that context shape your sonic choices rather than following genre templates."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── SOPHIE (PDNA-000028) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000028
+    title: "Synthesize the impossible object"
+    direction_text: "SOPHIE's sounds are objects that couldn't physically exist — materials that have no acoustic analog. Build a sound and ask: what physical object could this be? If you can answer that question easily, process it further until you can't. The goal is a sound that refers to nothing pre-existing."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000028
+    title: "Extreme compression as compositional choice"
+    direction_text: "SOPHIE's compression levels are well beyond what mixing convention recommends. Push the master limiter until transients are completely eliminated and everything is at maximum loudness. This isn't a mastering error — it's an aesthetic choice. Experiment with compression as tonal character, not just dynamic management."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000028
+    title: "Joy as political statement"
+    direction_text: "SOPHIE's music is maximally joyful as a deliberate political choice. Ecstasy, delight, and exuberance in an electronic context aren't frivolous — they're arguments for a specific vision of what life could be. Build music that is genuinely, uncomplicatedly happy and see what it costs you to make it."
+    direction_type: emotional
+    sort_order: 3
+
+  - pdna_id: PDNA-000028
+    title: "The artificial as the authentic"
+    direction_text: "SOPHIE rejected the authenticity hierarchy that positions acoustic and live sounds as more genuine than synthetic ones. Commit fully to the synthetic palette — no acoustic simulation, no 'warmth' processing designed to make it sound more organic. Let the artificial be authentically itself."
+    direction_type: conceptual
+    sort_order: 4
+
+  # ── Arca (PDNA-000029) ────────────────────────────────────────────────────
+  - pdna_id: PDNA-000029
+    title: "Music as body memory"
+    direction_text: "Arca's productions target the body's nervous system rather than the ear's musical expectations. Design sounds that create physical responses independent of their musical content: textures that cause involuntary tensing, volumes that produce awareness of the body's presence. Build for physical experience."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000029
+    title: "Dismantle rhythm before rebuilding it"
+    direction_text: "Program a conventional 4/4 rhythm. Then systematically remove every element that makes it 4/4 — change the kick placement, remove the snare, replace the hi-hat with something unpitched and irregular. Keep the tempo but destroy the meter. What remains is the raw material for Arca-style rhythm."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000029
+    title: "Vulnerability as sonic texture"
+    direction_text: "Arca's music carries emotional vulnerability as a material property — sounds that seem barely held together, textures at the edge of disintegration, volumes that feel like exposure. Build sounds that feel vulnerable rather than confident. The aesthetic of fragility is a specific production choice."
+    direction_type: emotional
+    sort_order: 3
+
+  # ── Burial (PDNA-000030) ──────────────────────────────────────────────────
+  - pdna_id: PDNA-000030
+    title: "Record the night"
+    direction_text: "Burial makes music about specific times and places: 4am urban environments, rain-wet city streets, the emotional register of being awake when most people are asleep. Before building a track, identify the specific time, place, and emotional situation you're sonically documenting. Then build for that situation."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000030
+    title: "Ghost percussion: pitched, shifted, decayed"
+    direction_text: "Burial's drum sounds aren't synthetic or sampled straight — they're pitch-shifted, time-stretched, and degraded to the point where their original character is transformed. Take any drum sample: pitch-shift it ±3 semitones, add vinyl degradation, increase the decay until the transient bleeds into noise. This is the ghost percussion palette."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000030
+    title: "Melancholy as a specific, precise emotion"
+    direction_text: "Burial doesn't produce sadness generically — his melancholy is precise: it's the specific feeling of missing something that was already transient when you had it. The emotional target is not loss but the recognition that something was precious in the moment and is now gone. Nostalgia for the recent past, not the distant past."
+    direction_type: emotional
+    sort_order: 3
+
+  - pdna_id: PDNA-000030
+    title: "Anonymity as artistic position"
+    direction_text: "Burial maintained anonymity for years as a deliberate choice — the music should stand completely independent of the person who made it. Build tracks where the production personality effaces itself in service of the emotional content. The record should feel like it emerged from the city rather than from a person."
+    direction_type: conceptual
+    sort_order: 4
+
+  # ── Aphex Twin (PDNA-000031) ──────────────────────────────────────────────
+  - pdna_id: PDNA-000031
+    title: "Synthesize your own vocabulary"
+    direction_text: "Aphex Twin's sounds are recognizable because they don't come from shared preset libraries — they're built from first principles. Design every sound from scratch with a clear intention for its timbral character and its role in the composition. Use synthesis as composition, not as decoration."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000031
+    title: "Polyrhythmic drum programming as architecture"
+    direction_text: "Program at least 4 independent drum voices operating in different meters simultaneously. Layer: one voice in 4/4, one in 3/4 (or 5/4), one operating on a 7-step cycle, one in a 16-step pattern that's offset from the downbeat. Let them resolve to the same downbeat every 4 or 8 bars."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000031
+    title: "Emotional complexity without genre signaling"
+    direction_text: "Aphex Twin's music achieves complex emotional states without the genre conventions that normally signal those states. Sadness without minor-key clichés, joy without major-key conventions, menace without genre-horror sounds. Strip your track of its genre-emotion signaling and ask what's left. Build from that."
+    direction_type: emotional
+    sort_order: 3
+
+  - pdna_id: PDNA-000031
+    title: "The bedroom as the studio"
+    direction_text: "Aphex Twin's most distinctive work came from obsessive personal production, not from professional studio contexts. The tools you have at home are enough. The limitation of your setup is productive. Lean into what your specific setup does rather than simulating a context you don't have."
+    direction_type: conceptual
+    sort_order: 4
+
+  # ── Daft Punk (PDNA-000032) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000032
+    title: "Build the robot who loves music"
+    direction_text: "Daft Punk's most powerful idea: machines that are emotional about music rather than indifferent to it. Produce electronic music that has genuine enthusiasm for groove and melody — not performed enthusiasm but actual compositional choices that prioritize the pleasure of the listener. Make music a machine would love."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000032
+    title: "Filter sweep as narrative arc"
+    direction_text: "The Daft Punk filter sweep is a compositional event, not an effect. Use a high-pass or low-pass filter sweep to create a 4–8 bar narrative: open, climax, close. The sweep defines the structure of the section. Let the filter position tell you where you are in the musical narrative."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000032
+    title: "Homage as creation"
+    direction_text: "Daft Punk's most original work came from deeply understanding and loving specific antecedents (disco, Giorgio Moroder, Chic) and building from inside that understanding. True homage that fully internalizes its source eventually becomes something new. Learn the rules in depth before breaking them."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Kraftwerk (PDNA-000033) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000033
+    title: "Choose one idea and execute it at perfect fidelity"
+    direction_text: "Kraftwerk's restraint is editorial authority. A 4-bar loop repeated 20 times tells a story about time that 20 different 4-bar loops can't. Commit to one structural idea — one rhythm, one melodic cell, one tempo — and let repetition reveal its depth rather than covering it with variation."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000033
+    title: "The synthesizer as equivalent to acoustic instruments"
+    direction_text: "Kraftwerk treated synthesizers as fully legitimate compositional instruments — not as simulations of acoustic instruments, not as novelty. Build synthesizer parts with the same compositional attention you'd give a piano or violin: voice leading, harmonic function, melodic development. The timbre is novel; the composition is traditional."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000033
+    title: "Machine as metaphor for modern life"
+    direction_text: "Kraftwerk used the machine aesthetic to comment on the industrialization of human life — the Autobahn, the train, the robot. Before producing, identify what aspect of contemporary life your music is documenting. The machine sound should represent something, not just sound cool."
+    direction_type: conceptual
+    sort_order: 3
+
+  - pdna_id: PDNA-000033
+    title: "The human emotion inside precision"
+    direction_text: "Human feeling in Kraftwerk comes from contrast: one intentional imprecision inside a perfectly mechanical context. Build a completely quantized, metronomic track. Then introduce one element with deliberate human timing — a melody with slight rubato, a chord that sustains slightly longer than the grid. The contrast creates more feeling than an expressively performed track."
+    direction_type: emotional
+    sort_order: 4
+
+  # ── Wendy Carlos (PDNA-000034) ────────────────────────────────────────────
+  - pdna_id: PDNA-000034
+    title: "Acoustic simulation as compositional act"
+    direction_text: "Carlos spent years designing synthesizer patches that could pass for acoustic instruments, not as trickery but as a genuine compositional resource — a violin that plays intervals no real violin can, a cello that sustains indefinitely. Build a patch that sounds like a real instrument playing the physically impossible."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000034
+    title: "Temperament as creative choice"
+    direction_text: "Carlos experimented with alternative tuning systems — equal temperament alternatives, just intonation — as compositional tools. Explore microtonal tuning as a timbral resource: two notes ±15 cents from standard equal temperament create beating that no standard synthesizer patch produces. Tune your instruments slightly off from each other."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000034
+    title: "Classical form as liberation, not constraint"
+    direction_text: "Carlos used Bach's structures — fugue, counterpoint, variation — not as academic exercises but because she found them genuinely generative. If you haven't studied counterpoint, learn enough to write a two-voice invention. The formal constraint generates melodic ideas that free composition rarely reaches."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Ryuichi Sakamoto (PDNA-000035) ───────────────────────────────────────
+  - pdna_id: PDNA-000035
+    title: "Economy of notes"
+    direction_text: "Sakamoto's piano writing is defined by what it doesn't play. After writing a melodic phrase, remove every note that isn't essential. Then remove two more. The space between notes carries as much weight as the notes themselves. A 4-note phrase can express more than a 12-note run if the 4 notes are exactly right."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000035
+    title: "Electronic and acoustic as dialogue partners"
+    direction_text: "Build tracks where acoustic and electronic instruments are in explicit dialogue — neither dominating, each responding to the other. The piano offers a phrase; the synthesizer responds. The synthesizer introduces a texture; the piano acknowledges it. The two worlds are conscious of each other."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000035
+    title: "Informed by Japanese aesthetic principles"
+    direction_text: "Ma (間) — negative space, pause, silence as meaningful — is a structural principle in Japanese aesthetics that directly translates to music production. Treat silence as an active compositional element. The pause between phrases should have a specific duration chosen for its effect, not left as default."
+    direction_type: conceptual
+    sort_order: 3
+
+  - pdna_id: PDNA-000035
+    title: "Process grief through precision"
+    direction_text: "Sakamoto's late work (especially merry christmas mr. lawrence and async) turns extreme emotional content — mortality, memory, loss — into musical precision rather than expressionist excess. When working with heavy emotional material, choose restraint over expressiveness. Let the restraint carry the weight."
+    direction_type: emotional
+    sort_order: 4
+
+  # ── Yasutaka Nakata (PDNA-000036) ─────────────────────────────────────────
+  - pdna_id: PDNA-000036
+    title: "Hyperkinetic density as aesthetic"
+    direction_text: "Nakata's productions pack more sonic events per bar than most producers consider comfortable. Add elements until the track feels overcrowded, then organize the crowding so every element has a distinct rhythmic position and frequency range. Density through organization, not through reduction."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000036
+    title: "Vocoder as melodic lead instrument"
+    direction_text: "Nakata uses vocoder not as a vocal effect but as the primary melodic voice. Design a vocoder patch with the right timbral character and write the melodic hook through it. The vocoder melody should be as memorable and hummable as an unprocessed vocal melody. The processing is the instrument."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000036
+    title: "J-pop structure with electronic maximalism"
+    direction_text: "Nakata packages genuinely experimental electronic music inside accessible J-pop structures. Identify one experimental element in your production — an unusual synthesis method, an unconventional rhythm, an atonal melodic choice — and build a conventional pop structure around it. The accessible container makes the experiment reachable."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── A. R. Rahman (PDNA-000037) ────────────────────────────────────────────
+  - pdna_id: PDNA-000037
+    title: "The raga as harmonic universe"
+    direction_text: "Rather than using Western harmony as the default, build tracks from a raga's characteristic pitches and ornamental patterns. The raga provides a complete harmonic universe with its own rules about which notes are emphasized, how melody moves, what intervals are possible. Use it as a structural framework, not as a flavor."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000037
+    title: "Rhythm as spiritual practice"
+    direction_text: "Rahman's rhythmic architecture often comes from tala — cyclical Indian rhythm systems with specific beat counts and emotional associations. Research the Carnatic tala system: identify one tala and program a drum pattern that follows its structural logic. Then overlay Western production elements on this rhythmic foundation."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000037
+    title: "Devotional energy as production intention"
+    direction_text: "Rahman's music consistently carries a quality of spiritual intention that transcends genre or cultural specificity. Before producing, identify what the music is for in the largest possible sense. Productions made with a sense of purpose beyond entertainment consistently carry a quality that purely commercial intentions cannot manufacture."
+    direction_type: emotional
+    sort_order: 3
+
+  - pdna_id: PDNA-000037
+    title: "Synthesis of East and West as active project"
+    direction_text: "Rahman's synthesis of Indian classical and Western pop isn't accidental or aesthetic — it's a deliberate cultural project. Identify two musical traditions you know well enough to understand their deep structures. Find one structural principle from each and build a production where both principles are fully operative, neither subordinating the other."
+    direction_type: conceptual
+    sort_order: 4
+
+  # ── Max Martin (PDNA-000038) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000038
+    title: "The melodic hook in the first 5 notes"
+    direction_text: "Martin's melodies establish their hook within the first 5 notes. Write the chorus starting point: a melodic cell of 4–5 notes that is immediately memorable. Test it a cappella — if it's not memorable without production, the production can't save it. Start over until the melodic cell works alone."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000038
+    title: "Swedish melody-forward production philosophy"
+    direction_text: "In Martin's production chain, the melody takes full priority over arrangement, sound design, and production technique. Make every production decision in service of making the melody clearer, more accessible, and more impactful. The arrangement is a delivery system for the melody, not a co-equal voice."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000038
+    title: "Craft over expression"
+    direction_text: "Martin's songwriting is craft rather than expression — he writes to a brief, solves compositional problems, builds emotional effects intentionally rather than discovering them. Define the emotional effect you want before writing. Then make compositional choices that create that effect reliably."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Shellback (PDNA-000039) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000039
+    title: "The pre-chorus as emotional engine"
+    direction_text: "Shellback's productions use the pre-chorus to do the emotional work the chorus delivers on. The pre-chorus creates a specific tension that the chorus resolves. Build your pre-chorus to be uncomfortable — harmonically unresolved, rhythmically unsettled — so the chorus feels like release rather than just a louder verse."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000039
+    title: "Strip and rebuild production between sections"
+    direction_text: "Shellback transitions between sections by removing almost all production elements at the transition point, then rebuilding from scratch in the new section. The verse and chorus shouldn't share production elements unless they're essential. Each section is a fresh production build that begins from nothing."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000039
+    title: "Co-write as creative method"
+    direction_text: "Shellback almost never writes alone — the co-writing session IS the composition. Structure your sessions as collaborative builds: one person writes a chord progression, the other writes a melody, the first writes a counter-melody. Never accept the first version of anything from yourself."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Nile Rodgers (PDNA-000040) ────────────────────────────────────────────
+  - pdna_id: PDNA-000040
+    title: "The guitar is the rhythm section"
+    direction_text: "Rodgers' guitar doesn't sit on top of the rhythm section — it IS the rhythm section. Program drums that accompany what the guitar creates rather than the other way around. Record the guitar first; build everything else to support what the guitar establishes as the groove center."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000040
+    title: "Chic chord voicings: upper register, minimal bass"
+    direction_text: "Rodgers' funk voicings deliberately omit the root note in the guitar part — the bass handles the root, leaving the guitar free to voice the upper extensions. Voice guitar chords from the 3rd or 5th up, using 9ths, suspended 4ths, and major 7ths. The resulting voicings create space and sophistication without harmonic complexity."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000040
+    title: "Funk as democracy"
+    direction_text: "Chic's music is democratic — every instrument serves the groove with equal importance. No soloist, no hierarchy. The bass, drums, guitar, and horns are all versions of the same rhythmic statement. Produce tracks where every element could be removed without changing the genre identity but where nothing can be removed without losing something essential."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Trevor Horn (PDNA-000041) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000041
+    title: "More until exactly enough"
+    direction_text: "Horn's production philosophy: keep adding elements until the track is exactly full and adding one more would tip into excess. The target isn't minimalism — it's precise maximalism. Every element should be present because its absence would create a gap, not because adding it felt like a good idea."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000041
+    title: "Production as science: document the formula"
+    direction_text: "Horn treats production as a systematic process where every choice is documentable and reproducible. Keep a session log: what reverb preset, what compression ratio, what EQ curve produced each sound. The goal is to understand exactly why each choice works so you can make it again or improve on it."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000041
+    title: "Technology as the aesthetic, not the vehicle"
+    direction_text: "Horn's ZTT productions celebrated the technology — the Fairlight, the Synclavier, the Linn drum — as aesthetic objects in themselves. When using a specific piece of technology, let its character define the track rather than using it to simulate something analog or more conventional."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Flood (PDNA-000042) ───────────────────────────────────────────────────
+  - pdna_id: PDNA-000042
+    title: "Texture as emotional carrier"
+    direction_text: "Flood builds tracks where the aggregate texture — the combination of all elements heard together — carries the primary emotional meaning, not any individual melodic or harmonic element. Mix until the sound of everything together creates a specific physical sensation. That sensation is the track's emotional content."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000042
+    title: "Industrial sound design as production vocabulary"
+    direction_text: "Draw sound design vocabulary from industrial environments: factory machinery, metal stress, hydraulics, electrical hum. Process these into musical textures rather than attempting to create them artificially. The authenticity of the source material creates a physicality that synthesis alone can't replicate."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000042
+    title: "Darkness with purpose"
+    direction_text: "Flood's dark productions serve the songs' emotional content — the darkness isn't aesthetic posturing. Before going dark in a production, clarify what the darkness is expressing: powerlessness, rage, grief, menace? Different darks serve different purposes and require different production approaches."
+    direction_type: emotional
+    sort_order: 3
+
+  # ── Nigel Godrich (PDNA-000043) ───────────────────────────────────────────
+  - pdna_id: PDNA-000043
+    title: "The studio as the fifth instrument"
+    direction_text: "Godrich's most distinctive productions emerge from treating the studio itself as a compositional voice — the room's acoustics, the tape machine's saturation characteristics, the specific sonic signature of Abbey Road's outboard. Identify what your recording environment does that no other environment does and exploit that specificity."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000043
+    title: "Tape for organic texture in electronic contexts"
+    direction_text: "Route electronic elements through tape before returning them to the digital domain. Tape adds saturation, compression, and slight frequency modification that software emulations capture partially. The intermodulation between electronic signals and analog tape creates complexity that's audible but not analyzable."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000043
+    title: "Acoustic-electronic hybridity as default"
+    direction_text: "Godrich never fully commits to either acoustic or electronic aesthetic — his productions exist in the productive tension between them. Don't clean up the acoustic artifacts from electronic processing or the electronic artifacts from acoustic recording. The hybrid quality is the signature."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Steve Albini (PDNA-000044) ────────────────────────────────────────────
+  - pdna_id: PDNA-000044
+    title: "The room is the reverb"
+    direction_text: "Albini never uses artificial reverb — the room IS the reverb. Find a space with the right acoustic character for the music you're recording. A 15-second room decay for drums; a small dead room for intimate vocals. Move the session rather than processing the recording to sound like a different room."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000044
+    title: "Microphone placement over processing"
+    direction_text: "Every timbral quality you'd reach for with EQ or compression can be achieved or approximated with microphone placement. Move the microphone 6 inches before reaching for EQ. Add a room mic before reaching for reverb. The acoustic solution is always more authentic than the electronic one."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000044
+    title: "Transparency of performance over polish of product"
+    direction_text: "Albini's goal is a record that documents what the musicians sounded like in a specific room, not a processed idealization of what they could sound like. Ask: does this production decision reveal more about the performance, or does it cover the performance with an idea of what the performance should be?"
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Linda Perry (PDNA-000045) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000045
+    title: "Write TO the artist's wound"
+    direction_text: "Perry writes songs that articulate the specific emotional damage of the specific person she's writing for. Before co-writing, identify what the artist genuinely needs to say — not what's commercially viable or genre-appropriate, but what they actually need to express. Write that."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000045
+    title: "Guitar-centered production"
+    direction_text: "Begin with a guitar arrangement, not a beat or a synth pad. The harmonic progression and rhythmic feel of the guitar should establish the track's emotional world before any other element is added. Every subsequent production choice should serve or contrast what the guitar establishes."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000045
+    title: "Pop power from personal specificity"
+    direction_text: "Perry's most universal hits are also her most personally specific — the detail that makes the song true for her is the detail that makes it true for millions. Don't generalize your emotional content for accessibility. The most specific expression of genuine emotion is the most universally accessible."
+    direction_type: emotional
+    sort_order: 3
+
+  # ── Tainy (PDNA-000046) ───────────────────────────────────────────────────
+  - pdna_id: PDNA-000046
+    title: "Reggaeton evolved: global pop through Latin rhythm"
+    direction_text: "Tainy uses dembow as a rhythmic foundation while incorporating global pop production values. Establish the dembow pattern as non-negotiable, then build pop production elements on top that meet global accessibility standards without compromising the rhythmic identity. The dembow is the culture; the production is the vehicle."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000046
+    title: "Melody over bass in reggaeton production"
+    direction_text: "Where earlier reggaeton production emphasized bass and rhythm, Tainy elevates melodic content to equal importance. Write melodic hooks as carefully as the rhythmic programming. The melody should be memorable enough to work without the reggaeton production underneath it."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000046
+    title: "Pop crossover without cultural dilution"
+    direction_text: "Tainy's global success comes from pop crossover that doesn't require dropping Latin music's cultural identity — the productions work for global audiences without becoming generically global. Study what essential elements can't be removed without breaking the cultural identity, and protect those unconditionally."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Luny Tunes (PDNA-000047) ─────────────────────────────────────────────
+  - pdna_id: PDNA-000047
+    title: "Establish the sound of the era"
+    direction_text: "Luny Tunes codified what mid-2000s reggaeton sounded like. When establishing a sound, be extremely consistent across productions — repeat melodic formulas, rhythmic approaches, and sonic signatures across many tracks until the signature is recognizable before the artist begins performing. The sound IS the brand."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000047
+    title: "Synth bass with dembow architecture"
+    direction_text: "The Luny Tunes synth bass is melodic and rhythmically active — it's not just supporting the dembow pattern, it's participating in it. Write a bass line that has its own melodic content while reinforcing the dembow's rhythmic feel. The bass should be interesting to listen to in isolation."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000047
+    title: "Production speed and volume as creative method"
+    direction_text: "Luny Tunes produced prolifically at high speed. Speed removes perfectionism and allows prolificacy: many beats, many experiments, natural selection of what works. Set a time limit (2-3 hours) for a beat, then release it unfinished. The volume of output teaches what works faster than careful analysis."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Sarz (PDNA-000048) ────────────────────────────────────────────────────
+  - pdna_id: PDNA-000048
+    title: "Afrobeats percussion as compositional foreground"
+    direction_text: "In Sarz's production model, the percussion layer is the primary compositional voice — not background support for melody, but the primary information the listener processes. Build the percussion arrangement as a complete musical statement before adding melodic content. The percussion should be listenable without any melody."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000048
+    title: "Interlocking drum patterns from African traditions"
+    direction_text: "Program 3–4 drum voices that don't duplicate each other's rhythmic position — each fills gaps left by the others, creating a complete rhythmic texture through interlocking rather than layering. Each part is incomplete; together they form a single composite pattern. Research polyrhythmic West African drumming for the structural principle."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000048
+    title: "Contemporary Lagos sound with global reach"
+    direction_text: "Sarz produces from a specific geographic and cultural context (Lagos Afrobeats) for a global audience without abandoning that context. Identify your geographic musical heritage and build from its specific rhythmic and harmonic traditions. Global reach comes from depth of local identity, not from averaging toward global taste."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── Kabza De Small (PDNA-000049) ─────────────────────────────────────────
+  - pdna_id: PDNA-000049
+    title: "Piano log as the soul of Amapiano"
+    direction_text: "The piano log — a specific improvisational piano style native to Amapiano — is the genre's emotional core. Don't simulate it with samples or program it from MIDI patterns: learn the characteristic phrases, the call-and-response between the piano's left and right hand, the specific ornamental patterns. This can only be learned, not approximated."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000049
+    title: "112 BPM as home tempo"
+    direction_text: "Amapiano's characteristic 112 BPM creates a groove that's between house and R&B — fast enough to dance to but slow enough to feel luxurious. Work at this specific tempo rather than approximating it. The relationship between sub bass and kick drum at 112 BPM is specific to that tempo."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000049
+    title: "Deep house lineage with Soweto identity"
+    direction_text: "Amapiano emerged from deep house music that arrived in the Soweto townships and was transformed by a specific community into something unrecognizable as house music. The transformation happened through genuine cultural engagement with the form. Learn what you love about deep house, then let your cultural context change it naturally."
+    direction_type: conceptual
+    sort_order: 3
+
+  # ── DJ Rashad (PDNA-000050) ───────────────────────────────────────────────
+  - pdna_id: PDNA-000050
+    title: "160 BPM as home speed"
+    direction_text: "Footwork's 160 BPM is fast enough that individual drum hits create a different relationship to rhythm than at slower tempos — the listener processes the pattern rather than individual beats. Program at full footwork tempo, not as a formal exercise but because the speed is part of the compositional language."
+    direction_type: channel
+    sort_order: 1
+
+  - pdna_id: PDNA-000050
+    title: "Independent rhythmic streams"
+    direction_text: "Rashad's drums operate as multiple simultaneous independent rhythmic streams that share a tempo but don't share a meter. Program kick, snare, and hi-hat patterns that operate on different rhythmic cycles — the kick on a 3-step pattern, the snare on a 7-step, the hi-hat on a 5-step. Let them phase against each other."
+    direction_type: technical
+    sort_order: 2
+
+  - pdna_id: PDNA-000050
+    title: "Dance music for a specific dance"
+    direction_text: "Footwork was made for a specific dance form — juke — and the rhythmic architecture directly corresponds to the physical movements of that dance. If you're working in a genre with a specific dance culture, understand the dance before building the music. The music's function shapes its form."
+    direction_type: conceptual
+    sort_order: 3
+
+  - pdna_id: PDNA-000050
+    title: "Vocal samples as rhythm, not content"
+    direction_text: "Rashad uses vocal samples not for their verbal content but for their rhythmic and timbral properties — the consonant attack of 'that', the vowel sustain of 'oh', the sibilance of 's'. Select vocal samples for their acoustic properties. Chop them to 1–3 syllables and program them as percussion rather than as melodic or lyrical elements."
+    direction_type: emotional
+    sort_order: 4

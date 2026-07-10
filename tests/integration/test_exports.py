@@ -41,3 +41,21 @@ class TestExports:
         assert any(dim in md for dim in ["Warmth", "Grit", "Atmosphere"]), (
             "Markdown Sonic DNA section should list sonic dimensions"
         )
+
+    def test_json_export_includes_warnings(self, db_url):
+        data = export_producer_json("PDNA-000013", db_url)
+        assert "warnings" in data, "Export dict must have a 'warnings' key"
+        assert len(data["warnings"]) >= 1, "J Dilla export should have at least one warning"
+
+    def test_json_export_includes_directions(self, db_url):
+        data = export_producer_json("PDNA-000013", db_url)
+        assert "directions" in data, "Export dict must have a 'directions' key"
+        assert len(data["directions"]) >= 1, "J Dilla export should have at least one direction"
+
+    def test_prompt_includes_warning_guidance(self, db_url):
+        prompt = generate_prompt("PDNA-000013", "beat_making", "claude", db_url)
+        assert "Avoid" in prompt, "Prompt should include 'Avoid' guidance from major warning"
+
+    def test_prompt_includes_direction_guidance(self, db_url):
+        prompt = generate_prompt("PDNA-000013", "beat_making", "claude", db_url)
+        assert "Channel" in prompt, "Prompt should include 'Channel' guidance from inspired directions"
