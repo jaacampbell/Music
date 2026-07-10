@@ -3,7 +3,8 @@ import tseslint from "typescript-eslint";
 
 export default [
   {
-    ignores: [".next/**", "node_modules/**"]
+    // Python services / vendored Python projects are not part of the JS/TS app.
+    ignores: [".next/**", "node_modules/**", "services/**", "producer-dna/**"]
   },
   ...tseslint.configs.recommended,
   {
