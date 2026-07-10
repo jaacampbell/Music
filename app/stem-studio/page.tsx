@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 
+import { ProducerDnaPanel } from "./ProducerDnaPanel";
 import { useRealStemPlayer, type StemInfo } from "./useRealStemPlayer";
 
 const SEPARATOR_URL =
@@ -205,6 +206,7 @@ export default function StemStudioPage(): React.JSX.Element {
             </div>
           )}
         </section>
+        <ProducerDnaPanel trackName={manifest?.source.filename} />
       </section>
 
       <div className="status">{busy || player.isLoading ? "Working…" : status}</div>
