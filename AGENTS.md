@@ -17,7 +17,13 @@ This repository is the **Agentic Beat Lab OS** — a music *production* command 
 - `lib/agent-loop.ts` — parses a natural-language command into a plan (stem mode 2/4/6/10, model profile, export profile) and runs the jobs.
 - `lib/prompt-cache.ts` — tiered prompt assembly + token-saver telemetry.
 
+### Real stem separation service (`services/separator/`)
+- A **separate Python service** (FastAPI + Demucs `htdemucs` + FFmpeg) does **real** 4-stem separation, exposed to the Next.js app at `/stem-studio` (page + `app/stem-studio/useRealStemPlayer.ts`). This is distinct from the simulated `/stem-lab`.
+- Setup/run is documented in `services/separator/README.md`. Non-obvious: install **CPU** builds of `torch` **and** `torchaudio` from the PyTorch CPU index (`--index-url https://download.pytorch.org/whl/cpu`) — the default PyPI `torchaudio` pulls a CUDA build and fails with `libcudart.so` errors. Demucs is driven via its CLI (`python -m demucs`), not `demucs.api` (absent in 4.0.1). First separation downloads the model weights.
+- The service's `.venv/` and `data/` (jobs, weights, stems) are gitignored and NOT part of the startup install; run the service manually (uvicorn on port 8000). The frontend targets it via `NEXT_PUBLIC_SEPARATOR_URL` (default `http://localhost:8000`).
+- ESLint ignores `services/**` and `producer-dna/**` (Python projects) — see `eslint.config.mjs`.
+
 ### Non-obvious notes
-- **It's a deterministic simulation MVP**: there is no real audio DSP/stem separation and no live LLM calls. The loop, scoring, stems, and exports are stubbed to model the data contracts. Treat outputs as mock data when building real integrations.
+- **The core command center is a deterministic simulation MVP**: the agent loop, scoring, `/stem-lab` extraction, and exports are stubbed to model the data contracts (no live LLM calls). Real stem separation lives in `services/separator/` + `/stem-studio` (above). Treat command-center outputs as mock data.
 - **State is in-memory and not persisted** — it resets on dev-server restart and is shared process-wide via `globalThis`. Creating projects via the API (e.g. curl) makes them appear in the UI after a reload. Real persistence (Postgres/Supabase) is a planned build-out.
 - The startup update script installs from `package-lock.json` via `npm ci`; no extra setup is required.

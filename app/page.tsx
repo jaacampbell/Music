@@ -396,6 +396,10 @@ export default function HomePage(): React.JSX.Element {
           Parallel interface + agent workflow + token saver command center ·{" "}
           <a href="/stem-lab" style={{ color: "var(--accent)" }}>
             Stem Lab →
+          </a>{" "}
+          ·{" "}
+          <a href="/stem-studio" style={{ color: "var(--accent)" }}>
+            Stem Studio (live) →
           </a>
         </p>
       </header>
