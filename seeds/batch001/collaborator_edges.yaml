@@ -1,0 +1,1251 @@
+edges:
+
+  # ── George Martin (PDNA-000001) ────────────────────────────────────────────
+  - from_pdna: PDNA-000001
+    to_entity_type: artist
+    to_entity_name: "The Beatles"
+    edge_type: co-producer
+    strength: 10
+    work_count: 13
+    notes: "Co-produced all major Beatles studio albums at Abbey Road; collaborative partnership defined the studio as a compositional instrument"
+
+  - from_pdna: PDNA-000001
+    to_entity_type: label
+    to_entity_name: "EMI/Parlophone"
+    edge_type: label
+    strength: 10
+    work_count: 40
+    notes: "Staff producer at Parlophone from 1955; the institutional context that made the Beatles partnership possible"
+
+  - from_pdna: PDNA-000001
+    to_entity_type: engineer
+    to_entity_name: "Geoff Emerick"
+    edge_type: co-producer
+    strength: 9
+    work_count: 10
+    notes: "Chief engineer on Revolver, Sgt Pepper, Abbey Road; Martin and Emerick's collaboration drove the studio experimentation era"
+
+  # ── Phil Spector (PDNA-000002) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000002
+    to_entity_type: artist
+    to_entity_name: "The Ronettes"
+    edge_type: co-producer
+    strength: 10
+    work_count: 8
+    notes: "Produced the Ronettes' complete commercial catalogue including 'Be My Baby'; the defining Wall of Sound showcase"
+
+  - from_pdna: PDNA-000002
+    to_entity_type: artist
+    to_entity_name: "John Lennon"
+    edge_type: co-producer
+    strength: 8
+    work_count: 4
+    notes: "Co-produced Imagine and collaborated on Sometime in New York City and the Plastic Ono Band recordings"
+
+  - from_pdna: PDNA-000002
+    to_entity_type: label
+    to_entity_name: "Philles Records"
+    edge_type: label
+    strength: 10
+    work_count: 20
+    notes: "Co-founded and operated Philles Records 1961–1966; the institutional vehicle for the Wall of Sound aesthetic"
+
+  # ── Quincy Jones (PDNA-000003) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000003
+    to_entity_type: artist
+    to_entity_name: "Michael Jackson"
+    edge_type: co-producer
+    strength: 10
+    work_count: 3
+    notes: "Off the Wall, Thriller, and Bad — three of the best-selling albums in history; Jones was the architectural intelligence behind Jackson's commercial peak"
+
+  - from_pdna: PDNA-000003
+    to_entity_type: artist
+    to_entity_name: "Frank Sinatra"
+    edge_type: co-producer
+    strength: 8
+    work_count: 6
+    notes: "Arranged and co-produced multiple Sinatra recordings including Fly Me to the Moon-era material; established Jones's reputation as an orchestral producer"
+
+  - from_pdna: PDNA-000003
+    to_entity_type: label
+    to_entity_name: "A&M Records"
+    edge_type: label
+    strength: 8
+    work_count: 15
+    notes: "Long-term relationship with A&M from the late 1960s through the Thriller era; institutional home for Jones's post-film scoring work"
+
+  # ── Rick Rubin (PDNA-000004) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000004
+    to_entity_type: artist
+    to_entity_name: "Johnny Cash"
+    edge_type: co-producer
+    strength: 10
+    work_count: 6
+    notes: "The American Recordings series (1994–2006); Rubin's stripped-back approach revitalized Cash's late career and produced enduring late-life masterworks"
+
+  - from_pdna: PDNA-000004
+    to_entity_type: artist
+    to_entity_name: "Jay-Z"
+    edge_type: co-producer
+    strength: 8
+    work_count: 2
+    notes: "Collaborated on The Blueprint 3 and subsequent projects; Rubin's input shaped the minimalist direction of the later Blueprint series"
+
+  - from_pdna: PDNA-000004
+    to_entity_type: label
+    to_entity_name: "Def Jam Recordings"
+    edge_type: label
+    strength: 10
+    work_count: 30
+    notes: "Co-founded Def Jam with Russell Simmons in 1984 while at NYU; the label defined the commercial viability of hip-hop and hard rock crossover production"
+
+  # ── Brian Eno (PDNA-000005) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000005
+    to_entity_type: producer
+    to_pdna: PDNA-000024
+    edge_type: co-producer
+    strength: 10
+    work_count: 3
+    notes: "Berlin Trilogy co-producer: Low, Heroes, Lodger; Eno and Bowie/Visconti's collaboration defined the art-rock production aesthetic of the late 1970s"
+
+  - from_pdna: PDNA-000005
+    to_entity_type: artist
+    to_entity_name: "David Byrne"
+    edge_type: co-producer
+    strength: 9
+    work_count: 3
+    notes: "More Songs About Buildings and Food, Fear of Music, Remain in Light, and My Life in the Bush of Ghosts; eno/Byrne collaboration introduced layering and texture as primary compositional tools"
+
+  - from_pdna: PDNA-000005
+    to_entity_type: label
+    to_entity_name: "Island Records"
+    edge_type: label
+    strength: 7
+    work_count: 8
+    notes: "Early solo releases and production work released through Island; institutional home for the ambient/art-rock production identity that preceded his Virgin-era work"
+
+  # ── Dr. Dre (PDNA-000006) ──────────────────────────────────────────────────
+  - from_pdna: PDNA-000006
+    to_entity_type: artist
+    to_entity_name: "Eminem"
+    edge_type: mentored
+    strength: 10
+    work_count: 8
+    notes: "Signed, produced, and mentored Eminem from 1997; The Slim Shady LP, The Marshall Mathers LP, The Eminem Show — the most commercially successful A&R relationship in hip-hop history"
+
+  - from_pdna: PDNA-000006
+    to_entity_type: artist
+    to_entity_name: "Snoop Dogg"
+    edge_type: co-producer
+    strength: 9
+    work_count: 12
+    notes: "Produced Doggystyle and most of Snoop's early career catalogue; the creative center of West Coast g-funk production"
+
+  - from_pdna: PDNA-000006
+    to_entity_type: label
+    to_entity_name: "Aftermath Entertainment"
+    edge_type: label
+    strength: 10
+    work_count: 50
+    notes: "Founded Aftermath in 1996 after leaving Death Row; the label became the institutional home for the post-N.W.A West Coast sound through Eminem, Game, and Kendrick Lamar"
+
+  # ── Timbaland (PDNA-000007) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000007
+    to_entity_type: producer
+    to_pdna: PDNA-000041
+    edge_type: co-producer
+    strength: 10
+    work_count: 20
+    notes: "Long-term creative partnership producing Missy Elliott's complete discography from Supa Dupa Fly onward; the defining rhythmic production partnership of late-1990s R&B"
+
+  - from_pdna: PDNA-000007
+    to_entity_type: artist
+    to_entity_name: "Justin Timberlake"
+    edge_type: co-producer
+    strength: 9
+    work_count: 8
+    notes: "FutureSex/LoveSounds and subsequent solo material; Timbaland's rhythmic complexity transformed Timberlake's commercial R&B into a critical and commercial force"
+
+  - from_pdna: PDNA-000007
+    to_entity_type: label
+    to_entity_name: "Blackground Records"
+    edge_type: label
+    strength: 8
+    work_count: 15
+    notes: "Home of the Timbaland/Missy Elliott/Aaliyah creative cluster in the late 1990s and early 2000s; the institutional ecosystem for Timbaland's formative production period"
+
+  # ── Pharrell Williams (PDNA-000008) ─────────────────────────────────────────
+  - from_pdna: PDNA-000008
+    to_entity_type: producer
+    to_pdna: PDNA-000018
+    edge_type: featured
+    strength: 9
+    work_count: 3
+    notes: "Collaborated on Random Access Memories: performed on Get Lucky, Lose Yourself to Dance, and Fragments of Time; the collision between Pharrell's funk sensibility and Daft Punk's electronic architecture"
+
+  - from_pdna: PDNA-000008
+    to_entity_type: artist
+    to_entity_name: "Snoop Dogg"
+    edge_type: co-producer
+    strength: 8
+    work_count: 6
+    notes: "Produced multiple Snoop tracks including Drop It Like It's Hot; the N.E.R.D./Neptunes west coast outreach that bridged Virginian pop-funk and California hip-hop"
+
+  - from_pdna: PDNA-000008
+    to_entity_type: label
+    to_entity_name: "Star Trak Entertainment"
+    edge_type: label
+    strength: 9
+    work_count: 25
+    notes: "Co-founded Star Trak with Chad Hugo in 2001 as the Neptunes' label imprint; institutional home for the production duo's A&R work and roster development"
+
+  # ── Kanye West (PDNA-000009) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000009
+    to_entity_type: producer
+    to_pdna: PDNA-000047
+    edge_type: co-producer
+    strength: 8
+    work_count: 4
+    notes: "Arca contributed to The Life of Pablo sessions and subsequent projects; Kanye's engagement with Arca represented a decisive turn toward avant-garde electronic production aesthetics"
+
+  - from_pdna: PDNA-000009
+    to_entity_type: artist
+    to_entity_name: "Jay-Z"
+    edge_type: co-producer
+    strength: 10
+    work_count: 15
+    notes: "Produced multiple tracks on The Blueprint and its sequels before solo career; Watch the Throne as full co-producer; the most significant producer-to-artist-to-collaborator arc in hip-hop"
+
+  - from_pdna: PDNA-000009
+    to_entity_type: label
+    to_entity_name: "Roc-A-Fella Records"
+    edge_type: label
+    strength: 9
+    work_count: 20
+    notes: "Core producer at Roc-A-Fella 2001–2004; the institutional context for the soul-chop era that defined Kanye's first phase and the label's production identity"
+
+  # ── RZA (PDNA-000010) ────────────────────────────────────────────────────────
+  - from_pdna: PDNA-000010
+    to_entity_type: artist
+    to_entity_name: "Wu-Tang Clan"
+    edge_type: co-producer
+    strength: 10
+    work_count: 8
+    notes: "Sole producer on Enter the Wu-Tang (36 Chambers) and primary producer on the first five years of Wu-Tang affiliated releases; built the entire sonic universe of Wu-Tang from scratch"
+
+  - from_pdna: PDNA-000010
+    to_entity_type: artist
+    to_entity_name: "GZA"
+    edge_type: co-producer
+    strength: 9
+    work_count: 2
+    notes: "Produced Liquid Swords (1995) and collaborated on subsequent GZA material; among the strongest individual production-to-MC pairings in the Wu-Tang extended universe"
+
+  - from_pdna: PDNA-000010
+    to_entity_type: label
+    to_entity_name: "Loud Records"
+    edge_type: label
+    strength: 8
+    work_count: 10
+    notes: "Wu-Tang's primary distribution and label partner for the 36 Chambers era; the commercial vehicle for the RZA's production vision reaching national distribution"
+
+  # ── Madlib (PDNA-000011) ─────────────────────────────────────────────────────
+  - from_pdna: PDNA-000011
+    to_entity_type: producer
+    to_pdna: PDNA-000013
+    edge_type: co-producer
+    strength: 9
+    work_count: 1
+    notes: "Champion Sound (2003) — the only collaborative album between Dilla and Madlib; recorded through the mail, two producers exchanging beats without a shared session"
+
+  - from_pdna: PDNA-000011
+    to_entity_type: artist
+    to_entity_name: "MF DOOM"
+    edge_type: co-producer
+    strength: 10
+    work_count: 2
+    notes: "Madvillainy (2004) and Madvillainy 2 (2014); produced Madvillain's entire catalogue; the defining album of underground hip-hop's sample-based era"
+
+  - from_pdna: PDNA-000011
+    to_entity_type: label
+    to_entity_name: "Stones Throw Records"
+    edge_type: label
+    strength: 10
+    work_count: 20
+    notes: "Primary label home from the late 1990s through the 2010s; Stones Throw and Madlib's relationship shaped the label's identity as the institutional home of underground sample-based hip-hop"
+
+  # ── Flying Lotus (PDNA-000012) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000012
+    to_entity_type: artist
+    to_entity_name: "Thundercat"
+    edge_type: co-producer
+    strength: 10
+    work_count: 6
+    notes: "Long-term collaborator and bass contributor across Cosmogramma, Until the Quiet Comes, and You're Dead!; Thundercat's bass is structurally inseparable from Flying Lotus's later production identity"
+
+  - from_pdna: PDNA-000012
+    to_entity_type: artist
+    to_entity_name: "Kendrick Lamar"
+    edge_type: featured
+    strength: 8
+    work_count: 3
+    notes: "Featured Kendrick on You're Dead! and collaborated on the broader Brainfeeder roster's connection to TDE; the convergence of Compton rap and experimental beat music"
+
+  - from_pdna: PDNA-000012
+    to_entity_type: label
+    to_entity_name: "Warp Records"
+    edge_type: label
+    strength: 9
+    work_count: 8
+    notes: "Released Los Angeles, Cosmogramma, and the full Flying Lotus catalogue through Warp; the label's institutional identity and Flying Lotus's production aesthetic reinforced each other"
+
+  # ── J Dilla (PDNA-000013) ───────────────────────────────────────────────────
+  - from_pdna: PDNA-000013
+    to_entity_type: producer
+    to_pdna: PDNA-000011
+    edge_type: co-producer
+    strength: 9
+    work_count: 1
+    notes: "Champion Sound (2003); the only time two of the defining beat producers of their generation recorded as a formal duo; exchanged tracks by mail during a period when both were at their creative peak"
+
+  - from_pdna: PDNA-000013
+    to_entity_type: artist
+    to_entity_name: "Common"
+    edge_type: beat-sale
+    strength: 10
+    work_count: 12
+    notes: "Primary producer on Like Water for Chocolate (2000) and key contributor to One Day It'll All Make Sense and Be; among the most significant individual producer-to-MC relationships in alternative hip-hop"
+
+  - from_pdna: PDNA-000013
+    to_entity_type: label
+    to_entity_name: "MCA Records"
+    edge_type: label
+    strength: 7
+    work_count: 5
+    notes: "Slum Village's label relationship for Fantastic Vol. 2; MCA's commercial distribution gave Dilla's production wider reach beyond the Detroit underground"
+
+  # ── Giorgio Moroder (PDNA-000014) ───────────────────────────────────────────
+  - from_pdna: PDNA-000014
+    to_entity_type: producer
+    to_pdna: PDNA-000018
+    edge_type: featured
+    strength: 9
+    work_count: 2
+    notes: "Giorgio by Moroder and his participation in Random Access Memories (2013); Daft Punk's deliberate invocation of Moroder as the founding father of synthesizer-driven dance production"
+
+  - from_pdna: PDNA-000014
+    to_entity_type: artist
+    to_entity_name: "Donna Summer"
+    edge_type: co-producer
+    strength: 10
+    work_count: 10
+    notes: "Produced the complete Donna Summer discography from I Feel Love through Bad Girls; the partnership that created the template for electronic dance music production"
+
+  - from_pdna: PDNA-000014
+    to_entity_type: label
+    to_entity_name: "Casablanca Records"
+    edge_type: label
+    strength: 9
+    work_count: 12
+    notes: "Institutional home for the Moroder/Summer collaboration; Casablanca's disco identity and Moroder's production vision were mutually constitutive during the peak disco era"
+
+  # ── Aphex Twin (PDNA-000015) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000015
+    to_entity_type: producer
+    to_pdna: PDNA-000016
+    edge_type: remixed
+    strength: 8
+    work_count: 4
+    notes: "Mutual remix relationship and live performance context; Aphex Twin and Four Tet's aesthetic proximity generated an ongoing exchange through remixes and shared live contexts in the Warp ecosystem"
+
+  - from_pdna: PDNA-000015
+    to_entity_type: artist
+    to_entity_name: "Squarepusher"
+    edge_type: performed-with
+    strength: 7
+    work_count: 3
+    notes: "Shared billing on the Warp Artificial Intelligence compilation and live events; both represent the technical extremes of the Warp roster's breakcore and experimental electronic branch"
+
+  - from_pdna: PDNA-000015
+    to_entity_type: label
+    to_entity_name: "Warp Records"
+    edge_type: label
+    strength: 10
+    work_count: 15
+    notes: "Primary label from Selected Ambient Works Vol. 2 onward; Warp's institutional identity is partially constituted by the Aphex Twin catalogue — the relationship defined what an experimental electronic label could be"
+
+  # ── Four Tet (PDNA-000016) ──────────────────────────────────────────────────
+  - from_pdna: PDNA-000016
+    to_entity_type: producer
+    to_pdna: PDNA-000019
+    edge_type: co-producer
+    strength: 9
+    work_count: 5
+    notes: "Wolf Cub / Moth EPs (2009, 2011) and subsequent collaborative singles; Four Tet and Burial's partnership produced some of the most critically acclaimed ambient electronic music of the 2000s"
+
+  - from_pdna: PDNA-000016
+    to_entity_type: producer
+    to_pdna: PDNA-000015
+    edge_type: remixed
+    strength: 8
+    work_count: 4
+    notes: "Mutual remix exchange and live collaboration; one of the defining aesthetic partnerships within the Warp Records extended family"
+
+  - from_pdna: PDNA-000016
+    to_entity_type: label
+    to_entity_name: "Domino Records"
+    edge_type: label
+    strength: 8
+    work_count: 6
+    notes: "Released Rounds and subsequent early catalogue through Domino; the label's indie credibility aligned with Four Tet's position between experimental and accessible electronic music"
+
+  # ── Boards of Canada (PDNA-000017) ──────────────────────────────────────────
+  - from_pdna: PDNA-000017
+    to_entity_type: label
+    to_entity_name: "Warp Records"
+    edge_type: label
+    strength: 10
+    work_count: 5
+    notes: "Released Music Has the Right to Children, Geogaddi, The Campfire Headphase, and Tomorrow's Harvest through Warp; the label's ambient/IDM identity was shaped by the Boards of Canada catalogue"
+
+  - from_pdna: PDNA-000017
+    to_entity_type: engineer
+    to_entity_name: "Conny Plank"
+    edge_type: co-producer
+    strength: 6
+    work_count: 1
+    notes: "The Boards of Canada aesthetic is deeply influenced by Plank's approach to studio texture; their early production ethos was partly formed through direct study of Plank's engineering philosophy"
+
+  - from_pdna: PDNA-000017
+    to_entity_type: artist
+    to_entity_name: "Funki Porcini"
+    edge_type: performed-with
+    strength: 5
+    work_count: 2
+    notes: "Shared compilation appearances on the Skam Records and related Ninja Tune ecosystem in the mid-1990s; the broader IDM scene context from which BoC emerged"
+
+  # ── Daft Punk (PDNA-000018) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000018
+    to_entity_type: producer
+    to_pdna: PDNA-000008
+    edge_type: co-producer
+    strength: 9
+    work_count: 3
+    notes: "Get Lucky, Lose Yourself to Dance, and Fragments of Time on Random Access Memories; the convergence of Pharrell's groove sensibility and Daft Punk's electronic architecture produced one of the defining pop productions of the 2010s"
+
+  - from_pdna: PDNA-000018
+    to_entity_type: producer
+    to_pdna: PDNA-000014
+    edge_type: featured
+    strength: 9
+    work_count: 2
+    notes: "Giorgio by Moroder (RAM) and Moroder's participation in the Random Access Memories project; a deliberate lineage acknowledgment and genuine creative exchange with the founding father of electronic dance production"
+
+  - from_pdna: PDNA-000018
+    to_entity_type: label
+    to_entity_name: "Virgin Records"
+    edge_type: label
+    strength: 9
+    work_count: 6
+    notes: "Released Homework, Discovery, Human After All, and Alive 2007 through Virgin/EMI; institutional home for the peak Daft Punk commercial and artistic period"
+
+  # ── Burial (PDNA-000019) ────────────────────────────────────────────────────
+  - from_pdna: PDNA-000019
+    to_entity_type: producer
+    to_pdna: PDNA-000016
+    edge_type: co-producer
+    strength: 9
+    work_count: 5
+    notes: "Moth (2009), Wolf Cub (2011), and subsequent collaborative EPs; among the most critically celebrated ambient collaborations of the 2000s, combining Burial's atmospheric UK garage-derived production with Four Tet's organic electronic sound"
+
+  - from_pdna: PDNA-000019
+    to_entity_type: artist
+    to_entity_name: "Massive Attack"
+    edge_type: remixed
+    strength: 7
+    work_count: 1
+    notes: "Collaborated with Robert Del Naja (3D) on the split single Ego/Mirror (2011); Burial's engagement with Massive Attack linked two generations of UK underground electronic music"
+
+  - from_pdna: PDNA-000019
+    to_entity_type: label
+    to_entity_name: "Hyperdub Records"
+    edge_type: label
+    strength: 10
+    work_count: 8
+    notes: "Burial's exclusive label home from the debut through Antidawn; Kode9's Hyperdub and Burial's anonymous production practice were mutually defining for the second wave of dubstep and grime"
+
+  # ── Skrillex (PDNA-000020) ──────────────────────────────────────────────────
+  - from_pdna: PDNA-000020
+    to_entity_type: producer
+    to_pdna: PDNA-000021
+    edge_type: co-producer
+    strength: 9
+    work_count: 6
+    notes: "Jack Ü (2015) — collaborative album and live project combining Skrillex's EDM production and Diplo's global bass sensibility; Where Are Ü Now with Justin Bieber was the commercial peak"
+
+  - from_pdna: PDNA-000020
+    to_entity_type: artist
+    to_entity_name: "Justin Bieber"
+    edge_type: co-producer
+    strength: 8
+    work_count: 4
+    notes: "Where Are Ü Now (as Jack Ü) and subsequent co-productions; transformed Bieber's commercial pop identity and introduced experimental sound design to mainstream production"
+
+  - from_pdna: PDNA-000020
+    to_entity_type: label
+    to_entity_name: "OWSLA Records"
+    edge_type: label
+    strength: 10
+    work_count: 20
+    notes: "Founded OWSLA in 2011 as an institutional home for next-generation electronic production; the label's roster and identity were extensions of Skrillex's curatorial vision"
+
+  # ── Diplo (PDNA-000021) ─────────────────────────────────────────────────────
+  - from_pdna: PDNA-000021
+    to_entity_type: producer
+    to_pdna: PDNA-000020
+    edge_type: co-producer
+    strength: 9
+    work_count: 6
+    notes: "Jack Ü collaborative album and live shows; the combination of Diplo's global bass curation and Skrillex's drop architecture produced the defining festival crossover EDM project of 2015"
+
+  - from_pdna: PDNA-000021
+    to_entity_type: artist
+    to_entity_name: "MIA"
+    edge_type: co-producer
+    strength: 9
+    work_count: 3
+    notes: "Co-produced Arular and Kala; Diplo's introduction of baile funk, dancehall, and Sri Lankan musical elements into MIA's hybrid pop-political production was a formative moment for global bass music"
+
+  - from_pdna: PDNA-000021
+    to_entity_type: label
+    to_entity_name: "Mad Decent"
+    edge_type: label
+    strength: 10
+    work_count: 30
+    notes: "Founded Mad Decent in 2006 as a vehicle for global bass music production; the label's aesthetic identity — eclectic, high-energy, internationally sourced — matched Diplo's production vision exactly"
+
+  # ── Calvin Harris (PDNA-000022) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000022
+    to_entity_type: artist
+    to_entity_name: "Rihanna"
+    edge_type: co-producer
+    strength: 9
+    work_count: 4
+    notes: "We Found Love, This Is What You Came For, and multiple chart collaborations; the Calvin Harris / Rihanna production relationship generated some of the most commercially successful dance-pop of the 2010s"
+
+  - from_pdna: PDNA-000022
+    to_entity_type: artist
+    to_entity_name: "Dua Lipa"
+    edge_type: co-producer
+    strength: 8
+    work_count: 3
+    notes: "One Kiss and collaborative work in the UK pop production space; Harris's ability to construct chart-dominant singles found a natural fit with Dua Lipa's vocal range and pop identity"
+
+  - from_pdna: PDNA-000022
+    to_entity_type: label
+    to_entity_name: "Columbia Records"
+    edge_type: label
+    strength: 9
+    work_count: 10
+    notes: "Primary label home for the peak commercial period; Columbia's infrastructure enabled Harris's transition from UK bedroom producer to global festival headliner and pop production institution"
+
+  # ── Max Martin (PDNA-000023) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000023
+    to_entity_type: artist
+    to_entity_name: "Britney Spears"
+    edge_type: co-producer
+    strength: 10
+    work_count: 12
+    notes: "...Baby One More Time, Oops!... I Did It Again, and multiple early career singles; Martin's melodic hook formula and Spears's vocal identity were co-constitutive during her commercial peak"
+
+  - from_pdna: PDNA-000023
+    to_entity_type: artist
+    to_entity_name: "Taylor Swift"
+    edge_type: co-producer
+    strength: 9
+    work_count: 10
+    notes: "Collaborated on 1989, Reputation, and Lover; Martin's involvement transformed Swift's production from Nashville country into global pop architecture"
+
+  - from_pdna: PDNA-000023
+    to_entity_type: label
+    to_entity_name: "Sony Music"
+    edge_type: label
+    strength: 9
+    work_count: 50
+    notes: "Long-term production partnership with Sony-distributed labels including Jive and RCA; the institutional relationship that enabled Martin's position as the most commercially successful pop producer in history"
+
+  # ── David Bowie / Tony Visconti (PDNA-000024) ────────────────────────────────
+  - from_pdna: PDNA-000024
+    to_entity_type: producer
+    to_pdna: PDNA-000005
+    edge_type: co-producer
+    strength: 10
+    work_count: 3
+    notes: "Brian Eno as co-producer on Low, Heroes, and Lodger (1977–1979); the Berlin Trilogy is among the most celebrated production experiments in rock history, merging Bowie's art-rock vision with Eno's generative systems"
+
+  - from_pdna: PDNA-000024
+    to_entity_type: artist
+    to_entity_name: "Marc Bolan / T. Rex"
+    edge_type: co-producer
+    strength: 9
+    work_count: 8
+    notes: "Tony Visconti produced Electric Warrior, The Slider, and the core T. Rex glam rock catalogue; established Visconti's production identity before the Bowie partnership"
+
+  - from_pdna: PDNA-000024
+    to_entity_type: label
+    to_entity_name: "RCA Records"
+    edge_type: label
+    strength: 9
+    work_count: 12
+    notes: "Bowie's label from Ziggy Stardust through Let's Dance and the Berlin period; RCA's institutional flexibility enabled the serial genre shifts that define the Bowie/Visconti creative arc"
+
+  # ── Mutt Lange (PDNA-000025) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000025
+    to_entity_type: artist
+    to_entity_name: "Def Leppard"
+    edge_type: co-producer
+    strength: 10
+    work_count: 5
+    notes: "Pyromania, Hysteria, Adrenalize — the commercial hard rock catalogue that established Lange as the definitive rock production maximalist; Hysteria is among the most produced albums in rock history"
+
+  - from_pdna: PDNA-000025
+    to_entity_type: artist
+    to_entity_name: "AC/DC"
+    edge_type: co-producer
+    strength: 10
+    work_count: 3
+    notes: "Highway to Hell, Back in Black, and For Those About to Rock; Back in Black is among the best-selling albums in history and the defining Lange rock production statement"
+
+  - from_pdna: PDNA-000025
+    to_entity_type: label
+    to_entity_name: "Mercury Records"
+    edge_type: label
+    strength: 8
+    work_count: 8
+    notes: "Institutional home for the Def Leppard peak period; Mercury's major label infrastructure supported the multi-year production investment required for Lange's maximalist approach"
+
+  # ── Steve Albini (PDNA-000026) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000026
+    to_entity_type: artist
+    to_entity_name: "Pixies"
+    edge_type: co-producer
+    strength: 10
+    work_count: 2
+    notes: "Recorded Surfer Rosa (1988) and Doolittle (1989); Albini's approach to capturing the Pixies' loud-quiet-loud dynamic established his method as the defining aesthetic for alternative rock recording"
+
+  - from_pdna: PDNA-000026
+    to_entity_type: artist
+    to_entity_name: "Nirvana"
+    edge_type: co-producer
+    strength: 9
+    work_count: 1
+    notes: "Engineered In Utero (1993); Nirvana hired Albini specifically to counteract the commercial sheen of Nevermind — In Utero is Albini's documentation philosophy applied to the world's most commercially scrutinised band"
+
+  - from_pdna: PDNA-000026
+    to_entity_type: label
+    to_entity_name: "Touch and Go Records"
+    edge_type: label
+    strength: 8
+    work_count: 10
+    notes: "Primary label affiliation through the Shellac catalogue and the broader Chicago independent rock ecosystem; Touch and Go's institutional ethics matched Albini's anti-commercial production philosophy"
+
+  # ── Joe Meek (PDNA-000027) ──────────────────────────────────────────────────
+  - from_pdna: PDNA-000027
+    to_entity_type: artist
+    to_entity_name: "The Tornados"
+    edge_type: co-producer
+    strength: 10
+    work_count: 6
+    notes: "Produced Telstar (1962), the first UK record to reach #1 in the US; Meek's primitive electronic production techniques created the space-age sound that pre-dated the synthesizer era by a decade"
+
+  - from_pdna: PDNA-000027
+    to_entity_type: artist
+    to_entity_name: "Billy Fury"
+    edge_type: co-producer
+    strength: 7
+    work_count: 4
+    notes: "Produced multiple Billy Fury recordings; Meek's work with Fury demonstrated his capacity to apply his idiosyncratic studio approach to straightforward British pop production"
+
+  - from_pdna: PDNA-000027
+    to_entity_type: label
+    to_entity_name: "Triumph Records"
+    edge_type: label
+    strength: 9
+    work_count: 15
+    notes: "Co-founded and operated Triumph Records from his flat at 304 Holloway Road; one of the first independent production studios in Britain, predating the modern independent label model"
+
+  # ── Nile Rodgers (PDNA-000028) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000028
+    to_entity_type: artist
+    to_entity_name: "David Bowie"
+    edge_type: co-producer
+    strength: 9
+    work_count: 1
+    notes: "Co-produced Let's Dance (1983); Rodgers's CHIC-derived rhythmic approach applied to Bowie's art-rock songwriting produced the commercial breakthrough of Bowie's later career"
+
+  - from_pdna: PDNA-000028
+    to_entity_type: artist
+    to_entity_name: "Madonna"
+    edge_type: co-producer
+    strength: 9
+    work_count: 1
+    notes: "Co-produced Like a Virgin (1984) and the title track; Rodgers's rhythm guitar architecture and pop instincts were central to establishing Madonna's commercial mainstream identity"
+
+  - from_pdna: PDNA-000028
+    to_entity_type: label
+    to_entity_name: "Atlantic Records"
+    edge_type: label
+    strength: 9
+    work_count: 12
+    notes: "CHIC signed to Atlantic; the label's funk and R&B institutional history made it the natural home for the CHIC production identity and Rodgers's early solo production work"
+
+  # ── Teddy Riley (PDNA-000029) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000029
+    to_entity_type: artist
+    to_entity_name: "Michael Jackson"
+    edge_type: co-producer
+    strength: 9
+    work_count: 6
+    notes: "Co-produced multiple tracks on Dangerous (1991) including Jam and Remember the Time; Riley's new jack swing rhythmic architecture applied to Jackson's pop productions at their commercial peak"
+
+  - from_pdna: PDNA-000029
+    to_entity_type: artist
+    to_entity_name: "Bobby Brown"
+    edge_type: co-producer
+    strength: 8
+    work_count: 4
+    notes: "Co-produced key tracks on Don't Be Cruel (1988); the Riley/Brown collaboration was the commercial definition of new jack swing applied to mainstream R&B"
+
+  - from_pdna: PDNA-000029
+    to_entity_type: label
+    to_entity_name: "Motown Records"
+    edge_type: label
+    strength: 7
+    work_count: 8
+    notes: "Production relationship with Motown through the early-to-mid 1990s; the institutional alignment of new jack swing with Motown's R&B tradition in the post-Gordy era"
+
+  # ── Prince (PDNA-000030) ────────────────────────────────────────────────────
+  - from_pdna: PDNA-000030
+    to_entity_type: artist
+    to_entity_name: "Sheila E"
+    edge_type: mentored
+    strength: 9
+    work_count: 8
+    notes: "Produced, co-wrote, and mentored Sheila E's complete early career; The Glamorous Life and Romance 1600 were produced entirely by Prince under the Prince productions umbrella"
+
+  - from_pdna: PDNA-000030
+    to_entity_type: artist
+    to_entity_name: "Morris Day / The Time"
+    edge_type: co-producer
+    strength: 8
+    work_count: 3
+    notes: "Produced The Time's first three albums effectively solo under pseudonyms; the band's sonic identity was created entirely by Prince as a vehicle for a different performance aesthetic"
+
+  - from_pdna: PDNA-000030
+    to_entity_type: label
+    to_entity_name: "Warner Bros. Records"
+    edge_type: label
+    strength: 8
+    work_count: 15
+    notes: "Label from For You through Emancipation and the public dispute over ownership rights; the Prince/Warner conflict became a landmark event in artist rights and intellectual property discourse"
+
+  # ── Butch Vig (PDNA-000031) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000031
+    to_entity_type: artist
+    to_entity_name: "Nirvana"
+    edge_type: co-producer
+    strength: 10
+    work_count: 1
+    notes: "Produced Nevermind (1991); the album that brought alternative rock to mainstream commercial viability; Vig's production translated raw punk energy into a format that crossed to Top 40 radio without losing its edge"
+
+  - from_pdna: PDNA-000031
+    to_entity_type: artist
+    to_entity_name: "Smashing Pumpkins"
+    edge_type: co-producer
+    strength: 9
+    work_count: 2
+    notes: "Produced Siamese Dream (1993) and Mellon Collie and the Infinite Sadness (1995); Vig's layered guitar approach and dynamic range on Siamese Dream is among the defining alternative rock production achievements"
+
+  - from_pdna: PDNA-000031
+    to_entity_type: label
+    to_entity_name: "Geffen Records"
+    edge_type: label
+    strength: 9
+    work_count: 8
+    notes: "Primary label relationship through the Nirvana and Smashing Pumpkins productions; Geffen's alternative rock roster in the early 1990s made it the institutional home for Vig's defining production work"
+
+  # ── Trent Reznor (PDNA-000032) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000032
+    to_entity_type: artist
+    to_entity_name: "Atticus Ross"
+    edge_type: co-producer
+    strength: 10
+    work_count: 15
+    notes: "Full creative and production partnership from The Social Network score onward; Reznor and Ross's film scoring work represents the translation of Nine Inch Nails' industrial production aesthetic into the Hollywood soundtrack context"
+
+  - from_pdna: PDNA-000032
+    to_entity_type: artist
+    to_entity_name: "Marilyn Manson"
+    edge_type: mentored
+    strength: 8
+    work_count: 2
+    notes: "Co-produced Portrait of an American Family and Antichrist Superstar; Reznor's industrial production template applied to Manson's theatrical shock-rock identity in the early career"
+
+  - from_pdna: PDNA-000032
+    to_entity_type: label
+    to_entity_name: "Interscope Records"
+    edge_type: label
+    strength: 9
+    work_count: 10
+    notes: "Nothing Records imprint under Interscope; the label structure that gave Reznor institutional independence while maintaining major distribution — a model that influenced the subsequent generation of producer-owned imprints"
+
+  # ── Kraftwerk (PDNA-000033) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000033
+    to_entity_type: engineer
+    to_entity_name: "Conny Plank"
+    edge_type: co-producer
+    strength: 9
+    work_count: 4
+    notes: "Engineered and co-produced the early Kraftwerk catalogue including Autobahn and Radio-Activity; Plank's experimental studio approach was formative for the electronic minimalism that Kraftwerk later refined internally"
+
+  - from_pdna: PDNA-000033
+    to_entity_type: label
+    to_entity_name: "Kling Klang Records"
+    edge_type: label
+    strength: 10
+    work_count: 8
+    notes: "Kraftwerk's wholly owned label and studio; complete control of production, distribution, and licensing from Computer World onward — the model of total production autonomy"
+
+  - from_pdna: PDNA-000033
+    to_entity_type: artist
+    to_entity_name: "New Order"
+    edge_type: performed-with
+    strength: 6
+    work_count: 2
+    notes: "Shared performance context at the Haçienda and the broader Factory Records/electronic music ecosystem in the early 1980s; New Order's Bernard Sumner cited Kraftwerk as the primary influence on Joy Division's and New Order's electronic turn"
+
+  # ── Hank Shocklee / Bomb Squad (PDNA-000034) ───────────────────────────────
+  - from_pdna: PDNA-000034
+    to_entity_type: artist
+    to_entity_name: "Public Enemy"
+    edge_type: co-producer
+    strength: 10
+    work_count: 8
+    notes: "Produced the complete Public Enemy catalogue through the peak creative period: Yo! Bum Rush the Show, It Takes a Nation, Fear of a Black Planet; the Bomb Squad's production identity is inseparable from Public Enemy's political project"
+
+  - from_pdna: PDNA-000034
+    to_entity_type: artist
+    to_entity_name: "Ice Cube"
+    edge_type: co-producer
+    strength: 9
+    work_count: 2
+    notes: "Co-produced AmeriKKKa's Most Wanted (1990); after Ice Cube's departure from N.W.A, the Bomb Squad's New York sample collage aesthetic was applied to his West Coast political hip-hop — a deliberate cross-coastal production alliance"
+
+  - from_pdna: PDNA-000034
+    to_entity_type: label
+    to_entity_name: "Def Jam Recordings"
+    edge_type: label
+    strength: 9
+    work_count: 15
+    notes: "Institutional home for Public Enemy and the Bomb Squad's production work; Def Jam's position between underground credibility and commercial infrastructure gave the Bomb Squad's confrontational production national reach"
+
+  # ── Pete Rock (PDNA-000035) ─────────────────────────────────────────────────
+  - from_pdna: PDNA-000035
+    to_entity_type: artist
+    to_entity_name: "CL Smooth"
+    edge_type: co-producer
+    strength: 10
+    work_count: 4
+    notes: "The Pete Rock & CL Smooth partnership produced Mecca and the Soul Brother and The Main Ingredient; among the most critically celebrated MC-producer relationships in boom-bap history"
+
+  - from_pdna: PDNA-000035
+    to_entity_type: artist
+    to_entity_name: "Nas"
+    edge_type: beat-sale
+    strength: 8
+    work_count: 3
+    notes: "Produced The World Is Yours (Illmatic) and contributed to subsequent Nas projects; among the most iconic individual beat placements in hip-hop — the loop, the soul, the horn are inseparable from the track's identity"
+
+  - from_pdna: PDNA-000035
+    to_entity_type: label
+    to_entity_name: "Elektra Records"
+    edge_type: label
+    strength: 8
+    work_count: 5
+    notes: "Label home for the Pete Rock & CL Smooth peak period; Elektra's R&B and hip-hop roster in the early 1990s made it the natural institutional home for the duo's soulful boom-bap production"
+
+  # ── DJ Premier (PDNA-000036) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000036
+    to_entity_type: artist
+    to_entity_name: "Gang Starr / Guru"
+    edge_type: co-producer
+    strength: 10
+    work_count: 8
+    notes: "Produced the complete Gang Starr discography; the Premier/Guru partnership defined the sonic and lyrical template for East Coast jazz-inflected hip-hop across eight albums"
+
+  - from_pdna: PDNA-000036
+    to_entity_type: artist
+    to_entity_name: "Nas"
+    edge_type: beat-sale
+    strength: 9
+    work_count: 5
+    notes: "Produced N.Y. State of Mind, Represent, and multiple Illmatic and subsequent Nas tracks; the Premier/Nas creative relationship is one of the defining producer-MC pairings in hip-hop history"
+
+  - from_pdna: PDNA-000036
+    to_entity_type: label
+    to_entity_name: "Chrysalis Records"
+    edge_type: label
+    strength: 8
+    work_count: 6
+    notes: "Gang Starr's label home for Step in the Arena and Guru's Jazzmatazz series; Chrysalis's jazz and soul affiliations aligned with the Premier production aesthetic"
+
+  # ── Large Professor (PDNA-000037) ───────────────────────────────────────────
+  - from_pdna: PDNA-000037
+    to_entity_type: artist
+    to_entity_name: "Nas"
+    edge_type: beat-sale
+    strength: 9
+    work_count: 4
+    notes: "Produced the demo sessions that preceded Illmatic and contributed In the Summer (Live at the Barbeque) and other formative Nas tracks; Large Professor's ear for vocal talent identified Nas before the major label era"
+
+  - from_pdna: PDNA-000037
+    to_entity_type: artist
+    to_entity_name: "Main Source"
+    edge_type: co-producer
+    strength: 9
+    work_count: 1
+    notes: "Production, arrangement, and performance on Breaking Atoms (1991); the album is among the most celebrated underground hip-hop releases of the early 1990s and established Large Professor's production identity"
+
+  - from_pdna: PDNA-000037
+    to_entity_type: label
+    to_entity_name: "Wild Pitch Records"
+    edge_type: label
+    strength: 8
+    work_count: 3
+    notes: "Label home for the Main Source releases; Wild Pitch's underground hip-hop identity and limited commercial infrastructure made it the authentic venue for Large Professor's production before the major label era"
+
+  # ── Erick Sermon / EPMD (PDNA-000038) ─────────────────────────────────────
+  - from_pdna: PDNA-000038
+    to_entity_type: artist
+    to_entity_name: "Redman"
+    edge_type: mentored
+    strength: 9
+    work_count: 6
+    notes: "Signed, produced, and mentored Redman from Whut? Thee Album onward; the EPMD/Redman production relationship was the defining A&R achievement of Erick Sermon's post-EPMD career"
+
+  - from_pdna: PDNA-000038
+    to_entity_type: artist
+    to_entity_name: "K-Solo"
+    edge_type: mentored
+    strength: 7
+    work_count: 2
+    notes: "Produced K-Solo's debut album and managed the early career; the Biz Markie, K-Solo, and Redman roster established EPMD's Hit Squad as a functional independent production and management operation"
+
+  - from_pdna: PDNA-000038
+    to_entity_type: label
+    to_entity_name: "Def Jam Recordings"
+    edge_type: label
+    strength: 8
+    work_count: 8
+    notes: "EPMD's reunion and Hit Squad material through Def Jam; the institutional alignment of Def Jam's commercial hip-hop platform with EPMD's slow-funk production identity in the early 1990s"
+
+  # ── Swizz Beatz (PDNA-000039) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000039
+    to_entity_type: artist
+    to_entity_name: "Jay-Z"
+    edge_type: beat-sale
+    strength: 9
+    work_count: 10
+    notes: "Produced multiple Jay-Z tracks across the Roc-A-Fella and Atlantic eras including On to the Next One; the Swizz/Jay-Z production relationship defined the aggressive, piano-driven sound of late-2000s Jay-Z material"
+
+  - from_pdna: PDNA-000039
+    to_entity_type: artist
+    to_entity_name: "DMX"
+    edge_type: co-producer
+    strength: 10
+    work_count: 12
+    notes: "Primary producer on multiple DMX albums including It's Dark and Hell Is Hot and Flesh of My Flesh, Blood of My Blood; the Swizz/DMX production relationship is the defining commercial hip-hop sound of the late 1990s"
+
+  - from_pdna: PDNA-000039
+    to_entity_type: label
+    to_entity_name: "Ruff Ryders Records"
+    edge_type: label
+    strength: 10
+    work_count: 20
+    notes: "In-house producer for Ruff Ryders from the label's founding; institutional identity of Ruff Ryders' aggressive commercial hip-hop was built on the Swizz Beatz production template"
+
+  # ── Just Blaze (PDNA-000040) ────────────────────────────────────────────────
+  - from_pdna: PDNA-000040
+    to_entity_type: artist
+    to_entity_name: "Jay-Z"
+    edge_type: beat-sale
+    strength: 10
+    work_count: 15
+    notes: "Primary producer on The Blueprint, The Blueprint 2, and The Black Album; the Just Blaze/Jay-Z production relationship defined the orchestral soul-chop aesthetic of early 2000s commercial hip-hop"
+
+  - from_pdna: PDNA-000040
+    to_entity_type: artist
+    to_entity_name: "Freeway"
+    edge_type: co-producer
+    strength: 8
+    work_count: 2
+    notes: "Produced Philadelphia Freeway and contributed to the Roc-A-Fella Philadelphia roster; the Just Blaze/Freeway production partnership demonstrated that the Blueprint aesthetic could serve harder lyrical content"
+
+  - from_pdna: PDNA-000040
+    to_entity_type: label
+    to_entity_name: "Roc-A-Fella Records"
+    edge_type: label
+    strength: 9
+    work_count: 20
+    notes: "In-house producer at Roc-A-Fella from 2000 onward; the label's soul-chop production identity in the Blueprint era was co-created by Just Blaze and Kanye West within the Roc-A-Fella institutional framework"
+
+  # ── Missy Elliott (PDNA-000041) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000041
+    to_entity_type: producer
+    to_pdna: PDNA-000007
+    edge_type: co-producer
+    strength: 10
+    work_count: 20
+    notes: "The Timbaland/Missy creative partnership produced Supa Dupa Fly, Da Real World, Miss E… So Addictive, and Under Construction; the defining long-term producer-as-artist collaborative model in 1990s-2000s R&B"
+
+  - from_pdna: PDNA-000041
+    to_entity_type: artist
+    to_entity_name: "Aaliyah"
+    edge_type: co-producer
+    strength: 8
+    work_count: 3
+    notes: "Co-wrote and produced material for Aaliyah within the Timbaland/Missy/Aaliyah creative cluster; the three artists represented the creative core of the Blackground Records production ecosystem"
+
+  - from_pdna: PDNA-000041
+    to_entity_type: label
+    to_entity_name: "Elektra Records"
+    edge_type: label
+    strength: 9
+    work_count: 8
+    notes: "Label home for the peak Missy Elliott period through Supa Dupa Fly and Da Real World; Elektra's R&B institutional identity made it a natural home for the Timbaland/Missy production aesthetic"
+
+  # ── Linda Perry (PDNA-000042) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000042
+    to_entity_type: artist
+    to_entity_name: "Pink"
+    edge_type: co-producer
+    strength: 10
+    work_count: 6
+    notes: "Co-produced Missundaztood and co-wrote Get the Party Started, Don't Let Me Get Me, and Family Portrait; Perry's production brought Pink from a failed dance-pop debut to a defining rock-influenced pop identity"
+
+  - from_pdna: PDNA-000042
+    to_entity_type: artist
+    to_entity_name: "Christina Aguilera"
+    edge_type: co-producer
+    strength: 9
+    work_count: 5
+    notes: "Co-produced Beautiful and multiple Stripped tracks; Perry's raw emotional production approach was the defining voice behind Aguilera's critical artistic rebirth in 2002"
+
+  - from_pdna: PDNA-000042
+    to_entity_type: label
+    to_entity_name: "Interscope Records"
+    edge_type: label
+    strength: 8
+    work_count: 12
+    notes: "Production relationship through Interscope's pop roster; the institutional context for Perry's work with Pink and other Interscope artists in the early 2000s"
+
+  # ── Rick Nowels (PDNA-000043) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000043
+    to_entity_type: artist
+    to_entity_name: "Lana Del Rey"
+    edge_type: co-producer
+    strength: 10
+    work_count: 8
+    notes: "Co-produced multiple Lana Del Rey albums including Norman Fucking Rockwell!; Nowels's atmospheric production aesthetic and Del Rey's vocal and lyrical identity are mutually reinforcing across their collaboration"
+
+  - from_pdna: PDNA-000043
+    to_entity_type: artist
+    to_entity_name: "Belinda Carlisle"
+    edge_type: co-producer
+    strength: 8
+    work_count: 4
+    notes: "Co-produced and co-wrote Heaven Is a Place on Earth (1987); Nowels's breakthrough as a commercial pop songwriter-producer, establishing the cinematic atmospheric approach he continued into the 2010s"
+
+  - from_pdna: PDNA-000043
+    to_entity_type: label
+    to_entity_name: "Interscope Records"
+    edge_type: label
+    strength: 8
+    work_count: 10
+    notes: "Long-term production relationship with Interscope's pop roster; the institutional home for Nowels's work with Lana Del Rey and the broader 2010s indie-pop production context"
+
+  # ── Mark Ronson (PDNA-000044) ───────────────────────────────────────────────
+  - from_pdna: PDNA-000044
+    to_entity_type: artist
+    to_entity_name: "Amy Winehouse"
+    edge_type: co-producer
+    strength: 10
+    work_count: 1
+    notes: "Produced Back to Black (2006); the collaboration between Ronson's vintage soul production approach and Winehouse's voice produced one of the most critically acclaimed pop albums of the 2000s"
+
+  - from_pdna: PDNA-000044
+    to_entity_type: artist
+    to_entity_name: "Bruno Mars"
+    edge_type: co-producer
+    strength: 9
+    work_count: 3
+    notes: "Co-produced Uptown Funk and collaborated on Uptown Special; the Ronson/Mars production partnership applied Ronson's vintage funk aesthetic to the highest commercial pop context of the 2010s"
+
+  - from_pdna: PDNA-000044
+    to_entity_type: label
+    to_entity_name: "Columbia Records"
+    edge_type: label
+    strength: 8
+    work_count: 8
+    notes: "Label relationship for the peak solo production period including Uptown Special; Columbia's commercial pop infrastructure enabled Ronson's vintage production aesthetic to reach mainstream audiences"
+
+  # ── Danger Mouse (PDNA-000045) ──────────────────────────────────────────────
+  - from_pdna: PDNA-000045
+    to_entity_type: artist
+    to_entity_name: "CeeLo Green"
+    edge_type: co-producer
+    strength: 10
+    work_count: 2
+    notes: "Gnarls Barkley partnership producing St. Elsewhere and The Odd Couple; Danger Mouse and CeeLo created Crazy — among the most critically and commercially successful crossover singles of the 2000s"
+
+  - from_pdna: PDNA-000045
+    to_entity_type: artist
+    to_entity_name: "James Mercer"
+    edge_type: co-producer
+    strength: 9
+    work_count: 3
+    notes: "Broken Bells collaboration producing the Broken Bells album and After the Disco; Danger Mouse's cinematic production aligned with Mercer's melodic instincts to produce critically celebrated art-pop"
+
+  - from_pdna: PDNA-000045
+    to_entity_type: label
+    to_entity_name: "Capitol Records"
+    edge_type: label
+    strength: 8
+    work_count: 6
+    notes: "Label home for the Gnarls Barkley project; Capitol's commercial pop infrastructure enabled Crazy's unprecedented global cross-format chart performance"
+
+  # ── Hudson Mohawke (PDNA-000046) ─────────────────────────────────────────────
+  - from_pdna: PDNA-000046
+    to_entity_type: producer
+    to_pdna: PDNA-000009
+    edge_type: co-producer
+    strength: 8
+    work_count: 4
+    notes: "Contributed to Cruel Summer sessions and collaborated within the G.O.O.D. Music production ecosystem; Kanye's engagement with HudMo's maximalist electronic approach influenced the broader sonic direction of the Cruel Summer era"
+
+  - from_pdna: PDNA-000046
+    to_entity_type: artist
+    to_entity_name: "Lunice"
+    edge_type: co-producer
+    strength: 9
+    work_count: 1
+    notes: "TNGHT EP (2012) as joint project with Lunice; among the most influential single releases in the trap-informed electronic music space, defining the big-room hip-hop-electronic crossover aesthetic"
+
+  - from_pdna: PDNA-000046
+    to_entity_type: label
+    to_entity_name: "Warp Records"
+    edge_type: label
+    strength: 9
+    work_count: 6
+    notes: "Primary label home from Butter onward; Warp's institutional position in the experimental electronic space gave HudMo's maximalist aesthetic a curatorial context that distinguished it from commercial EDM"
+
+  # ── Arca (PDNA-000047) ──────────────────────────────────────────────────────
+  - from_pdna: PDNA-000047
+    to_entity_type: producer
+    to_pdna: PDNA-000009
+    edge_type: co-producer
+    strength: 8
+    work_count: 3
+    notes: "Collaborated on The Life of Pablo and Yeezus-era material; Kanye's engagement with Arca's deconstructed electronic aesthetic was a deliberate move toward avant-garde production that influenced the sonic radicalism of Yeezus"
+
+  - from_pdna: PDNA-000047
+    to_entity_type: artist
+    to_entity_name: "FKA Twigs"
+    edge_type: co-producer
+    strength: 9
+    work_count: 2
+    notes: "Produced multiple tracks on LP1 and the preceding EPs; Arca's deconstructed club production aesthetic was the sonic architecture that defined FKA Twigs's art-pop identity in her debut period"
+
+  - from_pdna: PDNA-000047
+    to_entity_type: label
+    to_entity_name: "XL Recordings"
+    edge_type: label
+    strength: 9
+    work_count: 5
+    notes: "Primary label from Mutant onward; XL's position at the intersection of commercial indie and experimental music made it the appropriate institutional home for Arca's increasingly genre-defying solo work"
+
+  # ── Actress (PDNA-000048) ───────────────────────────────────────────────────
+  - from_pdna: PDNA-000048
+    to_entity_type: label
+    to_entity_name: "Werk Discs"
+    edge_type: label
+    strength: 10
+    work_count: 8
+    notes: "Actress's wholly owned imprint operating within the Ninja Tune distribution network; the label's small roster and curatorial identity reflects the Actress production philosophy of restraint and selection"
+
+  - from_pdna: PDNA-000048
+    to_entity_type: artist
+    to_entity_name: "AlunaGeorge"
+    edge_type: remixed
+    strength: 6
+    work_count: 1
+    notes: "Remixed AlunaGeorge material, demonstrating the cross-genre reach of the Werk Discs aesthetic into contemporary R&B and pop production contexts"
+
+  - from_pdna: PDNA-000048
+    to_entity_type: artist
+    to_entity_name: "London Contemporary Orchestra"
+    edge_type: performed-with
+    strength: 7
+    work_count: 1
+    notes: "Performed and collaborated with LCO in a live context; Actress's engagement with orchestral performance represented an extension of the abstract electronic production aesthetic into acoustic sound design"
+
+  # ── Jai Paul (PDNA-000049) ──────────────────────────────────────────────────
+  - from_pdna: PDNA-000049
+    to_entity_type: label
+    to_entity_name: "XL Recordings"
+    edge_type: label
+    strength: 8
+    work_count: 3
+    notes: "Signed to XL for the posthumously 'released' leak material and the eventual official release; XL's institutional reputation for protecting artist creative control made it the appropriate home for the Jai Paul back-catalogue situation"
+
+  - from_pdna: PDNA-000049
+    to_entity_type: artist
+    to_entity_name: "Dev Hynes / Blood Orange"
+    edge_type: co-producer
+    strength: 7
+    work_count: 2
+    notes: "Collaborative affiliation within the London experimental pop underground of the early 2010s; shared aesthetic sensibility around lo-fi R&B production with electronic texture"
+
+  - from_pdna: PDNA-000049
+    to_entity_type: artist
+    to_entity_name: "ABRA"
+    edge_type: co-producer
+    strength: 6
+    work_count: 1
+    notes: "Production contributions to ABRA's early releases; the Jai Paul production aesthetic applied to the Atlanta experimental R&B context"
+
+  # ── Hiatus Kaiyote / Paul Bender (PDNA-000050) ──────────────────────────────
+  - from_pdna: PDNA-000050
+    to_entity_type: label
+    to_entity_name: "Flying Buddha Records"
+    edge_type: label
+    strength: 9
+    work_count: 5
+    notes: "Label home and production infrastructure for the Hiatus Kaiyote catalogue; Flying Buddha's institutional alignment with the Melbourne-based neo-soul production scene reflects the band's independent creative model"
+
+  - from_pdna: PDNA-000050
+    to_entity_type: artist
+    to_entity_name: "Questlove"
+    edge_type: performed-with
+    strength: 8
+    work_count: 3
+    notes: "Performed and collaborated with Questlove in live and studio contexts; the Hiatus Kaiyote / Roots connection represents the most significant endorsement the band received during the transition from Melbourne underground to international neo-soul recognition"
+
+  - from_pdna: PDNA-000050
+    to_entity_type: artist
+    to_entity_name: "Thundercat"
+    edge_type: performed-with
+    strength: 7
+    work_count: 2
+    notes: "Shared live and studio contexts through the Brainfeeder-adjacent neo-soul scene; the Hiatus Kaiyote / Thundercat aesthetic overlap in advanced harmonic neo-soul positioned both acts within the same international critical conversation"

@@ -705,6 +705,82 @@ def dna_iterate(ctx, pdna_id, ctx_filter):
         console.print(Panel(prompt_text, title=panel_title))
 
 
+@dna_group.command("collabs")
+@click.argument("pdna_id")
+@click.option("--type", "edge_type_filter", default=None,
+              help="Filter by edge_type (co-producer, label, beat-sale, mentored, featured, remixed, performed-with)")
+@click.pass_context
+def dna_collabs(ctx, pdna_id, edge_type_filter):
+    """Show collaborator edges for a producer."""
+    from sqlalchemy import create_engine, text
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        p = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id}
+        ).fetchone()
+        if not p:
+            console.print(f"[red]Producer {pdna_id} not found.[/]")
+            return
+
+        params = {"pid": p[0]}
+        type_clause = ""
+        if edge_type_filter:
+            type_clause = " AND ce.edge_type = :etype"
+            params["etype"] = edge_type_filter
+
+        rows = conn.execute(
+            text(
+                "SELECT ce.to_entity_type, "
+                "COALESCE(p2.name, ce.to_entity_name) AS entity_name, "
+                "p2.pdna_id AS to_pdna_id, "
+                "ce.edge_type, ce.strength, ce.work_count, ce.notes "
+                "FROM collaborator_edges ce "
+                "LEFT JOIN producers p2 ON p2.id = ce.to_producer_id "
+                f"WHERE ce.from_producer_id = :pid{type_clause} "
+                "ORDER BY ce.edge_type, entity_name"
+            ),
+            params,
+        ).fetchall()
+
+    if not rows:
+        msg = f"No collaborator edges for {pdna_id}"
+        if edge_type_filter:
+            msg += f" with edge type '{edge_type_filter}'"
+        console.print(f"[yellow]{msg}.[/]")
+        return
+
+    title = f"Collaborators — {pdna_id}  {p[1]}"
+    if edge_type_filter:
+        title += f" [{edge_type_filter}]"
+
+    table = Table(title=title)
+    table.add_column("Entity")
+    table.add_column("Type", style="dim")
+    table.add_column("Edge Type")
+    table.add_column("Strength", justify="right")
+    table.add_column("Works", justify="right")
+    table.add_column("Notes")
+
+    for row in rows:
+        to_entity_type, entity_name, to_pdna_id, edge_type, strength, work_count, notes = (
+            row[0], row[1], row[2], row[3], row[4], row[5], row[6]
+        )
+        entity_str = entity_name or "[dim]—[/]"
+        if to_pdna_id:
+            entity_str = f"[cyan]{entity_name}[/] [dim]{to_pdna_id}[/]"
+        notes_str = (notes[:60] + "…") if notes and len(notes) > 60 else (notes or "")
+        table.add_row(
+            entity_str,
+            to_entity_type or "",
+            edge_type or "",
+            str(strength) if strength is not None else "[dim]—[/]",
+            str(work_count) if work_count else "[dim]—[/]",
+            notes_str,
+        )
+    console.print(table)
+
+
 @dna_group.command("compare")
 @click.argument("pdna_id_a")
 @click.argument("pdna_id_b")
