@@ -1,0 +1,903 @@
+# Gear claims for Batch 001 producers — 3 per producer, 150 total.
+# gear_category: sampler | drum_machine | synthesizer | daw | mixer | hardware | plugin
+# status: reported | verified
+gear:
+  - pdna_id: PDNA-000001
+    claims:
+      - gear_category: mixer
+        gear_name: "Neve 8078 console"
+        gear_era: "1970–1982"
+        status: verified
+        notes: "Primary console at AIR and Abbey Road; shaped the warm midrange of Martin's classic recordings"
+      - gear_category: hardware
+        gear_name: "Studer J37 4-track tape machine"
+        gear_era: "1965–1970"
+        status: verified
+        notes: "Abbey Road's workhorse; used for Sgt. Pepper's bouncing sessions"
+      - gear_category: mixer
+        gear_name: "EMI TG12345 console"
+        gear_era: "1969–1975"
+        status: verified
+        notes: "Replaced the REDD.51 at Abbey Road; first solid-state desk on Abbey Road album"
+
+  - pdna_id: PDNA-000002
+    claims:
+      - gear_category: hardware
+        gear_name: "Ampex 4-track reel-to-reel"
+        gear_era: "1960–1966"
+        status: verified
+        notes: "Gold Star Studios; stacked tracks to create the Wall of Sound density"
+      - gear_category: hardware
+        gear_name: "Gold Star echo chambers"
+        gear_era: "1958–1966"
+        status: verified
+        notes: "Tiled reverb chambers unique to Gold Star; the spatial signature of Phil's Wall of Sound"
+      - gear_category: mixer
+        gear_name: "Altec 9470 console"
+        gear_era: "1960–1966"
+        status: reported
+        notes: "Gold Star mixing board; blended the mass of session musicians into one signal"
+
+  - pdna_id: PDNA-000003
+    claims:
+      - gear_category: drum_machine
+        gear_name: "Linn LM-1"
+        gear_era: "1980–1985"
+        status: verified
+        notes: "Used on Thriller and Off the Wall sessions; pioneered sampled drum sounds in pop"
+      - gear_category: synthesizer
+        gear_name: "Yamaha DX7"
+        gear_era: "1983–1990"
+        status: verified
+        notes: "Bell tones and electric piano patches on 80s productions; sold 200,000 units globally"
+      - gear_category: mixer
+        gear_name: "SSL 4000 G console"
+        gear_era: "1984–2000"
+        status: verified
+        notes: "Westlake Audio studio; SSL bus compression became part of Quincy's polished sound"
+
+  - pdna_id: PDNA-000004
+    claims:
+      - gear_category: hardware
+        gear_name: "Roland RE-201 Space Echo"
+        gear_era: "1975–1985"
+        status: verified
+        notes: "Tape delay and reverb spring fundamental to ambient texture; used on Another Green World"
+      - gear_category: synthesizer
+        gear_name: "EMS VCS3 synthesizer"
+        gear_era: "1972–1980"
+        status: verified
+        notes: "Modular patch-based synthesis; Eno's primary experimental noise tool through early Roxy Music era"
+      - gear_category: hardware
+        gear_name: "Revox B77 reel-to-reel"
+        gear_era: "1977–1988"
+        status: verified
+        notes: "Generative tape loops; Eno ran multiple Revoxes at staggered speeds to create evolving textures"
+
+  - pdna_id: PDNA-000005
+    claims:
+      - gear_category: hardware
+        gear_name: "Roland Space Echo RE-201"
+        gear_era: "1974–1980"
+        status: verified
+        notes: "Black Ark studio; echo units run in feedback loops to create the cavernous dub sound"
+      - gear_category: mixer
+        gear_name: "Soundcraft Series One console"
+        gear_era: "1974–1979"
+        status: reported
+        notes: "Black Ark's 16-channel desk; processed through external reverbs and delays between channels"
+      - gear_category: hardware
+        gear_name: "Uher 4000 Report reel-to-reel"
+        gear_era: "1974–1980"
+        status: reported
+        notes: "Portable recorder used at Black Ark; field recordings and vocal overdubs fed into the console"
+
+  - pdna_id: PDNA-000006
+    claims:
+      - gear_category: mixer
+        gear_name: "Tubby's Custom 4-channel console"
+        gear_era: "1972–1979"
+        status: verified
+        notes: "Hand-built by Tubby himself; custom EQ curves enabled the radical frequency drops of dub"
+      - gear_category: hardware
+        gear_name: "Clockwork echo unit"
+        gear_era: "1972–1979"
+        status: verified
+        notes: "Spring reverb and tape echo combo; signature 'dub slapback' rhythm echo on vocals"
+      - gear_category: mixer
+        gear_name: "Mackie SR24 (later upgrade)"
+        gear_era: "1980–1989"
+        status: reported
+        notes: "Upgrade console after original burned; same performance aesthetic with updated routing"
+
+  - pdna_id: PDNA-000007
+    claims:
+      - gear_category: synthesizer
+        gear_name: "Moog Modular System 55"
+        gear_era: "1972–1980"
+        status: verified
+        notes: "Musicland Studios Munich; sequenced bass lines on I Feel Love and Donna Summer records"
+      - gear_category: synthesizer
+        gear_name: "ARP Odyssey"
+        gear_era: "1975–1983"
+        status: verified
+        notes: "Lead synth lines and effects on disco and film scores; paired with Moog for layered analog textures"
+      - gear_category: hardware
+        gear_name: "Roland MC-8 MicroComposer"
+        gear_era: "1977–1984"
+        status: verified
+        notes: "Early hardware sequencer; locked synthesizer sequences to click track for Euro-disco feel"
+
+  - pdna_id: PDNA-000008
+    claims:
+      - gear_category: hardware
+        gear_name: "Ampex 8-track tape machine"
+        gear_era: "1957–1972"
+        status: verified
+        notes: "Atlantic Records Studio; Dowd installed one of the first 8-tracks in America"
+      - gear_category: mixer
+        gear_name: "Langevin console"
+        gear_era: "1957–1970"
+        status: verified
+        notes: "Atlantic Studios; mic preamps shaped the warmth of Aretha Franklin and Ray Charles recordings"
+      - gear_category: hardware
+        gear_name: "Altec compressors (436C)"
+        gear_era: "1960–1975"
+        status: verified
+        notes: "Gentle optical compression on vocals; gave Atlantic records their punchy but breathable dynamics"
+
+  - pdna_id: PDNA-000009
+    claims:
+      - gear_category: hardware
+        gear_name: "Studer A80 reel-to-reel"
+        gear_era: "1968–1980"
+        status: verified
+        notes: "Columbia 30th Street; used for the legendary tape splice edits on Bitches Brew and In a Silent Way"
+      - gear_category: mixer
+        gear_name: "Columbia 30th Street Studio console"
+        gear_era: "1960–1975"
+        status: reported
+        notes: "Church-turned-studio; reverberant room sound captured by Macero's strategic mic placement"
+      - gear_category: hardware
+        gear_name: "Ampex ATR-102 mastering deck"
+        gear_era: "1975–1988"
+        status: reported
+        notes: "Post-production for mastering; used during the analog-to-digital transition period"
+
+  - pdna_id: PDNA-000010
+    claims:
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808"
+        gear_era: "1980–1986"
+        status: verified
+        notes: "Sugarhill Gang and Grandmaster Flash productions; 808 kick underpinned early rap records"
+      - gear_category: synthesizer
+        gear_name: "ARP String Ensemble"
+        gear_era: "1978–1984"
+        status: reported
+        notes: "Atmospheric string pads on early hip-hop and soul productions at Sugarhill studios"
+      - gear_category: mixer
+        gear_name: "MCI JH-636 console"
+        gear_era: "1979–1990"
+        status: reported
+        notes: "Sugarhill Recording Studio; American-voiced console with punchy mids suited to rap tracks"
+
+  - pdna_id: PDNA-000011
+    claims:
+      - gear_category: mixer
+        gear_name: "SSL 4000 G console"
+        gear_era: "1984–2005"
+        status: verified
+        notes: "Shangri-La studio; bus compressor on the stereo mix is central to Rubin's punchy, open sound"
+      - gear_category: mixer
+        gear_name: "Neve 8078"
+        gear_era: "1980–1990"
+        status: verified
+        notes: "Early Def Jam sessions; Neve's transformer saturation gave RHCP and LL Cool J their warmth"
+      - gear_category: sampler
+        gear_name: "Akai S900"
+        gear_era: "1986–1992"
+        status: reported
+        notes: "Used in early hip-hop sessions; 12-bit sampling for drum breaks and loop manipulation"
+
+  - pdna_id: PDNA-000012
+    claims:
+      - gear_category: sampler
+        gear_name: "Akai MPC3000"
+        gear_era: "1994–2005"
+        status: verified
+        notes: "Core production tool for The Chronic and 2001; MPC swing quantize shaped G-funk rhythm feel"
+      - gear_category: synthesizer
+        gear_name: "Korg Triton"
+        gear_era: "1999–2006"
+        status: verified
+        notes: "Warm analog-style pad sounds and bass; used extensively on 2001 and Eminem productions"
+      - gear_category: mixer
+        gear_name: "SSL 4000 G console"
+        gear_era: "1993–2010"
+        status: verified
+        notes: "Record One and Encore Studios; precision EQ and bus compression for Aftermath's polished mixes"
+
+  - pdna_id: PDNA-000013
+    claims:
+      - gear_category: sampler
+        gear_name: "Akai MPC3000"
+        gear_era: "1993–2006"
+        status: verified
+        notes: "Primary production platform; Dilla's MPC timing grid intentionally off-quantize for human feel"
+      - gear_category: sampler
+        gear_name: "E-mu SP-1200"
+        gear_era: "1990–1997"
+        status: verified
+        notes: "Crushed 12-bit samples with SP's limited memory; lo-fi grit fundamental to early Dilla sound"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808"
+        gear_era: "1991–2006"
+        status: verified
+        notes: "Sub-kick and 808 snare layered with MPC patterns; used on Common and Slum Village records"
+
+  - pdna_id: PDNA-000014
+    claims:
+      - gear_category: sampler
+        gear_name: "E-mu SP-1200"
+        gear_era: "1989–1999"
+        status: verified
+        notes: "Gang Starr production foundation; gritty 12-bit sample chopping and loop construction"
+      - gear_category: sampler
+        gear_name: "Akai MPC3000"
+        gear_era: "1994–2010"
+        status: verified
+        notes: "Replaced SP-1200 for longer samples; used for Nas, Jeru the Damaja, and Jay-Z productions"
+      - gear_category: hardware
+        gear_name: "Technics SL-1200 MK2 turntable"
+        gear_era: "1985–2010"
+        status: verified
+        notes: "Source for vinyl digging; Premier cues records manually to find sample chop points"
+
+  - pdna_id: PDNA-000015
+    claims:
+      - gear_category: sampler
+        gear_name: "E-mu SP-1200"
+        gear_era: "1992–1998"
+        status: verified
+        notes: "Primary Wu-Tang beat machine; lo-fi kung-fu samples pitched and chopped on the SP"
+      - gear_category: sampler
+        gear_name: "Akai MPC60"
+        gear_era: "1988–1996"
+        status: verified
+        notes: "16-pad layout used for filtering and time-stretching; some Enter the Wu-Tang beats originated here"
+      - gear_category: sampler
+        gear_name: "Ensoniq ASR-10"
+        gear_era: "1992–2000"
+        status: reported
+        notes: "Used for longer phrase sampling; deeper memory than SP-1200 allowed extended loops"
+
+  - pdna_id: PDNA-000016
+    claims:
+      - gear_category: sampler
+        gear_name: "Akai MPC2000"
+        gear_era: "1998–2005"
+        status: verified
+        notes: "Polyrhythmic beat construction; Timbaland's syncopated patterns programmed on MPC pads"
+      - gear_category: synthesizer
+        gear_name: "Korg Triton"
+        gear_era: "1999–2008"
+        status: verified
+        notes: "Lead synth and bass patches on Aaliyah and Missy Elliott productions; distinctive Triton pad sound"
+      - gear_category: hardware
+        gear_name: "Roland VP-9000 VariPhrase"
+        gear_era: "2000–2006"
+        status: reported
+        notes: "Independent pitch/time manipulation of vocal samples; gave Timbaland's voice-chop style flexibility"
+
+  - pdna_id: PDNA-000017
+    claims:
+      - gear_category: sampler
+        gear_name: "Akai MPC3000"
+        gear_era: "1998–2006"
+        status: verified
+        notes: "Early Neptunes beats; Chad Hugo and Pharrell used MPC for drum sequencing before moving to DAW"
+      - gear_category: synthesizer
+        gear_name: "Korg Triton"
+        gear_era: "1999–2008"
+        status: verified
+        notes: "Signature bass patches and lead tones on Clipse, Jay-Z, and Britney Spears productions"
+      - gear_category: plugin
+        gear_name: "Native Instruments Komplete"
+        gear_era: "2004–present"
+        status: reported
+        notes: "Software instruments for later productions; Massive used for bass design on post-2006 work"
+
+  - pdna_id: PDNA-000018
+    claims:
+      - gear_category: sampler
+        gear_name: "Akai MPC2000"
+        gear_era: "1998–2006"
+        status: verified
+        notes: "Flip-mode beats for Supa Dupa Fly and Da Real World; used in conjunction with Timbaland's MPC"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808"
+        gear_era: "1997–2006"
+        status: verified
+        notes: "808 sub-kick underpins almost every Missy Elliott track; used for the synthetic bass punch"
+      - gear_category: daw
+        gear_name: "Pro Tools HD"
+        gear_era: "2000–2010"
+        status: reported
+        notes: "Post-tracking editing and comping; vocal arrangements and final mix on later albums"
+
+  - pdna_id: PDNA-000019
+    claims:
+      - gear_category: daw
+        gear_name: "FL Studio"
+        gear_era: "2011–present"
+        status: verified
+        notes: "Primary production platform; Metro programs drums, melodies, and effects entirely in FL"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2011–present"
+        status: verified
+        notes: "808 bass drum pitched as melodic bass element; Metro's hallmark on Savage, Without Me, Jumpman"
+      - gear_category: synthesizer
+        gear_name: "Yamaha Motif XF"
+        gear_era: "2010–2018"
+        status: reported
+        notes: "String pads and atmospheric layers on trap beats; adds organic harmonic texture over programmed drums"
+
+  - pdna_id: PDNA-000020
+    claims:
+      - gear_category: daw
+        gear_name: "FL Studio"
+        gear_era: "2010–present"
+        status: verified
+        notes: "Core DAW for Mike WiLL; drum sequencing and mixer automation on Future and Rae Sremmurd records"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2010–present"
+        status: verified
+        notes: "Pitched 808 bass central to the Atlanta trap sound; characteristic long sustain on 808 kick"
+      - gear_category: synthesizer
+        gear_name: "Korg Triton"
+        gear_era: "2010–2016"
+        status: reported
+        notes: "Synth pads layered underneath trap drums; borrowed from Neptunes and Timbaland's production palette"
+
+  - pdna_id: PDNA-000021
+    claims:
+      - gear_category: daw
+        gear_name: "FL Studio"
+        gear_era: "2007–present"
+        status: verified
+        notes: "All Zaytoven productions originate in FL; piano melodies sketched live via MIDI keyboard"
+      - gear_category: synthesizer
+        gear_name: "Korg Triton"
+        gear_era: "2007–2015"
+        status: verified
+        notes: "Triton piano patches are Zaytoven's signature sound; used on Gucci Mane and Future records"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2007–present"
+        status: verified
+        notes: "808 bass and snare define ATL trap template; Zaytoven layers acoustic piano over programmed 808"
+
+  - pdna_id: PDNA-000022
+    claims:
+      - gear_category: daw
+        gear_name: "FL Studio"
+        gear_era: "2009–present"
+        status: verified
+        notes: "Lex Luger built the trap blueprint in FL; Hard in da Paint and Look at Me Now sequenced here"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2009–present"
+        status: verified
+        notes: "Punishing 808 sub-bass and snare; Lex's booming kick-snare template defined 2010–2013 trap"
+      - gear_category: plugin
+        gear_name: "reFX Nexus 2"
+        gear_era: "2010–2016"
+        status: reported
+        notes: "Trance and orchestral presets repurposed for hip-hop pads; gave Luger epics their cinematic swell"
+
+  - pdna_id: PDNA-000023
+    claims:
+      - gear_category: daw
+        gear_name: "FL Studio"
+        gear_era: "2009–present"
+        status: verified
+        notes: "All Southside productions built in FL; core member of 808 Mafia collective"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2009–present"
+        status: verified
+        notes: "808 bass note manipulation; long-decaying sub-kicks under minimal hi-hat patterns"
+      - gear_category: plugin
+        gear_name: "Native Instruments Massive"
+        gear_era: "2010–2018"
+        status: reported
+        notes: "Bass and lead synthesis for trap records; wavetable sweeps layered over 808 hits"
+
+  - pdna_id: PDNA-000024
+    claims:
+      - gear_category: sampler
+        gear_name: "Akai MPC2000"
+        gear_era: "1999–2010"
+        status: verified
+        notes: "Madvillainy and Quasimoto albums built entirely on MPC; dusty loop manipulation and resequencing"
+      - gear_category: sampler
+        gear_name: "Akai MPC3000"
+        gear_era: "2002–2015"
+        status: verified
+        notes: "Later Madlib projects; larger memory for extended samples and more complex arrangement layering"
+      - gear_category: sampler
+        gear_name: "Korg DSS-1"
+        gear_era: "1998–2006"
+        status: reported
+        notes: "Rare keyboard sampler for melodic phrase sampling; distinct resonant filtering unavailable on MPC"
+
+  - pdna_id: PDNA-000025
+    claims:
+      - gear_category: sampler
+        gear_name: "E-mu SP-1200"
+        gear_era: "1991–2000"
+        status: verified
+        notes: "Mecca and the Soul Brother era; soul sample chops with SP's characteristic 26kHz ceiling crunch"
+      - gear_category: sampler
+        gear_name: "Akai MPC60"
+        gear_era: "1989–1996"
+        status: verified
+        notes: "Early Crooklyn Dodgers and Marley Marl sessions; swing quantize set to 60% for groove feel"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808"
+        gear_era: "1990–1998"
+        status: verified
+        notes: "808 hats and snares layered with sampled drums; gave Pete Rock's boombap its distinctive crack"
+
+  - pdna_id: PDNA-000026
+    claims:
+      - gear_category: sampler
+        gear_name: "E-mu SP-12"
+        gear_era: "1985–1989"
+        status: verified
+        notes: "Hip-hop's first true sampler in use; Marley Marl discovered sampling accident that birthed hip-hop production"
+      - gear_category: sampler
+        gear_name: "E-mu SP-1200"
+        gear_era: "1988–1996"
+        status: verified
+        notes: "Cold Chillin' era; sampling James Brown breaks through SP's 10-second limit per pad"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808"
+        gear_era: "1985–1994"
+        status: verified
+        notes: "808 claps layered under sampled snares; Marley pioneered the layered drum sound central to 88–92 rap"
+
+  - pdna_id: PDNA-000027
+    claims:
+      - gear_category: hardware
+        gear_name: "Technics SL-1200 MK2 turntable"
+        gear_era: "1990–2000"
+        status: verified
+        notes: "Source decks for chopped and screwed technique; slowed 33 RPM records to ~24 RPM by hand"
+      - gear_category: mixer
+        gear_name: "Pioneer DJM-500 mixer"
+        gear_era: "1996–2000"
+        status: reported
+        notes: "Main DJ mixer in Screw's studio; used for manual pitch control and blend between turntables"
+      - gear_category: hardware
+        gear_name: "Reel-to-reel tape machine"
+        gear_era: "1993–2000"
+        status: reported
+        notes: "Screw Shop recordings captured to tape at reduced speed; analog warmth of slowed tape differed from digital"
+
+  - pdna_id: PDNA-000028
+    claims:
+      - gear_category: daw
+        gear_name: "Ableton Live"
+        gear_era: "2010–2019"
+        status: verified
+        notes: "Primary production environment; Max for Live patches for granular audio manipulation"
+      - gear_category: plugin
+        gear_name: "Native Instruments Massive"
+        gear_era: "2011–2018"
+        status: reported
+        notes: "Hyperpop bass design and texture; wavetable morphing for the elastic, exaggerated PC Music sound"
+      - gear_category: plugin
+        gear_name: "Celemony Melodyne"
+        gear_era: "2012–2019"
+        status: reported
+        notes: "Extreme vocal pitch correction as aesthetic tool; tuned vocals to uncanny, hyper-smooth quality"
+
+  - pdna_id: PDNA-000029
+    claims:
+      - gear_category: daw
+        gear_name: "Ableton Live"
+        gear_era: "2010–present"
+        status: verified
+        notes: "Core composition and sound design platform; Live's warping used aggressively for rhythmic disintegration"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2012–present"
+        status: reported
+        notes: "Deconstructed 808 samples pitched, reversed, and stretched to unrecognizable abstraction"
+      - gear_category: synthesizer
+        gear_name: "Roland Juno-106"
+        gear_era: "2013–present"
+        status: reported
+        notes: "Warm analog pads and bass as counterpoint to harsh digital processing; used on Mutant and Xen"
+
+  - pdna_id: PDNA-000030
+    claims:
+      - gear_category: daw
+        gear_name: "Adobe Audition (Cool Edit Pro)"
+        gear_era: "2002–2010"
+        status: verified
+        notes: "Untrue and Burial built in Cool Edit Pro; drag-and-drop samples over visual waveform editing"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2002–2010"
+        status: verified
+        notes: "Ghost-quantized 808 shuffles pulled from vinyl; half-step timing gives Burial's drums their stumble"
+      - gear_category: hardware
+        gear_name: "Zoom PS-02 portastudio"
+        gear_era: "2002–2007"
+        status: reported
+        notes: "Budget 4-track for early demos; some sources suggest early sketches captured here before Cool Edit"
+
+  - pdna_id: PDNA-000031
+    claims:
+      - gear_category: synthesizer
+        gear_name: "Korg MS-20"
+        gear_era: "1988–present"
+        status: verified
+        notes: "Semi-modular used throughout Selected Ambient Works; patch-cable routing for weird filter feedback"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-606 Drumatix"
+        gear_era: "1988–1995"
+        status: verified
+        notes: "Early acid house influence; TR-606 claps and hats on Digeridoo and early Rephlex material"
+      - gear_category: hardware
+        gear_name: "Roland Juno-106 (modified)"
+        gear_era: "1990–1998"
+        status: reported
+        notes: "Several units with blown voice chips kept for the distinctive distorted character; used as effect source"
+
+  - pdna_id: PDNA-000032
+    claims:
+      - gear_category: drum_machine
+        gear_name: "Roland TR-909"
+        gear_era: "1993–2001"
+        status: verified
+        notes: "House and techno rhythm foundation on Homework and Discovery; TR-909 hi-hats define Daft Punk's groove"
+      - gear_category: synthesizer
+        gear_name: "Roland TB-303 Bass Line"
+        gear_era: "1993–2005"
+        status: verified
+        notes: "Acid bass textures on Homework tracks; squelchy 303 filtered sweeps under disco-influenced chord progressions"
+      - gear_category: hardware
+        gear_name: "Talkbox (Heil Sound Talk Box)"
+        gear_era: "2001–2013"
+        status: verified
+        notes: "Vocoded vocals on Harder Better Faster Stronger and Get Lucky; part of the robot-human voice aesthetic"
+
+  - pdna_id: PDNA-000033
+    claims:
+      - gear_category: hardware
+        gear_name: "Synthanorma Sequencer"
+        gear_era: "1973–1982"
+        status: verified
+        notes: "Custom-built sequencer by Matten und Wiechers; programmed the motorik-pulse sequences on Autobahn and Trans-Europe Express"
+      - gear_category: synthesizer
+        gear_name: "Minimoog Model D"
+        gear_era: "1973–1983"
+        status: verified
+        notes: "Lead melody and bass on The Model and Man-Machine; monosynth portability for live Kling Klang performances"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-77"
+        gear_era: "1974–1978"
+        status: reported
+        notes: "Early rhythm accompaniment before custom electronic drums; preset patterns hacked for robotic precision"
+
+  - pdna_id: PDNA-000034
+    claims:
+      - gear_category: synthesizer
+        gear_name: "Moog Modular System 55"
+        gear_era: "1968–1980"
+        status: verified
+        notes: "Switched-On Bach recorded entirely on Moog Modular; each note recorded separately for polyphony illusion"
+      - gear_category: synthesizer
+        gear_name: "ARP 2600"
+        gear_era: "1972–1985"
+        status: verified
+        notes: "Semi-modular for sound design; patches for Kubrick's Clockwork Orange soundtrack processing"
+      - gear_category: hardware
+        gear_name: "Scully 280 24-track tape machine"
+        gear_era: "1972–1984"
+        status: reported
+        notes: "Columbia and private studio; multi-track recording for complex orchestral-synth layering"
+
+  - pdna_id: PDNA-000035
+    claims:
+      - gear_category: hardware
+        gear_name: "Roland MC-8 MicroComposer"
+        gear_era: "1978–1984"
+        status: verified
+        notes: "YMO's brain; 8-track polyphonic sequencer linked Moog, Prophet-5, and drums for synchronized live shows"
+      - gear_category: synthesizer
+        gear_name: "Oberheim OB-Xa"
+        gear_era: "1980–1988"
+        status: verified
+        notes: "Lush polyphonic pads on BGM and Thousand Knives; warm analog chorusing behind YMO's electronic minimalism"
+      - gear_category: synthesizer
+        gear_name: "Roland Juno-60"
+        gear_era: "1982–1992"
+        status: verified
+        notes: "Built-in chorus effect for layered string pads; used on film scores including Merry Christmas Mr. Lawrence"
+
+  - pdna_id: PDNA-000036
+    claims:
+      - gear_category: daw
+        gear_name: "Ableton Live"
+        gear_era: "2004–present"
+        status: verified
+        notes: "Primary production environment for Capsule and Perfume; session view used for live performance arrangement"
+      - gear_category: plugin
+        gear_name: "Native Instruments Massive"
+        gear_era: "2007–2018"
+        status: reported
+        notes: "Wavetable bass and lead patches for J-pop and electro-pop; filtered sweeps on Perfume's A-chan and Nocchi tracks"
+      - gear_category: synthesizer
+        gear_name: "Roland Juno-106"
+        gear_era: "2005–2015"
+        status: reported
+        notes: "Analog warmth alongside digital plugins; DCO chorus pads textured under hyperactive electronic patterns"
+
+  - pdna_id: PDNA-000037
+    claims:
+      - gear_category: daw
+        gear_name: "Pro Tools HD"
+        gear_era: "1995–2015"
+        status: verified
+        notes: "Chennai and London sessions; main recording and editing platform from Roja through Slumdog Millionaire"
+      - gear_category: synthesizer
+        gear_name: "Yamaha Motif ES"
+        gear_era: "2003–2012"
+        status: verified
+        notes: "Orchestral strings and Indian classical instruments emulated via Motif; combined with live session players"
+      - gear_category: daw
+        gear_name: "Apple Logic Pro"
+        gear_era: "2010–present"
+        status: reported
+        notes: "Later compositions mixed in Logic; MIDI scoring and virtual orchestral mockups before live recording"
+
+  - pdna_id: PDNA-000038
+    claims:
+      - gear_category: daw
+        gear_name: "Apple Logic Pro"
+        gear_era: "1995–present"
+        status: verified
+        notes: "Stockholm studios; all Max Martin productions written and demoed in Logic before being re-tracked"
+      - gear_category: mixer
+        gear_name: "SSL 9000 console"
+        gear_era: "2000–2015"
+        status: verified
+        notes: "MXM studio Stockholm; main mixing desk for Katy Perry, Taylor Swift, and The Weeknd sessions"
+      - gear_category: plugin
+        gear_name: "Antares Auto-Tune"
+        gear_era: "1998–present"
+        status: verified
+        notes: "Subtle pitch correction as production tool; sets the standard for polished pop vocal treatment"
+
+  - pdna_id: PDNA-000039
+    claims:
+      - gear_category: daw
+        gear_name: "Apple Logic Pro"
+        gear_era: "2004–present"
+        status: verified
+        notes: "Shellback co-produces all projects in Logic with Max Martin; shares template sessions for tight workflow"
+      - gear_category: daw
+        gear_name: "Pro Tools HD"
+        gear_era: "2005–present"
+        status: verified
+        notes: "Final mix and tracking platform; Pro Tools used for session recall and analog outboard summing"
+      - gear_category: hardware
+        gear_name: "Universal Audio Apollo interface"
+        gear_era: "2012–present"
+        status: reported
+        notes: "UAD plugins running in real-time on Apollo DSP; classic compressor and EQ emulations during tracking"
+
+  - pdna_id: PDNA-000040
+    claims:
+      - gear_category: hardware
+        gear_name: "Fender Stratocaster"
+        gear_era: "1970–present"
+        status: verified
+        notes: "Nile's primary instrument; signature clean funk rhythm guitar on Le Freak, Good Times, and Get Lucky"
+      - gear_category: mixer
+        gear_name: "SSL 4000 G console"
+        gear_era: "1982–2010"
+        status: verified
+        notes: "Electric Lady and Power Station; SSL bus compressor shaped the punchy, radio-ready sound of CHIC productions"
+      - gear_category: mixer
+        gear_name: "Neve 8028 console"
+        gear_era: "1976–1985"
+        status: verified
+        notes: "Early CHIC and Bowie sessions; Neve transformer character gave C'est Chic its deep warmth"
+
+  - pdna_id: PDNA-000041
+    claims:
+      - gear_category: sampler
+        gear_name: "Fairlight CMI Series II"
+        gear_era: "1981–1987"
+        status: verified
+        notes: "ABC and Yes productions; Fairlight's 8-bit sampling and additive synthesis defined 80s art-pop sonics"
+      - gear_category: mixer
+        gear_name: "SSL 4000 G console"
+        gear_era: "1982–2000"
+        status: verified
+        notes: "SARM Studios London; SSL's automation recalled mixes precisely for Horn's detailed arrangement work"
+      - gear_category: hardware
+        gear_name: "Sony PCM-1600 digital processor"
+        gear_era: "1980–1988"
+        status: reported
+        notes: "Early digital recording to Betamax video tape; used on Buggles and early ZTT productions"
+
+  - pdna_id: PDNA-000042
+    claims:
+      - gear_category: mixer
+        gear_name: "SSL 4000 G console"
+        gear_era: "1988–2010"
+        status: verified
+        notes: "Wessex Studios and various London rooms; SSL precision mixing for Depeche Mode and Nine Inch Nails"
+      - gear_category: daw
+        gear_name: "Pro Tools HD"
+        gear_era: "2000–present"
+        status: verified
+        notes: "Recording and editing platform post-2000; Trent Reznor sessions required Pro Tools for plugin automation"
+      - gear_category: mixer
+        gear_name: "Neve 8078"
+        gear_era: "1988–1998"
+        status: reported
+        notes: "Analog warmth counterpoint to Depeche Mode's cold synthesizers; Neve used on early Flood productions"
+
+  - pdna_id: PDNA-000043
+    claims:
+      - gear_category: daw
+        gear_name: "Pro Tools HD"
+        gear_era: "1997–present"
+        status: verified
+        notes: "OK Computer onward; Radiohead and Beck records assembled in Pro Tools with heavy editing and comping"
+      - gear_category: daw
+        gear_name: "Apple Logic Pro"
+        gear_era: "2003–present"
+        status: verified
+        notes: "Godrich uses Logic for synthesis and soft instruments; hybrid of Logic composition and Pro Tools recording"
+      - gear_category: mixer
+        gear_name: "SSL 4000 G console"
+        gear_era: "1997–2015"
+        status: verified
+        notes: "Abbey Road and AIR Studios; SSL dynamics used for controlled headroom on densely layered Radiohead records"
+
+  - pdna_id: PDNA-000044
+    claims:
+      - gear_category: mixer
+        gear_name: "Neve 8028 console"
+        gear_era: "1990–present"
+        status: verified
+        notes: "Electrical Audio Chicago; Neve's transformer gain staging is central to Albini's anti-compression philosophy"
+      - gear_category: hardware
+        gear_name: "Studer A80 reel-to-reel"
+        gear_era: "1990–present"
+        status: verified
+        notes: "2-inch 24-track and half-inch 2-track; Albini records to tape and transfers, never records straight to digital"
+      - gear_category: hardware
+        gear_name: "Ampex ATR-102 mastering deck"
+        gear_era: "1993–present"
+        status: verified
+        notes: "Half-inch 2-track for mix down; natural tape saturation as the only 'mastering' processing Albini endorses"
+
+  - pdna_id: PDNA-000045
+    claims:
+      - gear_category: daw
+        gear_name: "Pro Tools HD"
+        gear_era: "1998–present"
+        status: verified
+        notes: "Pink's and Christina Aguilera's sessions tracked in Pro Tools; vocal comping and arrangement editing"
+      - gear_category: hardware
+        gear_name: "Fender Rhodes Stage 73"
+        gear_era: "1995–present"
+        status: verified
+        notes: "Electric piano central to Linda Perry's songwriting; soul and rock ballad demos start on Rhodes"
+      - gear_category: mixer
+        gear_name: "Neve 8078"
+        gear_era: "1998–2012"
+        status: reported
+        notes: "Conway Recording Studios; Neve warmth on vocal chains for What's Up? and Beautiful"
+
+  - pdna_id: PDNA-000046
+    claims:
+      - gear_category: daw
+        gear_name: "Ableton Live"
+        gear_era: "2013–present"
+        status: verified
+        notes: "Tainy builds reggaeton tracks in Ableton; session view clips for fast arrangement sketching"
+      - gear_category: plugin
+        gear_name: "Native Instruments Massive"
+        gear_era: "2013–2020"
+        status: reported
+        notes: "Massive's bass presets used for dembow synth bass; wavetable morphing for reggaeton drop builds"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2013–present"
+        status: verified
+        notes: "808 kick on dembow rhythm pattern; Tainy's signature booming sub-bass under Latin pop melodies"
+
+  - pdna_id: PDNA-000047
+    claims:
+      - gear_category: daw
+        gear_name: "FL Studio"
+        gear_era: "2002–2016"
+        status: verified
+        notes: "Luny Tunes built the reggaeton template in FL; Gasolina, Pegao, and Rakata programmed in FL Studio"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2002–2016"
+        status: verified
+        notes: "808 kick drives dembow riddim; Luny Tunes popularized the heavier 808 sub-bass in reggaeton production"
+      - gear_category: synthesizer
+        gear_name: "Korg Trinity"
+        gear_era: "2002–2010"
+        status: reported
+        notes: "Synth pads and string stabs on mid-2000s reggaeton; Trinity's choir patches under dembow beats"
+
+  - pdna_id: PDNA-000048
+    claims:
+      - gear_category: daw
+        gear_name: "FL Studio"
+        gear_era: "2009–present"
+        status: verified
+        notes: "Sarz builds all Afrobeats productions in FL Studio; drum sequencing and melody programming in FL Piano Roll"
+      - gear_category: plugin
+        gear_name: "Native Instruments Komplete"
+        gear_era: "2012–present"
+        status: reported
+        notes: "Kontakt libraries for percussion and melodic instruments; African drum samples layered with programmed beats"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2012–present"
+        status: verified
+        notes: "808 sub-kick underpins Afrobeats and Afropop rhythms; layered with live congas and shakers"
+
+  - pdna_id: PDNA-000049
+    claims:
+      - gear_category: daw
+        gear_name: "FL Studio"
+        gear_era: "2017–present"
+        status: verified
+        notes: "Kabza builds all amapiano productions in FL; log drum samples and piano chords programmed in FL Piano Roll"
+      - gear_category: plugin
+        gear_name: "Native Instruments Komplete"
+        gear_era: "2018–present"
+        status: reported
+        notes: "Kontakt instruments for log drum emulation and ethnic percussion; core of the amapiano palette"
+      - gear_category: synthesizer
+        gear_name: "Korg Minilogue"
+        gear_era: "2019–present"
+        status: reported
+        notes: "Analog bass and chord stabs in live performance context; adds analog warmth to FL-produced amapiano"
+
+  - pdna_id: PDNA-000050
+    claims:
+      - gear_category: daw
+        gear_name: "Ableton Live"
+        gear_era: "2009–2014"
+        status: verified
+        notes: "Footwork and juke tracks built in Ableton; 160 BPM loops chopped and rearranged in session view"
+      - gear_category: drum_machine
+        gear_name: "Roland TR-808 (samples)"
+        gear_era: "2009–2014"
+        status: verified
+        notes: "808 bass punches in sub-160 BPM stutter patterns; DJ Rashad's footwork kick-pattern vocabulary"
+      - gear_category: hardware
+        gear_name: "Pioneer CDJ-2000"
+        gear_era: "2010–2014"
+        status: reported
+        notes: "Live DJ sets using CDJ for footwork sets; real-time loop triggering and track layering at footwork events"

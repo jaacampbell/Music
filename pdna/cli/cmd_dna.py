@@ -705,6 +705,76 @@ def dna_iterate(ctx, pdna_id, ctx_filter):
         console.print(Panel(prompt_text, title=panel_title))
 
 
+@dna_group.command("gear")
+@click.argument("pdna_id")
+@click.option("--category", "category_filter", default=None,
+              help="Filter by gear_category (sampler, drum_machine, synthesizer, daw, mixer, hardware, plugin)")
+@click.pass_context
+def dna_gear(ctx, pdna_id, category_filter):
+    """Show gear claims for a producer."""
+    from sqlalchemy import create_engine, text
+    engine = create_engine(ctx.obj["db_url"])
+
+    with engine.connect() as conn:
+        p = conn.execute(
+            text("SELECT id, name FROM producers WHERE pdna_id = :id"), {"id": pdna_id}
+        ).fetchone()
+        if not p:
+            console.print(f"[red]Producer {pdna_id} not found.[/]")
+            return
+
+        params = {"pid": p[0]}
+        cat_clause = ""
+        if category_filter:
+            cat_clause = " AND gc.gear_category = :cat"
+            params["cat"] = category_filter
+
+        rows = conn.execute(
+            text(
+                "SELECT gc.gear_category, gc.gear_name, gc.gear_era, gc.status, gc.notes "
+                "FROM gear_claims gc "
+                f"WHERE gc.producer_id = :pid{cat_clause} "
+                "ORDER BY gc.gear_category, gc.gear_name"
+            ),
+            params,
+        ).fetchall()
+
+    if not rows:
+        msg = f"No gear claims for {pdna_id}"
+        if category_filter:
+            msg += f" in category '{category_filter}'"
+        console.print(f"[yellow]{msg}.[/]")
+        return
+
+    title = f"Gear — {pdna_id}  {p[1]}"
+    if category_filter:
+        title += f" [{category_filter}]"
+
+    table = Table(title=title)
+    table.add_column("Category", style="dim")
+    table.add_column("Gear")
+    table.add_column("Era")
+    table.add_column("Status", justify="center")
+    table.add_column("Notes")
+
+    _STATUS_COLOR = {"verified": "green", "reported": "yellow"}
+
+    for row in rows:
+        gear_category, gear_name, gear_era, status, notes = (
+            row[0], row[1], row[2], row[3], row[4]
+        )
+        notes_str = (notes[:60] + "…") if notes and len(notes) > 60 else (notes or "")
+        color = _STATUS_COLOR.get(status, "white")
+        table.add_row(
+            gear_category or "",
+            gear_name or "",
+            gear_era or "[dim]—[/]",
+            f"[{color}]{status}[/]" if status else "[dim]—[/]",
+            notes_str,
+        )
+    console.print(table)
+
+
 @dna_group.command("collabs")
 @click.argument("pdna_id")
 @click.option("--type", "edge_type_filter", default=None,
