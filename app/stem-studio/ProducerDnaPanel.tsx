@@ -60,6 +60,7 @@ export function ProducerDnaPanel({ trackName }: { trackName?: string }): React.J
 
   const search = useCallback(async () => {
     setBusy(true);
+    setSelected(null);
     try {
       const params = new URLSearchParams();
       if (query) params.set("query", query);
