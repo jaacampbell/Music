@@ -1,9 +1,8 @@
 """Production stem-separation service.
 
 Core separation uses Demucs htdemucs_6s for six non-overlapping mixable stems.
-Deep 50+ separation uses Meta SAM-Audio text prompts to isolate any selected
-instrument/vocal/sound target independently. Deep target stems are intentionally
-marked non-mixable because text-query outputs can overlap each other.
+Deep 60+ separation uses Meta SAM-Audio text prompts for selected targets.
+Generated WAV files are stored in human-readable folders by vocal/instrument type.
 """
 
 from __future__ import annotations
@@ -12,11 +11,13 @@ import importlib.util
 import json
 import math
 import os
+import re
 import shutil
 import subprocess
 import sys
 import threading
 import uuid
+import zipfile
 from pathlib import Path
 
 import numpy as np
@@ -26,84 +27,34 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from starlette.concurrency import run_in_threadpool
 
-DATA_DIR = Path(__file__).parent / "data"
+BASE_DIR = Path(__file__).parent
+DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 MODEL_DIR = Path(os.environ.get("SEPARATOR_MODEL_DIR", str(DATA_DIR / "models")))
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
+CATALOG_PATH = BASE_DIR / "stem_catalog.json"
 
 CORE_STEMS = ["vocals", "drums", "bass", "guitar", "piano", "other"]
+CORE_FAMILIES = {
+    "vocals": "Vocals",
+    "drums": "Drums",
+    "bass": "Bass",
+    "guitar": "Guitars",
+    "piano": "Keys",
+    "other": "Music & FX",
+}
 CORE_MODEL = os.environ.get("DEMUCS_MODEL", "htdemucs_6s")
 SAM_MODEL_NAME = os.environ.get("SAM_AUDIO_MODEL", "facebook/sam-audio-small")
 MAX_DEEP_TARGETS = int(os.environ.get("MAX_DEEP_TARGETS", "60"))
 SAM_PREDICT_SPANS = os.environ.get("SAM_PREDICT_SPANS", "false").lower() == "true"
 SAM_RERANK_CANDIDATES = int(os.environ.get("SAM_RERANK_CANDIDATES", "1"))
 
-TARGETS = [
-    {"id": "lead_vocals", "label": "Lead Vocals", "group": "Vocals", "prompt": "lead vocals"},
-    {"id": "background_vocals", "label": "Background Vocals", "group": "Vocals", "prompt": "background vocals"},
-    {"id": "adlibs", "label": "Ad-libs", "group": "Vocals", "prompt": "vocal ad libs"},
-    {"id": "harmonies", "label": "Vocal Harmonies", "group": "Vocals", "prompt": "vocal harmonies"},
-    {"id": "vocal_doubles", "label": "Vocal Doubles", "group": "Vocals", "prompt": "doubled vocals"},
-    {"id": "choir", "label": "Choir", "group": "Vocals", "prompt": "choir vocals"},
-    {"id": "rap_vocals", "label": "Rap Vocals", "group": "Vocals", "prompt": "rapping vocals"},
-    {"id": "spoken_word", "label": "Spoken Word", "group": "Vocals", "prompt": "spoken word"},
-    {"id": "dialogue", "label": "Dialogue", "group": "Vocals", "prompt": "dialogue"},
-    {"id": "kick", "label": "Kick", "group": "Drums", "prompt": "kick drum"},
-    {"id": "snare", "label": "Snare", "group": "Drums", "prompt": "snare drum"},
-    {"id": "clap", "label": "Clap", "group": "Drums", "prompt": "hand claps"},
-    {"id": "closed_hihat", "label": "Closed Hi-Hat", "group": "Drums", "prompt": "closed hi hat"},
-    {"id": "open_hihat", "label": "Open Hi-Hat", "group": "Drums", "prompt": "open hi hat"},
-    {"id": "hihat", "label": "Hi-Hats", "group": "Drums", "prompt": "hi hats"},
-    {"id": "toms", "label": "Toms", "group": "Drums", "prompt": "tom drums"},
-    {"id": "ride", "label": "Ride Cymbal", "group": "Drums", "prompt": "ride cymbal"},
-    {"id": "crash", "label": "Crash Cymbal", "group": "Drums", "prompt": "crash cymbal"},
-    {"id": "cymbals", "label": "Cymbals", "group": "Drums", "prompt": "cymbals"},
-    {"id": "shaker", "label": "Shaker", "group": "Drums", "prompt": "shaker percussion"},
-    {"id": "tambourine", "label": "Tambourine", "group": "Drums", "prompt": "tambourine"},
-    {"id": "percussion", "label": "Percussion", "group": "Drums", "prompt": "percussion"},
-    {"id": "drum_loop", "label": "Drum Loop", "group": "Drums", "prompt": "drum loop"},
-    {"id": "bass_guitar", "label": "Bass Guitar", "group": "Bass", "prompt": "bass guitar"},
-    {"id": "upright_bass", "label": "Upright Bass", "group": "Bass", "prompt": "upright bass"},
-    {"id": "sub_bass", "label": "Sub Bass", "group": "Bass", "prompt": "sub bass"},
-    {"id": "bass_808", "label": "808 Bass", "group": "Bass", "prompt": "808 bass"},
-    {"id": "synth_bass", "label": "Synth Bass", "group": "Bass", "prompt": "synth bass"},
-    {"id": "piano", "label": "Piano", "group": "Keys", "prompt": "piano"},
-    {"id": "electric_piano", "label": "Electric Piano", "group": "Keys", "prompt": "electric piano"},
-    {"id": "organ", "label": "Organ", "group": "Keys", "prompt": "organ"},
-    {"id": "synthesizer", "label": "Synthesizer", "group": "Keys", "prompt": "synthesizer"},
-    {"id": "synth_pad", "label": "Synth Pad", "group": "Keys", "prompt": "synth pad"},
-    {"id": "lead_synth", "label": "Lead Synth", "group": "Keys", "prompt": "lead synthesizer"},
-    {"id": "pluck", "label": "Pluck", "group": "Keys", "prompt": "plucked synthesizer"},
-    {"id": "arpeggio", "label": "Arpeggio", "group": "Keys", "prompt": "synth arpeggio"},
-    {"id": "acoustic_guitar", "label": "Acoustic Guitar", "group": "Guitars", "prompt": "acoustic guitar"},
-    {"id": "electric_guitar", "label": "Electric Guitar", "group": "Guitars", "prompt": "electric guitar"},
-    {"id": "lead_guitar", "label": "Lead Guitar", "group": "Guitars", "prompt": "lead guitar"},
-    {"id": "rhythm_guitar", "label": "Rhythm Guitar", "group": "Guitars", "prompt": "rhythm guitar"},
-    {"id": "clean_guitar", "label": "Clean Guitar", "group": "Guitars", "prompt": "clean electric guitar"},
-    {"id": "distorted_guitar", "label": "Distorted Guitar", "group": "Guitars", "prompt": "distorted electric guitar"},
-    {"id": "strings", "label": "Strings", "group": "Orchestral", "prompt": "string section"},
-    {"id": "violin", "label": "Violin", "group": "Orchestral", "prompt": "violin"},
-    {"id": "viola", "label": "Viola", "group": "Orchestral", "prompt": "viola"},
-    {"id": "cello", "label": "Cello", "group": "Orchestral", "prompt": "cello"},
-    {"id": "brass", "label": "Brass", "group": "Orchestral", "prompt": "brass section"},
-    {"id": "trumpet", "label": "Trumpet", "group": "Orchestral", "prompt": "trumpet"},
-    {"id": "trombone", "label": "Trombone", "group": "Orchestral", "prompt": "trombone"},
-    {"id": "saxophone", "label": "Saxophone", "group": "Orchestral", "prompt": "saxophone"},
-    {"id": "flute", "label": "Flute", "group": "Orchestral", "prompt": "flute"},
-    {"id": "woodwinds", "label": "Woodwinds", "group": "Orchestral", "prompt": "woodwind instruments"},
-    {"id": "melody", "label": "Main Melody", "group": "Music & FX", "prompt": "main melody"},
-    {"id": "chords", "label": "Chords", "group": "Music & FX", "prompt": "chordal accompaniment"},
-    {"id": "effects", "label": "Effects", "group": "Music & FX", "prompt": "sound effects"},
-    {"id": "ambience", "label": "Ambience", "group": "Music & FX", "prompt": "ambient sound"},
-    {"id": "soundtrack", "label": "Soundtrack", "group": "Music & FX", "prompt": "background soundtrack"},
-    {"id": "risers", "label": "Risers / Sweeps", "group": "Music & FX", "prompt": "risers and sweeps"},
-    {"id": "impacts", "label": "Impacts", "group": "Music & FX", "prompt": "impact sound effects"},
-    {"id": "texture", "label": "Texture", "group": "Music & FX", "prompt": "musical texture"},
-]
+with CATALOG_PATH.open("r", encoding="utf-8") as catalog_file:
+    TARGETS = json.load(catalog_file)
 TARGET_BY_ID = {target["id"]: target for target in TARGETS}
 CORE_TARGET_ALIASES = {"piano": "piano"}
 
-app = FastAPI(title="Stem Studio Separator", version="2.0.0")
+app = FastAPI(title="Stem Studio Separator", version="2.1.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
@@ -132,16 +83,42 @@ def _rms_db(x: np.ndarray) -> float:
     return round(20 * math.log10(rms), 1) if rms > 1e-9 else -120.0
 
 
-def _stem_meta(job_dir: Path, path: Path, name: str, label: str, group: str, engine: str, mixable: bool, prompt: str | None = None) -> dict:
+def _safe_name(value: str) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9]+", "_", value).strip("_")
+    return cleaned or "Stem"
+
+
+def _stem_path(job_dir: Path, family: str, index: int | None, label: str) -> Path:
+    folder = job_dir / "stems" / _safe_name(family)
+    folder.mkdir(parents=True, exist_ok=True)
+    prefix = f"{index:02d}_" if index is not None else ""
+    return folder / f"{prefix}{_safe_name(label)}.wav"
+
+
+def _stem_meta(
+    job_dir: Path,
+    path: Path,
+    *,
+    name: str,
+    label: str,
+    group: str,
+    family: str,
+    engine: str,
+    mixable: bool,
+    prompt: str | None = None,
+) -> dict:
     audio, _ = sf.read(str(path), dtype="float32", always_2d=True)
+    relative = path.relative_to(job_dir)
     meta = {
         "name": name,
         "label": label,
         "group": group,
+        "family": family,
         "engine": engine,
         "mixable": mixable,
-        "file": str(path.relative_to(job_dir)),
-        "url": f"/jobs/{job_dir.name}/{path.relative_to(job_dir).as_posix()}",
+        "file": relative.as_posix(),
+        "downloadName": f"{_safe_name(family)}__{_safe_name(label)}.wav",
+        "url": f"/jobs/{job_dir.name}/{relative.as_posix()}",
         "integratedDb": _rms_db(audio),
     }
     if prompt:
@@ -167,18 +144,18 @@ def _separate_core(job_dir: Path, source_wav: Path) -> dict:
         ]
     )
     produced = out_root / CORE_MODEL / source_wav.stem
-    stems_dir = job_dir / "stems"
-    stems_dir.mkdir(parents=True, exist_ok=True)
 
     src_audio, sr = sf.read(str(source_wav), dtype="float32", always_2d=True)
     sample_sum = np.zeros_like(src_audio)
     core_meta = []
 
-    for idx, name in enumerate(CORE_STEMS):
+    for idx, name in enumerate(CORE_STEMS, start=1):
         produced_stem = produced / f"{name}.wav"
         if not produced_stem.is_file():
             raise RuntimeError(f"Demucs did not produce core stem: {name}")
-        out_path = stems_dir / f"{idx + 1:02d}_{name}.wav"
+        label = name.replace("_", " ").title()
+        family = CORE_FAMILIES[name]
+        out_path = _stem_path(job_dir, family, idx, label)
         shutil.copyfile(produced_stem, out_path)
         data, _ = sf.read(str(out_path), dtype="float32", always_2d=True)
         n = min(len(sample_sum), len(data))
@@ -188,8 +165,9 @@ def _separate_core(job_dir: Path, source_wav: Path) -> dict:
                 job_dir,
                 out_path,
                 name=name,
-                label=name.replace("_", " ").title(),
+                label=label,
                 group="Core 6",
+                family=family,
                 engine=f"Demucs {CORE_MODEL}",
                 mixable=True,
             )
@@ -200,7 +178,7 @@ def _separate_core(job_dir: Path, source_wav: Path) -> dict:
         data, _ = sf.read(str(produced / f"{name}.wav"), dtype="float32", always_2d=True)
         n = min(len(instrumental), len(data))
         instrumental[:n] += data[:n]
-    instrumental_path = stems_dir / "07_instrumental.wav"
+    instrumental_path = _stem_path(job_dir, "Mixdowns", None, "Instrumental")
     sf.write(str(instrumental_path), instrumental, sr, subtype="PCM_24")
     instrumental_meta = _stem_meta(
         job_dir,
@@ -208,6 +186,7 @@ def _separate_core(job_dir: Path, source_wav: Path) -> dict:
         name="instrumental",
         label="Instrumental",
         group="Core 6",
+        family="Mixdowns",
         engine=f"Demucs {CORE_MODEL}",
         mixable=False,
     )
@@ -291,9 +270,7 @@ def _separate_sam_target(job_dir: Path, source_wav: Path, target: dict, index: i
     if audio.dim() == 1:
         audio = audio.unsqueeze(0)
 
-    deep_dir = job_dir / "deep"
-    deep_dir.mkdir(parents=True, exist_ok=True)
-    out_path = deep_dir / f"{index:02d}_{target['id']}.wav"
+    out_path = _stem_path(job_dir, target["group"], index, target["label"])
     torchaudio.save(str(out_path), audio, int(processor.audio_sampling_rate))
     return _stem_meta(
         job_dir,
@@ -301,6 +278,7 @@ def _separate_sam_target(job_dir: Path, source_wav: Path, target: dict, index: i
         name=target["id"],
         label=target["label"],
         group=target["group"],
+        family=target["group"],
         engine=f"SAM-Audio {SAM_MODEL_NAME}",
         mixable=False,
         prompt=target["prompt"],
@@ -330,13 +308,14 @@ def _run_job(job_dir: Path, source_wav: Path, mode: str, targets: list[dict]) ->
     warnings = [
         "AI-separated stems are estimates, not the original studio multitracks.",
         f"Core mixer: {CORE_MODEL}.",
+        "Files are organized by vocal/instrument family and named with their stem type.",
     ]
     failed_targets = []
 
     if mode == "deep" and targets:
         if not _sam_package_available():
             warnings.append(
-                "Deep 50+ targets were requested but SAM-Audio is not installed on this worker."
+                "Deep 60+ targets were requested but SAM-Audio is not installed on this worker."
             )
         else:
             for idx, target in enumerate(targets, start=1):
@@ -365,17 +344,34 @@ def _run_job(job_dir: Path, source_wav: Path, mode: str, targets: list[dict]) ->
             "core": f"Demucs {CORE_MODEL}",
             "deep": f"SAM-Audio {SAM_MODEL_NAME}",
         },
+        "organization": {
+            "root": "stems",
+            "strategy": "family/type",
+            "families": sorted({stem["family"] for stem in result["stems"]}),
+        },
     }
+
+
+def _build_zip(job_dir: Path) -> Path:
+    stems_root = job_dir / "stems"
+    if not stems_root.is_dir():
+        raise HTTPException(404, "stems not found")
+    zip_path = job_dir / "Stem_Studio_Organized_Stems.zip"
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for path in sorted(stems_root.rglob("*.wav")):
+            archive.write(path, arcname=path.relative_to(job_dir).as_posix())
+    return zip_path
 
 
 @app.get("/health")
 def health() -> dict:
     return {
         "status": "ok",
-        "version": "2.0.0",
+        "version": "2.1.0",
         "coreModel": CORE_MODEL,
         "coreStems": CORE_STEMS,
         "deepTargetCount": len(TARGETS),
+        "organization": "family/type",
         "samAudio": {
             "installed": _sam_package_available(),
             "model": SAM_MODEL_NAME,
@@ -428,6 +424,7 @@ async def separate(
     return {
         "jobId": job_id,
         "source": {"filename": file.filename},
+        "zipUrl": f"/jobs/{job_id}/stems.zip",
         **result,
     }
 
@@ -472,7 +469,27 @@ async def separate_demo() -> dict:
         result = await run_in_threadpool(_run_job, job_dir, source_wav, "core", [])
     except Exception as exc:
         raise HTTPException(500, str(exc)[-1200:]) from exc
-    return {"jobId": job_id, "source": {"filename": "demo-mixture.wav"}, **result}
+    return {
+        "jobId": job_id,
+        "source": {"filename": "demo-mixture.wav"},
+        "zipUrl": f"/jobs/{job_id}/stems.zip",
+        **result,
+    }
+
+
+@app.get("/jobs/{job_id}/stems.zip")
+def get_stems_zip(job_id: str) -> FileResponse:
+    if ".." in job_id:
+        raise HTTPException(404, "job not found")
+    job_dir = DATA_DIR / job_id
+    if not job_dir.is_dir():
+        raise HTTPException(404, "job not found")
+    zip_path = _build_zip(job_dir)
+    return FileResponse(
+        str(zip_path),
+        media_type="application/zip",
+        filename="Stem_Studio_Organized_Stems.zip",
+    )
 
 
 @app.get("/jobs/{job_id}/{file_path:path}")

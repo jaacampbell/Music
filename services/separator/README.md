@@ -2,12 +2,51 @@
 
 Production backend for `/stem-studio`.
 
-It now has two layers:
+It has two layers:
 
 1. **Core 6** — Demucs `htdemucs_6s` creates synchronized, non-overlapping `vocals / drums / bass / guitar / piano / other` stems plus a derived instrumental.
 2. **Deep 60+** — Meta SAM-Audio isolates selected targets by natural-language prompt, including lead/background vocals, drum pieces, 808/sub-bass, guitar types, keys, strings, brass, woodwinds, FX, and more.
 
 Deep target stems are independent text-query isolates. They may overlap each other, so they are intentionally kept out of the synchronized Core 6 mixer and exposed as preview/download outputs instead.
+
+## Stem organization
+
+Every generated WAV is named by stem type and stored under a human-readable vocal/instrument family. The organized ZIP preserves the same folder structure.
+
+Example:
+
+```text
+stems/
+├── Vocals/
+│   ├── 01_Vocals.wav
+│   ├── 01_Lead_Vocals.wav
+│   ├── 02_Background_Vocals.wav
+│   └── 03_Ad_libs.wav
+├── Drums/
+│   ├── 02_Drums.wav
+│   ├── 04_Kick.wav
+│   ├── 05_Snare.wav
+│   └── 06_Closed_Hi_Hat.wav
+├── Bass/
+│   ├── 03_Bass.wav
+│   ├── 07_808_Bass.wav
+│   └── 08_Sub_Bass.wav
+├── Guitars/
+│   ├── 04_Guitar.wav
+│   ├── Acoustic_Guitar.wav
+│   └── Electric_Guitar.wav
+├── Keys/
+│   └── 05_Piano.wav
+├── Orchestral/
+│   ├── Strings.wav
+│   └── Trumpet.wav
+├── Music_FX/
+│   └── 06_Other.wav
+└── Mixdowns/
+    └── Instrumental.wav
+```
+
+The API manifest includes `family`, `file`, and `downloadName` for each stem. `GET /jobs/{job_id}/stems.zip` downloads the complete organized stem pack.
 
 ## Local Core 6 setup
 
@@ -72,6 +111,7 @@ The worker must be HTTPS when the Netlify site is HTTPS; browsers will block an 
 - `GET /catalog` — 60 deep target names/prompts and worker capability.
 - `POST /separate` — multipart upload with `file`, `mode=core|deep`, and `targets` as a JSON array.
 - `POST /separate/demo` — synthetic Core 6 test.
+- `GET /jobs/{job_id}/stems.zip` — complete organized ZIP by vocal/instrument family.
 - `GET /jobs/{job_id}/{file_path}` — stream/download generated WAV files.
 
 Example Deep request:

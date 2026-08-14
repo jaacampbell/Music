@@ -31,7 +31,7 @@ COPY requirements.txt requirements-gpu.txt ./
 RUN python -m pip install -r requirements.txt \
     && python -m pip install -r requirements-gpu.txt
 
-COPY app.py ./app.py
+COPY app.py stem_catalog.json ./
 
 RUN mkdir -p /models/huggingface /models/torch /models/separator /app/data
 
