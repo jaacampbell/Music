@@ -5,8 +5,12 @@ import type {
   GenerationVersion,
   Job,
   JobType,
+  LiveAudioAnalysis,
   Project,
+  ProjectHistoryEntry,
+  ProjectHistoryType,
   Scorecard,
+  SourceAudioAttachment,
   StemAsset
 } from "@/lib/types";
 
@@ -15,32 +19,43 @@ const DEFAULT_STEMS = ["vocals", "drums", "bass", "other"];
 const now = (): string => new Date().toISOString();
 const id = (): string => crypto.randomUUID();
 
+const historyEntry = (
+  type: ProjectHistoryType,
+  message: string,
+  details?: Record<string, unknown>
+): ProjectHistoryEntry => ({
+  id: id(),
+  type,
+  message,
+  createdAt: now(),
+  details
+});
+
+const appendHistory = (
+  project: Project,
+  type: ProjectHistoryType,
+  message: string,
+  details?: Record<string, unknown>
+): ProjectHistoryEntry[] => [
+  ...(project.history ?? []),
+  historyEntry(type, message, details)
+].slice(-200);
+
 const keyFromMood = (brief: string): string => {
   const lowered = brief.toLowerCase();
-  if (lowered.includes("minor") || lowered.includes("dark")) {
-    return "D minor";
-  }
-  if (lowered.includes("major") || lowered.includes("happy")) {
-    return "C major";
-  }
+  if (lowered.includes("minor") || lowered.includes("dark")) return "D minor";
+  if (lowered.includes("major") || lowered.includes("happy")) return "C major";
   return "A minor";
 };
 
 const bpmFromBrief = (brief: string): number => {
   const match = brief.match(/\b(\d{2,3})\s*bpm\b/i);
-  if (match) {
-    return Number(match[1]);
-  }
-  return 98;
+  return match ? Number(match[1]) : 98;
 };
 
 const stemNamesForMode = (mode: number): string[] => {
-  if (mode === 2) {
-    return ["vocals", "instrumental"];
-  }
-  if (mode === 6) {
-    return ["vocals", "drums", "bass", "guitar", "keys", "other"];
-  }
+  if (mode === 2) return ["vocals", "instrumental"];
+  if (mode === 6) return ["vocals", "drums", "bass", "guitar", "keys", "other"];
   if (mode === 10) {
     return [
       "lead_vocals",
@@ -75,14 +90,24 @@ const globalStore = globalThis as typeof globalThis & {
 const state: StoreState = globalStore.__beatLabStore ?? createInitialState();
 globalStore.__beatLabStore = state;
 
-const buildStems = (projectId: string, mode: number): StemAsset[] => {
-  const names = stemNamesForMode(mode);
-  return names.map((stemName, idx) => ({
+const normalizeProject = (project: Project): Project => ({
+  ...project,
+  history: project.history ?? [],
+  promptTelemetry: project.promptTelemetry ?? [],
+  strategyMap: project.strategyMap ?? [],
+  promptPack: project.promptPack ?? [],
+  generations: project.generations ?? [],
+  stems: project.stems ?? [],
+  scorecards: project.scorecards ?? []
+});
+
+const buildStems = (projectId: string, mode: number): StemAsset[] =>
+  stemNamesForMode(mode).map((stemName, idx) => ({
     id: id(),
     name: stemName,
     file: `${projectId}/${stemName}.wav`,
     startTime: 0,
-    durationSec: 185.0,
+    durationSec: 185,
     sampleRate: 44100,
     channels: 2,
     lufs: -16.5 + idx * 0.6,
@@ -92,7 +117,6 @@ const buildStems = (projectId: string, mode: number): StemAsset[] => {
         ? `${projectId}/${stemName}.mid`
         : undefined
   }));
-};
 
 const buildStrategies = (brief: string): string[] => [
   "GPS Noir",
@@ -104,8 +128,8 @@ const buildStrategies = (brief: string): string[] => [
 
 const buildPromptPack = (brief: string, bpm: number, key: string): string[] => [
   `Direction A: ${bpm} BPM in ${key}. ${brief}. Prioritize vocal pocket and minimal clutter.`,
-  `Direction B: same harmony, denser hats, call/response motif, preserve open hook section.`,
-  `Direction C: strip arrangement for female feature pocket, improve transition impacts.`
+  "Direction B: same harmony, denser hats, call/response motif, preserve open hook section.",
+  "Direction C: strip arrangement for feature pocket, improve transition impacts."
 ];
 
 const buildGenerations = (strategies: string[], bpm: number, key: string): GenerationVersion[] =>
@@ -166,20 +190,38 @@ const completeJob = (job: Job, result: Record<string, unknown>): Job => {
 };
 
 export const listProjects = (): Project[] =>
-  [...state.projects.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  [...state.projects.values()]
+    .map(normalizeProject)
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 
-export const getProject = (projectId: string): Project | undefined => state.projects.get(projectId);
+export const getProject = (projectId: string): Project | undefined => {
+  const project = state.projects.get(projectId);
+  return project ? normalizeProject(project) : undefined;
+};
+
+export const importProjects = (projects: Project[]): number => {
+  for (const project of projects) {
+    if (!project?.id || !project?.title) continue;
+    const incoming = normalizeProject(project);
+    const current = state.projects.get(incoming.id);
+    if (!current || incoming.updatedAt >= current.updatedAt) {
+      state.projects.set(incoming.id, incoming);
+    }
+  }
+  return projects.length;
+};
 
 export const createProject = (title: string, brief: string): Project => {
   const projectId = id();
+  const createdAt = now();
   const bpm = bpmFromBrief(brief);
   const key = keyFromMood(brief);
   const project: Project = {
     id: projectId,
     title,
     brief,
-    createdAt: now(),
-    updatedAt: now(),
+    createdAt,
+    updatedAt: createdAt,
     status: "draft",
     songDna: {
       bpm,
@@ -188,7 +230,7 @@ export const createProject = (title: string, brief: string): Project => {
       structure: ["intro", "verse", "hook", "verse", "hook", "outro"],
       vocalSpace: "balanced",
       palette: ["808", "soft rimshot", "muted guitar", "reverse synth"],
-      notes: "Reference-safe translation enabled."
+      notes: "Brief-derived starting point. Attach audio to replace BPM/key with measured analysis."
     },
     strategyMap: [],
     promptPack: [],
@@ -221,7 +263,8 @@ export const createProject = (title: string, brief: string): Project => {
       ],
       exports: []
     },
-    promptTelemetry: []
+    promptTelemetry: [],
+    history: [historyEntry("project-created", `Project created: ${title}`)]
   };
   state.projects.set(projectId, project);
   return project;
@@ -234,9 +277,12 @@ export const saveProjectState = (
   const current = state.projects.get(projectId);
   if (!current) return undefined;
   const updated: Project = {
-    ...current,
+    ...normalizeProject(current),
     ...updates,
-    updatedAt: now()
+    updatedAt: now(),
+    history: appendHistory(current, "state-saved", "Project notes and state saved.", {
+      updatedFields: Object.keys(updates)
+    })
   };
   state.projects.set(projectId, updated);
   const job = buildJob(projectId, "save-state", "Saving project state");
@@ -244,36 +290,121 @@ export const saveProjectState = (
   return updated;
 };
 
+export interface LiveAudioResultInput {
+  source: SourceAudioAttachment;
+  analysis: LiveAudioAnalysis;
+  stems: Array<{
+    name: string;
+    label?: string;
+    family?: string;
+    file?: string;
+    url?: string;
+    integratedDb?: number;
+    engine?: string;
+  }>;
+  mode: "core" | "deep";
+  model: string;
+  zipUrl?: string;
+}
+
+export const applyLiveAudioResult = (
+  projectId: string,
+  payload: LiveAudioResultInput
+): Project | undefined => {
+  const current = state.projects.get(projectId);
+  if (!current) return undefined;
+
+  const stems: StemAsset[] = payload.stems.map((stem) => ({
+    id: id(),
+    name: stem.label ?? stem.name,
+    file: stem.file ?? stem.url ?? stem.name,
+    startTime: 0,
+    durationSec: payload.analysis.durationSec,
+    sampleRate: payload.analysis.sampleRate,
+    channels: payload.analysis.channels,
+    lufs: stem.integratedDb ?? -120,
+    confidence: payload.mode === "core" ? 0.95 : 0.8,
+    family: stem.family,
+    engine: stem.engine ?? payload.model,
+    downloadUrl: stem.url
+  }));
+
+  const bpm = payload.analysis.bpm ?? current.songDna.bpm;
+  const key = payload.analysis.key ?? current.songDna.key;
+  const updated: Project = {
+    ...normalizeProject(current),
+    updatedAt: now(),
+    status: "in-progress",
+    sourceAudio: payload.source,
+    liveAnalysis: payload.analysis,
+    stems,
+    songDna: {
+      ...current.songDna,
+      bpm,
+      key,
+      notes: `Measured audio analysis attached. BPM confidence ${(payload.analysis.bpmConfidence * 100).toFixed(0)}%; key confidence ${(payload.analysis.keyConfidence * 100).toFixed(0)}%.`
+    },
+    manifest: {
+      ...current.manifest,
+      sourceFile: payload.source.name,
+      bpm,
+      key,
+      sampleRate: payload.analysis.sampleRate,
+      durationSeconds: payload.analysis.durationSec,
+      stems,
+      tempoMap: bpm ? [{ bar: 1, bpm }] : current.manifest.tempoMap
+    },
+    history: [
+      ...appendHistory(
+        current,
+        "audio-analyzed",
+        `Measured ${payload.analysis.bpm ?? "unknown"} BPM · ${payload.analysis.key ?? "unknown key"}.`,
+        {
+          bpmConfidence: payload.analysis.bpmConfidence,
+          keyConfidence: payload.analysis.keyConfidence,
+          engine: payload.analysis.engine
+        }
+      ),
+      historyEntry(
+        payload.mode === "deep" ? "deep-separated" : "core-separated",
+        `${payload.mode === "deep" ? "Deep" : "Core"} separation saved to project.`,
+        { stemCount: stems.length, model: payload.model, zipUrl: payload.zipUrl }
+      )
+    ].slice(-200)
+  };
+
+  state.projects.set(projectId, updated);
+  return updated;
+};
+
 export const runExtraction = (projectId: string, mode: number): Job | undefined => {
   const project = state.projects.get(projectId);
   if (!project) return undefined;
-  const job = buildJob(projectId, "extract", `Extracting ${mode}-stem package`);
+  const job = buildJob(projectId, "extract", `Modeling ${mode}-stem package`);
   const stems = buildStems(projectId, mode);
   const updated: Project = {
-    ...project,
+    ...normalizeProject(project),
     status: "in-progress",
     stems,
     updatedAt: now(),
-    manifest: {
-      ...project.manifest,
-      stems
-    }
+    manifest: { ...project.manifest, stems },
+    history: appendHistory(project, "agent-loop", `Modeled a ${mode}-stem planning package.`)
   };
   state.projects.set(projectId, updated);
-  return completeJob(job, { stemsCreated: stems.length, mode });
+  return completeJob(job, { stemsCreated: stems.length, mode, simulated: true });
 };
 
 export const runAnalysis = (projectId: string): Job | undefined => {
   const project = state.projects.get(projectId);
   if (!project) return undefined;
-  const job = buildJob(projectId, "analyze", "Running BPM/key/loudness analysis");
+  const job = buildJob(projectId, "analyze", "Refreshing planning analysis");
   const updated: Project = {
-    ...project,
+    ...normalizeProject(project),
     songDna: {
       ...project.songDna,
       bpm: project.songDna.bpm ?? 98,
       key: project.songDna.key ?? "A minor",
-      notes: `${project.songDna.notes} Analysis refreshed ${new Date().toLocaleString()}.`
+      notes: `${project.songDna.notes} Planning analysis refreshed ${new Date().toLocaleString()}.`
     },
     updatedAt: now()
   };
@@ -281,7 +412,8 @@ export const runAnalysis = (projectId: string): Job | undefined => {
   return completeJob(job, {
     bpm: updated.songDna.bpm,
     key: updated.songDna.key,
-    stemCount: updated.stems.length
+    stemCount: updated.stems.length,
+    simulated: true
   });
 };
 
@@ -291,7 +423,7 @@ export const runExport = (
 ): Job | undefined => {
   const project = state.projects.get(projectId);
   if (!project) return undefined;
-  const job = buildJob(projectId, "export", `Building ${type} export`);
+  const job = buildJob(projectId, "export", `Building ${type} export plan`);
   const artifact: ExportArtifact = {
     id: id(),
     type,
@@ -301,22 +433,22 @@ export const runExport = (
       ...project.stems.map((stem) => stem.file),
       `${projectId}/README-import.txt`
     ],
-    notes: "Aligned stems start at 0.0s and share sample rate/bit depth.",
+    notes: "Planning artifact. Real downloadable audio is produced by the separator worker.",
     createdAt: now()
   };
   const updated: Project = {
-    ...project,
+    ...normalizeProject(project),
     status: "ready-for-export",
     updatedAt: now(),
-    exportPlan:
-      "Universal WAV ZIP + DAW sidecars with tempo/key metadata. Reaper session enabled.",
+    exportPlan: "Organized WAV ZIP + DAW handoff notes. Use the live separator ZIP for real audio files.",
     manifest: {
       ...project.manifest,
       exports: [...project.manifest.exports, artifact]
-    }
+    },
+    history: appendHistory(project, "export", `Created ${type} export plan.`, { type })
   };
   state.projects.set(projectId, updated);
-  return completeJob(job, { exportId: artifact.id, type });
+  return completeJob(job, { exportId: artifact.id, type, planningOnly: true });
 };
 
 export const runAgentLoop = (
@@ -326,7 +458,7 @@ export const runAgentLoop = (
 ): Job | undefined => {
   const project = state.projects.get(projectId);
   if (!project) return undefined;
-  const job = buildJob(projectId, "agent-loop", "Running producer + A&R + engineer loop");
+  const job = buildJob(projectId, "agent-loop", "Running producer + A&R + engineer planning loop");
 
   const bpm = project.songDna.bpm ?? bpmFromBrief(project.brief);
   const key = project.songDna.key ?? keyFromMood(project.brief);
@@ -342,11 +474,10 @@ export const runAgentLoop = (
     .join(" + ");
 
   const revisionPrompt =
-    command ||
-    "Tighten low-end masking by sidechaining 808 to kick and open 2k-4k band for lead vocal.";
+    command || "Tighten low-end masking and preserve space for the lead vocal.";
 
   const updated: Project = {
-    ...project,
+    ...normalizeProject(project),
     status: "in-progress",
     updatedAt: now(),
     strategyMap,
@@ -357,7 +488,12 @@ export const runAgentLoop = (
     mixNotes: `Selected blend: ${selected}. Preserve emotional tone while reducing section clutter.`,
     promptTelemetry: promptTelemetry
       ? [...project.promptTelemetry, promptTelemetry]
-      : project.promptTelemetry
+      : project.promptTelemetry,
+    history: appendHistory(project, "agent-loop", "Producer/A&R planning loop completed.", {
+      command,
+      strategies: strategyMap.length,
+      modeledGenerations: generations.length
+    })
   };
   state.projects.set(projectId, updated);
   return completeJob(job, {
