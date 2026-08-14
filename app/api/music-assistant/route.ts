@@ -8,9 +8,7 @@ const bodySchema = z.object({
 
 interface ResponsesPayload {
   output_text?: string;
-  output?: Array<{
-    content?: Array<{ type?: string; text?: string }>;
-  }>;
+  output?: Array<{ content?: Array<{ type?: string; text?: string }> }>;
   error?: { message?: string };
 }
 
@@ -44,11 +42,34 @@ function outputText(payload: ResponsesPayload): string | null {
   return null;
 }
 
+async function verifySupabaseUser(request: Request): Promise<{ id: string } | null> {
+  const auth = request.headers.get("authorization") ?? "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!token || !url || !key) return null;
+  const response = await fetch(`${url}/auth/v1/user`, {
+    headers: { apikey: key, Authorization: `Bearer ${token}` },
+    cache: "no-store"
+  });
+  if (!response.ok) return null;
+  const user = (await response.json()) as { id?: string };
+  return user.id ? { id: user.id } : null;
+}
+
 export async function POST(request: Request): Promise<NextResponse> {
+  const user = await verifySupabaseUser(request);
+  if (!user) return NextResponse.json({ error: "Sign in to use Ask Music." }, { status: 401 });
+
   const parsed = bodySchema.safeParse(await request.json().catch(() => ({})));
   if (!parsed.success) return NextResponse.json({ error: "Invalid assistant request." }, { status: 400 });
 
   const { question, context } = parsed.data;
+  const project = context.project as { user_id?: unknown } | undefined;
+  if (!project || project.user_id !== user.id) {
+    return NextResponse.json({ error: "This project is not owned by the signed-in user." }, { status: 403 });
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
   const model = process.env.OPENAI_MUSIC_MODEL || "gpt-5-mini";
   if (!apiKey) return NextResponse.json({ answer: fallback(question, context), model: "local-fallback" });
@@ -65,10 +86,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json"
-    },
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       model,
       store: false,
@@ -79,11 +97,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   const payload = (await response.json().catch(() => ({}))) as ResponsesPayload;
   if (!response.ok) {
-    return NextResponse.json({
-      answer: fallback(question, context),
-      model: "local-fallback",
-      warning: payload.error?.message ?? `OpenAI request failed (${response.status}).`
-    });
+    return NextResponse.json({ answer: fallback(question, context), model: "local-fallback", warning: payload.error?.message ?? `OpenAI request failed (${response.status}).` });
   }
 
   return NextResponse.json({ answer: outputText(payload) ?? fallback(question, context), model });
