@@ -30,6 +30,9 @@ export interface StemAsset {
   lufs: number;
   confidence: number;
   midiFile?: string;
+  family?: string;
+  engine?: string;
+  downloadUrl?: string;
 }
 
 export interface GenerationVersion {
@@ -89,6 +92,49 @@ export interface Job {
   updatedAt: string;
 }
 
+export interface SourceAudioAttachment {
+  name: string;
+  size: number;
+  type: string;
+  lastModified: number;
+  attachedAt: string;
+  storage: "browser-indexeddb";
+}
+
+export interface LiveAudioAnalysis {
+  bpm: number | null;
+  key: string | null;
+  bpmConfidence: number;
+  keyConfidence: number;
+  peakDb: number;
+  rmsDb: number;
+  durationSec: number;
+  sampleRate: number;
+  channels: number;
+  engine: string;
+  analyzedAt: string;
+}
+
+export type ProjectHistoryType =
+  | "project-created"
+  | "project-restored"
+  | "state-saved"
+  | "agent-loop"
+  | "multitask"
+  | "audio-attached"
+  | "audio-analyzed"
+  | "core-separated"
+  | "deep-separated"
+  | "export";
+
+export interface ProjectHistoryEntry {
+  id: string;
+  type: ProjectHistoryType;
+  message: string;
+  createdAt: string;
+  details?: Record<string, unknown>;
+}
+
 export interface ProjectManifest {
   projectId: string;
   title: string;
@@ -123,4 +169,7 @@ export interface Project {
   exportPlan: string;
   manifest: ProjectManifest;
   promptTelemetry: PromptCacheTelemetry[];
+  sourceAudio?: SourceAudioAttachment;
+  liveAnalysis?: LiveAudioAnalysis;
+  history: ProjectHistoryEntry[];
 }
