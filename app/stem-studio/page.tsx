@@ -41,6 +41,12 @@ interface Manifest {
   alignment: { reconErrorDb: number; note: string };
   warnings: string[];
   engines: { core: string; deep: string };
+  zipUrl?: string;
+  organization?: {
+    root: string;
+    strategy: string;
+    families: string[];
+  };
 }
 
 export default function StemStudioPage(): React.JSX.Element {
@@ -80,7 +86,7 @@ export default function StemStudioPage(): React.JSX.Element {
     await player.loadStems(SEPARATOR_URL, mixable);
     const deepCount = m.stems.filter((stem) => stem.group !== "Core 6").length;
     setStatus(
-      `Ready · ${m.model} core · ${deepCount} deep target${deepCount === 1 ? "" : "s"} · recon ${m.alignment.reconErrorDb} dB`
+      `Ready · ${m.model} core · ${deepCount} deep target${deepCount === 1 ? "" : "s"} · organized by name and family · recon ${m.alignment.reconErrorDb} dB`
     );
   };
 
@@ -174,8 +180,8 @@ export default function StemStudioPage(): React.JSX.Element {
           </span>
         </div>
         <p className="meta" style={{ marginBottom: 0 }}>
-          Core 6 stems are non-overlapping Demucs stems and can be mixed together. The 60 deep
-          choices are independent SAM-Audio text-query isolates, so they may overlap each other.
+          Every output is named for the detected/selected stem and filed under its vocal or instrument
+          family. Core 6 stems are non-overlapping; deep isolates may overlap each other.
         </p>
       </section>
 
@@ -202,6 +208,15 @@ export default function StemStudioPage(): React.JSX.Element {
           <button className="secondary" onClick={() => void separateDemo()} disabled={busy}>
             Core 6 demo
           </button>
+          {manifest?.zipUrl && (
+            <a
+              href={`${SEPARATOR_URL}${manifest.zipUrl}`}
+              download="Stem_Studio_Organized_Stems.zip"
+              style={{ ...btn(false), display: "inline-flex", alignItems: "center", textDecoration: "none" }}
+            >
+              Download Organized ZIP
+            </a>
+          )}
           <input
             ref={fileRef}
             type="file"
@@ -214,6 +229,20 @@ export default function StemStudioPage(): React.JSX.Element {
           />
         </div>
       </section>
+
+      {manifest?.organization && (
+        <section className="panel main" style={{ marginBottom: "1rem" }}>
+          <h3 style={{ marginTop: 0 }}>Output organization</h3>
+          <p className="meta">
+            Folder strategy: <b>{manifest.organization.strategy}</b>. Your ZIP preserves these folders.
+          </p>
+          <div style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap" }}>
+            {manifest.organization.families.map((family) => (
+              <span key={family} style={badge("var(--text)")}>{family}</span>
+            ))}
+          </div>
+        </section>
+      )}
 
       {mode === "deep" && (
         <section className="panel main" style={{ marginBottom: "1rem" }}>
@@ -288,6 +317,9 @@ export default function StemStudioPage(): React.JSX.Element {
                   return (
                     <div className="card" key={ui.name}>
                       <h3 style={{ textTransform: "capitalize" }}>{meta?.label ?? ui.name}</h3>
+                      <div className="meta" style={{ marginBottom: "0.5rem" }}>
+                        {meta?.family ?? "Core 6"} · {meta?.file ?? ""}
+                      </div>
                       <div style={{ display: "flex", gap: "0.4rem", marginBottom: "0.5rem" }}>
                         <button onClick={() => player.setSolo(ui.name, !ui.solo)} style={pill(ui.solo, "#e0a83a")}>Solo</button>
                         <button onClick={() => player.setMuted(ui.name, !ui.muted)} style={pill(ui.muted, "#e05a5a")}>Mute</button>
@@ -312,7 +344,12 @@ export default function StemStudioPage(): React.JSX.Element {
               {coreDownloads.map((stem) => (
                 <div className="card" key={stem.name} style={{ marginTop: "0.65rem" }}>
                   <strong>{stem.label ?? stem.name}</strong>{" "}
-                  <a href={`${SEPARATOR_URL}${stem.url}`} download style={{ color: "var(--accent)" }}>
+                  <span className="meta">({stem.family ?? "Mixdown"})</span>{" "}
+                  <a
+                    href={`${SEPARATOR_URL}${stem.url}`}
+                    download={stem.downloadName ?? true}
+                    style={{ color: "var(--accent)" }}
+                  >
                     Download WAV
                   </a>
                 </div>
@@ -341,8 +378,15 @@ export default function StemStudioPage(): React.JSX.Element {
                       {stems.map((stem) => (
                         <div key={stem.name} style={{ borderTop: "1px solid var(--line)", paddingTop: "0.55rem" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline" }}>
-                            <strong>{stem.label ?? stem.name}</strong>
-                            <a href={`${SEPARATOR_URL}${stem.url}`} download style={{ color: "var(--accent)", whiteSpace: "nowrap" }}>
+                            <div>
+                              <strong>{stem.label ?? stem.name}</strong>
+                              <div className="meta">{stem.family ?? stem.group} · {stem.file}</div>
+                            </div>
+                            <a
+                              href={`${SEPARATOR_URL}${stem.url}`}
+                              download={stem.downloadName ?? true}
+                              style={{ color: "var(--accent)", whiteSpace: "nowrap" }}
+                            >
                               Download WAV
                             </a>
                           </div>
