@@ -1,4 +1,4 @@
-import type { Project } from "@/lib/types";
+import type { Project, ProjectHistoryEntry, SourceAudioAttachment } from "@/lib/types";
 
 const PROJECTS_KEY = "agentic-beat-lab:projects:v2";
 const ACTIVE_PROJECT_KEY = "agentic-beat-lab:active-project:v2";
@@ -113,7 +113,51 @@ export const saveActiveProjectId = (projectId: string | null): void => {
   else window.localStorage.removeItem(ACTIVE_PROJECT_KEY);
 };
 
+const persistSourceAttachment = async (projectId: string, file: File): Promise<void> => {
+  const current = loadStoredProjects();
+  const project = current.find((item) => item.id === projectId);
+  if (!project) return;
+
+  const timestamp = new Date().toISOString();
+  const sourceAudio: SourceAudioAttachment = {
+    name: file.name,
+    size: file.size,
+    type: file.type || "audio/*",
+    lastModified: file.lastModified,
+    attachedAt: timestamp,
+    storage: "browser-indexeddb"
+  };
+  const historyEntry: ProjectHistoryEntry = {
+    id: crypto.randomUUID(),
+    type: "audio-attached",
+    message: `Source audio attached: ${file.name}`,
+    createdAt: timestamp,
+    details: { size: file.size, type: file.type || "audio/*" }
+  };
+  const updated: Project = {
+    ...project,
+    sourceAudio,
+    updatedAt: timestamp,
+    manifest: {
+      ...project.manifest,
+      sourceFile: file.name
+    },
+    history: [...(project.history ?? []), historyEntry].slice(-200)
+  };
+
+  saveStoredProject(updated);
+
+  // Best-effort rehydration keeps the Netlify API session in sync. A worker or
+  // network failure after this point must not erase the locally attached song.
+  await fetch("/api/projects/import", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ projects: [updated] })
+  }).catch(() => undefined);
+};
+
 export const attachProjectAudio = async (projectId: string, file: File): Promise<void> => {
+  if (!file.size) throw new Error("The selected audio file is empty.");
   const record: StoredAudio = {
     projectId,
     blob: file,
@@ -124,6 +168,7 @@ export const attachProjectAudio = async (projectId: string, file: File): Promise
     savedAt: new Date().toISOString()
   };
   await idbPut(AUDIO_STORE, record);
+  await persistSourceAttachment(projectId, file);
 };
 
 export const getProjectAudio = async (projectId: string): Promise<File | null> => {
