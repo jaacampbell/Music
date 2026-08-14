@@ -1,70 +1,121 @@
-# Music
+# Music OS
 
-This repository contains **Music OS / Agentic Beat Lab OS** — a production command center and persistent artist workspace for song development, versioning, A&R, stem extraction, analysis, revision, release preparation, and DAW-oriented export.
+This repository contains **Music OS / Agentic Beat Lab OS** — an artist-first production command center and persistent workspace for song development, versioning, A&R, real stem extraction, analysis, revision, rights/release preparation, and DAW-oriented export.
 
-## Built app
+## Product surfaces
 
-The Next.js app now has four major surfaces:
+The Next.js app has one shared song/project identity across its major surfaces:
 
-- `/` — beginner-first Guided Mode + advanced Studio Mode command center.
-- `/dashboard` — Phase 2 persistent private Song Dashboard backed by Supabase/Postgres + private Storage.
-- `/stem-lab` — simulated contract/MVP for stem workflows and exports.
-- `/stem-studio` — the real production separator.
-- `/login` — Supabase-backed account creation/sign-in for the private dashboard.
+- `/` — beginner-first Guided Mode + advanced Studio Mode production command center.
+- `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.
+- `/stem-studio` — real production separator with project-native cloud stem handoff.
+- `/stem-lab` — deterministic stem workflow/contract MVP.
+- `/login` — Supabase-backed account creation/sign-in.
 - `/guide` — plain-language walkthrough and glossary.
 
-### Persistent Song Dashboard
+Use `?projectId=<uuid>` to move the same song between Dashboard, Guided/Studio, and Stem Studio.
 
-`/dashboard` is the first durable everyday artist workspace. It includes:
+## One song, one project graph
 
-- private user-owned projects with Row Level Security
-- debounced cloud autosave
-- artwork, BPM/key, project status, readiness, tasks, and checkpoints
-- private audio version history
-- private project files for stems, masters, artwork, agreements, lyrics, references, and other assets
-- browser-decoded waveform playback from the actual uploaded audio
-- timestamped waveform / mix comments
-- A/B version comparison with saved creative-part decisions
-- Release Center ownership, provenance, identifiers, distributor fields, and checklist
-- a project-aware Ask Music first pass that uses stored context without inventing unavailable audio measurements
+`music_projects.id` is the canonical song UUID. `app/components/CloudProjectBridge.tsx` keeps the existing deterministic production-planning `Project` model synchronized into the persistent row’s `planning_state` while preserving the working command-center APIs.
 
-Setup and security details are documented in [`docs/phase2-persistence.md`](docs/phase2-persistence.md). The SQL migration is [`db/music-os-phase2.sql`](db/music-os-phase2.sql).
+The bridge also:
 
-### Stem Studio · 60+ separator
+- promotes Guided/Studio projects into the private Supabase library;
+- hydrates Dashboard projects into the production engine;
+- syncs title/brief, BPM/key, measured analysis, production planning state, and source-audio metadata;
+- promotes browser source audio into private Storage and version history;
+- creates a new persistent version when a replacement source is attached.
 
-`/stem-studio` supports two production layers:
+See [`docs/phase3-unified-music-os.md`](docs/phase3-unified-music-os.md).
 
-- **Core 6** via Demucs `htdemucs_6s`: vocals, drums, bass, guitar, piano, other, plus a derived instrumental. These six stems are synchronized/non-overlapping and feed the live mixer.
-- **Deep 60+** via Meta SAM-Audio: selectable text-prompt isolates for lead/background vocals, ad-libs, harmonies, kick/snare/hats/cymbals/percussion, 808/sub/synth bass, guitar types, keys/synths, strings/brass/woodwinds, FX, ambience, and more.
+## Persistent Song Dashboard
 
-The frontend is designed to stay on Netlify while the compute-heavy separator runs on a separate GPU worker. Production deployment instructions live in [`services/separator/README.md`](services/separator/README.md).
+`/dashboard` includes:
+
+- private user-owned projects protected by Supabase Row Level Security;
+- debounced cloud autosave;
+- artwork, BPM/key, status, readiness, tasks, and checkpoints;
+- private audio version history and project files;
+- decoded waveform playback and timestamped mix comments;
+- synchronized A/B playback with position-preserving switching;
+- saved drums/atmosphere/vocal-space/low-end comparison decisions;
+- structured songwriter splits with a 100% total check;
+- structured producer-agreement tracking;
+- Release Center ownership, provenance, ISRC/UPC, distributor fields, and checklist;
+- project-aware Ask Music conversation history.
+
+## Ask Music
+
+`/api/music-assistant` is a server-side project-aware assistant route. It verifies a Music OS session and project ownership before using a configured OpenAI model. The server-only configuration is:
+
+```text
+OPENAI_API_KEY=YOUR_SERVER_ONLY_KEY
+OPENAI_MUSIC_MODEL=gpt-5-mini
+```
+
+If no model key is configured, the feature falls back to deterministic project-aware guidance. The route is instructed not to invent unavailable audio measurements, rights facts, clearances, credits, or ownership.
+
+## Stem Studio · Core 6 + Deep isolation
+
+`/stem-studio` supports:
+
+- **Core 6** via Demucs `htdemucs_6s`: vocals, drums, bass, guitar, piano, other, plus derived instrumental output.
+- **Deep isolation** via optional Meta SAM-Audio named targets such as lead/background vocals, ad-libs, drum parts, 808/sub-bass, guitars, keys, strings, brass, woodwinds, FX, and ambience.
+
+When the user is signed in and Stem Studio is opened for a project, completed generated WAVs are copied from the separator worker into that song’s private Supabase Storage and registered as `music_assets` stems automatically.
+
+Production separator deployment instructions live in [`services/separator/README.md`](services/separator/README.md).
+
+## Security model
+
+Supabase Auth + Row Level Security is the authorization boundary for private database rows and Storage objects.
+
+`proxy.ts` provides an optimistic `/dashboard` route guard, but it does not replace RLS. The private Storage path convention is:
+
+```text
+music-assets/{user_uuid}/{project_uuid}/...
+```
+
+The bucket remains private and size-limited. Phase 3 removes the old narrow MIME allow-list so legitimate agreements, lyrics, archives, DAW handoff files, stems, audio, and artwork can live in the project library.
+
+Never expose a Supabase service-role key or `OPENAI_API_KEY` through browser code or a `NEXT_PUBLIC_` variable.
+
+## Database setup
+
+Run the migrations in order:
+
+1. [`db/music-os-phase2.sql`](db/music-os-phase2.sql)
+2. [`db/music-os-phase3.sql`](db/music-os-phase3.sql)
+
+Then configure:
+
+```text
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_YOUR_KEY
+NEXT_PUBLIC_SEPARATOR_URL=https://YOUR-GPU-WORKER.example.com
+```
+
+The optional Ask Music variables are shown above.
+
+## Deterministic vs. measured processing
+
+The command-center agent loop, planning scorecards, `/stem-lab` extraction contracts, and DAW handoff planner remain deterministic modeling tools. They must not be presented as measured audio truth.
+
+Browser audio analysis and the external separator are real processing paths. Waveforms are rendered only from decoded audio; decode failure does not produce a fabricated waveform.
 
 ## Documents
 
-- [`docs/phase2-persistence.md`](docs/phase2-persistence.md): Supabase/Postgres, private Storage, accounts, persistent dashboard, and security/setup.
-- [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
-- [`docs/stem-extraction/PROPOSAL.md`](docs/stem-extraction/PROPOSAL.md): Technical proposal for the stem extraction + music editor export module.
-- [`docs/stem-extraction/agent-prompt.md`](docs/stem-extraction/agent-prompt.md): Runtime prompt for the Stem Extraction Agent.
-- [`docs/stem-extraction/build-checklist.md`](docs/stem-extraction/build-checklist.md): Phase 1 build checklist.
+- [`docs/phase3-unified-music-os.md`](docs/phase3-unified-music-os.md): unified project graph, source/version sync, Stem Studio handoff, Ask Music, and security.
+- [`docs/phase2-persistence.md`](docs/phase2-persistence.md): initial Supabase persistence layer and RLS model.
+- [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): operating model, agent council, production loop, and governance.
+- [`docs/stem-extraction/PROPOSAL.md`](docs/stem-extraction/PROPOSAL.md): stem extraction/editor proposal.
 
 ## Producer DNA Research OS
 
-The [`producer-dna/`](producer-dna/) directory vendors the **Producer DNA Research OS** — a Python research project (producer taxonomies, 3-layer musicological DNA, producer seeds, ingestion adapters, scoring, and CLI) that feeds Song DNA.
+The [`producer-dna/`](producer-dna/) directory contains the Producer DNA research system used to inform broad production traits and Song DNA while keeping artist-imitation directives out of executable generation instructions.
 
-## Command-center APIs
-
-The app also includes API routes for:
-
-- project creation/listing for the deterministic command-center planning MVP
-- simulated stem extraction jobs (2/4/6/10 modes)
-- music analysis jobs
-- export jobs (WAV ZIP, REAPER, Ableton-style, Logic-style)
-- natural-language agent loop execution (single or multitask batch)
-- prompt cache statistics
-
-The command-center simulation is separate from both the persistent `/dashboard` records and the real `/stem-studio` GPU-backed separator. The next integration phase is to make all three surfaces share the same persistent project graph.
-
-## Run the frontend locally
+## Run locally
 
 ```bash
 npm install
@@ -73,27 +124,4 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-For Phase 2 cloud persistence, copy `.env.example`, create a Supabase project, run `db/music-os-phase2.sql`, and configure:
-
-```text
-NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_YOUR_KEY
-```
-
-## Run Core 6 separator locally
-
-See [`services/separator/README.md`](services/separator/README.md). The frontend reads the separator URL from:
-
-```text
-NEXT_PUBLIC_SEPARATOR_URL=http://localhost:8000
-```
-
-## Production
-
-For a Netlify frontend, set the Supabase values above plus:
-
-```text
-NEXT_PUBLIC_SEPARATOR_URL=https://YOUR-GPU-WORKER.example.com
-```
-
-The GPU worker needs Python 3.11+, FFmpeg, CUDA for practical Deep 60+ inference, and `HF_TOKEN` for gated SAM-Audio checkpoint access.
+The GPU worker needs Python 3.11+, FFmpeg, CUDA for practical deep inference, and the appropriate gated-model credentials when SAM-Audio is enabled.
