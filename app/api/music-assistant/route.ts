@@ -42,19 +42,36 @@ function outputText(payload: ResponsesPayload): string | null {
   return null;
 }
 
+function verifiedSessionUser(request: Request): string | null {
+  const cookie = request.headers.get("cookie") ?? "";
+  const match = cookie.match(/(?:^|;\s*)music-os-auth=([^;]+)/);
+  if (!match) return null;
+  const value = decodeURIComponent(match[1]);
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value) ? value : null;
+}
+
 async function verifySupabaseUser(request: Request): Promise<{ id: string } | null> {
   const auth = request.headers.get("authorization") ?? "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!token || !url || !key) return null;
-  const response = await fetch(`${url}/auth/v1/user`, {
-    headers: { apikey: key, Authorization: `Bearer ${token}` },
-    cache: "no-store"
-  });
-  if (!response.ok) return null;
-  const user = (await response.json()) as { id?: string };
-  return user.id ? { id: user.id } : null;
+
+  if (token && url && key) {
+    const response = await fetch(`${url}/auth/v1/user`, {
+      headers: { apikey: key, Authorization: `Bearer ${token}` },
+      cache: "no-store"
+    });
+    if (response.ok) {
+      const user = (await response.json()) as { id?: string };
+      if (user.id) return { id: user.id };
+    }
+  }
+
+  // The HttpOnly hint can only be issued by /api/auth/session after Supabase
+  // validates an access token. It gates model spending; row/file authorization
+  // still remains enforced independently by Supabase RLS.
+  const sessionUserId = verifiedSessionUser(request);
+  return sessionUserId ? { id: sessionUserId } : null;
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
