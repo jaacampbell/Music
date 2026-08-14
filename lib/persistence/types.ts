@@ -1,3 +1,5 @@
+import type { Project } from "@/lib/types";
+
 export type MusicProjectStatus =
   | "draft"
   | "in-progress"
@@ -29,6 +31,10 @@ export interface MusicProjectRow {
   readiness: number;
   active_section: string;
   artwork_path: string | null;
+  source_audio_path: string | null;
+  live_analysis: Record<string, unknown> | null;
+  planning_state: Project | null;
+  last_synced_at: string | null;
   last_opened_at: string;
   created_at: string;
   updated_at: string;
@@ -99,6 +105,26 @@ export interface WaveformCommentRow {
   created_at: string;
 }
 
+export interface SongwriterSplit {
+  id: string;
+  name: string;
+  role: string;
+  pro: string;
+  ipi: string;
+  percentage: number;
+}
+
+export interface ProducerAgreement {
+  id: string;
+  producer: string;
+  agreementType: "work-for-hire" | "license" | "ownership" | "other";
+  fee: string;
+  points: string;
+  publishing: string;
+  status: "draft" | "signed" | "not-needed";
+  notes: string;
+}
+
 export interface MusicReleaseRow {
   id: string;
   project_id: string;
@@ -112,9 +138,9 @@ export interface MusicReleaseRow {
   distributor: string | null;
   master_ownership: string | null;
   publishing_ownership: string | null;
-  splits: unknown[];
-  producer_agreements: unknown[];
-  ai_provenance: unknown[];
+  splits: SongwriterSplit[];
+  producer_agreements: ProducerAgreement[];
+  ai_provenance: Array<{ note?: string; [key: string]: unknown }>;
   metadata: Record<string, unknown>;
   checklist: Record<string, boolean>;
   artwork_path: string | null;
@@ -142,5 +168,15 @@ export interface ComparisonRow {
   vocal_space_choice: "a" | "b" | "tie" | null;
   low_end_choice: "a" | "b" | "tie" | null;
   notes: string;
+  created_at: string;
+}
+
+export interface AgentMessageRow {
+  id: string;
+  project_id: string;
+  user_id: string;
+  role: "user" | "assistant";
+  body: string;
+  model: string | null;
   created_at: string;
 }

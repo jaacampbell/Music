@@ -98,7 +98,8 @@ export interface SourceAudioAttachment {
   type: string;
   lastModified: number;
   attachedAt: string;
-  storage: "browser-indexeddb";
+  storage: "browser-indexeddb" | "supabase-private" | "hybrid";
+  cloudPath?: string;
 }
 
 export interface LiveAudioAnalysis {

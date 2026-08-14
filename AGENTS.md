@@ -1,34 +1,77 @@
 # AGENTS.md
 
-## Cursor Cloud specific instructions
+## Music OS repository instructions
 
-This repository is the **Agentic Beat Lab OS** — a music *production* command center (not a music player). It is a **Next.js 16 (App Router) + React 19 + TypeScript** app that models the producer/A&R/engineer loop from `docs/agentic-beat-lab-os.md`.
+This repository is **Music OS / Agentic Beat Lab OS** — a Next.js 16 (App Router) + React 19 + TypeScript music-production workspace with a persistent artist library and a separate Python stem-separation service.
 
-### Commands (see `package.json` scripts)
-- `npm run dev` — Next.js dev server (Turbopack) at `http://localhost:3000`.
-- `npm run build` — production build (`next build`).
+### Commands
+- `npm run dev` — Next.js dev server at `http://localhost:3000`.
+- `npm run build` — production build.
 - `npm run start` — serve the production build.
-- `npm run lint` — ESLint (flat config in `eslint.config.mjs`, `eslint-config-next`).
+- `npm run lint` — ESLint.
+- CI also runs `python -m py_compile services/separator/app.py`.
 
-### Architecture
-- `app/page.tsx` — the single-page command center UI with 10 tabs (Song Brief, Song DNA, Prompt Pack, Generations, Stem Library, Beat Breakdown, Scorecards, Mix Notes, Revision Loop, Final Export).
-- `app/api/**` — route handlers: projects CRUD + state, agent run/multitask, extract/analyze/export, jobs, cache stats. Inputs validated with `zod`.
-- `lib/store.ts` — domain logic + an **in-memory store** on `globalThis` (`__beatLabStore`).
-- `lib/agent-loop.ts` — parses a natural-language command into a plan (stem mode 2/4/6/10, model profile, export profile) and runs the jobs.
-- `lib/prompt-cache.ts` — tiered prompt assembly + token-saver telemetry.
+### Product surfaces
+- `/` — beginner Guided Mode + advanced Studio Mode production command center.
+- `/dashboard` — private persistent Song Dashboard and canonical cloud project library.
+- `/stem-studio` — real Demucs Core 6 + optional SAM-Audio Deep isolation.
+- `/stem-lab` — deterministic stem workflow/contract MVP.
+- `/login` — Supabase account sign-in/signup.
+- `/guide` — plain-language help and glossary.
 
-### Real stem separation service (`services/separator/`)
-- A **separate Python service** (FastAPI + Demucs + optional Meta SAM-Audio + FFmpeg) powers `/stem-studio`.
-- Core production separation uses Demucs `htdemucs_6s` for six synchronized, non-overlapping stems: `vocals / drums / bass / guitar / piano / other`, plus a derived instrumental.
-- Deep separation exposes a 60-target catalog. Meta SAM-Audio isolates any selected target from text prompts (lead/background vocals, drum parts, 808/sub-bass, guitar types, keys, strings, brass, woodwinds, FX, and more). Deep targets may overlap and are not summed in the Core 6 mixer.
-- Local CPU Core 6 setup and production GPU Docker deployment are documented in `services/separator/README.md`.
-- SAM-Audio requires Python 3.11+, a CUDA worker for practical performance, checkpoint access on Hugging Face, and `HF_TOKEN` on first model download.
-- The frontend targets the worker via `NEXT_PUBLIC_SEPARATOR_URL` (default `http://localhost:8000`). A Netlify-hosted HTTPS frontend needs an HTTPS worker URL.
-- The service's `.venv/` and `data/` (jobs, weights, stems) are gitignored. Persist `/models` on production GPU hosts to avoid re-downloading weights.
-- ESLint ignores `services/**` and `producer-dna/**` (Python projects) — see `eslint.config.mjs`.
+### Unified project architecture
+The canonical song identity is the UUID in `public.music_projects`.
 
-### Non-obvious notes
-- **The core command center is a deterministic simulation MVP**: the agent loop, scoring, `/stem-lab` extraction, and exports are stubbed to model the data contracts (no live LLM calls). Real stem separation lives in `services/separator/` + `/stem-studio`.
-- **State is in-memory and not persisted** — it resets on dev-server restart and is shared process-wide via `globalThis`. Creating projects via the API (e.g. curl) makes them appear in the UI after a reload. Real persistence (Postgres/Supabase) is a planned build-out.
-- The startup update script installs from `package-lock.json` via `npm ci`; no extra setup is required for the Next.js frontend.
-- CI runs `npm run lint`, `npm run build`, and `python -m py_compile services/separator/app.py`.
+Phase 3 deliberately keeps the existing deterministic command-center APIs working while synchronizing their `Project` state into `music_projects.planning_state` through `app/components/CloudProjectBridge.tsx`.
+
+The bridge:
+- promotes Guided/Studio browser projects into Supabase using the same UUID;
+- hydrates Dashboard projects back into the existing command-center planning engine;
+- syncs planning state, title/brief, BPM/key, measured analysis, and source-audio metadata;
+- promotes browser source audio into the private `music-assets` bucket and version history;
+- makes `?projectId=<uuid>` the handoff between Dashboard, Studio, and Stem Studio.
+
+Do not create another independent project identifier for a feature that belongs to a song. New song-level features should reference `music_projects.id`.
+
+### Persistence and security
+Run both migrations, in order:
+1. `db/music-os-phase2.sql`
+2. `db/music-os-phase3.sql`
+
+Supabase Auth + Row Level Security is the authorization boundary for private project rows and Storage objects. `proxy.ts` is only an optimistic route guard for `/dashboard`; do not treat the route cookie as a replacement for RLS.
+
+The private Storage path convention is:
+`music-assets/{user_uuid}/{project_uuid}/...`
+
+Never expose a Supabase service-role key or `OPENAI_API_KEY` to browser code. Server-only secrets must not use a `NEXT_PUBLIC_` prefix.
+
+### Ask Music
+`app/api/music-assistant/route.ts` is the project-aware assistant endpoint. It:
+- requires a verified Music OS session;
+- verifies the requested project owner;
+- uses the OpenAI Responses API only from the server when `OPENAI_API_KEY` exists;
+- falls back to deterministic project guidance when no model key is configured;
+- must not invent measurements, credits, ownership, clearances, or analysis that the system did not actually produce.
+
+Conversation history is stored in `music_agent_messages` under RLS.
+
+### Real stem separation
+`services/separator/` is the separate FastAPI + Demucs + optional SAM-Audio worker used by `/stem-studio`.
+
+Core production separation uses Demucs `htdemucs_6s` for synchronized non-overlapping `vocals / drums / bass / guitar / piano / other`, plus derived instrumental output. Deep isolation exposes named targets and may overlap.
+
+When a signed-in project is linked, Stem Studio copies completed generated WAVs from the worker into that project’s private Supabase Storage and records them as `music_assets` stem rows. Individual failed cloud copies must not invalidate other successful stems.
+
+### Important truthfulness rules
+- The deterministic command-center agent loop/scoring/export planner is still a planning model, not a live generative producer.
+- Browser audio analysis and the external separator are real processing paths.
+- A waveform must come from decoded audio; never render a fabricated waveform on decode failure.
+- Never label defaults or planning placeholders as measured audio facts.
+- Ask Music must distinguish listening hypotheses from measured findings.
+
+### Development expectations
+- Preserve beginner-friendly Guided Mode; advanced technical controls belong in Studio/technical views.
+- Keep project handoffs project-ID aware.
+- Validate user/API input.
+- Prefer owner-scoped persistent records for new song data.
+- Run lint/build and separator syntax CI before merging changes to `main`.
