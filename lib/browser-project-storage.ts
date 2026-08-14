@@ -1,4 +1,4 @@
-import type { Project, SourceAudioAttachment } from "@/lib/types";
+import type { Project, ProjectHistoryEntry, SourceAudioAttachment } from "@/lib/types";
 
 const PROJECTS_KEY = "agentic-beat-lab:projects:v2";
 const ACTIVE_PROJECT_KEY = "agentic-beat-lab:active-project:v2";
@@ -127,6 +127,13 @@ const persistSourceAttachment = async (projectId: string, file: File): Promise<v
     attachedAt: timestamp,
     storage: "browser-indexeddb"
   };
+  const historyEntry: ProjectHistoryEntry = {
+    id: crypto.randomUUID(),
+    type: "audio-attached",
+    message: `Source audio attached: ${file.name}`,
+    createdAt: timestamp,
+    details: { size: file.size, type: file.type || "audio/*" }
+  };
   const updated: Project = {
     ...project,
     sourceAudio,
@@ -135,16 +142,7 @@ const persistSourceAttachment = async (projectId: string, file: File): Promise<v
       ...project.manifest,
       sourceFile: file.name
     },
-    history: [
-      ...(project.history ?? []),
-      {
-        id: crypto.randomUUID(),
-        type: "audio-attached",
-        message: `Source audio attached: ${file.name}`,
-        createdAt: timestamp,
-        details: { size: file.size, type: file.type || "audio/*" }
-      }
-    ].slice(-200)
+    history: [...(project.history ?? []), historyEntry].slice(-200)
   };
 
   saveStoredProject(updated);
