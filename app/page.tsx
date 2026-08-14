@@ -1,10 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ProducerDnaPanel } from "@/app/components/ProducerDnaPanel";
-import type { Project } from "@/lib/types";
+import { analyzeAudioFile } from "@/lib/browser-audio-analysis";
+import {
+  attachProjectAudio,
+  getProjectAudio,
+  loadActiveProjectId,
+  loadSeparationSnapshot,
+  loadStoredProjects,
+  saveActiveProjectId,
+  saveSeparationSnapshot,
+  saveStoredProjects
+} from "@/lib/browser-project-storage";
+import type { Project, SourceAudioAttachment } from "@/lib/types";
 
 type AppMode = "guided" | "studio";
 type TabName =
@@ -18,7 +29,37 @@ type TabName =
   | "Scorecards"
   | "Mix Notes"
   | "Revision Loop"
-  | "Final Export";
+  | "Final Export"
+  | "History";
+
+interface LiveStem {
+  name: string;
+  label?: string;
+  family?: string;
+  group?: string;
+  file?: string;
+  downloadName?: string;
+  url: string;
+  integratedDb: number;
+  engine?: string;
+  mixable?: boolean;
+}
+
+interface LiveManifest {
+  jobId: string;
+  source: { filename: string };
+  model: string;
+  mode: "core" | "deep";
+  sampleRate: number;
+  channels: number;
+  durationSec: number;
+  stems: LiveStem[];
+  zipUrl?: string;
+  alignment: { reconErrorDb: number; note: string };
+  warnings: string[];
+}
+
+const SEPARATOR_URL = process.env.NEXT_PUBLIC_SEPARATOR_URL ?? "http://localhost:8000";
 
 const TABS: Array<{ id: TabName; label: string; description: string }> = [
   { id: "Song Brief", label: "Song Idea", description: "What you want to make and how it should feel." },
@@ -36,12 +77,13 @@ const TABS: Array<{ id: TabName; label: string; description: string }> = [
 const STUDIO_TABS: Array<{ id: TabName; label: string; description: string }> = [
   ...TABS.slice(0, 2),
   { id: "Producer DNA", label: "Producer & Sound Library", description: "Research broad production traits and creative directions." },
-  ...TABS.slice(2)
+  ...TABS.slice(2),
+  { id: "History", label: "Project History", description: "See saved project, analysis, separation, and export activity." }
 ];
 
 const GLOSSARY = [
   ["BPM", "Beats per minute. It tells you how fast the song is."],
-  ["Key", "The musical note and scale the song is centered around. If you do not know it, Music OS can analyze it."],
+  ["Key", "The musical note and scale the song is centered around. Music OS can estimate it from attached audio."],
   ["Stem", "One isolated part of a song, such as vocals, drums, bass, piano, or guitar."],
   ["Song DNA", "The technical name for your Sound Profile: tempo, key, mood, structure, vocal space, and palette."],
   ["Producer DNA", "A research profile of broad production traits, scenes, techniques, and creative directions."],
@@ -60,8 +102,8 @@ const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
     }
   });
   if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.error ?? `Request failed (${response.status})`);
+    const error = (await response.json().catch(() => ({}))) as { error?: string; detail?: string };
+    throw new Error(error.error ?? error.detail ?? `Request failed (${response.status})`);
   }
   return response.json() as Promise<T>;
 };
@@ -74,18 +116,23 @@ function progressForProject(project: Project | null): number {
   if (project.stems.length > 0) completed += 1;
   if (project.scorecards.length > 0) completed += 1;
   if (project.mixNotes.trim()) completed += 1;
-  if (project.manifest.exports.length > 0) completed += 1;
+  if (project.manifest.exports.length > 0 || project.sourceAudio) completed += 1;
   return completed;
 }
 
 function recommendedStep(project: Project | null): { title: string; detail: string; tab: TabName } {
   if (!project) return { title: "Create your first song project", detail: "Start with a title and describe the sound in normal language. Music theory is optional.", tab: "Song Brief" };
-  if (project.promptPack.length === 0 && project.generations.length === 0) return { title: "Build your sound profile", detail: "Turn your idea into a usable production plan and a few creative directions.", tab: "Song DNA" };
-  if (project.stems.length === 0) return { title: "Work with the song parts", detail: "Separate stems when you want vocals, drums, bass, and instruments on their own.", tab: "Stem Library" };
+  if (!project.sourceAudio) return { title: "Attach the actual song", detail: "Add your audio so Music OS can measure it and keep the same source connected to Stem Lab and Stem Studio.", tab: "Song DNA" };
+  if (project.promptPack.length === 0 && project.generations.length === 0) return { title: "Build your production directions", detail: "Turn your idea and measured sound profile into usable creative directions.", tab: "Prompt Pack" };
+  if (project.stems.length === 0) return { title: "Separate the song parts", detail: "Create real vocals, drums, bass, guitar, piano, and other stems from the attached track.", tab: "Stem Library" };
   if (project.scorecards.length === 0) return { title: "Review the current version", detail: "See what is working, what is crowded, and what should change next.", tab: "Scorecards" };
   if (!project.mixNotes.trim()) return { title: "Add mix feedback", detail: "Write what you hear in plain language: vocals too quiet, bass too heavy, hook needs more space.", tab: "Mix Notes" };
-  if (project.manifest.exports.length === 0) return { title: "Prepare your export", detail: "Package the current version for your DAW or engineer.", tab: "Final Export" };
-  return { title: "Choose the next creative move", detail: "Revise again, compare another version, or move this project toward release preparation.", tab: "Revision Loop" };
+  return { title: "Prepare or improve the next version", detail: "Export the real stems, revise the production direction, or go deeper in Stem Studio.", tab: "Final Export" };
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 export default function HomePage(): React.JSX.Element {
@@ -100,26 +147,68 @@ export default function HomePage(): React.JSX.Element {
   const [mixNotesInput, setMixNotesInput] = useState("");
   const [revisionInput, setRevisionInput] = useState("");
   const [exportPlanInput, setExportPlanInput] = useState("");
-  const [statusText, setStatusText] = useState("Ready");
+  const [statusText, setStatusText] = useState("Restoring your workspace…");
   const [cacheEntries, setCacheEntries] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [audioBusy, setAudioBusy] = useState(false);
+  const [liveManifest, setLiveManifest] = useState<LiveManifest | null>(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
 
   const selectedProject = useMemo(() => projects.find((project) => project.id === activeProjectId) ?? null, [projects, activeProjectId]);
   const progress = progressForProject(selectedProject);
   const nextStep = recommendedStep(selectedProject);
-
-  const loadProjects = async (): Promise<void> => {
-    const data = await api<{ projects: Project[] }>("/api/projects");
-    setProjects(data.projects);
-    if (!activeProjectId && data.projects.length > 0) setActiveProjectId(data.projects[0].id);
-  };
+  const projectQuery = selectedProject ? `?projectId=${encodeURIComponent(selectedProject.id)}` : "";
 
   const loadCacheStats = async (): Promise<void> => {
     const data = await api<{ cache: { entries: number } }>("/api/cache/stats");
     setCacheEntries(data.cache.entries);
   };
 
-  useEffect(() => { void Promise.all([loadProjects(), loadCacheStats()]); }, []);
+  const loadProjects = async (preferredId?: string | null): Promise<void> => {
+    const data = await api<{ projects: Project[] }>("/api/projects");
+    setProjects(data.projects);
+    saveStoredProjects(data.projects);
+    const targetId = preferredId ?? activeProjectId ?? loadActiveProjectId();
+    if (targetId && data.projects.some((project) => project.id === targetId)) setActiveProjectId(targetId);
+    else if (data.projects.length > 0) setActiveProjectId(data.projects[0].id);
+  };
+
+  const ensureServerProject = async (): Promise<void> => {
+    if (!selectedProject) return;
+    await api<{ imported: number }>("/api/projects/import", {
+      method: "POST",
+      body: JSON.stringify({ projects: [selectedProject] })
+    });
+  };
+
+  useEffect(() => {
+    void (async () => {
+      const stored = loadStoredProjects();
+      try {
+        if (stored.length > 0) {
+          await api<{ imported: number }>("/api/projects/import", {
+            method: "POST",
+            body: JSON.stringify({ projects: stored })
+          });
+        }
+        await Promise.all([loadProjects(loadActiveProjectId()), loadCacheStats()]);
+        setStatusText(stored.length > 0 ? `Restored ${stored.length} saved project${stored.length === 1 ? "" : "s"}.` : "Ready");
+      } catch (error) {
+        setProjects(stored);
+        if (stored.length > 0) setActiveProjectId(loadActiveProjectId() ?? stored[0].id);
+        setStatusText(error instanceof Error ? error.message : "Could not restore the workspace.");
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    saveActiveProjectId(activeProjectId);
+    if (!activeProjectId) {
+      setLiveManifest(null);
+      return;
+    }
+    void loadSeparationSnapshot<LiveManifest>(activeProjectId, "core").then(setLiveManifest);
+  }, [activeProjectId]);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -129,11 +218,11 @@ export default function HomePage(): React.JSX.Element {
     setExportPlanInput(selectedProject.exportPlan);
   }, [selectedProject?.id]);
 
-  const withBusy = async (task: () => Promise<void>): Promise<void> => {
+  const withBusy = async (task: () => Promise<void>, preferredId?: string): Promise<void> => {
     setBusy(true);
     try {
       await task();
-      await Promise.all([loadProjects(), loadCacheStats()]);
+      await Promise.all([loadProjects(preferredId), loadCacheStats()]);
     } catch (error) {
       setStatusText(error instanceof Error ? error.message : "Unexpected error");
     } finally {
@@ -141,23 +230,38 @@ export default function HomePage(): React.JSX.Element {
     }
   };
 
-  const createProject = async (): Promise<void> => withBusy(async () => {
+  const createProject = async (): Promise<void> => {
     if (!titleInput.trim() || !briefInput.trim()) {
       setStatusText("Add a song title and a short description first.");
       return;
     }
-    const data = await api<{ project: Project }>("/api/projects", { method: "POST", body: JSON.stringify({ title: titleInput.trim(), brief: briefInput.trim() }) });
-    setActiveProjectId(data.project.id);
-    setActiveTab("Song Brief");
-    setStatusText(`Created ${data.project.title}. Your next step is to build the sound profile.`);
-  });
+    setBusy(true);
+    try {
+      const data = await api<{ project: Project }>("/api/projects", {
+        method: "POST",
+        body: JSON.stringify({ title: titleInput.trim(), brief: briefInput.trim() })
+      });
+      await loadProjects(data.project.id);
+      setActiveProjectId(data.project.id);
+      setActiveTab("Song Brief");
+      setStatusText(`Created ${data.project.title}. This project now restores from this browser.`);
+    } catch (error) {
+      setStatusText(error instanceof Error ? error.message : "Could not create project.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const runAgentLoop = async (): Promise<void> => {
     if (!selectedProject) return;
     await withBusy(async () => {
-      const data = await api<{ result: { decision: { stemMode: number; modelProfile: string }; jobIds: string[] } }>("/api/agent/run", { method: "POST", body: JSON.stringify({ projectId: selectedProject.id, command: commandInput }) });
-      setStatusText(`Production analysis finished. ${data.result.jobIds.length} task${data.result.jobIds.length === 1 ? "" : "s"} completed.`);
-    });
+      await ensureServerProject();
+      const data = await api<{ result: { jobIds: string[] } }>("/api/agent/run", {
+        method: "POST",
+        body: JSON.stringify({ projectId: selectedProject.id, command: commandInput })
+      });
+      setStatusText(`Production planning finished. ${data.result.jobIds.length} task${data.result.jobIds.length === 1 ? "" : "s"} completed.`);
+    }, selectedProject.id);
   };
 
   const runMultitask = async (): Promise<void> => {
@@ -165,44 +269,117 @@ export default function HomePage(): React.JSX.Element {
     const commands = commandInput.split("\n").map((value) => value.trim()).filter(Boolean);
     if (commands.length === 0) { setStatusText("Add one command per line to run several tasks."); return; }
     await withBusy(async () => {
-      const data = await api<{ result: { totalCommands: number; totalJobs: number } }>("/api/agent/multitask", { method: "POST", body: JSON.stringify({ projectId: selectedProject.id, commands }) });
-      setStatusText(`Finished ${data.result.totalCommands} commands across ${data.result.totalJobs} jobs.`);
-    });
+      await ensureServerProject();
+      const data = await api<{ result: { totalCommands: number; totalJobs: number } }>("/api/agent/multitask", {
+        method: "POST",
+        body: JSON.stringify({ projectId: selectedProject.id, commands })
+      });
+      setStatusText(`Finished ${data.result.totalCommands} planning commands across ${data.result.totalJobs} jobs.`);
+    }, selectedProject.id);
   };
 
   const runExtraction = async (stemMode: 2 | 4 | 6 | 10): Promise<void> => {
     if (!selectedProject) return;
     await withBusy(async () => {
-      await api<{ job: { id: string } }>(`/api/projects/${selectedProject.id}/extract`, { method: "POST", body: JSON.stringify({ mode: stemMode }) });
+      await ensureServerProject();
+      await api<{ job: { id: string } }>(`/api/projects/${selectedProject.id}/extract`, {
+        method: "POST",
+        body: JSON.stringify({ mode: stemMode })
+      });
       setActiveTab("Stem Library");
-      setStatusText(`Created a ${stemMode}-stem planning package. Use Stem Studio for real audio separation.`);
-    });
+      setStatusText(`Created a ${stemMode}-stem planning model. Attach audio here or use Stem Studio for real stems.`);
+    }, selectedProject.id);
   };
 
   const runAnalysis = async (): Promise<void> => {
     if (!selectedProject) return;
     await withBusy(async () => {
+      await ensureServerProject();
       await api<{ job: { id: string } }>(`/api/projects/${selectedProject.id}/analyze`, { method: "POST", body: JSON.stringify({}) });
       setActiveTab("Song DNA");
-      setStatusText("Sound profile analysis refreshed.");
-    });
+      setStatusText("Planning profile refreshed. Attach real audio for measured BPM/key estimates.");
+    }, selectedProject.id);
   };
 
   const runExport = async (type: string): Promise<void> => {
     if (!selectedProject) return;
     await withBusy(async () => {
+      await ensureServerProject();
       await api<{ job: { id: string } }>(`/api/projects/${selectedProject.id}/export`, { method: "POST", body: JSON.stringify({ type }) });
       setActiveTab("Final Export");
-      setStatusText("Export plan created. Use Stem Studio for downloadable real stem audio.");
-    });
+      setStatusText("DAW handoff plan created. Real audio downloads come from the saved separation package.");
+    }, selectedProject.id);
   };
 
   const saveState = async (): Promise<void> => {
     if (!selectedProject) return;
     await withBusy(async () => {
-      await api<{ project: Project }>(`/api/projects/${selectedProject.id}/state`, { method: "PATCH", body: JSON.stringify({ brief: briefInput, mixNotes: mixNotesInput, revisionPrompt: revisionInput, exportPlan: exportPlanInput }) });
-      setStatusText("Saved your project changes for this app session.");
-    });
+      await ensureServerProject();
+      await api<{ project: Project }>(`/api/projects/${selectedProject.id}/state`, {
+        method: "PATCH",
+        body: JSON.stringify({ brief: briefInput, mixNotes: mixNotesInput, revisionPrompt: revisionInput, exportPlan: exportPlanInput })
+      });
+      setStatusText("Saved your project changes. A browser copy will restore after a refresh or server cold start.");
+    }, selectedProject.id);
+  };
+
+  const attachAndSeparate = async (file: File): Promise<void> => {
+    if (!selectedProject) {
+      setStatusText("Create or select a project before attaching audio.");
+      return;
+    }
+    setAudioBusy(true);
+    setStatusText(`Saving ${file.name}, measuring the audio, and running Core 6…`);
+    try {
+      await attachProjectAudio(selectedProject.id, file);
+      await ensureServerProject();
+
+      const form = new FormData();
+      form.append("file", file);
+      form.append("mode", "core");
+      form.append("targets", "[]");
+      const [analysis, response] = await Promise.all([
+        analyzeAudioFile(file),
+        fetch(`${SEPARATOR_URL}/separate`, { method: "POST", body: form })
+      ]);
+      if (!response.ok) {
+        const body = (await response.json().catch(() => ({}))) as { detail?: string };
+        throw new Error(body.detail ?? `Stem separation failed (${response.status})`);
+      }
+      const manifest = (await response.json()) as LiveManifest;
+      const source: SourceAudioAttachment = {
+        name: file.name,
+        size: file.size,
+        type: file.type || "audio/*",
+        lastModified: file.lastModified,
+        attachedAt: new Date().toISOString(),
+        storage: "browser-indexeddb"
+      };
+      await api<{ project: Project }>(`/api/projects/${selectedProject.id}/live-audio`, {
+        method: "POST",
+        body: JSON.stringify({ source, analysis, stems: manifest.stems, mode: "core", model: manifest.model, zipUrl: manifest.zipUrl })
+      });
+      await saveSeparationSnapshot(selectedProject.id, "core", manifest);
+      setLiveManifest(manifest);
+      await loadProjects(selectedProject.id);
+      setActiveTab("Stem Library");
+      setStatusText(`Real audio saved · ${analysis.bpm ?? "?"} BPM · ${analysis.key ?? "key estimate unavailable"} · ${manifest.stems.length} outputs.`);
+    } catch (error) {
+      setStatusText(error instanceof Error ? error.message : "Could not process the audio.");
+    } finally {
+      setAudioBusy(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
+  const rerunSavedAudio = async (): Promise<void> => {
+    if (!selectedProject) return;
+    const file = await getProjectAudio(selectedProject.id);
+    if (!file) {
+      setStatusText("The saved source audio is not available in this browser. Choose it again.");
+      return;
+    }
+    await attachAndSeparate(file);
   };
 
   const renderTabContent = (): React.JSX.Element => {
@@ -210,26 +387,32 @@ export default function HomePage(): React.JSX.Element {
     if (!selectedProject) return <div className="emptyState"><div className="emptyIcon">♪</div><h2>Create a song project to begin</h2><p>You can describe your idea in normal language. You do not need to know BPM, key, mixing terms, or music theory.</p></div>;
 
     switch (activeTab) {
-      case "Song Brief":
-        return <div className="contentGrid"><section className="card"><div className="eyebrow">Song idea</div><h2>{selectedProject.title}</h2><p>{selectedProject.brief}</p><div className="helpText">This is the creative brief: feeling, tempo, references, story, energy, and anything you want to protect.</div></section><section className="card"><div className="eyebrow">Current status</div><h3>{selectedProject.status === "ready-for-export" ? "Ready to export" : selectedProject.status === "in-progress" ? "In production" : "Getting started"}</h3><p className="meta">Last updated {new Date(selectedProject.updatedAt).toLocaleString()}</p></section></div>;
-      case "Song DNA":
-        return <div className="contentGrid"><section className="card"><div className="eyebrow">Sound profile</div><h2>What the song sounds like</h2><div className="metricGrid"><div className="metric"><span>BPM</span><strong>{selectedProject.songDna.bpm ?? "Not set"}</strong><small>How fast the song is</small></div><div className="metric"><span>Key</span><strong>{selectedProject.songDna.key ?? "Not set"}</strong><small>The musical center</small></div><div className="metric"><span>Vocal space</span><strong>{selectedProject.songDna.vocalSpace}</strong><small>Room left for vocals</small></div></div></section><section className="card"><div className="eyebrow">Mood & ingredients</div><div className="pillRow">{selectedProject.songDna.mood.map((value) => <span className="pill" key={value}>{value}</span>)}</div><ul className="plainList">{selectedProject.songDna.palette.map((item) => <li key={item}>{item}</li>)}</ul><button className="secondaryButton" onClick={() => void runAnalysis()} disabled={busy}>Refresh analysis</button></section></div>;
+      case "Song Brief": {
+        const latestHistory = (selectedProject.history ?? []).slice(-3).reverse();
+        return <div className="contentGrid"><section className="card"><div className="eyebrow">Song idea</div><h2>{selectedProject.title}</h2><p>{selectedProject.brief}</p><div className="helpText">This creative brief travels with the project into stem separation, QA, and export.</div></section><section className="card"><div className="eyebrow">Current status</div><h3>{selectedProject.status === "ready-for-export" ? "Ready to export" : selectedProject.status === "in-progress" ? "In production" : "Getting started"}</h3><p className="meta">Last updated {new Date(selectedProject.updatedAt).toLocaleString()}</p>{selectedProject.sourceAudio && <p className="meta">Attached audio: <strong>{selectedProject.sourceAudio.name}</strong> · {formatBytes(selectedProject.sourceAudio.size)}</p>}{latestHistory.length > 0 && <div className="helpText">Latest: {latestHistory[0].message}</div>}</section></div>;
+      }
+      case "Song DNA": {
+        const analysis = selectedProject.liveAnalysis;
+        return <div className="contentGrid"><section className="card"><div className="eyebrow">Sound profile</div><h2>{analysis ? "Measured from your attached audio" : "Starting profile from your description"}</h2><div className="metricGrid"><div className="metric"><span>BPM</span><strong>{selectedProject.songDna.bpm ?? "Not set"}</strong><small>{analysis ? `${Math.round(analysis.bpmConfidence * 100)}% estimate confidence` : "Attach audio to measure"}</small></div><div className="metric"><span>Key</span><strong>{selectedProject.songDna.key ?? "Not set"}</strong><small>{analysis ? `${Math.round(analysis.keyConfidence * 100)}% estimate confidence` : "Attach audio to estimate"}</small></div><div className="metric"><span>Vocal space</span><strong>{selectedProject.songDna.vocalSpace}</strong><small>Room left for vocals</small></div></div>{analysis && <p className="meta">Peak {analysis.peakDb} dB · RMS {analysis.rmsDb} dB · {analysis.sampleRate / 1000} kHz · {analysis.channels} channel{analysis.channels === 1 ? "" : "s"}</p>}<div className="actionRow"><button className="primaryButton" onClick={() => fileRef.current?.click()} disabled={audioBusy}>{analysis ? "Replace / re-analyze audio" : "Attach audio & analyze"}</button>{selectedProject.sourceAudio && <button className="secondaryButton" onClick={() => void rerunSavedAudio()} disabled={audioBusy}>Re-run saved audio</button>}</div></section><section className="card"><div className="eyebrow">Mood & ingredients</div><div className="pillRow">{selectedProject.songDna.mood.map((value) => <span className="pill" key={value}>{value}</span>)}</div><ul className="plainList">{selectedProject.songDna.palette.map((item) => <li key={item}>{item}</li>)}</ul>{mode === "studio" && <button className="secondaryButton" onClick={() => void runAnalysis()} disabled={busy}>Refresh planning profile</button>}</section></div>;
+      }
       case "Prompt Pack":
-        return <section className="card"><div className="eyebrow">Production directions</div><h2>Different ways to build this sound</h2>{selectedProject.promptPack.length === 0 ? <p className="meta">No directions yet. Run “Build my sound” to create them.</p> : <div className="stackList">{selectedProject.promptPack.map((prompt, index) => <div className="listCard" key={prompt}><strong>Direction {index + 1}</strong><p>{prompt}</p></div>)}</div>}</section>;
+        return <section className="card"><div className="eyebrow">Production directions</div><h2>Different ways to build this sound</h2>{selectedProject.promptPack.length === 0 ? <div className="emptyInline"><p>No directions yet.</p><button className="primaryButton" onClick={() => void runAgentLoop()} disabled={busy}>Build my sound</button></div> : <div className="stackList">{selectedProject.promptPack.map((prompt, index) => <div className="listCard" key={prompt}><strong>Direction {index + 1}</strong><p>{prompt}</p></div>)}</div>}</section>;
       case "Generations":
-        return <section className="card"><div className="eyebrow">Versions</div><h2>Compare creative directions</h2>{selectedProject.generations.length === 0 ? <p className="meta">No modeled versions yet. Run the production analysis.</p> : <div className="contentGrid">{selectedProject.generations.map((generation) => <article className="listCard" key={generation.id}><h3>{generation.name} {generation.selected ? "✓" : ""}</h3><p>{generation.strategy}</p><div className="scoreLine"><span>Score</span><strong>{generation.score}</strong></div><p className="meta">Strong: {generation.strengths.join(", ")}</p><p className="meta">Needs work: {generation.weaknesses.join(", ")}</p></article>)}</div>}</section>;
+        return <section className="card"><div className="eyebrow">Versions</div><h2>Compare creative directions</h2>{selectedProject.generations.length === 0 ? <p className="meta">No modeled versions yet. Run the production planning analysis.</p> : <div className="contentGrid">{selectedProject.generations.map((generation) => <article className="listCard" key={generation.id}><h3>{generation.name} {generation.selected ? "✓" : ""}</h3><p>{generation.strategy}</p><div className="scoreLine"><span>Modeled score</span><strong>{generation.score}</strong></div><p className="meta">Strong: {generation.strengths.join(", ")}</p><p className="meta">Needs work: {generation.weaknesses.join(", ")}</p></article>)}</div>}</section>;
       case "Stem Library":
-        return <section className="card"><div className="sectionHeader"><div><div className="eyebrow">Song parts / stems</div><h2>Work with parts of the song separately</h2><p className="meta">A stem is one isolated part, such as vocals, drums, bass, or guitar.</p></div><Link className="textLink" href="/stem-studio">Open real Stem Studio →</Link></div>{selectedProject.stems.length === 0 ? <div className="emptyInline"><p>No planning stems yet.</p><div className="actionRow"><button className="secondaryButton" onClick={() => void runExtraction(4)} disabled={busy}>Model a 4-stem plan</button><Link className="primaryButton linkButton" href="/stem-studio">Separate real audio</Link></div></div> : <div className="stemGrid">{selectedProject.stems.map((stem) => <div className="stemCard" key={stem.id}><strong>{stem.name.replaceAll("_", " ")}</strong><span>{stem.durationSec.toFixed(0)} sec</span><small>Advanced: {stem.lufs.toFixed(1)} LUFS · {(stem.confidence * 100).toFixed(0)}% confidence</small></div>)}</div>}</section>;
+        return <section className="card"><div className="sectionHeader"><div><div className="eyebrow">Song parts / stems</div><h2>{liveManifest ? "Real separated audio" : "Separate your actual song"}</h2><p className="meta">Core 6 creates synchronized vocals, drums, bass, guitar, piano, and other. Stem Studio adds the deeper 60+ target library.</p></div><div className="advancedLinks"><Link href={`/stem-lab${projectQuery}`}>Open Stem Lab</Link><Link href={`/stem-studio${projectQuery}`}>Open Deep 60+</Link></div></div>{!liveManifest ? <div className="emptyInline"><p>{selectedProject.sourceAudio ? `${selectedProject.sourceAudio.name} is saved in this browser and ready to run.` : "Attach the actual audio file to create real stems."}</p><div className="actionRow"><button className="primaryButton" onClick={() => selectedProject.sourceAudio ? void rerunSavedAudio() : fileRef.current?.click()} disabled={audioBusy}>{audioBusy ? "Separating…" : selectedProject.sourceAudio ? "Run saved audio" : "Choose audio & separate"}</button>{mode === "studio" && <button className="secondaryButton" onClick={() => void runExtraction(4)} disabled={busy}>Model a planning-only 4-stem set</button>}</div></div> : <><div className="actionRow"><button className="secondaryButton" onClick={() => void rerunSavedAudio()} disabled={audioBusy}>Re-run source</button>{liveManifest.zipUrl && <a className="primaryButton linkButton" href={`${SEPARATOR_URL}${liveManifest.zipUrl}`} download="Organized_Stems.zip">Download organized ZIP</a>}</div><div className="stemGrid">{liveManifest.stems.map((stem) => <div className="stemCard" key={`${stem.name}-${stem.url}`}><strong>{stem.label ?? stem.name.replaceAll("_", " ")}</strong><span>{stem.family ?? stem.group ?? "Core"} · {stem.integratedDb} dB</span><small>{stem.file ?? stem.url}</small><audio controls preload="none" src={`${SEPARATOR_URL}${stem.url}`} style={{ width: "100%" }} /><a className="textLink" href={`${SEPARATOR_URL}${stem.url}`} download={stem.downloadName ?? true}>Download WAV</a></div>)}</div><p className="meta">Core reconstruction error: {liveManifest.alignment.reconErrorDb} dB. If the worker has restarted and these previews no longer load, use “Re-run source” to regenerate them.</p></>}</section>;
       case "Beat Breakdown":
         return <div className="contentGrid"><section className="card"><div className="eyebrow">Song structure</div><h2>Sections</h2><ul className="plainList">{selectedProject.manifest.markers.map((marker) => <li key={`${marker.bar}-${marker.label}`}>Bar {marker.bar}: <strong>{marker.label}</strong></li>)}</ul></section><section className="card"><div className="eyebrow">Harmony</div><h2>Chord map</h2><ul className="plainList">{selectedProject.manifest.chords.map((chord) => <li key={`${chord.bar}-${chord.chord}`}>Bar {chord.bar}: <strong>{chord.chord}</strong></li>)}</ul></section></div>;
       case "Scorecards":
-        return <section className="card"><div className="eyebrow">Song review</div><h2>What is working?</h2>{selectedProject.scorecards.length === 0 ? <p className="meta">No review scores yet. Run the production analysis first.</p> : <div className="contentGrid">{selectedProject.scorecards.map((score) => <div className="listCard" key={score.id}><h3>{score.summary}</h3><div className="scoreRows"><span>Emotion <strong>{score.emotionalAlignment}/10</strong></span><span>Originality <strong>{score.originality}/10</strong></span><span>Vocal space <strong>{score.vocalSpace}/10</strong></span><span>Release readiness <strong>{score.releaseReadiness}/10</strong></span></div></div>)}</div>}</section>;
+        return <section className="card"><div className="eyebrow">Song review</div><h2>What is working?</h2>{selectedProject.scorecards.length === 0 ? <p className="meta">No modeled review scores yet. Run the production planning analysis first.</p> : <div className="contentGrid">{selectedProject.scorecards.map((score) => <div className="listCard" key={score.id}><h3>{score.summary}</h3><div className="scoreRows"><span>Emotion <strong>{score.emotionalAlignment}/10</strong></span><span>Originality <strong>{score.originality}/10</strong></span><span>Vocal space <strong>{score.vocalSpace}/10</strong></span><span>Release readiness <strong>{score.releaseReadiness}/10</strong></span></div></div>)}</div>}</section>;
       case "Mix Notes":
         return <section className="card"><div className="eyebrow">Mix feedback</div><h2>Write what you hear</h2><p className="meta">Plain language is fine: “vocals too quiet,” “808 is swallowing the kick,” “hook needs more space.”</p><textarea className="largeInput" value={mixNotesInput} onChange={(event) => setMixNotesInput(event.target.value)} placeholder="What should change in the mix?"/><button className="primaryButton" onClick={() => void saveState()} disabled={busy || !mixNotesInput.trim()}>Save mix feedback</button></section>;
       case "Revision Loop":
-        return <section className="card"><div className="eyebrow">Improve this version</div><h2>Turn feedback into the next revision</h2><p className="meta">Describe the change you want. The advanced system translates this into production instructions.</p><textarea className="largeInput" value={revisionInput} onChange={(event) => setRevisionInput(event.target.value)} placeholder="Example: Keep the drums, make the verse less crowded, and leave more space for a low male vocal."/><button className="primaryButton" onClick={() => void saveState()} disabled={busy}>Save revision direction</button></section>;
+        return <section className="card"><div className="eyebrow">Improve this version</div><h2>Turn feedback into the next revision</h2><p className="meta">Describe the change you want. The planning engine translates this into production instructions.</p><textarea className="largeInput" value={revisionInput} onChange={(event) => setRevisionInput(event.target.value)} placeholder="Example: Keep the drums, make the verse less crowded, and leave more space for a low male vocal."/><button className="primaryButton" onClick={() => void saveState()} disabled={busy}>Save revision direction</button></section>;
       case "Final Export":
-        return <section className="card"><div className="eyebrow">Download & send to DAW</div><h2>Choose where the project goes next</h2><p className="meta">A DAW is the music software where you record, arrange, mix, and finish songs. The command center export is currently a modeled handoff plan; real stem downloads come from Stem Studio.</p><div className="actionRow"><button className="primaryButton" onClick={() => void runExport("wav-zip")} disabled={busy}>Plan universal WAV package</button><button className="secondaryButton" onClick={() => void runExport("reaper-rpp")} disabled={busy}>Plan REAPER package</button><Link className="secondaryButton linkButton" href="/stem-studio">Open real audio exports</Link></div><textarea className="largeInput" value={exportPlanInput} onChange={(event) => setExportPlanInput(event.target.value)} placeholder="Optional notes for the export or engineer"/><button className="secondaryButton" onClick={() => void saveState()} disabled={busy}>Save export notes</button>{selectedProject.manifest.exports.length > 0 && <div className="stackList">{selectedProject.manifest.exports.map((artifact) => <div className="listCard" key={artifact.id}><strong>{artifact.type}</strong><p className="meta">{artifact.files.length} planned files · {artifact.status}</p></div>)}</div>}</section>;
+        return <section className="card"><div className="eyebrow">Download & send to DAW</div><h2>Choose where the project goes next</h2><p className="meta">Planning exports describe the handoff. The real audio package is the organized ZIP created by the separator.</p><div className="actionRow"><button className="primaryButton" onClick={() => void runExport("wav-zip")} disabled={busy}>Plan universal WAV package</button><button className="secondaryButton" onClick={() => void runExport("reaper-rpp")} disabled={busy}>Plan REAPER package</button>{liveManifest?.zipUrl ? <a className="secondaryButton linkButton" href={`${SEPARATOR_URL}${liveManifest.zipUrl}`} download="Organized_Stems.zip">Download real stems</a> : <Link className="secondaryButton linkButton" href={`/stem-studio${projectQuery}`}>Open real audio exports</Link>}</div><textarea className="largeInput" value={exportPlanInput} onChange={(event) => setExportPlanInput(event.target.value)} placeholder="Optional notes for the export or engineer"/><button className="secondaryButton" onClick={() => void saveState()} disabled={busy}>Save export notes</button>{selectedProject.manifest.exports.length > 0 && <div className="stackList">{selectedProject.manifest.exports.map((artifact) => <div className="listCard" key={artifact.id}><strong>{artifact.type}</strong><p className="meta">{artifact.files.length} planned files · {artifact.status}</p></div>)}</div>}</section>;
+      case "History":
+        return <section className="card"><div className="eyebrow">Project history</div><h2>What happened in this project</h2>{(selectedProject.history ?? []).length === 0 ? <p className="meta">No history yet.</p> : <div className="stackList">{selectedProject.history.slice().reverse().map((entry) => <div className="listCard" key={entry.id}><strong>{entry.message}</strong><p className="meta">{new Date(entry.createdAt).toLocaleString()} · {entry.type}</p></div>)}</div>}</section>;
       default:
         return <div />;
     }
@@ -243,16 +426,17 @@ export default function HomePage(): React.JSX.Element {
       </header>
 
       {mode === "guided" ? <>
-        <section className="welcomePanel"><div><div className="eyebrow">Start here</div><h1>What do you want to do today?</h1><p>You can use normal language. Music OS keeps technical controls available only when you need them.</p></div><div className="quickActions"><button onClick={() => { setActiveTab("Song Brief"); document.getElementById("project-builder")?.scrollIntoView({ behavior: "smooth" }); }}><span>＋</span><strong>Start a new song</strong><small>Create a project from an idea</small></button><Link href="/stem-studio"><span>≋</span><strong>Separate stems</strong><small>Split vocals, drums, bass & more</small></Link><button onClick={() => setActiveTab("Song DNA")}><span>⌁</span><strong>Analyze my song</strong><small>Understand tempo, key & sound</small></button><button onClick={() => setActiveTab("Revision Loop")}><span>↻</span><strong>Improve a version</strong><small>Turn feedback into revisions</small></button><button onClick={() => setActiveTab("Generations")}><span>◫</span><strong>Compare versions</strong><small>See strengths and weaknesses</small></button><button onClick={() => setActiveTab("Producer DNA")}><span>⌕</span><strong>Research a sound</strong><small>Explore producer traits safely</small></button></div></section>
+        <section className="welcomePanel"><div><div className="eyebrow">Start here</div><h1>What do you want to do today?</h1><p>You can use normal language. Music OS keeps technical controls available only when you need them.</p></div><div className="quickActions"><button onClick={() => { setActiveTab("Song Brief"); document.getElementById("project-builder")?.scrollIntoView({ behavior: "smooth" }); }}><span>＋</span><strong>Start a new song</strong><small>Create a project from an idea</small></button><Link href={`/stem-studio${projectQuery}`}><span>≋</span><strong>Separate stems</strong><small>{selectedProject ? "Use this project’s saved audio" : "Split vocals, drums, bass & more"}</small></Link><button onClick={() => { setActiveTab("Song DNA"); document.getElementById("project-builder")?.scrollIntoView({ behavior: "smooth" }); }}><span>⌁</span><strong>Analyze my song</strong><small>Attach audio for measured tempo & key</small></button><button onClick={() => setActiveTab("Revision Loop")}><span>↻</span><strong>Improve a version</strong><small>Turn feedback into revisions</small></button><button onClick={() => setActiveTab("Generations")}><span>◫</span><strong>Compare versions</strong><small>See strengths and weaknesses</small></button><button onClick={() => setActiveTab("Producer DNA")}><span>⌕</span><strong>Research a sound</strong><small>Explore producer traits safely</small></button></div></section>
 
-        <section className="projectStrip"><div className="projectPicker"><label htmlFor="project-select">Current project</label><select id="project-select" value={activeProjectId ?? ""} onChange={(event) => setActiveProjectId(event.target.value || null)}><option value="">No project selected</option>{projects.map((project) => <option key={project.id} value={project.id}>{project.title}</option>)}</select></div><div className="progressWrap"><div className="progressLabels"><span>Project progress</span><strong>{progress}/7</strong></div><div className="progressTrack"><div className="progressFill" style={{ width: `${(progress / 7) * 100}%` }} /></div><div className="progressSteps"><span>Idea</span><span>Sound</span><span>Versions</span><span>Stems</span><span>Review</span><span>Mix</span><span>Export</span></div></div></section>
+        <section className="projectStrip"><div className="projectPicker"><label htmlFor="project-select">Current project</label><select id="project-select" value={activeProjectId ?? ""} onChange={(event) => setActiveProjectId(event.target.value || null)}><option value="">No project selected</option>{projects.map((project) => <option key={project.id} value={project.id}>{project.title}</option>)}</select>{selectedProject?.sourceAudio && <small className="meta">Audio saved: {selectedProject.sourceAudio.name}</small>}</div><div className="progressWrap"><div className="progressLabels"><span>Project progress</span><strong>{progress}/7</strong></div><div className="progressTrack"><div className="progressFill" style={{ width: `${(progress / 7) * 100}%` }} /></div><div className="progressSteps"><span>Idea</span><span>Sound</span><span>Versions</span><span>Stems</span><span>Review</span><span>Mix</span><span>Export</span></div></div></section>
 
         <section className="nextStepCard"><div><div className="eyebrow">Recommended next step</div><h2>{nextStep.title}</h2><p>{nextStep.detail}</p></div><button className="primaryButton" onClick={() => setActiveTab(nextStep.tab)}>Go to {STUDIO_TABS.find((tab) => tab.id === nextStep.tab)?.label} →</button></section>
 
         <section id="project-builder" className="guidedBuilder"><div className="builderSidebar"><div className="sidebarTitle">Project steps</div>{TABS.map((tab, index) => <button key={tab.id} className={`guidedTab ${activeTab === tab.id ? "active" : ""}`} onClick={() => setActiveTab(tab.id)}><span className="tabNumber">{index + 1}</span><span><strong>{tab.label}</strong><small>{tab.description}</small></span></button>)}<button className={`guidedTab optional ${activeTab === "Producer DNA" ? "active" : ""}`} onClick={() => setActiveTab("Producer DNA")}><span className="tabNumber">⌕</span><span><strong>Producer & Sound Library</strong><small>Optional research tool</small></span></button></div><div className="builderMain">{!selectedProject ? <section className="newProjectCard"><div className="eyebrow">Step 1</div><h2>Tell us about your song</h2><p>No music theory required. Describe the sound the way you would explain it to a producer.</p><label>Song title<input value={titleInput} onChange={(event) => setTitleInput(event.target.value)} placeholder="Untitled song" /></label><label>What should it sound and feel like?<textarea value={briefInput} onChange={(event) => setBriefInput(event.target.value)} placeholder="Example: dark late-night rap, smooth 808s, simple melody, lots of room for vocals..." /></label><button className="primaryButton large" onClick={() => void createProject()} disabled={busy}>{busy ? "Creating…" : "Create song project →"}</button></section> : renderTabContent()}</div></section>
-      </> : <section className="studioModeLayout"><aside className="studioSidebar"><div className="eyebrow">Studio mode</div><select value={activeProjectId ?? ""} onChange={(event) => setActiveProjectId(event.target.value || null)}><option value="">Select project</option>{projects.map((project) => <option key={project.id} value={project.id}>{project.title}</option>)}</select><div className="tab-list">{STUDIO_TABS.map((tab) => <button key={tab.id} className={`tab-item ${activeTab === tab.id ? "active" : ""}`} onClick={() => setActiveTab(tab.id)}><strong>{tab.label}</strong><small>{tab.id}</small></button>)}</div></aside><div className="studioMain"><section className="advancedControls"><div className="sectionHeader"><div><div className="eyebrow">Advanced controls</div><h2>Production command center</h2></div><div className="advancedLinks"><Link href="/stem-studio">Stem Studio</Link><Link href="/guide">Guide</Link></div></div><div className="advancedGrid"><label>Song brief<textarea value={briefInput} onChange={(event) => setBriefInput(event.target.value)} /></label><label>Agent command<textarea value={commandInput} onChange={(event) => setCommandInput(event.target.value)} /></label><label>Mix notes<textarea value={mixNotesInput} onChange={(event) => setMixNotesInput(event.target.value)} /></label><label>Revision prompt<textarea value={revisionInput} onChange={(event) => setRevisionInput(event.target.value)} /></label></div><div className="actionRow wrap"><button className="primaryButton" onClick={() => void runAgentLoop()} disabled={busy || !selectedProject}>Run production analysis</button><button className="secondaryButton" onClick={() => void runMultitask()} disabled={busy || !selectedProject}>Run several tasks</button><button className="secondaryButton" onClick={() => void runExtraction(4)} disabled={busy || !selectedProject}>Model 4 stems</button><button className="secondaryButton" onClick={() => void runAnalysis()} disabled={busy || !selectedProject}>Analyze profile</button><button className="secondaryButton" onClick={() => void saveState()} disabled={busy || !selectedProject}>Save state</button></div><details className="technicalDetails"><summary>Technical details</summary><p>Prompt cache entries: {cacheEntries}. The command center agent/scoring layer is currently a deterministic planning MVP. Real audio separation remains in Stem Studio.</p></details></section>{renderTabContent()}</div></section>}
+      </> : <section className="studioModeLayout"><aside className="studioSidebar"><div className="eyebrow">Studio mode</div><select value={activeProjectId ?? ""} onChange={(event) => setActiveProjectId(event.target.value || null)}><option value="">Select project</option>{projects.map((project) => <option key={project.id} value={project.id}>{project.title}</option>)}</select><div className="tab-list">{STUDIO_TABS.map((tab) => <button key={tab.id} className={`tab-item ${activeTab === tab.id ? "active" : ""}`} onClick={() => setActiveTab(tab.id)}><strong>{tab.label}</strong><small>{tab.id}</small></button>)}</div></aside><div className="studioMain"><section className="advancedControls"><div className="sectionHeader"><div><div className="eyebrow">Advanced controls</div><h2>Production command center</h2></div><div className="advancedLinks"><Link href={`/stem-lab${projectQuery}`}>Stem Lab</Link><Link href={`/stem-studio${projectQuery}`}>Stem Studio</Link><Link href="/guide">Guide</Link></div></div><div className="advancedGrid"><label>Song brief<textarea value={briefInput} onChange={(event) => setBriefInput(event.target.value)} /></label><label>Agent command<textarea value={commandInput} onChange={(event) => setCommandInput(event.target.value)} /></label><label>Mix notes<textarea value={mixNotesInput} onChange={(event) => setMixNotesInput(event.target.value)} /></label><label>Revision prompt<textarea value={revisionInput} onChange={(event) => setRevisionInput(event.target.value)} /></label></div><div className="actionRow wrap"><button className="primaryButton" onClick={() => void runAgentLoop()} disabled={busy || !selectedProject}>Run production planning</button><button className="secondaryButton" onClick={() => void runMultitask()} disabled={busy || !selectedProject}>Run several tasks</button><button className="secondaryButton" onClick={() => fileRef.current?.click()} disabled={audioBusy || !selectedProject}>{audioBusy ? "Processing audio…" : "Attach / analyze real audio"}</button><button className="secondaryButton" onClick={() => void runExtraction(4)} disabled={busy || !selectedProject}>Model 4 stems</button><button className="secondaryButton" onClick={() => void saveState()} disabled={busy || !selectedProject}>Save state</button></div><details className="technicalDetails"><summary>Technical details</summary><p>Prompt cache entries: {cacheEntries}. Planning/scorecard generation is deterministic. Attached-audio analysis and separator output are real processing. Project metadata is restored from localStorage and source audio is kept in IndexedDB on this browser.</p></details></section>{renderTabContent()}</div></section>}
 
-      <div className="statusBar" role="status" aria-live="polite"><span className={busy ? "statusDot busy" : "statusDot"} />{busy ? "Working…" : statusText}</div>
+      <input ref={fileRef} type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff" style={{ display: "none" }} onChange={(event) => { const file = event.target.files?.[0]; if (file) void attachAndSeparate(file); }} />
+      <div className="statusBar" role="status" aria-live="polite"><span className={busy || audioBusy ? "statusDot busy" : "statusDot"} />{busy || audioBusy ? "Working… " : ""}{statusText}</div>
 
       {helpOpen && <div className="helpOverlay" role="presentation" onClick={() => setHelpOpen(false)}><aside className="helpDrawer" role="dialog" aria-modal="true" aria-label="Music OS help" onClick={(event) => event.stopPropagation()}><div className="helpHeader"><div><div className="eyebrow">Help & learning</div><h2>What does this mean?</h2></div><button onClick={() => setHelpOpen(false)} aria-label="Close help">×</button></div><p className="meta">Use this glossary while you work. The full walkthrough is available in the Guide.</p><div className="glossaryList">{GLOSSARY.map(([term, definition]) => <div className="glossaryItem" key={term}><strong>{term}</strong><p>{definition}</p></div>)}</div><Link className="primaryButton linkButton" href="/guide">Open full guide →</Link></aside></div>}
     </main>
