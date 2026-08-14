@@ -4,10 +4,12 @@ export interface StemInfo {
   name: string;
   label?: string;
   group?: string;
+  family?: string;
   engine?: string;
   mixable?: boolean;
   prompt?: string;
   file?: string;
+  downloadName?: string;
   url: string;
   integratedDb: number;
 }
