@@ -57,34 +57,86 @@ function authHeaders(accessToken?: string): HeadersInit {
   };
 }
 
+async function requestWithContext(
+  url: string,
+  init: RequestInit,
+  label: string
+): Promise<Response> {
+  try {
+    return await fetch(url, init);
+  } catch (error) {
+    const browserMessage = error instanceof Error ? error.message : "network request failed";
+    throw new Error(
+      `${label} could not reach the Music OS cloud service. Check your connection and the Netlify Supabase environment settings. (${browserMessage})`
+    );
+  }
+}
+
 async function parseError(response: Response): Promise<Error> {
-  const payload = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+  const raw = await response.text().catch(() => "");
+  let payload: Record<string, unknown> = {};
+  if (raw) {
+    try {
+      payload = JSON.parse(raw) as Record<string, unknown>;
+    } catch {
+      payload = {};
+    }
+  }
   const message =
     (typeof payload.message === "string" && payload.message) ||
     (typeof payload.error_description === "string" && payload.error_description) ||
     (typeof payload.error === "string" && payload.error) ||
+    (typeof payload.msg === "string" && payload.msg) ||
+    raw ||
     `Request failed (${response.status})`;
   return new Error(message);
 }
 
+function storageContentType(file: File): string {
+  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+  const declared = file.type.trim().toLowerCase();
+
+  // Browsers do not agree on several common music MIME types. Normalize them
+  // to the canonical values accepted by the Music OS storage bucket.
+  if (extension === "m4a" || declared === "audio/x-m4a" || declared === "audio/m4a") {
+    return "audio/mp4";
+  }
+  if (extension === "mp3" || declared === "audio/mp3") return "audio/mpeg";
+  if (extension === "wav" || declared === "audio/vnd.wave") return "audio/wav";
+  if (extension === "flac" || declared === "audio/x-flac") return "audio/flac";
+  if (extension === "aif" || extension === "aiff") return "audio/aiff";
+  if (extension === "ogg") return "audio/ogg";
+  if (extension === "webm") return "audio/webm";
+
+  return declared || "application/octet-stream";
+}
+
 export async function signIn(email: string, password: string): Promise<CloudSession> {
   if (!isCloudConfigured()) throw new Error("Supabase environment variables are not configured.");
-  const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-    method: "POST",
-    headers: authHeaders(),
-    body: JSON.stringify({ email, password })
-  });
+  const response = await requestWithContext(
+    `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
+    {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ email, password })
+    },
+    "Sign in"
+  );
   if (!response.ok) throw await parseError(response);
   return storeSession((await response.json()) as AuthResponse);
 }
 
 export async function signUp(email: string, password: string): Promise<{ session: CloudSession | null; message: string }> {
   if (!isCloudConfigured()) throw new Error("Supabase environment variables are not configured.");
-  const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-    method: "POST",
-    headers: authHeaders(),
-    body: JSON.stringify({ email, password })
-  });
+  const response = await requestWithContext(
+    `${SUPABASE_URL}/auth/v1/signup`,
+    {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ email, password })
+    },
+    "Account creation"
+  );
   if (!response.ok) throw await parseError(response);
   const payload = (await response.json()) as AuthResponse;
   if (payload.access_token && payload.refresh_token && payload.user) {
@@ -94,11 +146,15 @@ export async function signUp(email: string, password: string): Promise<{ session
 }
 
 export async function refreshSession(session: CloudSession): Promise<CloudSession> {
-  const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
-    method: "POST",
-    headers: authHeaders(),
-    body: JSON.stringify({ refresh_token: session.refresh_token })
-  });
+  const response = await requestWithContext(
+    `${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,
+    {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ refresh_token: session.refresh_token })
+    },
+    "Session refresh"
+  );
   if (!response.ok) {
     clearStoredSession();
     throw await parseError(response);
@@ -120,10 +176,14 @@ export function clearStoredSession(): void {
 export async function signOut(): Promise<void> {
   const session = await getValidSession().catch(() => null);
   if (session) {
-    await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
-      method: "POST",
-      headers: authHeaders(session.access_token)
-    }).catch(() => undefined);
+    await requestWithContext(
+      `${SUPABASE_URL}/auth/v1/logout`,
+      {
+        method: "POST",
+        headers: authHeaders(session.access_token)
+      },
+      "Sign out"
+    ).catch(() => undefined);
   }
   clearStoredSession();
 }
@@ -131,9 +191,11 @@ export async function signOut(): Promise<void> {
 export async function getCurrentUser(): Promise<CloudUser | null> {
   const session = await getValidSession();
   if (!session) return null;
-  const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-    headers: authHeaders(session.access_token)
-  });
+  const response = await requestWithContext(
+    `${SUPABASE_URL}/auth/v1/user`,
+    { headers: authHeaders(session.access_token) },
+    "Account check"
+  );
   if (!response.ok) {
     if (response.status === 401) clearStoredSession();
     return null;
@@ -153,14 +215,18 @@ export async function supabaseRest<T>(table: string, options: RestOptions = {}):
   const session = await getValidSession();
   if (!session) throw new Error("Sign in to access your private music library.");
   const query = options.query ? `?${options.query}` : "";
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}${query}`, {
-    method: options.method ?? "GET",
-    headers: {
-      ...authHeaders(session.access_token),
-      Prefer: options.prefer ?? (options.method === "POST" || options.method === "PATCH" ? "return=representation" : "")
+  const response = await requestWithContext(
+    `${SUPABASE_URL}/rest/v1/${table}${query}`,
+    {
+      method: options.method ?? "GET",
+      headers: {
+        ...authHeaders(session.access_token),
+        Prefer: options.prefer ?? (options.method === "POST" || options.method === "PATCH" ? "return=representation" : "")
+      },
+      body: options.body === undefined ? undefined : JSON.stringify(options.body)
     },
-    body: options.body === undefined ? undefined : JSON.stringify(options.body)
-  });
+    `Cloud ${options.method ?? "GET"} ${table}`
+  );
   if (!response.ok) throw await parseError(response);
   if (response.status === 204) return undefined as T;
   const text = await response.text();
@@ -185,30 +251,44 @@ export async function uploadPrivateFile(
   if (!isCloudConfigured()) throw new Error("Cloud storage is not configured yet.");
   const session = await getValidSession();
   if (!session) throw new Error("Sign in before uploading files.");
+  if (!file.size) throw new Error("The selected file is empty.");
+
+  const contentType = storageContentType(file);
   const path = `${session.user.id}/${projectId}/${folder}/${Date.now()}-${crypto.randomUUID()}-${safeStorageName(file.name)}`;
-  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/music-assets/${path}`, {
-    method: "POST",
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${session.access_token}`,
-      "Content-Type": file.type || "application/octet-stream",
-      "x-upsert": "false"
+  const response = await requestWithContext(
+    `${SUPABASE_URL}/storage/v1/object/music-assets/${path}`,
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type": contentType,
+        "x-upsert": "false"
+      },
+      body: file
     },
-    body: file
-  });
-  if (!response.ok) throw await parseError(response);
+    `Upload of ${file.name}`
+  );
+  if (!response.ok) {
+    const storageError = await parseError(response);
+    throw new Error(`Could not upload ${file.name}: ${storageError.message}`);
+  }
   return path;
 }
 
 export async function downloadPrivateFile(path: string): Promise<Blob> {
   const session = await getValidSession();
   if (!session) throw new Error("Sign in to load this private file.");
-  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/authenticated/music-assets/${path}`, {
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${session.access_token}`
-    }
-  });
+  const response = await requestWithContext(
+    `${SUPABASE_URL}/storage/v1/object/authenticated/music-assets/${path}`,
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${session.access_token}`
+      }
+    },
+    "Private file download"
+  );
   if (!response.ok) throw await parseError(response);
   return response.blob();
 }
@@ -216,12 +296,16 @@ export async function downloadPrivateFile(path: string): Promise<Blob> {
 export async function deletePrivateFile(path: string): Promise<void> {
   const session = await getValidSession();
   if (!session) throw new Error("Sign in to manage this private file.");
-  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/music-assets/${path}`, {
-    method: "DELETE",
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${session.access_token}`
-    }
-  });
+  const response = await requestWithContext(
+    `${SUPABASE_URL}/storage/v1/object/music-assets/${path}`,
+    {
+      method: "DELETE",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${session.access_token}`
+      }
+    },
+    "Private file delete"
+  );
   if (!response.ok) throw await parseError(response);
 }
