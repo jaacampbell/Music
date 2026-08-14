@@ -1,13 +1,24 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ProducerDnaPanel } from "@/app/components/ProducerDnaPanel";
-import type { Project } from "@/lib/types";
+import { analyzeAudioFile } from "@/lib/browser-audio-analysis";
+import {
+  attachProjectAudio,
+  getProjectAudio,
+  loadActiveProjectId,
+  loadSeparationSnapshot,
+  loadStoredProjects,
+  saveActiveProjectId,
+  saveSeparationSnapshot,
+  saveStoredProjects
+} from "@/lib/browser-project-storage";
+import type { LiveAudioAnalysis, Project, SourceAudioAttachment } from "@/lib/types";
 import "./beatLab.css";
 
-const SEPARATOR_URL =
-  process.env.NEXT_PUBLIC_SEPARATOR_URL ?? "http://localhost:8000";
+const SEPARATOR_URL = process.env.NEXT_PUBLIC_SEPARATOR_URL ?? "http://localhost:8000";
 
 const TABS = [
   "Song Brief",
@@ -20,7 +31,8 @@ const TABS = [
   "Scorecards",
   "Mix Notes",
   "Revision Loop",
-  "Final Export"
+  "Final Export",
+  "History"
 ] as const;
 
 type TabName = (typeof TABS)[number];
@@ -75,10 +87,15 @@ const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
     }
   });
   if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.error ?? `Request failed (${response.status})`);
+    const error = (await response.json().catch(() => ({}))) as { error?: string; detail?: string };
+    throw new Error(error.error ?? error.detail ?? `Request failed (${response.status})`);
   }
   return response.json() as Promise<T>;
+};
+
+const formatBytes = (bytes: number): string => {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
 export default function HomePage(): React.JSX.Element {
@@ -95,12 +112,13 @@ export default function HomePage(): React.JSX.Element {
   const [mixNotesInput, setMixNotesInput] = useState("");
   const [revisionInput, setRevisionInput] = useState("");
   const [exportPlanInput, setExportPlanInput] = useState("");
-  const [statusText, setStatusText] = useState("Ready");
+  const [statusText, setStatusText] = useState("Loading production workspace…");
   const [cacheEntries, setCacheEntries] = useState(0);
   const [busy, setBusy] = useState(false);
   const [workerHealth, setWorkerHealth] = useState<WorkerHealth | null>(null);
   const [liveManifest, setLiveManifest] = useState<LiveManifest | null>(null);
   const [liveBusy, setLiveBusy] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const selectedProject = useMemo(
@@ -108,12 +126,17 @@ export default function HomePage(): React.JSX.Element {
     [projects, activeProjectId]
   );
 
-  const loadProjects = async (): Promise<void> => {
+  const refreshProjects = async (preferredId?: string | null): Promise<Project[]> => {
     const data = await api<{ projects: Project[] }>("/api/projects");
     setProjects(data.projects);
-    if (!activeProjectId && data.projects.length > 0) {
+    saveStoredProjects(data.projects);
+    const requested = preferredId ?? activeProjectId ?? loadActiveProjectId();
+    if (requested && data.projects.some((project) => project.id === requested)) {
+      setActiveProjectId(requested);
+    } else if (data.projects.length > 0) {
       setActiveProjectId(data.projects[0].id);
     }
+    return data.projects;
   };
 
   const loadCacheStats = async (): Promise<void> => {
@@ -132,9 +155,39 @@ export default function HomePage(): React.JSX.Element {
   };
 
   useEffect(() => {
-    void Promise.all([loadProjects(), loadCacheStats()]);
-    void loadWorkerHealth();
+    void (async () => {
+      const stored = loadStoredProjects();
+      if (stored.length > 0) {
+        try {
+          await api<{ imported: number }>("/api/projects/import", {
+            method: "POST",
+            body: JSON.stringify({ projects: stored })
+          });
+        } catch {
+          setStatusText("Could not restore saved projects to the server session; local copies are still safe.");
+        }
+      }
+      try {
+        await Promise.all([refreshProjects(loadActiveProjectId()), loadCacheStats(), loadWorkerHealth()]);
+        setStatusText(stored.length > 0 ? `Restored ${stored.length} saved project${stored.length === 1 ? "" : "s"}.` : "Ready.");
+      } catch (error) {
+        setProjects(stored);
+        if (stored.length > 0) setActiveProjectId(loadActiveProjectId() ?? stored[0].id);
+        setStatusText(error instanceof Error ? error.message : "Workspace initialization failed.");
+      } finally {
+        setHydrated(true);
+      }
+    })();
   }, []);
+
+  useEffect(() => {
+    saveActiveProjectId(activeProjectId);
+    if (!activeProjectId) {
+      setLiveManifest(null);
+      return;
+    }
+    void loadSeparationSnapshot<LiveManifest>(activeProjectId, "core").then(setLiveManifest);
+  }, [activeProjectId]);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -144,11 +197,11 @@ export default function HomePage(): React.JSX.Element {
     setExportPlanInput(selectedProject.exportPlan);
   }, [selectedProject?.id]);
 
-  const withBusy = async (task: () => Promise<void>): Promise<void> => {
+  const withBusy = async (task: () => Promise<string | null | void>): Promise<void> => {
     setBusy(true);
     try {
-      await task();
-      await Promise.all([loadProjects(), loadCacheStats()]);
+      const preferred = await task();
+      await Promise.all([refreshProjects(typeof preferred === "string" ? preferred : undefined), loadCacheStats()]);
     } catch (error) {
       setStatusText(error instanceof Error ? error.message : "Unexpected error");
     } finally {
@@ -162,8 +215,8 @@ export default function HomePage(): React.JSX.Element {
         method: "POST",
         body: JSON.stringify({ title: titleInput, brief: briefInput })
       });
-      setActiveProjectId(data.project.id);
-      setStatusText(`Project created: ${data.project.title}. Planning workspace is ready.`);
+      setStatusText(`Project created: ${data.project.title}. It will be restored from this browser on future visits.`);
+      return data.project.id;
     });
 
   const runAgentLoop = async (): Promise<void> => {
@@ -173,23 +226,18 @@ export default function HomePage(): React.JSX.Element {
         result: { decision: { stemMode: number; modelProfile: string }; jobIds: string[] };
       }>("/api/agent/run", {
         method: "POST",
-        body: JSON.stringify({
-          projectId: selectedProject.id,
-          command: commandInput
-        })
+        body: JSON.stringify({ projectId: selectedProject.id, command: commandInput })
       });
       setStatusText(
-        `Planning loop completed: ${data.result.jobIds.length} modeled jobs · stem plan ${data.result.decision.stemMode} · ${data.result.decision.modelProfile}.`
+        `Planning loop completed: ${data.result.jobIds.length} modeled jobs · ${data.result.decision.modelProfile}.`
       );
+      return selectedProject.id;
     });
   };
 
   const runMultitask = async (): Promise<void> => {
     if (!selectedProject) return;
-    const commands = commandInput
-      .split("\n")
-      .map((value) => value.trim())
-      .filter(Boolean);
+    const commands = commandInput.split("\n").map((value) => value.trim()).filter(Boolean);
     if (commands.length === 0) {
       setStatusText("Add one planning command per line to run a batch.");
       return;
@@ -199,14 +247,12 @@ export default function HomePage(): React.JSX.Element {
         result: { totalCommands: number; totalJobs: number; totalTokensSaved: number };
       }>("/api/agent/multitask", {
         method: "POST",
-        body: JSON.stringify({
-          projectId: selectedProject.id,
-          commands
-        })
+        body: JSON.stringify({ projectId: selectedProject.id, commands })
       });
       setStatusText(
         `Planning batch finished: ${data.result.totalCommands} commands · ${data.result.totalJobs} modeled jobs · ${data.result.totalTokensSaved} cached tokens.`
       );
+      return selectedProject.id;
     });
   };
 
@@ -222,31 +268,65 @@ export default function HomePage(): React.JSX.Element {
           exportPlan: exportPlanInput
         })
       });
-      setStatusText("Project state saved for this running app session.");
+      setStatusText("Project notes saved and copied to browser persistence.");
+      return selectedProject.id;
     });
   };
 
-  const separateLiveAudio = async (file: File): Promise<void> => {
+  const attachAndSeparate = async (file: File): Promise<void> => {
+    if (!selectedProject) {
+      setStatusText("Create or select a project before attaching audio.");
+      return;
+    }
+
     setLiveBusy(true);
-    setStatusText(`Uploading ${file.name} to the live Core 6 separator…`);
+    setStatusText(`Saving ${file.name}, analyzing the audio, and running Core 6…`);
     try {
+      await attachProjectAudio(selectedProject.id, file);
+
       const form = new FormData();
       form.append("file", file);
       form.append("mode", "core");
       form.append("targets", "[]");
-      const response = await fetch(`${SEPARATOR_URL}/separate`, {
-        method: "POST",
-        body: form
-      });
+
+      const [analysis, response] = await Promise.all([
+        analyzeAudioFile(file),
+        fetch(`${SEPARATOR_URL}/separate`, { method: "POST", body: form })
+      ]);
+
       if (!response.ok) {
         const body = (await response.json().catch(() => ({}))) as { detail?: string };
         throw new Error(body.detail ?? `Live separator failed (${response.status})`);
       }
+
       const manifest = (await response.json()) as LiveManifest;
+      const source: SourceAudioAttachment = {
+        name: file.name,
+        size: file.size,
+        type: file.type || "audio/*",
+        lastModified: file.lastModified,
+        attachedAt: new Date().toISOString(),
+        storage: "browser-indexeddb"
+      };
+
+      await api<{ project: Project }>(`/api/projects/${selectedProject.id}/live-audio`, {
+        method: "POST",
+        body: JSON.stringify({
+          source,
+          analysis,
+          stems: manifest.stems,
+          mode: "core",
+          model: manifest.model,
+          zipUrl: manifest.zipUrl
+        })
+      });
+
+      await saveSeparationSnapshot(selectedProject.id, "core", manifest);
       setLiveManifest(manifest);
+      await refreshProjects(selectedProject.id);
       setActiveTab("Stem Library");
       setStatusText(
-        `Live audio ready: ${manifest.stems.length} outputs · ${manifest.model} · ${manifest.durationSec}s.`
+        `Real audio saved · ${analysis.bpm ?? "?"} BPM · ${analysis.key ?? "key pending"} · ${manifest.stems.length} outputs.`
       );
       await loadWorkerHealth();
     } catch (error) {
@@ -257,13 +337,23 @@ export default function HomePage(): React.JSX.Element {
     }
   };
 
-  const renderLiveStemLibrary = (): React.JSX.Element => {
+  const rerunAttachedAudio = async (): Promise<void> => {
+    if (!selectedProject) return;
+    const file = await getProjectAudio(selectedProject.id);
+    if (!file) {
+      setStatusText("The saved source file is not available in this browser. Attach it again.");
+      return;
+    }
+    await attachAndSeparate(file);
+  };
+
+  const renderStemLibrary = (): React.JSX.Element => {
     if (!liveManifest) {
       return (
         <div className="abl-empty">
           <div>
-            <strong>No live audio loaded yet.</strong>
-            <p>Use the Live Audio panel above. That sends an actual audio file to the separator worker.</p>
+            <strong>No real stems saved for this project yet.</strong>
+            <p>Attach the song above to run Core 6. The source file is kept in this browser for re-runs.</p>
           </div>
         </div>
       );
@@ -273,17 +363,13 @@ export default function HomePage(): React.JSX.Element {
       <div>
         <div className="abl-panel-head">
           <div>
-            <h2>Live stem library</h2>
+            <h2>Real stem library</h2>
             <p>
               {liveManifest.source.filename} · {liveManifest.durationSec}s · {liveManifest.sampleRate / 1000} kHz · {liveManifest.model}
             </p>
           </div>
           {liveManifest.zipUrl && (
-            <a
-              className="abl-link-button secondary"
-              href={`${SEPARATOR_URL}${liveManifest.zipUrl}`}
-              download="Stem_Studio_Organized_Stems.zip"
-            >
+            <a className="abl-link-button secondary" href={`${SEPARATOR_URL}${liveManifest.zipUrl}`} download="Organized_Stems.zip">
               Download organized ZIP
             </a>
           )}
@@ -298,203 +384,86 @@ export default function HomePage(): React.JSX.Element {
                     {stem.family ?? stem.group ?? "Core"} · {stem.integratedDb} dB
                   </div>
                 </div>
-                <a
-                  className="abl-download"
-                  href={`${SEPARATOR_URL}${stem.url}`}
-                  download={stem.downloadName ?? true}
-                >
-                  WAV
-                </a>
+                <a className="abl-download" href={`${SEPARATOR_URL}${stem.url}`} download={stem.downloadName ?? true}>WAV</a>
               </div>
               <div className="abl-mono" style={{ marginTop: ".5rem" }}>{stem.file ?? stem.url}</div>
               <audio controls preload="none" src={`${SEPARATOR_URL}${stem.url}`} />
             </article>
           ))}
         </div>
-        <div className="abl-card" style={{ marginTop: ".75rem" }}>
-          <strong>Core reconstruction</strong>
-          <p className="abl-muted" style={{ marginBottom: 0 }}>
-            Error {liveManifest.alignment.reconErrorDb} dB. {liveManifest.alignment.note}
-          </p>
-        </div>
       </div>
     );
   };
 
-  const renderMainContent = (): React.JSX.Element => {
-    if (activeTab === "Producer DNA") {
-      return <ProducerDnaPanel />;
-    }
-
-    if (activeTab === "Stem Library" && liveManifest) {
-      return renderLiveStemLibrary();
-    }
-
+  const renderContent = (): React.JSX.Element => {
+    if (activeTab === "Producer DNA") return <ProducerDnaPanel />;
     if (!selectedProject) {
-      if (activeTab === "Stem Library") return renderLiveStemLibrary();
-      return (
-        <div className="abl-empty">
-          <div>
-            <strong>No planning project selected.</strong>
-            <p>Create a project above, or upload audio if you only need live stem separation.</p>
-          </div>
-        </div>
-      );
+      return <div className="abl-empty"><div><strong>No project selected.</strong><p>Create a project to start the production workflow.</p></div></div>;
     }
 
     switch (activeTab) {
       case "Song Brief":
         return (
           <div className="abl-content-grid">
+            <div className="abl-card"><h3>Song brief</h3><p>{selectedProject.brief}</p></div>
             <div className="abl-card">
-              <h3>Song brief</h3>
-              <p>{selectedProject.brief}</p>
-            </div>
-            <div className="abl-card">
-              <h3>Planning command</h3>
-              <p className="abl-muted">{commandInput}</p>
+              <h3>Project state</h3>
+              <p className="abl-muted">{selectedProject.sourceAudio ? `Audio attached: ${selectedProject.sourceAudio.name}` : "No source audio attached yet."}</p>
               <div className="abl-mono">Prompt cache entries: {cacheEntries}</div>
             </div>
           </div>
         );
-      case "Song DNA":
+      case "Song DNA": {
+        const analysis = selectedProject.liveAnalysis;
         return (
           <div className="abl-content-grid">
             <div className="abl-card">
-              <h3>Core profile</h3>
-              <p className="abl-muted">
-                BPM {selectedProject.songDna.bpm} · Key {selectedProject.songDna.key} · Vocal space {selectedProject.songDna.vocalSpace}
-              </p>
-              <div className="abl-chips">
-                {selectedProject.songDna.mood.map((value) => (
-                  <span className="abl-chip" key={value}>{value}</span>
-                ))}
-              </div>
-            </div>
-            <div className="abl-card">
-              <h3>Palette / structure</h3>
-              <ul className="abl-list">
-                {selectedProject.songDna.palette.map((item) => <li key={item}>{item}</li>)}
-              </ul>
-            </div>
-          </div>
-        );
-      case "Prompt Pack":
-        return (
-          <div className="abl-card">
-            <h3>Prompt variants</h3>
-            {selectedProject.promptPack.length === 0 ? (
-              <p className="abl-muted">Run the planning loop to create prompt directions.</p>
-            ) : (
-              <ul className="abl-list">
-                {selectedProject.promptPack.map((prompt) => <li key={prompt}>{prompt}</li>)}
-              </ul>
-            )}
-          </div>
-        );
-      case "Generations":
-        return (
-          <div className="abl-content-grid">
-            {selectedProject.generations.length === 0 && (
-              <div className="abl-card"><p className="abl-muted">No modeled generations yet. Run the planning loop.</p></div>
-            )}
-            {selectedProject.generations.map((generation) => (
-              <div className="abl-card" key={generation.id}>
-                <h3>{generation.name} {generation.selected ? "✓" : ""}</h3>
-                <p className="abl-muted">{generation.strategy} · modeled score {generation.score}</p>
+              <h3>{analysis ? "Measured audio DNA" : "Brief-derived starting DNA"}</h3>
+              <p className="abl-muted">BPM {selectedProject.songDna.bpm ?? "—"} · Key {selectedProject.songDna.key ?? "—"}</p>
+              {analysis && (
                 <div className="abl-mono">
-                  Strengths: {generation.strengths.join(", ")}{"\n"}
-                  Weaknesses: {generation.weaknesses.join(", ")}
+                  BPM confidence {(analysis.bpmConfidence * 100).toFixed(0)}% · key confidence {(analysis.keyConfidence * 100).toFixed(0)}%{"\n"}
+                  RMS {analysis.rmsDb} dB · peak {analysis.peakDb} dB · {analysis.sampleRate / 1000} kHz · {analysis.channels}ch{"\n"}
+                  {analysis.engine}
                 </div>
-              </div>
-            ))}
+              )}
+            </div>
+            <div className="abl-card"><h3>Palette / structure</h3><ul className="abl-list">{selectedProject.songDna.palette.map((item) => <li key={item}>{item}</li>)}</ul></div>
           </div>
         );
+      }
+      case "Prompt Pack":
+        return <div className="abl-card"><h3>Prompt directions</h3>{selectedProject.promptPack.length ? <ul className="abl-list">{selectedProject.promptPack.map((prompt) => <li key={prompt}>{prompt}</li>)}</ul> : <p className="abl-muted">Run the planning loop first.</p>}</div>;
+      case "Generations":
+        return <div className="abl-content-grid">{selectedProject.generations.length ? selectedProject.generations.map((generation) => <div className="abl-card" key={generation.id}><h3>{generation.name} {generation.selected ? "✓" : ""}</h3><p className="abl-muted">{generation.strategy} · modeled score {generation.score}</p><div className="abl-mono">Strengths: {generation.strengths.join(", ")}{"\n"}Weaknesses: {generation.weaknesses.join(", ")}</div></div>) : <div className="abl-card"><p className="abl-muted">No modeled generations yet.</p></div>}</div>;
       case "Stem Library":
-        return renderLiveStemLibrary();
+        return renderStemLibrary();
       case "Beat Breakdown":
-        return (
-          <div className="abl-content-grid">
-            <div className="abl-card">
-              <h3>Planned markers</h3>
-              <ul className="abl-list">
-                {selectedProject.manifest.markers.map((marker) => (
-                  <li key={`${marker.bar}-${marker.label}`}>Bar {marker.bar}: {marker.label}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="abl-card">
-              <h3>Planned chord map</h3>
-              <ul className="abl-list">
-                {selectedProject.manifest.chords.map((chord) => (
-                  <li key={`${chord.bar}-${chord.chord}`}>Bar {chord.bar}: {chord.chord}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        );
+        return <div className="abl-content-grid"><div className="abl-card"><h3>Markers</h3><ul className="abl-list">{selectedProject.manifest.markers.map((marker) => <li key={`${marker.bar}-${marker.label}`}>Bar {marker.bar}: {marker.label}</li>)}</ul></div><div className="abl-card"><h3>Chord map</h3><ul className="abl-list">{selectedProject.manifest.chords.map((chord) => <li key={`${chord.bar}-${chord.chord}`}>Bar {chord.bar}: {chord.chord}</li>)}</ul></div></div>;
       case "Scorecards":
-        return (
-          <div className="abl-content-grid">
-            {selectedProject.scorecards.length === 0 && (
-              <div className="abl-card"><p className="abl-muted">No modeled scorecards yet. Run the planning loop.</p></div>
-            )}
-            {selectedProject.scorecards.map((score) => (
-              <div className="abl-card" key={score.id}>
-                <h3>{score.summary}</h3>
-                <p className="abl-muted">
-                  Emotion {score.emotionalAlignment}/10 · Originality {score.originality}/10 · Release {score.releaseReadiness}/10
-                </p>
-              </div>
-            ))}
-          </div>
-        );
+        return <div className="abl-content-grid">{selectedProject.scorecards.length ? selectedProject.scorecards.map((score) => <div className="abl-card" key={score.id}><h3>{score.summary}</h3><p className="abl-muted">Emotion {score.emotionalAlignment}/10 · Originality {score.originality}/10 · Release {score.releaseReadiness}/10</p></div>) : <div className="abl-card"><p className="abl-muted">Run the planning loop to create modeled A&R scorecards.</p></div>}</div>;
       case "Mix Notes":
-        return (
-          <div className="abl-card">
-            <h3>Mix notes</h3>
-            <p>{selectedProject.mixNotes || "No notes yet."}</p>
-          </div>
-        );
+        return <div className="abl-card"><h3>Mix notes</h3><p>{selectedProject.mixNotes || "No mix notes yet."}</p></div>;
       case "Revision Loop":
-        return (
-          <div className="abl-card">
-            <h3>Revision prompt</h3>
-            <p>{selectedProject.revisionPrompt || "No revision prompt generated yet."}</p>
-            <div className="abl-mono">
-              Last telemetry: {selectedProject.promptTelemetry.length > 0
-                ? JSON.stringify(selectedProject.promptTelemetry[selectedProject.promptTelemetry.length - 1])
-                : "none"}
-            </div>
-          </div>
-        );
+        return <div className="abl-card"><h3>Current revision direction</h3><p>{selectedProject.revisionPrompt || "No revision direction yet."}</p></div>;
       case "Final Export":
         return (
           <div className="abl-content-grid">
-            <div className="abl-card">
-              <h3>DAW handoff plan</h3>
-              <p>{selectedProject.exportPlan || "No planned export yet."}</p>
-              <p className="abl-muted">Planning artifacts below are metadata contracts, not downloadable audio files.</p>
-            </div>
-            <div className="abl-card">
-              <h3>Live audio export</h3>
-              {liveManifest?.zipUrl ? (
-                <a className="abl-link-button" href={`${SEPARATOR_URL}${liveManifest.zipUrl}`} download>
-                  Download real organized stem ZIP
-                </a>
-              ) : (
-                <p className="abl-muted">Upload a track above to create a real downloadable stem package.</p>
-              )}
-            </div>
-            <div className="abl-card">
-              <h3>Planned artifacts</h3>
+            <div className="abl-card"><h3>DAW handoff plan</h3><p>{selectedProject.exportPlan || "Save your project plan and use the organized stem ZIP as the real audio handoff."}</p></div>
+            <div className="abl-card"><h3>Real audio export</h3>{liveManifest?.zipUrl ? <a className="abl-link-button" href={`${SEPARATOR_URL}${liveManifest.zipUrl}`} download="Organized_Stems.zip">Download organized stems</a> : <p className="abl-muted">Run Core 6 first.</p>}</div>
+          </div>
+        );
+      case "History":
+        return (
+          <div className="abl-card">
+            <h3>Project history</h3>
+            {selectedProject.history.length === 0 ? <p className="abl-muted">No history yet.</p> : (
               <ul className="abl-list">
-                {selectedProject.manifest.exports.length === 0 && <li>No modeled exports yet.</li>}
-                {selectedProject.manifest.exports.map((artifact) => (
-                  <li key={artifact.id}>{artifact.type} ({artifact.files.length} planned files)</li>
+                {selectedProject.history.slice().reverse().map((entry) => (
+                  <li key={entry.id}><strong>{new Date(entry.createdAt).toLocaleString()}</strong> · {entry.message}</li>
                 ))}
               </ul>
-            </div>
+            )}
           </div>
         );
       default:
@@ -502,150 +471,84 @@ export default function HomePage(): React.JSX.Element {
     }
   };
 
+  const projectQuery = selectedProject ? `?projectId=${encodeURIComponent(selectedProject.id)}` : "";
   const workerOnline = workerHealth?.status === "ok";
   const deepReady = workerHealth?.samAudio.installed === true;
 
   return (
     <main className="abl-shell">
       <div className="abl-wrap">
-        <nav className="abl-topbar" aria-label="Music OS navigation">
-          <div className="abl-brand"><span className="abl-mark">A</span> Agentic Beat Lab OS</div>
-          <div className="abl-nav">
-            <a href="/">Command Center</a>
-            <a href="/stem-lab">Stem Lab</a>
-            <a href="/stem-studio">Stem Studio 60+</a>
-          </div>
-        </nav>
+        <header className="abl-topbar">
+          <div className="abl-brand"><span className="abl-mark">A</span><span>Agentic Beat Lab OS</span></div>
+          <nav className="abl-nav">
+            <Link href={`/stem-lab${projectQuery}`}>Stem Lab</Link>
+            <Link href={`/stem-studio${projectQuery}`}>Stem Studio 60+</Link>
+          </nav>
+        </header>
 
         <section className="abl-hero">
           <div className="abl-hero-main">
             <p className="abl-kicker">Production command center</p>
-            <h1>Plan the record. Separate the audio. Move it into the DAW.</h1>
-            <p className="abl-lede">
-              The OS now makes a hard distinction between its planning layer and the live audio layer. Strategy, prompt packs, modeled scorecards, and revision planning happen in the command center; actual stem audio is created by the same separator worker that powers Stem Studio.
-            </p>
-            <div className="abl-chips">
-              <span className="abl-chip">11 workflow views</span>
-              <span className="abl-chip">Real Core 6 audio</span>
-              <span className="abl-chip">60+ deep stems in Studio</span>
-              <span className="abl-chip">Organized DAW ZIP</span>
-            </div>
+            <h1>One project. Real audio. Planning, stems, QA, and handoff.</h1>
+            <p className="abl-lede">Projects now restore from this browser, source audio is kept in IndexedDB, measured BPM/key can replace brief guesses, and real separator output is written back into the same project.</p>
+            <div className="abl-chips"><span className="abl-chip">Browser-persistent projects</span><span className="abl-chip">Real audio analysis</span><span className="abl-chip">Core 6 live</span><span className="abl-chip">Deep 60+ handoff</span></div>
           </div>
-
           <aside className="abl-panel abl-reality">
-            <div className="abl-panel-head"><div><h3>What is actually live?</h3><p>Reality map for this build.</p></div></div>
-            <div className="abl-reality-card">
-              <strong><span className={`abl-dot ${workerOnline ? "live" : ""}`} /> Audio separator</strong>
-              <p>{workerOnline ? `${workerHealth?.coreModel} worker is reachable.` : "Worker is not reachable from this browser yet."}</p>
-            </div>
-            <div className="abl-reality-card">
-              <strong><span className="abl-dot plan" /> Agent / A&R loop</strong>
-              <p>Deterministic planning engine today. It models strategy, scoring, prompts, revisions, and export plans; it is not calling a live LLM.</p>
-            </div>
-            <div className="abl-reality-card">
-              <strong><span className="abl-dot" /> Project persistence</strong>
-              <p>Session memory only right now. A Netlify restart/serverless cold start can clear projects until database persistence is added.</p>
-            </div>
-            <div className="abl-reality-card">
-              <strong><span className={`abl-dot ${deepReady ? "live" : ""}`} /> Deep 60+</strong>
-              <p>{deepReady ? "Deep target engine is available in Stem Studio." : "Deep targets require the GPU worker / SAM-Audio runtime."}</p>
-            </div>
+            <div className="abl-reality-card"><strong><span className={`abl-dot ${workerOnline ? "live" : ""}`} /> Live separator</strong><p>{workerOnline ? `${workerHealth?.coreModel} worker connected.` : "Worker not detected. Planning still works; audio separation does not."}</p></div>
+            <div className="abl-reality-card"><strong><span className="abl-dot live" /> Project persistence</strong><p>Project JSON uses localStorage and source files use IndexedDB. This survives refreshes and server cold starts on this browser.</p></div>
+            <div className="abl-reality-card"><strong><span className="abl-dot plan" /> Producer/A&R layer</strong><p>Still a deterministic planning engine. It does not generate finished audio yet.</p></div>
+            <div className="abl-reality-card"><strong><span className={`abl-dot ${deepReady ? "live" : ""}`} /> Deep 60+</strong><p>{deepReady ? "Deep target engine detected." : "Requires the GPU deep-isolation worker."}</p></div>
           </aside>
         </section>
 
-        <section className="abl-workflow" aria-label="How Agentic Beat Lab works">
-          <div className="abl-step"><span className="abl-step-number">01</span><strong>Create a project</strong><p>Capture the song brief, direction, mix notes, and release intent.</p></div>
-          <div className="abl-step"><span className="abl-step-number">02</span><strong>Run the planning loop</strong><p>Generate strategy directions, prompt packs, modeled versions, A&R scorecards, and revision priorities.</p></div>
-          <div className="abl-step"><span className="abl-step-number">03</span><strong>Upload the actual track</strong><p>The file goes to the live separator worker and returns real synchronized stems.</p></div>
-          <div className="abl-step"><span className="abl-step-number">04</span><strong>Export / refine</strong><p>Download the organized ZIP, inspect in Stem Lab, or use Deep 60+ in Stem Studio.</p></div>
+        <section className="abl-workflow">
+          {[["01", "Create/select project", "Everything stays attached to one production record."],["02", "Attach the actual song", "The browser saves the source file and measures the audio."],["03", "Separate + inspect", "Core 6 is real; Stem Lab handles synchronized QA."],["04", "Go deeper + export", "Stem Studio performs Deep 60+ and organized handoff."]].map(([number, title, copy]) => <div className="abl-step" key={number}><span className="abl-step-number">{number}</span><strong>{title}</strong><p>{copy}</p></div>)}
         </section>
 
         <section className="abl-command-grid">
-          <div className="abl-panel">
-            <div className="abl-panel-head">
-              <div><h2>Project + planning controls</h2><p>This side manages the production plan, not the audio inference engine.</p></div>
-              <span className="abl-reality-badge"><span className="abl-dot plan" /> Planning</span>
-            </div>
+          <section className="abl-panel">
+            <div className="abl-panel-head"><div><h2>Project + production plan</h2><p>Planning state is saved back into the selected project.</p></div></div>
             <div className="abl-form-grid">
-              <div><div className="abl-label">Project title</div><input className="abl-input" value={titleInput} onChange={(event) => setTitleInput(event.target.value)} /></div>
-              <div><div className="abl-label">Song brief</div><textarea className="abl-textarea" value={briefInput} onChange={(event) => setBriefInput(event.target.value)} /></div>
-              <div><div className="abl-label">Agent / producer command</div><textarea className="abl-textarea" value={commandInput} onChange={(event) => setCommandInput(event.target.value)} /></div>
-              <div className="abl-content-grid">
-                <div><div className="abl-label">Mix notes</div><textarea className="abl-textarea" value={mixNotesInput} onChange={(event) => setMixNotesInput(event.target.value)} /></div>
-                <div><div className="abl-label">Revision override</div><textarea className="abl-textarea" value={revisionInput} onChange={(event) => setRevisionInput(event.target.value)} /></div>
-              </div>
-              <div><div className="abl-label">Export / DAW handoff notes</div><textarea className="abl-textarea" value={exportPlanInput} onChange={(event) => setExportPlanInput(event.target.value)} /></div>
+              <label className="abl-label">Project title<input className="abl-input" value={titleInput} onChange={(event) => setTitleInput(event.target.value)} /></label>
+              <label className="abl-label">Song brief<textarea className="abl-textarea" value={briefInput} onChange={(event) => setBriefInput(event.target.value)} /></label>
+              <label className="abl-label">Agent command<textarea className="abl-textarea" value={commandInput} onChange={(event) => setCommandInput(event.target.value)} placeholder="One command, or one per line for batch." /></label>
+              <label className="abl-label">Mix notes<textarea className="abl-textarea" value={mixNotesInput} onChange={(event) => setMixNotesInput(event.target.value)} /></label>
             </div>
             <div className="abl-actions">
-              <button className="abl-button" onClick={() => void createProject()} disabled={busy}>Create Project</button>
-              <button className="abl-button secondary" onClick={() => void runAgentLoop()} disabled={busy || !selectedProject}>Run Planning Loop</button>
-              <button className="abl-button secondary" onClick={() => void runMultitask()} disabled={busy || !selectedProject}>Batch Commands</button>
-              <button className="abl-button secondary" onClick={() => void saveState()} disabled={busy || !selectedProject}>Save Session State</button>
+              <button className="abl-button" onClick={() => void createProject()} disabled={busy || !titleInput.trim()}>Create project</button>
+              <button className="abl-button secondary" onClick={() => void runAgentLoop()} disabled={busy || !selectedProject}>Run planning loop</button>
+              <button className="abl-button secondary" onClick={() => void runMultitask()} disabled={busy || !selectedProject}>Batch planning</button>
+              <button className="abl-button secondary" onClick={() => void saveState()} disabled={busy || !selectedProject}>Save state</button>
             </div>
-          </div>
+          </section>
 
-          <div className="abl-panel">
-            <div className="abl-panel-head">
-              <div><h2>Live audio</h2><p>Actual file processing through the separator worker.</p></div>
-              <span className="abl-reality-badge"><span className={`abl-dot ${workerOnline ? "live" : ""}`} /> {workerOnline ? "Live" : "Offline"}</span>
-            </div>
-            <div className="abl-upload">
+          <section className="abl-panel">
+            <div className="abl-panel-head"><div><h2>Attach real audio</h2><p>{selectedProject ? `Attach to ${selectedProject.title}` : "Select a project first."}</p></div></div>
+            <div className="abl-upload" onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); const file = event.dataTransfer.files?.[0]; if (file) void attachAndSeparate(file); }}>
               <div>
-                <strong>Upload a mix for real Core 6 separation</strong>
-                <p>WAV, MP3, FLAC, M4A, AIFF. For 60+ granular targets, continue into Stem Studio.</p>
-                <button className="abl-button" onClick={() => fileRef.current?.click()} disabled={liveBusy || !workerOnline}>
-                  {liveBusy ? "Separating…" : "Choose audio file"}
-                </button>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff"
-                  style={{ display: "none" }}
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    if (file) void separateLiveAudio(file);
-                  }}
-                />
+                <strong>{selectedProject?.sourceAudio ? selectedProject.sourceAudio.name : "Drop WAV, MP3, FLAC, M4A or AIFF"}</strong>
+                <p>{selectedProject?.sourceAudio ? `${formatBytes(selectedProject.sourceAudio.size)} saved in this browser.` : "The source stays attached to this project for future re-runs."}</p>
+                <button className="abl-button" onClick={() => fileRef.current?.click()} disabled={!selectedProject || liveBusy}>{liveBusy ? "Analyzing + separating…" : selectedProject?.sourceAudio ? "Replace source audio" : "Choose audio"}</button>
+                {selectedProject?.sourceAudio && <button className="abl-button secondary" style={{ marginLeft: ".45rem" }} onClick={() => void rerunAttachedAudio()} disabled={liveBusy}>Re-run saved source</button>}
               </div>
+              <input ref={fileRef} type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff" style={{ display: "none" }} onChange={(event) => { const file = event.target.files?.[0]; if (file) void attachAndSeparate(file); }} />
             </div>
-            <div className="abl-actions">
-              <a className="abl-link-button secondary" href="/stem-lab">Open Stem Lab</a>
-              <a className="abl-link-button secondary" href="/stem-studio">Open Deep 60+</a>
-              {liveManifest?.zipUrl && <a className="abl-link-button" href={`${SEPARATOR_URL}${liveManifest.zipUrl}`} download>Download Stems ZIP</a>}
-            </div>
-          </div>
+          </section>
         </section>
 
         <section className="abl-main-grid">
           <aside className="abl-panel abl-sidebar">
             <div className="abl-project-meta">
-              <div className="abl-label">Planning projects</div>
-              <select className="abl-select" value={activeProjectId ?? ""} onChange={(event) => setActiveProjectId(event.target.value || null)}>
-                <option value="">No project selected</option>
-                {projects.map((project) => <option key={project.id} value={project.id}>{project.title}</option>)}
-              </select>
-              <div className="abl-muted" style={{ fontSize: ".78rem", marginTop: ".45rem" }}>{projects.length} project{projects.length === 1 ? "" : "s"} in current server session</div>
+              <label className="abl-label">Project<select className="abl-select" value={activeProjectId ?? ""} onChange={(event) => setActiveProjectId(event.target.value || null)}><option value="">Select project</option>{projects.map((project) => <option key={project.id} value={project.id}>{project.title}</option>)}</select></label>
+              <div className="abl-muted" style={{ marginTop: ".55rem", fontSize: ".8rem" }}>{hydrated ? `${projects.length} saved project${projects.length === 1 ? "" : "s"}` : "Restoring…"}</div>
             </div>
-            <div className="abl-tab-list">
-              {TABS.map((tab) => (
-                <button key={tab} className={`abl-tab ${activeTab === tab ? "active" : ""}`} onClick={() => setActiveTab(tab)}>{tab}</button>
-              ))}
-            </div>
+            <div className="abl-tab-list">{TABS.map((tab) => <button key={tab} className={`abl-tab ${activeTab === tab ? "active" : ""}`} onClick={() => setActiveTab(tab)}>{tab}</button>)}</div>
           </aside>
-
-          <section className="abl-panel abl-content">
-            <div className="abl-panel-head">
-              <div><h2>{activeTab}</h2><p>{activeTab === "Stem Library" ? "Real separator results appear here when you upload audio." : "Production planning workspace."}</p></div>
-              {activeTab === "Stem Library" && <span className="abl-reality-badge"><span className={`abl-dot ${liveManifest ? "live" : ""}`} /> {liveManifest ? "Real audio" : "Waiting"}</span>}
-            </div>
-            {renderMainContent()}
-          </section>
+          <section className="abl-panel abl-content">{renderContent()}</section>
         </section>
       </div>
 
-      <div className="abl-status" role="status" aria-live="polite">
-        {busy || liveBusy ? "Working · " : ""}{statusText}
-      </div>
+      <div className="abl-status" aria-live="polite">{busy || liveBusy ? "Working · " : ""}{statusText}</div>
     </main>
   );
 }
