@@ -18,12 +18,17 @@ This repository is the **Agentic Beat Lab OS** — a music *production* command 
 - `lib/prompt-cache.ts` — tiered prompt assembly + token-saver telemetry.
 
 ### Real stem separation service (`services/separator/`)
-- A **separate Python service** (FastAPI + Demucs `htdemucs` + FFmpeg) does **real** 4-stem separation, exposed to the Next.js app at `/stem-studio` (page + `app/stem-studio/useRealStemPlayer.ts`). This is distinct from the simulated `/stem-lab`.
-- Setup/run is documented in `services/separator/README.md`. Non-obvious: install **CPU** builds of `torch` **and** `torchaudio` from the PyTorch CPU index (`--index-url https://download.pytorch.org/whl/cpu`) — the default PyPI `torchaudio` pulls a CUDA build and fails with `libcudart.so` errors. Demucs is driven via its CLI (`python -m demucs`), not `demucs.api` (absent in 4.0.1). First separation downloads the model weights.
-- The service's `.venv/` and `data/` (jobs, weights, stems) are gitignored and NOT part of the startup install; run the service manually (uvicorn on port 8000). The frontend targets it via `NEXT_PUBLIC_SEPARATOR_URL` (default `http://localhost:8000`).
+- A **separate Python service** (FastAPI + Demucs + optional Meta SAM-Audio + FFmpeg) powers `/stem-studio`.
+- Core production separation uses Demucs `htdemucs_6s` for six synchronized, non-overlapping stems: `vocals / drums / bass / guitar / piano / other`, plus a derived instrumental.
+- Deep separation exposes a 60-target catalog. Meta SAM-Audio isolates any selected target from text prompts (lead/background vocals, drum parts, 808/sub-bass, guitar types, keys, strings, brass, woodwinds, FX, and more). Deep targets may overlap and are not summed in the Core 6 mixer.
+- Local CPU Core 6 setup and production GPU Docker deployment are documented in `services/separator/README.md`.
+- SAM-Audio requires Python 3.11+, a CUDA worker for practical performance, checkpoint access on Hugging Face, and `HF_TOKEN` on first model download.
+- The frontend targets the worker via `NEXT_PUBLIC_SEPARATOR_URL` (default `http://localhost:8000`). A Netlify-hosted HTTPS frontend needs an HTTPS worker URL.
+- The service's `.venv/` and `data/` (jobs, weights, stems) are gitignored. Persist `/models` on production GPU hosts to avoid re-downloading weights.
 - ESLint ignores `services/**` and `producer-dna/**` (Python projects) — see `eslint.config.mjs`.
 
 ### Non-obvious notes
-- **The core command center is a deterministic simulation MVP**: the agent loop, scoring, `/stem-lab` extraction, and exports are stubbed to model the data contracts (no live LLM calls). Real stem separation lives in `services/separator/` + `/stem-studio` (above). Treat command-center outputs as mock data.
+- **The core command center is a deterministic simulation MVP**: the agent loop, scoring, `/stem-lab` extraction, and exports are stubbed to model the data contracts (no live LLM calls). Real stem separation lives in `services/separator/` + `/stem-studio`.
 - **State is in-memory and not persisted** — it resets on dev-server restart and is shared process-wide via `globalThis`. Creating projects via the API (e.g. curl) makes them appear in the UI after a reload. Real persistence (Postgres/Supabase) is a planned build-out.
-- The startup update script installs from `package-lock.json` via `npm ci`; no extra setup is required.
+- The startup update script installs from `package-lock.json` via `npm ci`; no extra setup is required for the Next.js frontend.
+- CI runs `npm run lint`, `npm run build`, and `python -m py_compile services/separator/app.py`.

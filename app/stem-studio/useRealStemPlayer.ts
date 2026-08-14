@@ -2,6 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface StemInfo {
   name: string;
+  label?: string;
+  group?: string;
+  engine?: string;
+  mixable?: boolean;
+  prompt?: string;
+  file?: string;
   url: string;
   integratedDb: number;
 }

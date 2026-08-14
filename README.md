@@ -1,62 +1,70 @@
 # Music
 
-This repository now includes a production blueprint for a **universal Agentic Beat Lab OS** (AI Producer + A&R + Mix Engineer loop), including:
+This repository contains the **Agentic Beat Lab OS** — a production command center for song development, A&R, stem extraction, analysis, revision, and DAW-oriented export.
 
-- Song DNA and beat strategy decomposition
-- Parallel generation and stem-first selection
-- Audio analysis + A&R scoring loop
-- Revision prompting and iterative quality improvement
-- DAW/export-oriented output planning
-- Parallel multi-agent implementation plan (including UI squad)
-- Prompt caching and token-saver policy for lower inference cost
+## Built app
+
+The Next.js app includes the 10-tab command center plus two stem tools:
+
+- `/stem-lab` — simulated contract/MVP for stem workflows and exports.
+- `/stem-studio` — the real production separator.
+
+### Stem Studio · 60+ separator
+
+`/stem-studio` now supports two production layers:
+
+- **Core 6** via Demucs `htdemucs_6s`: vocals, drums, bass, guitar, piano, other, plus a derived instrumental. These six stems are synchronized/non-overlapping and feed the live mixer.
+- **Deep 60+** via Meta SAM-Audio: selectable text-prompt isolates for lead/background vocals, ad-libs, harmonies, kick/snare/hats/cymbals/percussion, 808/sub/synth bass, guitar types, keys/synths, strings/brass/woodwinds, FX, ambience, and more.
+
+The frontend is designed to stay on Netlify while the compute-heavy separator runs on a separate GPU worker. Production deployment instructions live in [`services/separator/README.md`](services/separator/README.md).
 
 ## Documents
 
 - [`docs/agentic-beat-lab-os.md`](docs/agentic-beat-lab-os.md): Full operating model, agent council roles, master router prompt, command-center tabs, MVP stack, and governance rules.
-
-### Stem Extraction + DAW Export (planning)
-
 - [`docs/stem-extraction/PROPOSAL.md`](docs/stem-extraction/PROPOSAL.md): Technical proposal for the stem extraction + music editor export module.
 - [`docs/stem-extraction/agent-prompt.md`](docs/stem-extraction/agent-prompt.md): Runtime prompt for the Stem Extraction Agent.
-- [`docs/stem-extraction/build-checklist.md`](docs/stem-extraction/build-checklist.md): Phase 1 "build this first" checklist.
+- [`docs/stem-extraction/build-checklist.md`](docs/stem-extraction/build-checklist.md): Phase 1 build checklist.
 
-## Producer DNA Research OS (integrated + standalone)
+## Producer DNA Research OS
 
-The [`producer-dna/`](producer-dna/) directory vendors the **Producer DNA Research OS** — a Python research project (producer taxonomies, 3-layer musicological DNA, Batch 001 seed of 50 producers, ingestion adapters, scoring, and CLI) that feeds Song DNA. It is integrated here as a subproject **and** maintained as its own standalone repository. See [`producer-dna/README.md`](producer-dna/README.md).
+The [`producer-dna/`](producer-dna/) directory vendors the **Producer DNA Research OS** — a Python research project (producer taxonomies, 3-layer musicological DNA, Batch 001 seed of 50 producers, ingestion adapters, scoring, and CLI) that feeds Song DNA.
 
-## Built MVP (interface + APIs)
+## Command-center APIs
 
-This repository now contains a runnable **Agentic Beat Lab OS command center** built with Next.js:
+The app also includes API routes for:
 
-- 10-tab interface:
-  - Song Brief
-  - Song DNA
-  - Prompt Pack
-  - Generations
-  - Stem Library
-  - Beat Breakdown
-  - Scorecards
-  - Mix Notes
-  - Revision Loop
-  - Final Export
-- API routes for:
-  - project creation/listing
-  - stem extraction jobs (2/4/6/10 modes)
-  - music analysis jobs
-  - export jobs (WAV ZIP, REAPER, Ableton-style, Logic-style)
-  - natural-language agent loop execution (single or multitask batch)
-  - prompt cache statistics
-- Prompt caching + token saver policy implemented in code:
-  - stable template keying
-  - hash-based context blocks
-  - revision-delta context
-  - cache hit/token savings telemetry
+- project creation/listing
+- simulated stem extraction jobs (2/4/6/10 modes)
+- music analysis jobs
+- export jobs (WAV ZIP, REAPER, Ableton-style, Logic-style)
+- natural-language agent loop execution (single or multitask batch)
+- prompt cache statistics
 
-## Run locally
+The command-center simulation is separate from the real `/stem-studio` GPU-backed separator.
+
+## Run the frontend locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open `http://localhost:3000`.
+
+## Run Core 6 separator locally
+
+See [`services/separator/README.md`](services/separator/README.md). The frontend reads the separator URL from:
+
+```text
+NEXT_PUBLIC_SEPARATOR_URL=http://localhost:8000
+```
+
+## Production
+
+For a Netlify frontend, set:
+
+```text
+NEXT_PUBLIC_SEPARATOR_URL=https://YOUR-GPU-WORKER.example.com
+```
+
+The GPU worker needs Python 3.11+, FFmpeg, CUDA for practical Deep 60+ inference, and `HF_TOKEN` for gated SAM-Audio checkpoint access.
