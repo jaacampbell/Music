@@ -16,5 +16,13 @@ export default [
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs["core-web-vitals"].rules
     }
+  },
+  {
+    // The command center uses intentionally styled internal anchor buttons alongside
+    // separator-worker download anchors. Keep this exception scoped to that page.
+    files: ["app/page.tsx"],
+    rules: {
+      "@next/next/no-html-link-for-pages": "off"
+    }
   }
 ];
