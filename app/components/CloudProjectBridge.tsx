@@ -41,15 +41,7 @@ function defaultPlanningProject(row: MusicProjectRow): Project {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     status: projectStatus(row.status),
-    songDna: {
-      bpm: row.bpm,
-      key: row.song_key,
-      mood: [],
-      structure: [],
-      vocalSpace: "balanced",
-      palette: [],
-      notes: ""
-    },
+    songDna: { bpm: row.bpm, key: row.song_key, mood: [], structure: [], vocalSpace: "balanced", palette: [], notes: "" },
     strategyMap: [],
     promptPack: [],
     generations: [],
@@ -86,18 +78,8 @@ function hydratePlanningProject(row: MusicProjectRow): Project {
     brief: row.brief,
     updatedAt: row.updated_at,
     status: projectStatus(row.status),
-    songDna: {
-      ...base.songDna,
-      bpm: row.bpm ?? base.songDna.bpm,
-      key: row.song_key ?? base.songDna.key
-    },
-    manifest: {
-      ...base.manifest,
-      projectId: row.id,
-      title: row.title,
-      bpm: row.bpm ?? base.manifest.bpm,
-      key: row.song_key ?? base.manifest.key
-    },
+    songDna: { ...base.songDna, bpm: row.bpm ?? base.songDna.bpm, key: row.song_key ?? base.songDna.key },
+    manifest: { ...base.manifest, projectId: row.id, title: row.title, bpm: row.bpm ?? base.manifest.bpm, key: row.song_key ?? base.manifest.key },
     sourceAudio: base.sourceAudio
       ? { ...base.sourceAudio, storage: row.source_audio_path ? "hybrid" : base.sourceAudio.storage, cloudPath: row.source_audio_path ?? base.sourceAudio.cloudPath }
       : undefined
@@ -114,7 +96,12 @@ async function importIntoPlanningApi(projects: Project[]): Promise<void> {
 }
 
 async function uploadCanonicalSource(user: CloudUser, row: MusicProjectRow, project: Project): Promise<MusicProjectRow> {
-  if (row.source_audio_path || !project.sourceAudio) return row;
+  if (!project.sourceAudio) return row;
+  // A browser-only source means the user selected new audio after the previous
+  // cloud source. Hybrid/private metadata means this exact attachment already
+  // has a cloud copy and must not create duplicate versions every sync cycle.
+  if (row.source_audio_path && project.sourceAudio.storage !== "browser-indexeddb") return row;
+
   const sourceFile = await getProjectAudio(project.id);
   if (!sourceFile) return row;
 
@@ -181,7 +168,6 @@ export function CloudProjectBridge(): React.JSX.Element | null {
         const localById = new Map(local.map((project) => [project.id, project]));
         const rowById = new Map(rows.map((row) => [row.id, row]));
 
-        // Hydrate projects created in the persistent dashboard into the existing production engine.
         const hydrated: Project[] = [];
         for (const row of rows) {
           const localProject = localById.get(row.id);
@@ -194,7 +180,6 @@ export function CloudProjectBridge(): React.JSX.Element | null {
         }
         if (hydrated.length) await importIntoPlanningApi(hydrated);
 
-        // Promote projects created from Guided/Studio mode into the same persistent library.
         for (const project of loadStoredProjects()) {
           let row = rowById.get(project.id);
           if (!row) {
@@ -261,6 +246,9 @@ export function CloudProjectBridge(): React.JSX.Element | null {
             window.location.reload();
           }
         }
+      } catch {
+        // Cloud sync is best-effort. Local production state remains available;
+        // the next interval retries without discarding browser work.
       } finally {
         syncingRef.current = false;
       }
