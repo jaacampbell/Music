@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { ProducerDnaPanel } from "./ProducerDnaPanel";
 import { PRESETS, STEM_GROUPS, STEM_TARGETS } from "./catalog";
 import { useRealStemPlayer, type StemInfo } from "./useRealStemPlayer";
+import "./stemStudio.css";
 
 const SEPARATOR_URL =
   process.env.NEXT_PUBLIC_SEPARATOR_URL ?? "http://localhost:8000";
@@ -56,6 +57,7 @@ export default function StemStudioPage(): React.JSX.Element {
   const [mode, setMode] = useState<"core" | "deep">("deep");
   const [selectedTargets, setSelectedTargets] = useState<string[]>(PRESETS.vocals);
   const [busy, setBusy] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [status, setStatus] = useState("Ready — choose stems and upload a track.");
   const fileRef = useRef<HTMLInputElement | null>(null);
 
@@ -81,12 +83,12 @@ export default function StemStudioPage(): React.JSX.Element {
     setManifest(m);
     const mixable = m.stems.filter((stem) => stem.mixable);
     setStatus(
-      `Separated ${m.stems.length} outputs. Loading ${mixable.length} non-overlapping core stems into the mixer…`
+      `Separated ${m.stems.length} outputs. Loading ${mixable.length} synchronized core stems…`
     );
     await player.loadStems(SEPARATOR_URL, mixable);
     const deepCount = m.stems.filter((stem) => stem.group !== "Core 6").length;
     setStatus(
-      `Ready · ${m.model} core · ${deepCount} deep target${deepCount === 1 ? "" : "s"} · organized by name and family · recon ${m.alignment.reconErrorDb} dB`
+      `Ready · ${m.model} · ${deepCount} deep target${deepCount === 1 ? "" : "s"} · organized by name and family · recon ${m.alignment.reconErrorDb} dB`
     );
   };
 
@@ -144,371 +146,462 @@ export default function StemStudioPage(): React.JSX.Element {
     setMode("deep");
   };
 
+  const handleDrop = (event: React.DragEvent<HTMLElement>): void => {
+    event.preventDefault();
+    setDragging(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file && !busy && !(mode === "deep" && selectedTargets.length === 0)) {
+      void separateUpload(file);
+    }
+  };
+
   const stemMeta = (name: string): StemInfo | undefined =>
     manifest?.stems.find((stem) => stem.name === name);
 
-  const deepOutputs =
-    manifest?.stems.filter((stem) => stem.group !== "Core 6") ?? [];
+  const deepOutputs = manifest?.stems.filter((stem) => stem.group !== "Core 6") ?? [];
   const coreDownloads =
     manifest?.stems.filter((stem) => stem.group === "Core 6" && !stem.mixable) ?? [];
   const samReady = health?.samAudio.installed === true;
   const workerOnline = health?.status === "ok";
+  const canSeparate = !busy && !(mode === "deep" && selectedTargets.length === 0);
 
   return (
-    <main className="page">
-      <header className="header">
-        <h1>Stem Studio · 60+ Separator</h1>
-        <p>
-          Core 6 mixing + text-prompt deep isolation ·{" "}
-          <Link href="/" style={{ color: "var(--accent)" }}>
-            ← Command center
-          </Link>
-        </p>
-      </header>
-
-      <section className="panel main" style={{ marginBottom: "1rem" }}>
-        <div style={{ display: "flex", gap: "0.55rem", flexWrap: "wrap", alignItems: "center" }}>
-          <span style={badge(workerOnline ? "#6ee7a8" : "#f2b36c")}>
-            {workerOnline ? "● worker online" : "● worker not detected"}
-          </span>
-          <span style={badge(samReady ? "#6ee7a8" : "#f2b36c")}>
-            {samReady ? "● SAM-Audio 60-target engine ready" : "● deep engine needs GPU worker"}
-          </span>
-          {health?.samAudio.cudaAvailable && <span style={badge("#6ee7a8")}>CUDA</span>}
-          <span className="mono" style={{ fontSize: "0.78rem", opacity: 0.75 }}>
-            {SEPARATOR_URL}
-          </span>
+    <main className="stemStudio">
+      <nav className="studioTopbar" aria-label="Stem Studio navigation">
+        <div className="studioBrand">
+          <span className="studioMark" aria-hidden="true">S</span>
+          <span>Stem Studio</span>
         </div>
-        <p className="meta" style={{ marginBottom: 0 }}>
-          Every output is named for the detected/selected stem and filed under its vocal or instrument
-          family. Core 6 stems are non-overlapping; deep isolates may overlap each other.
-        </p>
-      </section>
+        <Link href="/" className="studioNavLink">
+          Command center →
+        </Link>
+      </nav>
 
-      <section className="controls" style={{ alignItems: "stretch" }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
-            <button onClick={() => setMode("core")} style={modeBtn(mode === "core")}>
-              Core 6
-            </button>
-            <button onClick={() => setMode("deep")} style={modeBtn(mode === "deep")}>
-              Deep 60+
-            </button>
+      <div className="studioShell">
+        <header className="studioHero">
+          <div>
+            <p className="studioEyebrow">AI stem workstation · production build</p>
+            <h1>
+              Separate the mix.
+              <span>Keep every layer.</span>
+            </h1>
+            <p className="studioHeroCopy">
+              Split one song into synchronized Core 6 stems or isolate 60+ named vocal,
+              drum, bass, instrument, orchestral, and FX targets. Every output is filed by
+              family and ready to preview, mix, or download.
+            </p>
           </div>
-          <p className="meta" style={{ margin: 0 }}>
-            {mode === "core"
-              ? "Vocals · Drums · Bass · Guitar · Piano · Other + Instrumental"
-              : `${selectedTargets.length} deep targets selected + Core 6 base stems`}
-          </p>
-        </div>
-        <div className="buttons">
-          <button onClick={() => fileRef.current?.click()} disabled={busy || (mode === "deep" && selectedTargets.length === 0)}>
-            Upload & Separate
-          </button>
-          <button className="secondary" onClick={() => void separateDemo()} disabled={busy}>
-            Core 6 demo
-          </button>
-          {manifest?.zipUrl && (
-            <a
-              href={`${SEPARATOR_URL}${manifest.zipUrl}`}
-              download="Stem_Studio_Organized_Stems.zip"
-              style={{ ...btn(false), display: "inline-flex", alignItems: "center", textDecoration: "none" }}
+          <div className="studioHeroStat" aria-label="Stem Studio capabilities">
+            <div className="studioStat"><strong>60+</strong><span>deep targets</span></div>
+            <div className="studioStat"><strong>6</strong><span>mixable core stems</span></div>
+            <div className="studioStat"><strong>WAV</strong><span>organized export</span></div>
+          </div>
+        </header>
+
+        <section className="studioWorkspace">
+          <div className="studioPanel studioUploadPanel">
+            <div
+              className={`studioDropzone${dragging ? " isDragging" : ""}`}
+              role="button"
+              tabIndex={0}
+              aria-disabled={!canSeparate}
+              onClick={() => canSeparate && fileRef.current?.click()}
+              onKeyDown={(event) => {
+                if ((event.key === "Enter" || event.key === " ") && canSeparate) {
+                  event.preventDefault();
+                  fileRef.current?.click();
+                }
+              }}
+              onDragOver={(event) => {
+                event.preventDefault();
+                if (canSeparate) setDragging(true);
+              }}
+              onDragLeave={() => setDragging(false)}
+              onDrop={handleDrop}
             >
-              Download Organized ZIP
-            </a>
-          )}
-          <input
-            ref={fileRef}
-            type="file"
-            accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff"
-            style={{ display: "none" }}
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) void separateUpload(file);
-            }}
-          />
-        </div>
-      </section>
-
-      {manifest?.organization && (
-        <section className="panel main" style={{ marginBottom: "1rem" }}>
-          <h3 style={{ marginTop: 0 }}>Output organization</h3>
-          <p className="meta">
-            Folder strategy: <b>{manifest.organization.strategy}</b>. Your ZIP preserves these folders.
-          </p>
-          <div style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap" }}>
-            {manifest.organization.families.map((family) => (
-              <span key={family} style={badge("var(--text)")}>{family}</span>
-            ))}
+              <div>
+                <div className="studioDropIcon" aria-hidden="true">↑</div>
+                <h2>{busy ? "Separation in progress" : "Drop your track here"}</h2>
+                <p>
+                  WAV, MP3, FLAC, M4A, or AIFF. {mode === "deep"
+                    ? `${selectedTargets.length} deep targets selected in addition to the Core 6 base.`
+                    : "Core 6 creates vocals, drums, bass, guitar, piano, other, and an instrumental."}
+                </p>
+                <div className="studioActions">
+                  <button
+                    className="studioButton"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      fileRef.current?.click();
+                    }}
+                    disabled={!canSeparate}
+                  >
+                    {busy ? "Processing…" : "Choose audio file"}
+                  </button>
+                  <button
+                    className="studioGhostButton"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      void separateDemo();
+                    }}
+                    disabled={busy}
+                  >
+                    Run demo
+                  </button>
+                  {manifest?.zipUrl && (
+                    <a
+                      className="studioGhostButton"
+                      href={`${SEPARATOR_URL}${manifest.zipUrl}`}
+                      download="Stem_Studio_Organized_Stems.zip"
+                      onClick={(event) => event.stopPropagation()}
+                      style={{ textDecoration: "none" }}
+                    >
+                      Download organized ZIP
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff"
+              hidden
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) void separateUpload(file);
+              }}
+            />
           </div>
+
+          <aside className="studioPanel studioControlPanel" aria-label="Separation settings">
+            <p className="studioSectionLabel">Separation mode</p>
+            <div className="studioModeSwitch">
+              <button
+                className={`studioModeButton${mode === "core" ? " active" : ""}`}
+                aria-pressed={mode === "core"}
+                onClick={() => setMode("core")}
+              >
+                Core 6
+              </button>
+              <button
+                className={`studioModeButton${mode === "deep" ? " active" : ""}`}
+                aria-pressed={mode === "deep"}
+                onClick={() => setMode("deep")}
+              >
+                Deep 60+
+              </button>
+            </div>
+            <p className="studioModeDescription">
+              {mode === "core"
+                ? "Fast, synchronized stems for mixing: vocals, drums, bass, guitar, piano, other + instrumental."
+                : `${selectedTargets.length} independent deep isolates selected, plus the synchronized Core 6 base.`}
+            </p>
+
+            <p className="studioSectionLabel">Engine status</p>
+            <div className="studioHealthGrid">
+              <div className="studioHealthRow">
+                <span>Worker</span>
+                <strong className={workerOnline ? "studioGood" : "studioWarn"}>
+                  {workerOnline ? "Online" : "Not detected"}
+                </strong>
+              </div>
+              <div className="studioHealthRow">
+                <span>Deep engine</span>
+                <strong className={samReady ? "studioGood" : "studioWarn"}>
+                  {samReady ? "Ready" : "GPU needed"}
+                </strong>
+              </div>
+              <div className="studioHealthRow">
+                <span>Compute</span>
+                <strong>{health?.samAudio.cudaAvailable ? "CUDA GPU" : "CPU / unknown"}</strong>
+              </div>
+              <div className="studioHealthRow">
+                <span>Endpoint</span>
+                <span className="studioEndpoint" title={SEPARATOR_URL}>{SEPARATOR_URL}</span>
+              </div>
+            </div>
+          </aside>
         </section>
-      )}
 
-      {mode === "deep" && (
-        <section className="panel main" style={{ marginBottom: "1rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-            <div>
-              <h3 style={{ marginTop: 0, marginBottom: "0.25rem" }}>Choose deep stems</h3>
-              <p className="meta" style={{ marginTop: 0 }}>
-                {selectedTargets.length} of {STEM_TARGETS.length} selected. Each selection is a separate
-                AI isolation pass.
-              </p>
+        {mode === "deep" && (
+          <section className="studioPanel studioSection">
+            <div className="studioSectionHeader">
+              <div>
+                <p className="studioSectionLabel">Target library</p>
+                <h2>Choose exactly what you want isolated</h2>
+                <p>Each selected target becomes its own named WAV inside the correct family folder.</p>
+              </div>
+              <span className="studioCount">{selectedTargets.length}/{STEM_TARGETS.length}</span>
             </div>
-            <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignContent: "flex-start" }}>
-              <button onClick={() => selectPreset("vocals")} style={presetBtn()}>Vocals</button>
-              <button onClick={() => selectPreset("drums")} style={presetBtn()}>Drums</button>
-              <button onClick={() => selectPreset("beat")} style={presetBtn()}>Beat</button>
-              <button onClick={() => selectPreset("instruments")} style={presetBtn()}>Instruments</button>
-              <button onClick={() => selectPreset("all")} style={presetBtn()}>All 60</button>
-              <button onClick={() => setSelectedTargets([])} style={presetBtn()}>Clear</button>
-            </div>
-          </div>
 
-          {selectedTargets.length > 12 && (
-            <div className="status" style={{ marginBottom: "0.85rem" }}>
-              Large deep jobs can take a long time because every selected target is isolated separately.
-              Start with the stems you actually need when speed matters.
+            <div className="studioChips" aria-label="Stem presets">
+              <button className="studioChip" onClick={() => selectPreset("vocals")}>Vocals</button>
+              <button className="studioChip" onClick={() => selectPreset("drums")}>Drums</button>
+              <button className="studioChip" onClick={() => selectPreset("beat")}>Beat</button>
+              <button className="studioChip" onClick={() => selectPreset("instruments")}>Instruments</button>
+              <button className="studioChip" onClick={() => selectPreset("all")}>All 60</button>
+              <button className="studioChip" onClick={() => setSelectedTargets([])}>Clear</button>
             </div>
-          )}
 
-          <div style={{ display: "grid", gap: "0.9rem" }}>
-            {STEM_GROUPS.map((group) => (
-              <div className="card" key={group}>
-                <h3 style={{ marginTop: 0 }}>{group}</h3>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: "0.45rem" }}>
-                  {STEM_TARGETS.filter((target) => target.group === group).map((target) => {
-                    const checked = selectedTargets.includes(target.id);
+            {selectedTargets.length > 12 && (
+              <div className="studioNotice">
+                Large deep jobs run one isolation pass per target. For faster turnaround, select only
+                the layers you actually need.
+              </div>
+            )}
+
+            <div className="studioGroupGrid">
+              {STEM_GROUPS.map((group) => (
+                <div className="studioGroup" key={group}>
+                  <h3>{group}</h3>
+                  <div className="studioTargetGrid">
+                    {STEM_TARGETS.filter((target) => target.group === group).map((target) => {
+                      const checked = selectedTargets.includes(target.id);
+                      return (
+                        <label
+                          key={target.id}
+                          className={`studioTarget${checked ? " selected" : ""}`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => toggleTarget(target.id)}
+                          />
+                          <span>{target.label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {manifest?.organization && (
+          <section className="studioPanel studioSection">
+            <div className="studioSectionHeader">
+              <div>
+                <p className="studioSectionLabel">Export structure</p>
+                <h2>Organized automatically</h2>
+                <p>{manifest.organization.strategy}. The ZIP preserves every family folder and filename.</p>
+              </div>
+              {manifest.zipUrl && (
+                <a
+                  className="studioLink"
+                  href={`${SEPARATOR_URL}${manifest.zipUrl}`}
+                  download="Stem_Studio_Organized_Stems.zip"
+                >
+                  Download ZIP →
+                </a>
+              )}
+            </div>
+            <div className="studioChips">
+              {manifest.organization.families.map((family) => (
+                <span className="studioChip" key={family}>{family}</span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="studioResultsGrid">
+          <section className="studioPanel studioSection">
+            <div className="studioSectionHeader">
+              <div>
+                <p className="studioSectionLabel">Live mix</p>
+                <h2>Core 6 mixer</h2>
+                <p>Synchronized, non-overlapping stems designed to play together.</p>
+              </div>
+            </div>
+
+            {player.stems.length === 0 ? (
+              <div className="studioEmpty">Upload a track to load the synchronized mixer.</div>
+            ) : (
+              <>
+                <div className="studioTransport">
+                  <button className="studioMiniButton primary" onClick={player.play} disabled={player.isLoading}>▶ Play</button>
+                  <button className="studioMiniButton" onClick={player.stop}>■ Stop</button>
+                  <button className="studioMiniButton" onClick={player.karaoke}>Instrumental</button>
+                  <button className="studioMiniButton" onClick={player.acapella}>Vocals only</button>
+                  <button className="studioMiniButton" onClick={player.reset}>Reset</button>
+                </div>
+
+                <div className="studioMixerGrid">
+                  {player.stems.map((ui) => {
+                    const meta = stemMeta(ui.name);
                     return (
-                      <label key={target.id} style={targetCard(checked)}>
+                      <div className="studioChannel" key={ui.name}>
+                        <div className="studioChannelTop">
+                          <div>
+                            <h3>{meta?.label ?? ui.name}</h3>
+                            <div className="studioChannelPath">
+                              {meta?.family ?? "Core 6"}{meta?.file ? ` · ${meta.file}` : ""}
+                            </div>
+                          </div>
+                          <span className="studioDb">{meta?.integratedDb ?? "—"} dB</span>
+                        </div>
+                        <div className="studioSoloMute">
+                          <button
+                            className={ui.solo ? "activeSolo" : ""}
+                            aria-pressed={ui.solo}
+                            onClick={() => player.setSolo(ui.name, !ui.solo)}
+                          >
+                            SOLO
+                          </button>
+                          <button
+                            className={ui.muted ? "activeMute" : ""}
+                            aria-pressed={ui.muted}
+                            onClick={() => player.setMuted(ui.name, !ui.muted)}
+                          >
+                            MUTE
+                          </button>
+                        </div>
                         <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={() => toggleTarget(target.id)}
+                          className="studioRange"
+                          type="range"
+                          min={0}
+                          max={1}
+                          step={0.01}
+                          value={ui.gain}
+                          onChange={(event) => player.setGain(ui.name, Number(event.target.value))}
+                          aria-label={`${meta?.label ?? ui.name} gain`}
                         />
-                        <span>{target.label}</span>
-                      </label>
+                      </div>
                     );
                   })}
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
-      <section className="layout" style={{ gridTemplateColumns: "1fr 1fr" }}>
-        <section className="panel main">
-          <h3 style={{ marginTop: 0 }}>Core 6 mixer</h3>
-          {player.stems.length === 0 && (
-            <p className="meta">Separate a track to load the synchronized non-overlapping mixer.</p>
-          )}
-          {player.stems.length > 0 && (
-            <>
-              <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.8rem", flexWrap: "wrap" }}>
-                <button onClick={player.play} style={btn(true)} disabled={player.isLoading}>▶ Play</button>
-                <button onClick={player.stop} style={btn(false)}>⏹ Stop</button>
-                <button onClick={player.karaoke} style={btn(false)}>🎤 Instrumental</button>
-                <button onClick={player.acapella} style={btn(false)}>🎙 Vocals only</button>
-                <button onClick={player.reset} style={btn(false)}>↺ Reset</button>
+                {coreDownloads.length > 0 && (
+                  <div className="studioDeepList" style={{ marginTop: ".75rem" }}>
+                    {coreDownloads.map((stem) => (
+                      <div className="studioDownloadRow" key={stem.name}>
+                        <div className="studioDeepStemHead">
+                          <div>
+                            <strong>{stem.label ?? stem.name}</strong>
+                            <div className="studioChannelPath">{stem.family ?? "Mixdowns"} · {stem.file}</div>
+                          </div>
+                          <a
+                            className="studioLink"
+                            href={`${SEPARATOR_URL}${stem.url}`}
+                            download={stem.downloadName ?? true}
+                          >
+                            WAV ↓
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+
+          <section className="studioPanel studioSection">
+            <div className="studioSectionHeader">
+              <div>
+                <p className="studioSectionLabel">Deep outputs</p>
+                <h2>Isolated stems</h2>
+                <p>Independent AI isolates grouped by vocal or instrument family.</p>
               </div>
-              <div className="grid" style={{ gridTemplateColumns: "repeat(2, 1fr)" }}>
-                {player.stems.map((ui) => {
-                  const meta = stemMeta(ui.name);
+              {manifest && <span className="studioCount">{deepOutputs.length}</span>}
+            </div>
+
+            {!manifest || deepOutputs.length === 0 ? (
+              <div className="studioEmpty">
+                {!manifest
+                  ? "Run a Deep 60+ separation to populate isolated outputs."
+                  : manifest.mode === "core"
+                    ? "This was a Core 6 job. Switch to Deep 60+ for individual targets."
+                    : "No deep outputs were produced. Check the engine status and job notes."}
+              </div>
+            ) : (
+              <div className="studioDeepList">
+                {STEM_GROUPS.map((group) => {
+                  const stems = deepOutputs.filter((stem) => stem.group === group);
+                  if (stems.length === 0) return null;
                   return (
-                    <div className="card" key={ui.name}>
-                      <h3 style={{ textTransform: "capitalize" }}>{meta?.label ?? ui.name}</h3>
-                      <div className="meta" style={{ marginBottom: "0.5rem" }}>
-                        {meta?.family ?? "Core 6"} · {meta?.file ?? ""}
-                      </div>
-                      <div style={{ display: "flex", gap: "0.4rem", marginBottom: "0.5rem" }}>
-                        <button onClick={() => player.setSolo(ui.name, !ui.solo)} style={pill(ui.solo, "#e0a83a")}>Solo</button>
-                        <button onClick={() => player.setMuted(ui.name, !ui.muted)} style={pill(ui.muted, "#e05a5a")}>Mute</button>
-                      </div>
-                      <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={ui.gain}
-                        onChange={(event) => player.setGain(ui.name, Number(event.target.value))}
-                        style={{ width: "100%" }}
-                        aria-label={`${ui.name} gain`}
-                      />
-                      <div className="mono" style={{ marginTop: "0.4rem" }}>
-                        {meta?.integratedDb ?? "—"} dB {ui.loaded ? "· loaded" : "· …"}
-                      </div>
+                    <div className="studioDeepGroup" key={group}>
+                      <h3 className="studioDeepGroupTitle">{group}</h3>
+                      {stems.map((stem) => (
+                        <div className="studioDeepStem" key={stem.name}>
+                          <div className="studioDeepStemHead">
+                            <div>
+                              <strong>{stem.label ?? stem.name}</strong>
+                              <div className="studioChannelPath">{stem.family ?? stem.group} · {stem.file}</div>
+                              <div className="studioChannelPath">{stem.integratedDb} dB · {stem.engine}</div>
+                            </div>
+                            <a
+                              className="studioLink"
+                              href={`${SEPARATOR_URL}${stem.url}`}
+                              download={stem.downloadName ?? true}
+                            >
+                              WAV ↓
+                            </a>
+                          </div>
+                          <audio controls preload="none" src={`${SEPARATOR_URL}${stem.url}`} />
+                        </div>
+                      ))}
                     </div>
                   );
                 })}
               </div>
-              {coreDownloads.map((stem) => (
-                <div className="card" key={stem.name} style={{ marginTop: "0.65rem" }}>
-                  <strong>{stem.label ?? stem.name}</strong>{" "}
-                  <span className="meta">({stem.family ?? "Mixdown"})</span>{" "}
-                  <a
-                    href={`${SEPARATOR_URL}${stem.url}`}
-                    download={stem.downloadName ?? true}
-                    style={{ color: "var(--accent)" }}
-                  >
-                    Download WAV
-                  </a>
-                </div>
-              ))}
-            </>
-          )}
+            )}
+          </section>
         </section>
 
-        <section className="panel main">
-          <h3 style={{ marginTop: 0 }}>Deep isolated outputs</h3>
-          {!manifest && <p className="meta">No separation yet.</p>}
-          {manifest && deepOutputs.length === 0 && (
-            <p className="meta">
-              No deep outputs were produced. {manifest.mode === "core" ? "This was a Core 6 job." : "Check the worker notes below."}
-            </p>
-          )}
-          {deepOutputs.length > 0 && (
-            <div style={{ display: "grid", gap: "0.7rem" }}>
-              {STEM_GROUPS.map((group) => {
-                const stems = deepOutputs.filter((stem) => stem.group === group);
-                if (stems.length === 0) return null;
-                return (
-                  <div className="card" key={group}>
-                    <h3 style={{ marginTop: 0 }}>{group}</h3>
-                    <div style={{ display: "grid", gap: "0.65rem" }}>
-                      {stems.map((stem) => (
-                        <div key={stem.name} style={{ borderTop: "1px solid var(--line)", paddingTop: "0.55rem" }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "baseline" }}>
-                            <div>
-                              <strong>{stem.label ?? stem.name}</strong>
-                              <div className="meta">{stem.family ?? stem.group} · {stem.file}</div>
-                            </div>
-                            <a
-                              href={`${SEPARATOR_URL}${stem.url}`}
-                              download={stem.downloadName ?? true}
-                              style={{ color: "var(--accent)", whiteSpace: "nowrap" }}
-                            >
-                              Download WAV
-                            </a>
-                          </div>
-                          <div className="meta">{stem.integratedDb} dB · {stem.engine}</div>
-                          <audio controls preload="none" src={`${SEPARATOR_URL}${stem.url}`} style={{ width: "100%", marginTop: "0.4rem" }} />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </section>
-      </section>
-
-      {manifest && (
-        <section className="panel main" style={{ marginTop: "1rem" }}>
-          <h3 style={{ marginTop: 0 }}>Job manifest</h3>
-          <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
-            <div className="card">
-              <h3>Source</h3>
-              <div className="mono">
-                {manifest.source.filename}
-                {"\n"}
-                {manifest.durationSec}s · {manifest.sampleRate / 1000} kHz · job {manifest.jobId}
+        {manifest && (
+          <section className="studioPanel studioSection">
+            <div className="studioSectionHeader">
+              <div>
+                <p className="studioSectionLabel">Technical detail</p>
+                <h2>Job manifest</h2>
               </div>
             </div>
-            <div className="card">
-              <h3>Engines</h3>
-              <div className="meta">
-                Core: {manifest.engines.core}
-                <br />
-                Deep: {manifest.engines.deep}
+            <div className="studioManifestGrid">
+              <div className="studioManifestCard">
+                <h3>Source</h3>
+                <div>{manifest.source.filename}</div>
+                <div>{manifest.durationSec}s · {manifest.sampleRate / 1000} kHz</div>
+                <div>job {manifest.jobId}</div>
+              </div>
+              <div className="studioManifestCard">
+                <h3>Engines</h3>
+                <div>Core: {manifest.engines.core}</div>
+                <div>Deep: {manifest.engines.deep}</div>
+              </div>
+              <div className="studioManifestCard">
+                <h3>Alignment</h3>
+                <div>Core reconstruction error</div>
+                <div>{manifest.alignment.reconErrorDb} dB</div>
               </div>
             </div>
-            <div className="card">
-              <h3>Alignment</h3>
-              <div className="meta">
-                Core recon error {manifest.alignment.reconErrorDb} dB
+
+            {manifest.failedTargets.length > 0 && (
+              <div className="studioNotice" style={{ marginTop: ".8rem", marginBottom: 0 }}>
+                <strong>Failed deep targets:</strong>{" "}
+                {manifest.failedTargets.map((failure) => `${failure.id}: ${failure.error}`).join(" · ")}
               </div>
-            </div>
-          </div>
-          {manifest.failedTargets.length > 0 && (
-            <div className="card" style={{ marginTop: "0.7rem" }}>
-              <h3>Failed deep targets</h3>
-              <ul className="list">
-                {manifest.failedTargets.map((failure) => (
-                  <li key={failure.id} className="meta">
-                    {failure.id}: {failure.error}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <div className="card" style={{ marginTop: "0.7rem" }}>
-            <h3>Notes</h3>
-            <ul className="list">
-              {manifest.warnings.map((warning) => (
-                <li key={warning} className="meta">{warning}</li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
+            )}
 
-      <ProducerDnaPanel trackName={manifest?.source.filename} />
+            {manifest.warnings.length > 0 && (
+              <div className="studioManifestCard" style={{ marginTop: ".8rem" }}>
+                <h3>Notes</h3>
+                <div>{manifest.warnings.join(" · ")}</div>
+              </div>
+            )}
+          </section>
+        )}
 
-      <div className="status">{busy || player.isLoading ? "Working… " : ""}{status}</div>
+        <div style={{ marginTop: "1rem" }}>
+          <ProducerDnaPanel trackName={manifest?.source.filename} />
+        </div>
+      </div>
+
+      <div className="studioStatusBar" role="status" aria-live="polite">
+        <span className={`studioStatusDot${busy || player.isLoading ? " busy" : ""}`} />
+        <span>{busy || player.isLoading ? "Working · " : ""}{status}</span>
+      </div>
     </main>
   );
 }
-
-const btn = (primary: boolean): React.CSSProperties => ({
-  background: primary ? "var(--accent)" : "#2f3548",
-  color: "#fff",
-  border: "none",
-  borderRadius: 8,
-  padding: "0.5rem 0.85rem",
-  cursor: "pointer"
-});
-
-const modeBtn = (active: boolean): React.CSSProperties => ({
-  ...btn(active),
-  background: active ? "var(--accent)" : "transparent",
-  border: active ? "1px solid transparent" : "1px solid var(--line)"
-});
-
-const presetBtn = (): React.CSSProperties => ({
-  background: "transparent",
-  color: "var(--text)",
-  border: "1px solid var(--line)",
-  borderRadius: 999,
-  padding: "0.35rem 0.65rem",
-  cursor: "pointer"
-});
-
-const targetCard = (active: boolean): React.CSSProperties => ({
-  display: "flex",
-  alignItems: "center",
-  gap: "0.45rem",
-  padding: "0.55rem 0.65rem",
-  borderRadius: 8,
-  border: `1px solid ${active ? "var(--accent)" : "var(--line)"}`,
-  background: active ? "rgba(120, 124, 255, 0.12)" : "transparent",
-  cursor: "pointer"
-});
-
-const badge = (color: string): React.CSSProperties => ({
-  border: "1px solid var(--line)",
-  borderRadius: 999,
-  padding: "0.3rem 0.55rem",
-  color
-});
-
-const pill = (active: boolean, activeColor: string): React.CSSProperties => ({
-  flex: 1,
-  padding: "0.35rem",
-  borderRadius: 8,
-  border: "1px solid var(--line)",
-  background: active ? activeColor : "transparent",
-  color: active ? "#0c0d10" : "var(--text)",
-  fontWeight: active ? 700 : 400,
-  cursor: "pointer"
-});
