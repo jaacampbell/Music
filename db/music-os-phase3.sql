@@ -15,6 +15,16 @@ comment on column public.music_projects.source_audio_path is
 comment on column public.music_projects.live_analysis is
   'Latest measured browser/worker audio analysis. Null means no measured analysis has run.';
 
+-- The Phase 2 bucket was intentionally restrictive, but the product now stores
+-- agreements, lyrics, archives, DAW handoff files, and generated stems. Keep it
+-- private and size-limited while allowing the project library to accept those
+-- real-world file types.
+update storage.buckets
+set file_size_limit = 524288000,
+    allowed_mime_types = null,
+    public = false
+where id = 'music-assets';
+
 create table if not exists public.music_agent_messages (
   id uuid primary key default gen_random_uuid(),
   project_id uuid not null references public.music_projects(id) on delete cascade,
