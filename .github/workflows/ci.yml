@@ -25,5 +25,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: python -m py_compile services/separator/app.py services/separator/agent_core.py services/separator/agent_api.py services/separator/agent_phase5.py services/separator/agent_phase6.py services/separator/agent_phase7.py services/separator/agent_phase11.py services/separator/agent_phase12.py scripts/runpod_stem_ctl.py scripts/check_production_config.py
+      - run: python -m py_compile services/separator/app.py services/separator/agent_core.py services/separator/agent_api.py services/separator/agent_phase5.py services/separator/agent_phase6.py services/separator/agent_phase7.py services/separator/agent_phase11.py services/separator/agent_phase12.py services/stem-controller/controller.py scripts/runpod_stem_ctl.py scripts/check_production_config.py
       - run: python scripts/check_production_config.py

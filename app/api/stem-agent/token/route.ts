@@ -34,6 +34,16 @@ type OrchestrationRow = {
   recovery_generation: number;
 };
 
+type ComputeStateRow = {
+  state: "disabled" | "standby" | "demand" | "waking" | "ready" | "busy" | "cooldown" | "stopping" | "error";
+  auto_start_enabled: boolean;
+  auto_stop_enabled: boolean;
+  pending_jobs: number;
+  active_jobs: number;
+  last_seen: string;
+  last_error: string | null;
+};
+
 function supabaseConfig(): { url: string; key: string } | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -116,6 +126,24 @@ async function loadOrchestration(
   return rows[0] ?? null;
 }
 
+async function loadComputeState(
+  config: { url: string; key: string },
+  accessToken: string
+): Promise<ComputeStateRow | null> {
+  const query = new URLSearchParams({
+    select: "state,auto_start_enabled,auto_stop_enabled,pending_jobs,active_jobs,last_seen,last_error",
+    key: "eq.stem-gpu",
+    limit: "1"
+  });
+  const response = await fetch(`${config.url}/rest/v1/music_compute_state?${query.toString()}`, {
+    headers: { apikey: config.key, Authorization: `Bearer ${accessToken}` },
+    cache: "no-store"
+  });
+  if (!response.ok) return null;
+  const rows = (await response.json().catch(() => [])) as ComputeStateRow[];
+  return rows[0] ?? null;
+}
+
 async function selectWorker(
   config: { url: string; key: string },
   accessToken: string,
@@ -185,27 +213,41 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   let orchestration: OrchestrationRow | null = null;
   if (parsed.data.orchestrationId) {
-    if (!parsed.data.projectId) {
-      return NextResponse.json({ error: "Cloud orchestration requires a linked Music OS project." }, { status: 400 });
-    }
+    if (!parsed.data.projectId) return NextResponse.json({ error: "Cloud orchestration requires a linked Music OS project." }, { status: 400 });
     orchestration = await loadOrchestration(config, parsed.data.accessToken, user.id, parsed.data.projectId, parsed.data.orchestrationId);
-    if (!orchestration || !orchestration.source_storage_path) {
-      return NextResponse.json({ error: "Cloud orchestration source is not staged for this account." }, { status: 404 });
-    }
-    if (["completed", "cancelled"].includes(orchestration.status)) {
-      return NextResponse.json({ error: `Cloud orchestration is already ${orchestration.status}.` }, { status: 409 });
-    }
+    if (!orchestration || !orchestration.source_storage_path) return NextResponse.json({ error: "Cloud orchestration source is not staged for this account." }, { status: 404 });
+    if (["completed", "cancelled"].includes(orchestration.status)) return NextResponse.json({ error: `Cloud orchestration is already ${orchestration.status}.` }, { status: 409 });
   }
 
   const meshWorker = await selectWorker(config, parsed.data.accessToken, parsed.data.mode, parsed.data.excludeNodeId);
   const worker = meshWorker ?? staticWorkerFallback(parsed.data.mode, parsed.data.excludeNodeId);
   if (!worker) {
+    const compute = await loadComputeState(config, parsed.data.accessToken);
+    const controllerFresh = Boolean(compute && Number.isFinite(Date.parse(compute.last_seen)) && Date.parse(compute.last_seen) >= Date.now() - 30_000);
+    const canWake = Boolean(controllerFresh && compute?.auto_start_enabled && parsed.data.orchestrationId);
+    const waking = Boolean(canWake && compute && ["standby", "demand", "waking", "ready", "cooldown"].includes(compute.state));
+    const code = waking ? "COMPUTE_WAKING" : "NO_COMPATIBLE_WORKER";
+    const error = waking
+      ? `GPU engine is waking from standby for this ${parsed.data.mode === "deep" ? "Deep" : "Core"} job.`
+      : compute && controllerFresh && !compute.auto_start_enabled
+        ? "GPU engine is in standby and paid auto-start is disabled on the controller."
+        : parsed.data.mode === "deep"
+          ? "No healthy Agentic Deep worker is available. Launch or recover a CUDA + SAM-Audio node."
+          : "No healthy Core 6 worker is available. Launch or recover a Stem Worker node.";
     return NextResponse.json({
-      error: parsed.data.mode === "deep"
-        ? "No healthy Agentic Deep worker is available. Launch or recover a CUDA + SAM-Audio node."
-        : "No healthy Core 6 worker is available. Launch or recover a Stem Worker node.",
-      code: "NO_COMPATIBLE_WORKER",
-      mode: parsed.data.mode
+      error,
+      code,
+      mode: parsed.data.mode,
+      retryAfterSeconds: waking ? 5 : null,
+      compute: compute ? {
+        state: compute.state,
+        autoStartEnabled: compute.auto_start_enabled,
+        autoStopEnabled: compute.auto_stop_enabled,
+        pendingJobs: compute.pending_jobs,
+        activeJobs: compute.active_jobs,
+        controllerFresh,
+        lastError: compute.last_error
+      } : null
     }, { status: 503 });
   }
 

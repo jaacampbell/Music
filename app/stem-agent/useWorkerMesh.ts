@@ -37,6 +37,16 @@ export type WorkerSession = {
   } | null;
 };
 
+export type ComputeState = {
+  state: string;
+  autoStartEnabled: boolean;
+  autoStopEnabled: boolean;
+  pendingJobs: number;
+  activeJobs: number;
+  controllerFresh: boolean;
+  lastError: string | null;
+};
+
 export type StemReadiness = {
   status: "ready" | "control-plane-ready" | "degraded";
   checkedAt: string;
@@ -65,13 +75,26 @@ export type AcquireWorkerOptions = {
   strategy?: string;
   instruction?: string;
   targets?: string[];
+  waitForCompute?: boolean;
+  maxWaitMs?: number;
+  onComputeWait?: (message: string, compute: ComputeState | null) => void;
 };
+
+type SessionResponse = Partial<WorkerSession> & {
+  error?: string;
+  code?: string;
+  retryAfterSeconds?: number | null;
+  compute?: ComputeState | null;
+};
+
+const sleep = (milliseconds: number) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 
 export function useWorkerMesh(projectId: string | null, mode: "core" | "deep") {
   const [worker, setWorker] = useState<WorkerSelection | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [health, setHealth] = useState<WorkerHealth | null>(null);
   const [readiness, setReadiness] = useState<StemReadiness | null>(null);
+  const [compute, setCompute] = useState<ComputeState | null>(null);
 
   const refreshReadiness = useCallback(async (): Promise<StemReadiness | null> => {
     try {
@@ -101,36 +124,61 @@ export function useWorkerMesh(projectId: string | null, mode: "core" | "deep") {
   const acquire = useCallback(async (options: AcquireWorkerOptions = {}): Promise<WorkerSession> => {
     const accessToken = await getSessionAccessToken();
     if (!accessToken) throw new Error("Sign in before using the Agentic Stem System.");
-    const response = await fetch("/api/stem-agent/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        accessToken,
-        projectId,
-        mode,
-        orchestrationId: options.orchestrationId ?? null,
-        excludeNodeId: options.excludeNodeId ?? null,
-        strategy: options.strategy ?? "auto",
-        instruction: options.instruction ?? "",
-        targets: options.targets ?? []
-      })
-    });
-    const body = await response.json().catch(() => ({})) as Partial<WorkerSession> & { error?: string; code?: string };
-    if (!response.ok || !body.token || !body.worker?.origin) {
-      const detail = body.code ? `${body.error ?? "Worker routing failed."} (${body.code})` : body.error;
-      throw new Error(detail ?? "No compatible Stem Worker is currently available.");
+
+    const payload = {
+      accessToken,
+      projectId,
+      mode,
+      orchestrationId: options.orchestrationId ?? null,
+      excludeNodeId: options.excludeNodeId ?? null,
+      strategy: options.strategy ?? "auto",
+      instruction: options.instruction ?? "",
+      targets: options.targets ?? []
+    };
+    const waitForCompute = options.waitForCompute !== false && Boolean(options.orchestrationId);
+    const deadline = Date.now() + Math.max(15_000, options.maxWaitMs ?? 4 * 60_000);
+
+    while (true) {
+      const response = await fetch("/api/stem-agent/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const body = await response.json().catch(() => ({})) as SessionResponse;
+
+      if (response.ok && body.token && body.worker?.origin) {
+        const session = body as WorkerSession;
+        setCompute(null);
+        setToken(session.token);
+        setWorker(session.worker);
+        await probeWorker(session.worker.origin);
+        return session;
+      }
+
+      if (body.code === "COMPUTE_WAKING" && waitForCompute && Date.now() < deadline) {
+        const nextCompute = body.compute ?? null;
+        setCompute(nextCompute);
+        options.onComputeWait?.(body.error ?? "GPU engine is waking from standby…", nextCompute);
+        await refreshReadiness();
+        const retrySeconds = Math.max(3, Math.min(15, body.retryAfterSeconds ?? 5));
+        await sleep(retrySeconds * 1000);
+        continue;
+      }
+
+      setCompute(body.compute ?? null);
+      const suffix = body.code && body.code !== "NO_COMPATIBLE_WORKER" ? ` (${body.code})` : "";
+      if (body.code === "COMPUTE_WAKING" && waitForCompute) {
+        throw new Error("GPU wake-up exceeded four minutes. The durable job is still staged; check Stem System Status or the VPS controller.");
+      }
+      throw new Error(`${body.error ?? "No compatible Stem Worker is currently available."}${suffix}`);
     }
-    const session = body as WorkerSession;
-    setToken(session.token);
-    setWorker(session.worker);
-    await probeWorker(session.worker.origin);
-    return session;
-  }, [mode, probeWorker, projectId]);
+  }, [mode, probeWorker, projectId, refreshReadiness]);
 
   const clear = useCallback(() => {
     setToken(null);
     setWorker(null);
     setHealth(null);
+    setCompute(null);
   }, []);
 
   useEffect(() => { void refreshReadiness(); }, [refreshReadiness]);
@@ -141,6 +189,7 @@ export function useWorkerMesh(projectId: string | null, mode: "core" | "deep") {
     token,
     health,
     readiness,
+    compute,
     acquire,
     clear,
     refreshReadiness,
