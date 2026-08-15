@@ -33,6 +33,11 @@ async function probeJson(url: string, timeoutMs = 4500): Promise<Probe> {
   }
 }
 
+function numberField(data: Record<string, unknown>, key: string): number {
+  const value = Number(data[key] ?? 0);
+  return Number.isFinite(value) ? value : 0;
+}
+
 export async function GET(): Promise<NextResponse> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") ?? "";
   const separatorUrl = process.env.NEXT_PUBLIC_SEPARATOR_URL?.replace(/\/$/, "") ?? "";
@@ -42,26 +47,39 @@ export async function GET(): Promise<NextResponse> {
     ? await probeJson(`${supabaseUrl}/functions/v1/stem-worker-mirror`)
     : { ok: false, error: "Supabase URL is not configured." } satisfies Probe;
 
+  const workerFleet = supabaseUrl
+    ? await probeJson(`${supabaseUrl}/functions/v1/stem-worker-heartbeat`)
+    : { ok: false, error: "Supabase URL is not configured." } satisfies Probe;
+
   const workerHealth = separatorUrl
     ? await probeJson(`${separatorUrl}/agent/health`)
-    : { ok: false, error: "No GPU/CPU worker URL is configured." } satisfies Probe;
+    : { ok: false, error: "No static worker fallback URL is configured." } satisfies Probe;
 
   const workerSystem = separatorUrl && workerHealth.ok
     ? await probeJson(`${separatorUrl}/agent/system`)
-    : { ok: false, error: separatorUrl ? "Worker health probe failed." : "Worker URL is not configured." } satisfies Probe;
+    : { ok: false, error: separatorUrl ? "Static worker health probe failed." : "Static worker fallback is not configured." } satisfies Probe;
 
   const workerMirror = separatorUrl && workerHealth.ok
     ? await probeJson(`${separatorUrl}/agent/mirror/edge`)
-    : { ok: false, error: separatorUrl ? "Worker health probe failed." : "Worker URL is not configured." } satisfies Probe;
+    : { ok: false, error: separatorUrl ? "Static worker health probe failed." : "Static worker fallback is not configured." } satisfies Probe;
 
   const healthData = workerHealth.data ?? {};
   const samAudio = (healthData.samAudio ?? {}) as Record<string, unknown>;
   const systemData = workerSystem.data ?? {};
   const recovery = (systemData.restartRecovery ?? {}) as Record<string, unknown>;
+  const fleetData = workerFleet.data ?? {};
+  const fleetReadyNodes = numberField(fleetData, "readyNodes");
+  const fleetDeepNodes = numberField(fleetData, "deepReadyNodes");
+  const fleetHierarchical = numberField(fleetData, "hierarchicalNodes");
+  const fleetRecovery = numberField(fleetData, "recoveryNodes");
+  const fleetMirror = numberField(fleetData, "cloudMirrorNodes");
+  const fleetSam = numberField(fleetData, "samReadyNodes");
 
-  const controlPlaneReady = Boolean(supabaseUrl && gatewayConfigured && edgeMirror.ok);
-  const computeReady = Boolean(separatorUrl && workerHealth.ok);
-  const deepReady = Boolean(computeReady && samAudio.installed === true && samAudio.cudaAvailable === true);
+  const staticComputeReady = Boolean(separatorUrl && workerHealth.ok);
+  const fleetComputeReady = Boolean(workerFleet.ok && fleetReadyNodes > 0);
+  const controlPlaneReady = Boolean(supabaseUrl && gatewayConfigured && edgeMirror.ok && workerFleet.ok);
+  const computeReady = staticComputeReady || fleetComputeReady;
+  const deepReady = Boolean(fleetDeepNodes > 0 || (staticComputeReady && samAudio.installed === true && samAudio.cudaAvailable === true));
 
   const nextAction = !supabaseUrl
     ? "Configure Supabase for Music OS."
@@ -69,13 +87,13 @@ export async function GET(): Promise<NextResponse> {
       ? "Configure the server-only Stem Director gateway secret."
       : !edgeMirror.ok
         ? "Repair the Supabase stem-worker-mirror Edge gateway."
-        : !separatorUrl
-          ? "Launch the Phase 7 GPU worker and set NEXT_PUBLIC_SEPARATOR_URL on Netlify."
-          : !workerHealth.ok
-            ? "The configured worker URL is unreachable. Check the GPU host, HTTPS port, container health and CORS."
+        : !workerFleet.ok
+          ? "Repair the Stem Worker Mesh heartbeat gateway."
+          : !computeReady
+            ? "Launch a Phase 11 Stem Worker. It will self-register with Worker Mesh; no Netlify worker URL is required."
             : !deepReady
-              ? "Core separation is reachable. Enable CUDA + SAM-Audio to unlock Agentic Deep mode."
-              : "Stem Director control plane and deep compute are ready.";
+              ? "Core workers are available. Add a CUDA + SAM-Audio node to unlock Agentic Deep mode."
+              : "Stem Director control plane and Agentic Deep Worker Mesh are ready.";
 
   return NextResponse.json({
     status: controlPlaneReady && computeReady ? "ready" : controlPlaneReady ? "control-plane-ready" : "degraded",
@@ -84,10 +102,12 @@ export async function GET(): Promise<NextResponse> {
     configuration: {
       supabase: Boolean(supabaseUrl),
       gatewaySecret: gatewayConfigured,
-      separatorUrl: Boolean(separatorUrl)
+      separatorUrl: Boolean(separatorUrl),
+      workerMesh: Boolean(supabaseUrl)
     },
     services: {
       edgeMirror,
+      workerFleet,
       workerHealth,
       workerSystem,
       workerMirror
@@ -96,11 +116,12 @@ export async function GET(): Promise<NextResponse> {
       controlPlaneReady,
       computeReady,
       deepReady,
-      cuda: samAudio.cudaAvailable === true,
-      samAudio: samAudio.installed === true,
-      hierarchicalRouting: systemData.hierarchicalRouting === true,
-      restartRecovery: recovery.enabled === true,
-      cloudMirror: workerMirror.ok
+      cuda: fleetDeepNodes > 0 || samAudio.cudaAvailable === true,
+      samAudio: fleetSam > 0 || samAudio.installed === true,
+      hierarchicalRouting: fleetHierarchical > 0 || systemData.hierarchicalRouting === true,
+      restartRecovery: fleetRecovery > 0 || recovery.enabled === true,
+      cloudMirror: fleetMirror > 0 || workerMirror.ok,
+      dynamicRouting: workerFleet.ok
     }
   }, {
     headers: { "Cache-Control": "no-store" }
