@@ -33,7 +33,7 @@ jobs:
           test -s /tmp/status.html
           echo "Ops page reachable."
 
-      - name: Wait for mesh-aware production readiness
+      - name: Wait for Phase 12 production readiness
         shell: bash
         run: |
           set -euo pipefail
@@ -42,18 +42,20 @@ jobs:
             if curl --fail --silent --show-error --location --max-time 25 \
               "$SITE/api/stem-agent/readiness" -o /tmp/readiness.json; then
               DYNAMIC="$(jq -r '.capabilities.dynamicRouting // false' /tmp/readiness.json)"
+              RECOVERY="$(jq -r '.capabilities.cloudRecovery // false' /tmp/readiness.json)"
               FLEET_OK="$(jq -r '.services.workerFleet.ok // false' /tmp/readiness.json)"
-              if [[ "$DYNAMIC" == "true" && "$FLEET_OK" == "true" ]]; then
+              ARTIFACT_OK="$(jq -r '.services.artifactBroker.ok // false' /tmp/readiness.json)"
+              if [[ "$DYNAMIC" == "true" && "$RECOVERY" == "true" && "$FLEET_OK" == "true" && "$ARTIFACT_OK" == "true" ]]; then
                 ready=true
-                echo "Mesh-aware production bundle detected on attempt $attempt."
+                echo "Phase 12 production bundle detected on attempt $attempt."
                 break
               fi
             fi
-            echo "Netlify has not published the mesh-aware bundle yet ($attempt/18)."
+            echo "Netlify has not published the Phase 12 durable-recovery bundle yet ($attempt/18)."
             sleep 5
           done
           if [[ "$ready" != "true" ]]; then
-            echo "Production never exposed the Phase 11 readiness shape." >&2
+            echo "Production never exposed the Phase 12 readiness shape." >&2
             jq . /tmp/readiness.json 2>/dev/null || true
             exit 1
           fi
@@ -69,8 +71,10 @@ jobs:
           CONTROL="$(jq -r '.capabilities.controlPlaneReady' /tmp/readiness.json)"
           COMPUTE="$(jq -r '.capabilities.computeReady' /tmp/readiness.json)"
           DYNAMIC="$(jq -r '.capabilities.dynamicRouting // false' /tmp/readiness.json)"
+          RECOVERY="$(jq -r '.capabilities.cloudRecovery // false' /tmp/readiness.json)"
           EDGE_OK="$(jq -r '.services.edgeMirror.ok' /tmp/readiness.json)"
           FLEET_OK="$(jq -r '.services.workerFleet.ok // false' /tmp/readiness.json)"
+          ARTIFACT_OK="$(jq -r '.services.artifactBroker.ok // false' /tmp/readiness.json)"
           READY_NODES="$(jq -r '.services.workerFleet.data.readyNodes // 0' /tmp/readiness.json)"
           DEEP_NODES="$(jq -r '.services.workerFleet.data.deepReadyNodes // 0' /tmp/readiness.json)"
           NEXT_ACTION="$(jq -r '.nextAction' /tmp/readiness.json)"
@@ -85,6 +89,10 @@ jobs:
           fi
           if [[ "$FLEET_OK" != "true" || "$DYNAMIC" != "true" ]]; then
             echo "Worker Mesh discovery gateway is not healthy." >&2
+            exit 1
+          fi
+          if [[ "$ARTIFACT_OK" != "true" || "$RECOVERY" != "true" ]]; then
+            echo "Durable source recovery is not healthy." >&2
             exit 1
           fi
           if [[ "$COMPUTE" == "true" && "$STATUS" != "ready" ]]; then
@@ -106,7 +114,9 @@ jobs:
             echo "- Control plane: \`$CONTROL\`"
             echo "- Lifecycle Edge gateway: \`$EDGE_OK\`"
             echo "- Worker Mesh gateway: \`$FLEET_OK\`"
+            echo "- Durable source broker: \`$ARTIFACT_OK\`"
             echo "- Dynamic routing: \`$DYNAMIC\`"
+            echo "- Cross-node recovery: \`$RECOVERY\`"
             echo "- Ready nodes: \`$READY_NODES\`"
             echo "- Deep-ready nodes: \`$DEEP_NODES\`"
             echo "- Compute healthy: \`$COMPUTE\`"
@@ -121,7 +131,7 @@ jobs:
           CUDA="$(jq -r '.capabilities.cuda' /tmp/readiness.json)"
           SAM="$(jq -r '.capabilities.samAudio' /tmp/readiness.json)"
           HIERARCHICAL="$(jq -r '.capabilities.hierarchicalRouting' /tmp/readiness.json)"
-          RECOVERY="$(jq -r '.capabilities.restartRecovery' /tmp/readiness.json)"
+          RESTART="$(jq -r '.capabilities.restartRecovery' /tmp/readiness.json)"
           MIRROR="$(jq -r '.capabilities.cloudMirror' /tmp/readiness.json)"
           {
             echo ""
@@ -130,6 +140,7 @@ jobs:
             echo "- SAM-Audio: \`$SAM\`"
             echo "- Agentic Deep ready: \`$DEEP\`"
             echo "- Hierarchical routing: \`$HIERARCHICAL\`"
-            echo "- Restart recovery: \`$RECOVERY\`"
+            echo "- Same-node restart recovery: \`$RESTART\`"
+            echo "- Cross-node source replay: \`$RECOVERY\`"
             echo "- Cloud lifecycle mirror: \`$MIRROR\`"
           } >> "$GITHUB_STEP_SUMMARY"
