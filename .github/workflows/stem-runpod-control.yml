@@ -56,11 +56,6 @@ on:
         description: "For delete type exactly: TERMINATE STEM POD"
         required: false
         type: string
-      wire_netlify:
-        description: "If NETLIFY_AUTH_TOKEN exists, set NEXT_PUBLIC_SEPARATOR_URL and trigger production build"
-        required: true
-        default: true
-        type: boolean
 
 permissions:
   contents: read
@@ -81,8 +76,6 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       SUPABASE_URL: https://jgnsrjjgeodqruafafav.supabase.co
       CORS_ORIGINS: https://musicdevnc.netlify.app
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      NETLIFY_SITE_ID: e8f3a628-1e29-4b2f-be6c-92ca36d8d033
       FALLBACK_POD_ID: ${{ vars.RUNPOD_STEM_POD_ID }}
 
     steps:
@@ -134,37 +127,45 @@ jobs:
           if [[ "${{ inputs.interruptible }}" == "true" ]]; then ARGS+=(--interruptible); fi
           python scripts/runpod_stem_ctl.py "${ARGS[@]}"
 
-      - name: Wire worker URL into Netlify production
-        if: ${{ inputs.wire_netlify && env.NETLIFY_AUTH_TOKEN != '' && (inputs.operation == 'create' || inputs.operation == 'update' || inputs.operation == 'start' || inputs.operation == 'restart') }}
+      - name: Verify Worker Mesh self-registration
+        if: ${{ inputs.operation == 'create' || inputs.operation == 'update' || inputs.operation == 'start' || inputs.operation == 'restart' }}
         shell: bash
         env:
           WORKER_URL: ${{ steps.control.outputs.worker_url }}
         run: |
           set -euo pipefail
           if [[ -z "$WORKER_URL" ]]; then
-            echo "Worker URL was not produced; refusing to modify Netlify." >&2
+            echo "Worker URL was not produced." >&2
             exit 1
           fi
-          npx -y netlify-cli@latest env:set NEXT_PUBLIC_SEPARATOR_URL "$WORKER_URL" \
-            --site "$NETLIFY_SITE_ID" --context production --force --auth "$NETLIFY_AUTH_TOKEN"
-          npx -y netlify-cli@latest deploy --trigger --prod --site "$NETLIFY_SITE_ID" --auth "$NETLIFY_AUTH_TOKEN"
-          {
-            echo ""
-            echo "## Netlify handoff"
-            echo ""
-            echo "Production NEXT_PUBLIC_SEPARATOR_URL set to \`$WORKER_URL\` and a production build was triggered."
-          } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Netlify handoff instructions
-        if: ${{ inputs.wire_netlify && env.NETLIFY_AUTH_TOKEN == '' && (inputs.operation == 'create' || inputs.operation == 'update' || inputs.operation == 'start' || inputs.operation == 'restart') }}
-        shell: bash
-        env:
-          WORKER_URL: ${{ steps.control.outputs.worker_url }}
-        run: |
+          ok=false
+          for attempt in $(seq 1 12); do
+            if curl --fail --silent --show-error --max-time 10 "$WORKER_URL/agent/mesh/node" -o /tmp/mesh-node.json; then
+              jq . /tmp/mesh-node.json
+              if [[ "$(jq -r '.heartbeat.ok // false' /tmp/mesh-node.json)" == "true" ]]; then
+                ok=true
+                break
+              fi
+            fi
+            echo "Worker heartbeat not registered yet ($attempt/12)."
+            sleep 5
+          done
+
+          if [[ "$ok" != "true" ]]; then
+            echo "Worker became healthy but did not self-register with the Worker Mesh." >&2
+            exit 1
+          fi
+
+          NODE_ID="$(jq -r '.node.nodeId // "unknown"' /tmp/mesh-node.json)"
           {
             echo ""
-            echo "## Netlify handoff required"
+            echo "## Worker Mesh handoff"
             echo ""
-            echo "NETLIFY_AUTH_TOKEN is not configured in GitHub Actions."
-            echo "Set NEXT_PUBLIC_SEPARATOR_URL to \`$WORKER_URL\` on Netlify and redeploy."
+            echo "- Node: \`$NODE_ID\`"
+            echo "- Worker: \`$WORKER_URL\`"
+            echo "- Registration: \`healthy\`"
+            echo "- Netlify redeploy: \`not required\`"
+            echo ""
+            echo "Stem Director now discovers this node dynamically through Supabase Worker Mesh heartbeats."
           } >> "$GITHUB_STEP_SUMMARY"
