@@ -26,7 +26,7 @@ function adminClient() {
   const url = Deno.env.get("SUPABASE_URL");
   const modern = Deno.env.get("SUPABASE_SECRET_KEYS");
   const legacy = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const key = modern ? JSON.parse(modern)["default"] : legacy;
+  const key = legacy || (modern ? JSON.parse(modern)["default"] : undefined);
   if (!url || !key) throw new Error("Supabase admin environment is unavailable");
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
@@ -178,7 +178,6 @@ Deno.serve(async (req: Request) => {
     return json({ ok: true, workerJobId, orchestrationId, status, progress: row.progress, leaseExpiresAt });
   }
 
-  // Legacy direct-upload jobs continue to mirror by worker job id.
   const { error } = await admin.from("music_stem_jobs").upsert(row, { onConflict: "user_id,worker_job_id" });
   if (error) return json({ error: "job mirror failed" }, 500);
   return json({ ok: true, workerJobId, status, progress: row.progress });
