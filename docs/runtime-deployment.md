@@ -37,7 +37,7 @@ The production CUDA image is published through GitHub Actions to GitHub Containe
 
 Never commit runtime credentials.
 
-- `SEPARATOR_GATEWAY_SECRET` is server/worker-only and must match on Netlify and the worker.
+- `SEPARATOR_GATEWAY_SECRET` is server/worker-only and must match on Netlify and the worker. On Netlify it is production-only but scoped to builds, functions, and runtime so the Next.js server bundle and deployed function both receive it without exposing it to browser code.
 - The canonical gateway secret is also kept encrypted in Supabase Vault for controlled recovery/configuration.
 - The Phase 7 GPU worker does not need a Supabase admin/service-role key for lifecycle mirroring.
 - `HF_TOKEN` is worker-only when gated SAM-Audio checkpoints require it.
