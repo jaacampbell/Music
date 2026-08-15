@@ -74,7 +74,7 @@ jobs:
       SEPARATOR_GATEWAY_SECRET: ${{ secrets.SEPARATOR_GATEWAY_SECRET }}
       HF_TOKEN: ${{ secrets.HF_TOKEN }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      SUPABASE_URL: https://uxypcdelqiiopexxnjsn.supabase.co
+      SUPABASE_URL: https://jgnsrjjgeodqruafafav.supabase.co
       CORS_ORIGINS: https://musicdevnc.netlify.app
       FALLBACK_POD_ID: ${{ vars.RUNPOD_STEM_POD_ID }}
 
