@@ -1,0 +1,99 @@
+name: Production Smoke
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-smoke
+  cancel-in-progress: true
+
+jobs:
+  stem-director:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SITE: https://musicdevnc.netlify.app
+
+    steps:
+      - name: Check operations page
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --max-time 20 \
+            "$SITE/stem-agent/status" \
+            -o /tmp/status.html
+          test -s /tmp/status.html
+          echo "Ops page reachable."
+
+      - name: Check production readiness API
+        id: readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --max-time 25 \
+            "$SITE/api/stem-agent/readiness" \
+            -o /tmp/readiness.json
+
+          jq . /tmp/readiness.json
+
+          STATUS="$(jq -r '.status' /tmp/readiness.json)"
+          CONTROL="$(jq -r '.capabilities.controlPlaneReady' /tmp/readiness.json)"
+          COMPUTE="$(jq -r '.capabilities.computeReady' /tmp/readiness.json)"
+          WORKER_CONFIGURED="$(jq -r '.configuration.separatorUrl' /tmp/readiness.json)"
+          EDGE_OK="$(jq -r '.services.edgeMirror.ok' /tmp/readiness.json)"
+          NEXT_ACTION="$(jq -r '.nextAction' /tmp/readiness.json)"
+
+          if [[ "$CONTROL" != "true" ]]; then
+            echo "Stem Director control plane is not ready." >&2
+            exit 1
+          fi
+          if [[ "$EDGE_OK" != "true" ]]; then
+            echo "Supabase lifecycle Edge gateway is not healthy." >&2
+            exit 1
+          fi
+          if [[ "$WORKER_CONFIGURED" == "true" && "$COMPUTE" != "true" ]]; then
+            echo "A production worker URL is configured but the worker is unhealthy." >&2
+            exit 1
+          fi
+          if [[ "$WORKER_CONFIGURED" != "true" && "$STATUS" != "control-plane-ready" ]]; then
+            echo "Expected control-plane-ready while GPU worker URL is unconfigured, got: $STATUS" >&2
+            exit 1
+          fi
+
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+          echo "compute=$COMPUTE" >> "$GITHUB_OUTPUT"
+          echo "worker_configured=$WORKER_CONFIGURED" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## Stem Director production smoke"
+            echo ""
+            echo "- Readiness: \`$STATUS\`"
+            echo "- Control plane: \`$CONTROL\`"
+            echo "- Edge lifecycle gateway: \`$EDGE_OK\`"
+            echo "- Worker URL configured: \`$WORKER_CONFIGURED\`"
+            echo "- Compute healthy: \`$COMPUTE\`"
+            echo "- Next action: $NEXT_ACTION"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Deep-compute readiness note
+        if: ${{ steps.readiness.outputs.worker_configured == 'true' }}
+        shell: bash
+        run: |
+          DEEP="$(jq -r '.capabilities.deepReady' /tmp/readiness.json)"
+          CUDA="$(jq -r '.capabilities.cuda' /tmp/readiness.json)"
+          SAM="$(jq -r '.capabilities.samAudio' /tmp/readiness.json)"
+          {
+            echo ""
+            echo "### Deep compute"
+            echo "- CUDA: \`$CUDA\`"
+            echo "- SAM-Audio: \`$SAM\`"
+            echo "- Agentic Deep ready: \`$DEEP\`"
+          } >> "$GITHUB_STEP_SUMMARY"
