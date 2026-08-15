@@ -23,7 +23,10 @@ function adminClient() {
   const url = Deno.env.get("SUPABASE_URL");
   const modern = Deno.env.get("SUPABASE_SECRET_KEYS");
   const legacy = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const key = modern ? JSON.parse(modern)["default"] : legacy;
+  // supabase-js's existing service-role JWT path is unambiguous. Prefer the
+  // platform-provided legacy service-role key while it exists; only fall back
+  // to the new named secret key when a project has disabled legacy keys.
+  const key = legacy || (modern ? JSON.parse(modern)["default"] : undefined);
   if (!url || !key) throw new Error("Supabase admin environment is unavailable");
   return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
