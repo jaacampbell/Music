@@ -1,0 +1,170 @@
+name: Stem GPU Control
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: "Pod action"
+        required: true
+        default: "status"
+        type: choice
+        options:
+          - status
+          - create
+          - update
+          - start
+          - stop
+          - restart
+          - delete
+      pod_id:
+        description: "Existing RunPod Pod ID (leave blank only for create; RUNPOD_STEM_POD_ID repo variable is fallback)"
+        required: false
+        type: string
+      gpu_types:
+        description: "Comma-separated GPU preference list"
+        required: true
+        default: "NVIDIA GeForce RTX 4090,NVIDIA RTX A6000,NVIDIA RTX A5000,NVIDIA L4"
+        type: string
+      cloud_type:
+        description: "RunPod cloud tier"
+        required: true
+        default: "SECURE"
+        type: choice
+        options:
+          - SECURE
+          - COMMUNITY
+      interruptible:
+        description: "Use interruptible/spot capacity for create"
+        required: true
+        default: false
+        type: boolean
+      volume_gb:
+        description: "Persistent /workspace volume size in GB"
+        required: true
+        default: "80"
+        type: string
+      image:
+        description: "Separator image"
+        required: true
+        default: "ghcr.io/jaacampbell/music-separator:latest"
+        type: string
+      confirm_charges:
+        description: "For create/update/start/restart type exactly: I ACCEPT GPU CHARGES"
+        required: false
+        type: string
+      confirm_termination:
+        description: "For delete type exactly: TERMINATE STEM POD"
+        required: false
+        type: string
+      wire_netlify:
+        description: "If NETLIFY_AUTH_TOKEN exists, set NEXT_PUBLIC_SEPARATOR_URL and trigger production build"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: stem-runpod-control
+  cancel-in-progress: false
+
+jobs:
+  control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      RUNPOD_API_KEY: ${{ secrets.RUNPOD_API_KEY }}
+      SEPARATOR_GATEWAY_SECRET: ${{ secrets.SEPARATOR_GATEWAY_SECRET }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      SUPABASE_URL: https://jgnsrjjgeodqruafafav.supabase.co
+      CORS_ORIGINS: https://musicdevnc.netlify.app
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: e8f3a628-1e29-4b2f-be6c-92ca36d8d033
+      FALLBACK_POD_ID: ${{ vars.RUNPOD_STEM_POD_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate control credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$RUNPOD_API_KEY" ]]; then
+            echo "RUNPOD_API_KEY GitHub Actions secret is required." >&2
+            exit 1
+          fi
+          case "${{ inputs.operation }}" in
+            create|update|start|restart)
+              if [[ -z "$SEPARATOR_GATEWAY_SECRET" ]]; then
+                echo "SEPARATOR_GATEWAY_SECRET GitHub Actions secret is required for production worker actions." >&2
+                exit 1
+              fi
+              ;;
+          esac
+
+      - name: Resolve Pod ID
+        id: pod
+        shell: bash
+        env:
+          INPUT_POD_ID: ${{ inputs.pod_id }}
+        run: |
+          set -euo pipefail
+          POD_ID="$INPUT_POD_ID"
+          if [[ -z "$POD_ID" ]]; then POD_ID="$FALLBACK_POD_ID"; fi
+          echo "id=$POD_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Control Stem Director Pod
+        id: control
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARGS=(
+            --operation "${{ inputs.operation }}"
+            --pod-id "${{ steps.pod.outputs.id }}"
+            --image "${{ inputs.image }}"
+            --gpu-types "${{ inputs.gpu_types }}"
+            --cloud-type "${{ inputs.cloud_type }}"
+            --volume-gb "${{ inputs.volume_gb }}"
+            --confirm-charges "${{ inputs.confirm_charges }}"
+            --confirm-termination "${{ inputs.confirm_termination }}"
+          )
+          if [[ "${{ inputs.interruptible }}" == "true" ]]; then ARGS+=(--interruptible); fi
+          python scripts/runpod_stem_ctl.py "${ARGS[@]}"
+
+      - name: Wire worker URL into Netlify production
+        if: ${{ inputs.wire_netlify && env.NETLIFY_AUTH_TOKEN != '' && (inputs.operation == 'create' || inputs.operation == 'update' || inputs.operation == 'start' || inputs.operation == 'restart') }}
+        shell: bash
+        env:
+          WORKER_URL: ${{ steps.control.outputs.worker_url }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$WORKER_URL" ]]; then
+            echo "Worker URL was not produced; refusing to modify Netlify." >&2
+            exit 1
+          fi
+          npx -y netlify-cli@latest env:set NEXT_PUBLIC_SEPARATOR_URL "$WORKER_URL" \
+            --site "$NETLIFY_SITE_ID" --context production --force --auth "$NETLIFY_AUTH_TOKEN"
+          npx -y netlify-cli@latest deploy --trigger --prod --site "$NETLIFY_SITE_ID" --auth "$NETLIFY_AUTH_TOKEN"
+          {
+            echo ""
+            echo "## Netlify handoff"
+            echo ""
+            echo "Production NEXT_PUBLIC_SEPARATOR_URL set to \`$WORKER_URL\` and a production build was triggered."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Netlify handoff instructions
+        if: ${{ inputs.wire_netlify && env.NETLIFY_AUTH_TOKEN == '' && (inputs.operation == 'create' || inputs.operation == 'update' || inputs.operation == 'start' || inputs.operation == 'restart') }}
+        shell: bash
+        env:
+          WORKER_URL: ${{ steps.control.outputs.worker_url }}
+        run: |
+          {
+            echo ""
+            echo "## Netlify handoff required"
+            echo ""
+            echo "NETLIFY_AUTH_TOKEN is not configured in GitHub Actions."
+            echo "Set NEXT_PUBLIC_SEPARATOR_URL to \`$WORKER_URL\` on Netlify and redeploy."
+          } >> "$GITHUB_STEP_SUMMARY"
