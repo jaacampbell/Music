@@ -46,19 +46,19 @@ export async function GET(): Promise<NextResponse> {
   const edgeMirror = supabaseUrl
     ? await probeJson(`${supabaseUrl}/functions/v1/stem-worker-mirror`)
     : { ok: false, error: "Supabase URL is not configured." } satisfies Probe;
-
   const workerFleet = supabaseUrl
     ? await probeJson(`${supabaseUrl}/functions/v1/stem-worker-heartbeat`)
+    : { ok: false, error: "Supabase URL is not configured." } satisfies Probe;
+  const artifactBroker = supabaseUrl
+    ? await probeJson(`${supabaseUrl}/functions/v1/stem-worker-artifacts`)
     : { ok: false, error: "Supabase URL is not configured." } satisfies Probe;
 
   const workerHealth = separatorUrl
     ? await probeJson(`${separatorUrl}/agent/health`)
     : { ok: false, error: "No static worker fallback URL is configured." } satisfies Probe;
-
   const workerSystem = separatorUrl && workerHealth.ok
     ? await probeJson(`${separatorUrl}/agent/system`)
     : { ok: false, error: separatorUrl ? "Static worker health probe failed." : "Static worker fallback is not configured." } satisfies Probe;
-
   const workerMirror = separatorUrl && workerHealth.ok
     ? await probeJson(`${separatorUrl}/agent/mirror/edge`)
     : { ok: false, error: separatorUrl ? "Static worker health probe failed." : "Static worker fallback is not configured." } satisfies Probe;
@@ -77,9 +77,10 @@ export async function GET(): Promise<NextResponse> {
 
   const staticComputeReady = Boolean(separatorUrl && workerHealth.ok);
   const fleetComputeReady = Boolean(workerFleet.ok && fleetReadyNodes > 0);
-  const controlPlaneReady = Boolean(supabaseUrl && gatewayConfigured && edgeMirror.ok && workerFleet.ok);
+  const controlPlaneReady = Boolean(supabaseUrl && gatewayConfigured && edgeMirror.ok && workerFleet.ok && artifactBroker.ok);
   const computeReady = staticComputeReady || fleetComputeReady;
   const deepReady = Boolean(fleetDeepNodes > 0 || (staticComputeReady && samAudio.installed === true && samAudio.cudaAvailable === true));
+  const cloudRecovery = Boolean(artifactBroker.ok && edgeMirror.ok && workerFleet.ok);
 
   const nextAction = !supabaseUrl
     ? "Configure Supabase for Music OS."
@@ -89,11 +90,13 @@ export async function GET(): Promise<NextResponse> {
         ? "Repair the Supabase stem-worker-mirror Edge gateway."
         : !workerFleet.ok
           ? "Repair the Stem Worker Mesh heartbeat gateway."
-          : !computeReady
-            ? "Launch a Phase 11 Stem Worker. It will self-register with Worker Mesh; no Netlify worker URL is required."
-            : !deepReady
-              ? "Core workers are available. Add a CUDA + SAM-Audio node to unlock Agentic Deep mode."
-              : "Stem Director control plane and Agentic Deep Worker Mesh are ready.";
+          : !artifactBroker.ok
+            ? "Repair the durable stem source artifact broker."
+            : !computeReady
+              ? "Launch a Phase 12 Stem Worker. It will self-register; project sources will remain durable in private cloud storage."
+              : !deepReady
+                ? "Core workers are available. Add a CUDA + SAM-Audio node to unlock Agentic Deep mode."
+                : "Stem Director control plane, durable recovery and Agentic Deep Worker Mesh are ready.";
 
   return NextResponse.json({
     status: controlPlaneReady && computeReady ? "ready" : controlPlaneReady ? "control-plane-ready" : "degraded",
@@ -108,6 +111,7 @@ export async function GET(): Promise<NextResponse> {
     services: {
       edgeMirror,
       workerFleet,
+      artifactBroker,
       workerHealth,
       workerSystem,
       workerMirror
@@ -121,7 +125,8 @@ export async function GET(): Promise<NextResponse> {
       hierarchicalRouting: fleetHierarchical > 0 || systemData.hierarchicalRouting === true,
       restartRecovery: fleetRecovery > 0 || recovery.enabled === true,
       cloudMirror: fleetMirror > 0 || workerMirror.ok,
-      dynamicRouting: workerFleet.ok
+      dynamicRouting: workerFleet.ok,
+      cloudRecovery
     }
   }, {
     headers: { "Cache-Control": "no-store" }
