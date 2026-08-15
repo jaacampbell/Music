@@ -114,7 +114,6 @@ export default function StemAgentPage(): React.JSX.Element {
   const health = mesh.health;
   const online = health?.status === "ok";
   const fleetReady = mesh.readiness?.capabilities.computeReady === true;
-  const deepReady = health?.samAudio.installed === true && health?.samAudio.cudaAvailable === true;
   const groupedTargets = useMemo(() => STEM_GROUPS.map((group) => ({ group, items: STEM_TARGETS.filter((target) => target.group === group) })), []);
   const events = job?.events ?? [];
   const fleetSummary = mesh.readiness?.services?.workerFleet?.data;
