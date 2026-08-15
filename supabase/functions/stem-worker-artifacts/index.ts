@@ -4,9 +4,26 @@ const encoder = new TextEncoder();
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const WORKER_JOB = /^[a-f0-9]{12}$/;
 const NODE_ID = /^[A-Za-z0-9._:-]{1,128}$/;
-const ACTIVE = new Set(["staging", "queued", "running", "recovering"]);
+const ACTIVE = new Set(["staging", "queued", "running", "recovering", "cancelling"]);
 const LEASE_SECONDS = 60;
 const SOURCE_URL_SECONDS = 15 * 60;
+const MAX_ARTIFACTS = 120;
+const ARTIFACT_KIND = new Set(["stem", "manifest", "report", "zip"]);
+
+type WorkerEnvelope = { payload_text?: unknown; signature_hex?: unknown };
+type ArtifactRequest = {
+  relative_path?: unknown;
+  storage_path?: unknown;
+  kind?: unknown;
+  label?: unknown;
+  mime_type?: unknown;
+  byte_size?: unknown;
+  sha256?: unknown;
+  duration_sec?: unknown;
+  family?: unknown;
+  engine?: unknown;
+  metadata?: unknown;
+};
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -28,7 +45,7 @@ function adminClient() {
   const legacy = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const key = legacy || (modern ? JSON.parse(modern)["default"] : undefined);
   if (!url || !key) throw new Error("Supabase admin environment is unavailable");
-  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  return { client: createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } }), url };
 }
 
 async function verifyHmac(payloadText: string, signatureHex: string, derivedKeyHex: string): Promise<boolean> {
@@ -46,10 +63,46 @@ async function verifyHmac(payloadText: string, signatureHex: string, derivedKeyH
   }
 }
 
+function safeRelativePath(raw: unknown): string | null {
+  if (typeof raw !== "string" || raw.length < 1 || raw.length > 320 || raw.startsWith("/")) return null;
+  const normalized = raw.replaceAll("\\", "/").replace(/\/{2,}/g, "/");
+  const parts = normalized.split("/");
+  if (parts.some((part) => !part || part === "." || part === ".." || !/^[A-Za-z0-9._ -]{1,120}$/.test(part))) return null;
+  const ext = parts.at(-1)?.split(".").at(-1)?.toLowerCase();
+  if (!ext || !["wav", "json", "zip"].includes(ext)) return null;
+  return normalized;
+}
+
+function boundedText(value: unknown, max = 200): string | null {
+  return typeof value === "string" && value.trim() ? value.trim().slice(0, max) : null;
+}
+
+function safeNumber(value: unknown): number | null {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+}
+
+function stemAssetKind(kind: string): string {
+  return kind === "stem" ? "stem" : "other";
+}
+
+function projectRefFromUrl(url: string): string | null {
+  try {
+    const host = new URL(url).hostname;
+    const ref = host.split(".")[0];
+    return /^[a-z0-9]{10,40}$/.test(ref) ? ref : null;
+  } catch {
+    return null;
+  }
+}
+
 Deno.serve(async (req: Request) => {
   let admin;
+  let supabaseUrl = "";
   try {
-    admin = adminClient();
+    const configured = adminClient();
+    admin = configured.client;
+    supabaseUrl = configured.url;
   } catch {
     return json({ error: "server configuration unavailable" }, 503);
   }
@@ -68,13 +121,16 @@ Deno.serve(async (req: Request) => {
       configReady: Boolean(config?.value_hash),
       leaseSeconds: LEASE_SECONDS,
       signedSourceSeconds: SOURCE_URL_SECONDS,
+      permanentOutputs: true,
+      uploadProtocol: "tus-resumable-signed-token",
+      directStorageHost: Boolean(projectRefFromUrl(supabaseUrl)),
     });
   }
 
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
   if (!config?.value_hash) return json({ error: "worker authentication is not configured" }, 503);
 
-  const envelope = await req.json().catch(() => null) as { payload_text?: unknown; signature_hex?: unknown } | null;
+  const envelope = await req.json().catch(() => null) as WorkerEnvelope | null;
   if (!envelope || typeof envelope.payload_text !== "string" || typeof envelope.signature_hex !== "string") {
     return json({ error: "invalid payload envelope" }, 400);
   }
@@ -100,8 +156,8 @@ Deno.serve(async (req: Request) => {
   if (!Number.isFinite(sentAt) || Math.abs(Math.floor(Date.now() / 1000) - sentAt) > 300) {
     return json({ error: "expired worker payload" }, 401);
   }
-  if (action !== "claim-source" || !UUID.test(orchestrationId) || !UUID.test(projectId) || !UUID.test(userId) || !NODE_ID.test(nodeId) || !WORKER_JOB.test(workerJobId)) {
-    return json({ error: "invalid artifact request" }, 400);
+  if (!UUID.test(orchestrationId) || !UUID.test(projectId) || !UUID.test(userId) || !NODE_ID.test(nodeId) || !WORKER_JOB.test(workerJobId)) {
+    return json({ error: "invalid artifact request identity" }, 400);
   }
 
   const cutoff = new Date(Date.now() - 60_000).toISOString();
@@ -117,82 +173,201 @@ Deno.serve(async (req: Request) => {
 
   const { data: job } = await admin
     .from("music_stem_jobs")
-    .select("id,orchestration_id,project_id,user_id,status,source_storage_path,source_original_name,source_mime_type,source_byte_size,worker_node_id,worker_lease_expires_at,lease_version,recovery_generation")
+    .select("id,orchestration_id,project_id,user_id,status,source_storage_path,source_original_name,source_mime_type,source_byte_size,worker_job_id,worker_node_id,worker_lease_expires_at,lease_version,recovery_generation,result_status,result_storage_prefix")
     .eq("orchestration_id", orchestrationId)
     .eq("project_id", projectId)
     .eq("user_id", userId)
     .maybeSingle();
+  if (!job) return json({ error: "cloud orchestration was not found" }, 404);
 
-  if (!job || !ACTIVE.has(job.status) || !job.source_storage_path) {
-    return json({ error: "recoverable cloud job was not found" }, 404);
-  }
-
-  const expectedPrefix = `${userId}/${projectId}/`;
-  if (!String(job.source_storage_path).startsWith(expectedPrefix)) {
+  const expectedProjectPrefix = `${userId}/${projectId}/`;
+  if (job.source_storage_path && !String(job.source_storage_path).startsWith(expectedProjectPrefix)) {
     return json({ error: "source ownership boundary mismatch" }, 403);
   }
 
-  const leaseUntil = job.worker_lease_expires_at ? Date.parse(job.worker_lease_expires_at) : 0;
-  const leaseActive = Number.isFinite(leaseUntil) && leaseUntil > Date.now();
-  const changingNode = Boolean(job.worker_node_id && job.worker_node_id !== nodeId);
-  if (changingNode && leaseActive) {
+  if (action === "claim-source") {
+    if (!ACTIVE.has(job.status) || !job.source_storage_path) {
+      return json({ error: "recoverable cloud job was not found" }, 404);
+    }
+    const leaseUntil = job.worker_lease_expires_at ? Date.parse(job.worker_lease_expires_at) : 0;
+    const leaseActive = Number.isFinite(leaseUntil) && leaseUntil > Date.now();
+    const changingNode = Boolean(job.worker_node_id && job.worker_node_id !== nodeId);
+    if (changingNode && leaseActive) {
+      return json({ error: "another worker still owns the execution lease", code: "LEASE_ACTIVE", leaseExpiresAt: job.worker_lease_expires_at }, 409);
+    }
+
+    const nextLeaseVersion = Number(job.lease_version ?? 0) + 1;
+    const nextGeneration = Number(job.recovery_generation ?? 0) + (changingNode ? 1 : 0);
+    const leaseExpiresAt = new Date(Date.now() + LEASE_SECONDS * 1000).toISOString();
+    const { data: claimed, error: claimError } = await admin
+      .from("music_stem_jobs")
+      .update({
+        worker_job_id: workerJobId,
+        worker_node_id: nodeId,
+        worker_origin: node.origin,
+        worker_lease_expires_at: leaseExpiresAt,
+        lease_version: nextLeaseVersion,
+        recovery_generation: nextGeneration,
+        recovered_from_node: changingNode ? job.worker_node_id : null,
+        last_recovery_at: changingNode ? new Date().toISOString() : null,
+        status: changingNode ? "recovering" : "queued",
+        stage: changingNode ? "cross-node-recovery" : "cloud-source-claim",
+      })
+      .eq("id", job.id)
+      .eq("lease_version", Number(job.lease_version ?? 0))
+      .select("id")
+      .maybeSingle();
+    if (claimError || !claimed) return json({ error: "execution lease changed while claiming source", code: "LEASE_RACE" }, 409);
+
+    const { data: signed, error: signedError } = await admin.storage.from("music-assets").createSignedUrl(job.source_storage_path, SOURCE_URL_SECONDS);
+    if (signedError || !signed?.signedUrl) return json({ error: "could not authorize durable source download" }, 500);
+
     return json({
-      error: "another worker still owns the execution lease",
-      code: "LEASE_ACTIVE",
-      leaseExpiresAt: job.worker_lease_expires_at,
-    }, 409);
+      ok: true,
+      action,
+      orchestrationId,
+      projectId,
+      userId,
+      workerJobId,
+      nodeId,
+      workerOrigin: node.origin,
+      sourcePath: job.source_storage_path,
+      sourceName: job.source_original_name || "source-audio",
+      sourceMimeType: job.source_mime_type || null,
+      sourceByteSize: job.source_byte_size || null,
+      signedUrl: signed.signedUrl,
+      signedUrlExpiresIn: SOURCE_URL_SECONDS,
+      leaseExpiresAt,
+      recoveryGeneration: nextGeneration,
+      recoveredFromNode: changingNode ? job.worker_node_id : null,
+    });
   }
 
-  const nextLeaseVersion = Number(job.lease_version ?? 0) + 1;
-  const nextGeneration = Number(job.recovery_generation ?? 0) + (changingNode ? 1 : 0);
-  const leaseExpiresAt = new Date(Date.now() + LEASE_SECONDS * 1000).toISOString();
-  const patch = {
-    worker_job_id: workerJobId,
-    worker_node_id: nodeId,
-    worker_origin: node.origin,
-    worker_lease_expires_at: leaseExpiresAt,
-    lease_version: nextLeaseVersion,
-    recovery_generation: nextGeneration,
-    recovered_from_node: changingNode ? job.worker_node_id : null,
-    last_recovery_at: changingNode ? new Date().toISOString() : null,
-    status: changingNode ? "recovering" : "queued",
-    stage: changingNode ? "cross-node-recovery" : "cloud-source-claim",
-  };
-
-  const { data: claimed, error: claimError } = await admin
-    .from("music_stem_jobs")
-    .update(patch)
-    .eq("id", job.id)
-    .eq("lease_version", Number(job.lease_version ?? 0))
-    .select("id")
-    .maybeSingle();
-  if (claimError || !claimed) {
-    return json({ error: "execution lease changed while claiming source", code: "LEASE_RACE" }, 409);
+  const leaseUntil = job.worker_lease_expires_at ? Date.parse(job.worker_lease_expires_at) : 0;
+  if (job.worker_node_id !== nodeId || job.worker_job_id !== workerJobId || !Number.isFinite(leaseUntil) || leaseUntil <= Date.now()) {
+    return json({ error: "worker no longer owns a live orchestration lease", code: "LEASE_NOT_OWNED" }, 409);
   }
 
-  const { data: signed, error: signedError } = await admin.storage
-    .from("music-assets")
-    .createSignedUrl(job.source_storage_path, SOURCE_URL_SECONDS);
-  if (signedError || !signed?.signedUrl) {
-    return json({ error: "could not authorize durable source download" }, 500);
+  const generation = Math.max(0, Number(job.recovery_generation ?? 0));
+  const outputPrefix = `${userId}/${projectId}/stem-results/${orchestrationId}/g${generation}/${workerJobId}`;
+  const artifacts = Array.isArray(payload.artifacts) ? payload.artifacts as ArtifactRequest[] : [];
+  if (!artifacts.length || artifacts.length > MAX_ARTIFACTS) return json({ error: "invalid artifact list" }, 400);
+
+  if (action === "create-output-slots") {
+    const ref = projectRefFromUrl(supabaseUrl);
+    if (!ref) return json({ error: "direct storage hostname could not be derived" }, 503);
+    const slots = [] as Array<Record<string, unknown>>;
+    const seen = new Set<string>();
+    for (const artifact of artifacts) {
+      const relativePath = safeRelativePath(artifact.relative_path);
+      const kind = String(artifact.kind ?? "");
+      if (!relativePath || !ARTIFACT_KIND.has(kind) || seen.has(relativePath)) return json({ error: "invalid or duplicate output artifact" }, 400);
+      seen.add(relativePath);
+      const storagePath = `${outputPrefix}/${relativePath}`;
+      const { data: signed, error } = await admin.storage.from("music-assets").createSignedUploadUrl(storagePath, { upsert: false });
+      if (error || !signed?.token) return json({ error: `could not authorize output upload for ${relativePath}` }, 500);
+      slots.push({
+        relativePath,
+        kind,
+        storagePath,
+        token: signed.token,
+        tusEndpoint: `https://${ref}.storage.supabase.co/storage/v1/upload/resumable`,
+      });
+    }
+    await admin.from("music_stem_jobs").update({
+      result_status: "persisting",
+      result_storage_prefix: outputPrefix,
+      result_error: null,
+    }).eq("id", job.id);
+    return json({ ok: true, action, orchestrationId, workerJobId, outputPrefix, recoveryGeneration: generation, slots });
   }
 
-  return json({
-    ok: true,
-    orchestrationId,
-    projectId,
-    userId,
-    workerJobId,
-    nodeId,
-    workerOrigin: node.origin,
-    sourcePath: job.source_storage_path,
-    sourceName: job.source_original_name || "source-audio",
-    sourceMimeType: job.source_mime_type || null,
-    sourceByteSize: job.source_byte_size || null,
-    signedUrl: signed.signedUrl,
-    signedUrlExpiresIn: SOURCE_URL_SECONDS,
-    leaseExpiresAt,
-    recoveryGeneration: nextGeneration,
-    recoveredFromNode: changingNode ? job.worker_node_id : null,
-  });
+  if (action === "commit-outputs") {
+    const verified: Array<Record<string, unknown>> = [];
+    let totalBytes = 0;
+    let manifestPath: string | null = null;
+    let reportPath: string | null = null;
+    let zipPath: string | null = null;
+
+    for (const artifact of artifacts) {
+      const storagePath = typeof artifact.storage_path === "string" ? artifact.storage_path : "";
+      const kind = String(artifact.kind ?? "");
+      if (!storagePath.startsWith(`${outputPrefix}/`) || !ARTIFACT_KIND.has(kind)) return json({ error: "output artifact escaped orchestration prefix" }, 403);
+      const { data: info, error: infoError } = await admin.storage.from("music-assets").info(storagePath);
+      if (infoError || !info) return json({ error: `output object is missing: ${storagePath}` }, 409);
+      const actualSize = Number(info.size ?? 0);
+      if (!Number.isFinite(actualSize) || actualSize <= 0) return json({ error: `output object is empty: ${storagePath}` }, 409);
+      const declaredSize = safeNumber(artifact.byte_size);
+      if (declaredSize !== null && actualSize !== declaredSize) return json({ error: `output size mismatch: ${storagePath}` }, 409);
+      totalBytes += actualSize;
+      const item = {
+        kind,
+        storagePath,
+        label: boundedText(artifact.label) ?? storagePath.split("/").at(-1),
+        mimeType: boundedText(artifact.mime_type, 120) ?? info.contentType ?? null,
+        byteSize: actualSize,
+        sha256: boundedText(artifact.sha256, 64),
+        durationSec: safeNumber(artifact.duration_sec),
+        family: boundedText(artifact.family, 80),
+        engine: boundedText(artifact.engine, 120),
+        metadata: artifact.metadata && typeof artifact.metadata === "object" ? artifact.metadata : {},
+      };
+      verified.push(item);
+      if (kind === "manifest") manifestPath = storagePath;
+      if (kind === "report") reportPath = storagePath;
+      if (kind === "zip") zipPath = storagePath;
+    }
+
+    if (!manifestPath || !reportPath || !zipPath || !verified.some((item) => item.kind === "stem")) {
+      return json({ error: "permanent result set must include stems, manifest, report and zip" }, 409);
+    }
+
+    for (const item of verified) {
+      const storagePath = String(item.storagePath);
+      const { data: existing } = await admin.from("music_assets").select("id").eq("orchestration_id", orchestrationId).eq("storage_path", storagePath).maybeSingle();
+      const row = {
+        project_id: projectId,
+        user_id: userId,
+        kind: stemAssetKind(String(item.kind)),
+        label: String(item.label ?? storagePath.split("/").at(-1) ?? "Stem result"),
+        storage_path: storagePath,
+        original_name: storagePath.split("/").at(-1) ?? "artifact",
+        mime_type: item.mimeType,
+        byte_size: item.byteSize,
+        duration_sec: item.durationSec,
+        orchestration_id: orchestrationId,
+        worker_job_id: workerJobId,
+        sha256: item.sha256,
+        metadata: {
+          artifactKind: item.kind,
+          recoveryGeneration: generation,
+          workerNodeId: nodeId,
+          family: item.family,
+          engine: item.engine,
+          ...(item.metadata as Record<string, unknown>),
+        },
+      };
+      if (existing?.id) await admin.from("music_assets").update(row).eq("id", existing.id);
+      else await admin.from("music_assets").insert(row);
+    }
+
+    const persistedAt = new Date().toISOString();
+    const { error: jobError } = await admin.from("music_stem_jobs").update({
+      result_status: "complete",
+      result_storage_prefix: outputPrefix,
+      result_manifest_path: manifestPath,
+      result_report_path: reportPath,
+      result_zip_path: zipPath,
+      result_artifacts: verified,
+      result_artifact_count: verified.length,
+      result_bytes: totalBytes,
+      results_persisted_at: persistedAt,
+      result_error: null,
+    }).eq("id", job.id);
+    if (jobError) return json({ error: "result commit metadata failed" }, 500);
+
+    return json({ ok: true, action, orchestrationId, workerJobId, outputPrefix, artifactCount: verified.length, bytes: totalBytes, persistedAt, artifacts: verified });
+  }
+
+  return json({ error: "unsupported artifact action" }, 400);
 });
