@@ -89,7 +89,8 @@ export function useRealStemPlayer(): RealStemPlayer {
 
         const loaded = await Promise.all(
           incoming.map(async (stem) => {
-            const res = await fetch(baseUrl + stem.url);
+            const url = /^https?:\/\//i.test(stem.url) ? stem.url : baseUrl + stem.url;
+            const res = await fetch(url);
             if (!res.ok) throw new Error(`fetch ${stem.name} failed (${res.status})`);
             const buf = await ctx.decodeAudioData(await res.arrayBuffer());
             const gain = ctx.createGain();
@@ -166,9 +167,7 @@ export function useRealStemPlayer(): RealStemPlayer {
     );
   }, []);
   const acapella = useCallback(() => {
-    setStems((prev) =>
-      prev.map((s) => ({ ...s, muted: false, solo: s.name === "vocals" }))
-    );
+    setStems((prev) => prev.map((s) => ({ ...s, muted: false, solo: s.name === "vocals" })));
   }, []);
   const reset = useCallback(() => {
     setStems((prev) => prev.map((s) => ({ ...s, muted: false, solo: false, gain: 0.9 })));
