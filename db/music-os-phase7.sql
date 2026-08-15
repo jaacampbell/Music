@@ -22,6 +22,12 @@ alter table public.music_worker_config enable row level security;
 revoke all on public.music_worker_config from anon, authenticated;
 grant select on public.music_worker_config to service_role;
 
+drop policy if exists "deny_browser_access" on public.music_worker_config;
+create policy "deny_browser_access" on public.music_worker_config
+for all to anon, authenticated
+using (false)
+with check (false);
+
 insert into public.music_worker_config (key, value_hash, description)
 select
   'separator_gateway_hmac_key',
@@ -42,4 +48,4 @@ on conflict (key) do update set
 revoke execute on function public.music_stem_worker_mirror(text, text) from anon, authenticated;
 
 comment on table public.music_worker_config is
-  'Server-only configuration for Music OS workers. No browser roles have table privileges.';
+  'Server-only configuration for Music OS workers. Browser roles are explicitly denied and have no table privileges.';
