@@ -17,7 +17,7 @@ type Readiness = {
   checkedAt: string;
   nextAction: string;
   configuration: { supabase: boolean; gatewaySecret: boolean; separatorUrl: boolean; workerMesh: boolean };
-  services: { edgeMirror: Probe; workerFleet: Probe; workerHealth: Probe; workerSystem: Probe; workerMirror: Probe };
+  services: { edgeMirror: Probe; workerFleet: Probe; artifactBroker: Probe; workerHealth: Probe; workerSystem: Probe; workerMirror: Probe };
   capabilities: {
     controlPlaneReady: boolean;
     computeReady: boolean;
@@ -28,12 +28,14 @@ type Readiness = {
     restartRecovery: boolean;
     cloudMirror: boolean;
     dynamicRouting: boolean;
+    cloudRecovery: boolean;
   };
 };
 
 const labels: Record<keyof Readiness["services"], [string, string]> = {
-  edgeMirror: ["Cloud lifecycle gateway", "Supabase Edge Function that receives signed worker job updates."],
+  edgeMirror: ["Cloud lifecycle gateway", "Supabase Edge Function that receives signed worker job updates and renews active execution leases."],
   workerFleet: ["Worker Mesh registry", "Live heartbeats, capacity and Deep compatibility for all active compute nodes."],
+  artifactBroker: ["Durable source broker", "HMAC-authorized execution leases and short-lived private source URLs for cross-node replay."],
   workerHealth: ["Static fallback worker", "Optional rollback worker URL; dynamic mesh routing does not require it."],
   workerSystem: ["Static agent orchestration", "Queue and recovery telemetry for the optional static fallback worker."],
   workerMirror: ["Static worker → cloud mirror", "Lifecycle mirror diagnostics for the optional static fallback worker."],
@@ -64,10 +66,11 @@ export default function StemAgentStatusPage(): React.JSX.Element {
   const capabilities = data ? [
     ["Control plane", data.capabilities.controlPlaneReady, "Netlify gateway + Supabase Edge services"],
     ["Dynamic routing", data.capabilities.dynamicRouting, "Worker Mesh discovery instead of a build-time URL"],
+    ["Durable recovery", data.capabilities.cloudRecovery, "Private source + lease-controlled cross-node replay"],
     ["Compute", data.capabilities.computeReady, "At least one fresh worker with available capacity"],
     ["Agentic Deep", data.capabilities.deepReady, "At least one CUDA + SAM-Audio worker"],
     ["Hierarchical routing", data.capabilities.hierarchicalRouting, "Deep targets route through Core parent stems"],
-    ["Restart recovery", data.capabilities.restartRecovery, "Persistent jobs can recover after worker restart"],
+    ["Restart recovery", data.capabilities.restartRecovery, "Persistent jobs can recover after same-node restart"],
     ["Cloud mirror", data.capabilities.cloudMirror, "Worker lifecycle sync into Music OS"],
   ] as const : [];
 
@@ -79,7 +82,7 @@ export default function StemAgentStatusPage(): React.JSX.Element {
       </header>
 
       <section className="opsHero">
-        <div><p className="opsEyebrow">Production control plane · Worker Mesh</p><h1>Know exactly what is <span>ready.</span></h1><p>Independent diagnostics for cloud orchestration, secure lifecycle mirroring, fleet discovery and GPU compute—so “offline” always has a reason and a next action.</p></div>
+        <div><p className="opsEyebrow">Production control plane · Resilient Worker Mesh</p><h1>Know exactly what is <span>ready.</span></h1><p>Independent diagnostics for cloud orchestration, durable source recovery, fleet discovery and GPU compute—so a failed node does not have to become a lost job.</p></div>
         <button className="opsRefresh" onClick={() => void refresh()} disabled={loading}>{loading ? "Checking…" : "Run diagnostics"}</button>
       </section>
 
@@ -109,8 +112,8 @@ export default function StemAgentStatusPage(): React.JSX.Element {
         </section>
 
         <section className="opsConfig">
-          <div><p className="opsEyebrow">Configuration boundary</p><h2>Dynamic workers do not require a frontend redeploy.</h2><p>The diagnostic API never returns gateway/model credentials. Workers self-register through signed heartbeats, and authenticated job sessions receive only the selected public worker origin plus a short-lived project-scoped token.</p></div>
-          <div className="configChecks"><span className={data.configuration.supabase ? "yes" : "no"}>Supabase</span><span className={data.configuration.gatewaySecret ? "yes" : "no"}>Gateway secret</span><span className={data.configuration.workerMesh ? "yes" : "no"}>Worker Mesh</span><span className={data.configuration.separatorUrl ? "yes" : "no"}>Static fallback</span></div>
+          <div><p className="opsEyebrow">Configuration boundary</p><h2>The project source lives beyond any one GPU.</h2><p>Project-linked runs stage source audio in private Supabase Storage before compute. Workers receive only a short-lived signed source URL after a lease claim; gateway/model credentials and permanent storage credentials remain inaccessible to browser code and GPU hosts.</p></div>
+          <div className="configChecks"><span className={data.configuration.supabase ? "yes" : "no"}>Supabase</span><span className={data.configuration.gatewaySecret ? "yes" : "no"}>Gateway secret</span><span className={data.configuration.workerMesh ? "yes" : "no"}>Worker Mesh</span><span className={data.capabilities.cloudRecovery ? "yes" : "no"}>Cloud recovery</span><span className={data.configuration.separatorUrl ? "yes" : "no"}>Static fallback</span></div>
         </section>
       </>}
     </main>
