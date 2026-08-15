@@ -34,6 +34,30 @@ function signWorkerToken(secret: string, userId: string, projectId?: string | nu
   return `${encoded}.${signature}`;
 }
 
+async function verifyProjectOwnership(
+  config: { url: string; key: string },
+  accessToken: string,
+  userId: string,
+  projectId: string
+): Promise<boolean> {
+  const query = new URLSearchParams({
+    select: "id",
+    id: `eq.${projectId}`,
+    user_id: `eq.${userId}`,
+    limit: "1"
+  });
+  const response = await fetch(`${config.url}/rest/v1/music_projects?${query.toString()}`, {
+    headers: {
+      apikey: config.key,
+      Authorization: `Bearer ${accessToken}`
+    },
+    cache: "no-store"
+  });
+  if (!response.ok) return false;
+  const rows = (await response.json().catch(() => [])) as Array<{ id?: string }>;
+  return rows.some((row) => row.id === projectId);
+}
+
 export async function POST(request: Request): Promise<NextResponse> {
   const secret = process.env.SEPARATOR_GATEWAY_SECRET?.trim();
   if (!secret) return NextResponse.json({ error: "Stem Agent gateway is not configured." }, { status: 503 });
@@ -55,6 +79,13 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   const user = (await verify.json()) as { id?: string };
   if (!user.id) return NextResponse.json({ error: "Verified session did not include a user." }, { status: 401 });
+
+  if (parsed.data.projectId) {
+    const ownsProject = await verifyProjectOwnership(config, parsed.data.accessToken, user.id, parsed.data.projectId);
+    if (!ownsProject) {
+      return NextResponse.json({ error: "The selected Music OS project does not belong to this account." }, { status: 403 });
+    }
+  }
 
   return NextResponse.json({
     token: signWorkerToken(secret, user.id, parsed.data.projectId),
