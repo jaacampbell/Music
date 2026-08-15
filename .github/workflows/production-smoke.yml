@@ -47,8 +47,11 @@ jobs:
           STATUS="$(jq -r '.status' /tmp/readiness.json)"
           CONTROL="$(jq -r '.capabilities.controlPlaneReady' /tmp/readiness.json)"
           COMPUTE="$(jq -r '.capabilities.computeReady' /tmp/readiness.json)"
-          WORKER_CONFIGURED="$(jq -r '.configuration.separatorUrl' /tmp/readiness.json)"
+          DYNAMIC="$(jq -r '.capabilities.dynamicRouting // false' /tmp/readiness.json)"
           EDGE_OK="$(jq -r '.services.edgeMirror.ok' /tmp/readiness.json)"
+          FLEET_OK="$(jq -r '.services.workerFleet.ok // false' /tmp/readiness.json)"
+          READY_NODES="$(jq -r '.services.workerFleet.data.readyNodes // 0' /tmp/readiness.json)"
+          DEEP_NODES="$(jq -r '.services.workerFleet.data.deepReadyNodes // 0' /tmp/readiness.json)"
           NEXT_ACTION="$(jq -r '.nextAction' /tmp/readiness.json)"
 
           if [[ "$CONTROL" != "true" ]]; then
@@ -59,41 +62,53 @@ jobs:
             echo "Supabase lifecycle Edge gateway is not healthy." >&2
             exit 1
           fi
-          if [[ "$WORKER_CONFIGURED" == "true" && "$COMPUTE" != "true" ]]; then
-            echo "A production worker URL is configured but the worker is unhealthy." >&2
+          if [[ "$FLEET_OK" != "true" || "$DYNAMIC" != "true" ]]; then
+            echo "Worker Mesh discovery gateway is not healthy." >&2
             exit 1
           fi
-          if [[ "$WORKER_CONFIGURED" != "true" && "$STATUS" != "control-plane-ready" ]]; then
-            echo "Expected control-plane-ready while GPU worker URL is unconfigured, got: $STATUS" >&2
+          if [[ "$COMPUTE" == "true" && "$STATUS" != "ready" ]]; then
+            echo "Compute is available but production readiness is not ready: $STATUS" >&2
+            exit 1
+          fi
+          if [[ "$COMPUTE" != "true" && "$STATUS" != "control-plane-ready" ]]; then
+            echo "Expected control-plane-ready while no worker has capacity, got: $STATUS" >&2
             exit 1
           fi
 
           echo "status=$STATUS" >> "$GITHUB_OUTPUT"
           echo "compute=$COMPUTE" >> "$GITHUB_OUTPUT"
-          echo "worker_configured=$WORKER_CONFIGURED" >> "$GITHUB_OUTPUT"
 
           {
             echo "## Stem Director production smoke"
             echo ""
             echo "- Readiness: \`$STATUS\`"
             echo "- Control plane: \`$CONTROL\`"
-            echo "- Edge lifecycle gateway: \`$EDGE_OK\`"
-            echo "- Worker URL configured: \`$WORKER_CONFIGURED\`"
+            echo "- Lifecycle Edge gateway: \`$EDGE_OK\`"
+            echo "- Worker Mesh gateway: \`$FLEET_OK\`"
+            echo "- Dynamic routing: \`$DYNAMIC\`"
+            echo "- Ready nodes: \`$READY_NODES\`"
+            echo "- Deep-ready nodes: \`$DEEP_NODES\`"
             echo "- Compute healthy: \`$COMPUTE\`"
             echo "- Next action: $NEXT_ACTION"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Deep-compute readiness note
-        if: ${{ steps.readiness.outputs.worker_configured == 'true' }}
+        if: ${{ steps.readiness.outputs.compute == 'true' }}
         shell: bash
         run: |
           DEEP="$(jq -r '.capabilities.deepReady' /tmp/readiness.json)"
           CUDA="$(jq -r '.capabilities.cuda' /tmp/readiness.json)"
           SAM="$(jq -r '.capabilities.samAudio' /tmp/readiness.json)"
+          HIERARCHICAL="$(jq -r '.capabilities.hierarchicalRouting' /tmp/readiness.json)"
+          RECOVERY="$(jq -r '.capabilities.restartRecovery' /tmp/readiness.json)"
+          MIRROR="$(jq -r '.capabilities.cloudMirror' /tmp/readiness.json)"
           {
             echo ""
-            echo "### Deep compute"
+            echo "### Compute capabilities"
             echo "- CUDA: \`$CUDA\`"
             echo "- SAM-Audio: \`$SAM\`"
             echo "- Agentic Deep ready: \`$DEEP\`"
+            echo "- Hierarchical routing: \`$HIERARCHICAL\`"
+            echo "- Restart recovery: \`$RECOVERY\`"
+            echo "- Cloud lifecycle mirror: \`$MIRROR\`"
           } >> "$GITHUB_STEP_SUMMARY"
