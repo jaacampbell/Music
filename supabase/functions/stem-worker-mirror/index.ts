@@ -4,8 +4,8 @@ const encoder = new TextEncoder();
 const WORKER_ID = /^[a-f0-9]{12}$/;
 const NODE_ID = /^[A-Za-z0-9._:-]{1,128}$/;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const STATUSES = new Set(["queued", "running", "cancelling", "completed", "failed", "cancelled"]);
-const ACTIVE = new Set(["queued", "running", "cancelling"]);
+const STATUSES = new Set(["queued", "running", "recovering", "cancelling", "completed", "failed", "cancelled"]);
+const ACTIVE = new Set(["queued", "running", "recovering", "cancelling"]);
 const LEASE_SECONDS = 60;
 
 function json(data: unknown, status = 200): Response {
