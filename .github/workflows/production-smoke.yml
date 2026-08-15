@@ -132,6 +132,7 @@ jobs:
           SAM="$(jq -r '.capabilities.samAudio' /tmp/readiness.json)"
           HIERARCHICAL="$(jq -r '.capabilities.hierarchicalRouting' /tmp/readiness.json)"
           RESTART="$(jq -r '.capabilities.restartRecovery' /tmp/readiness.json)"
+          CROSS_NODE="$(jq -r '.capabilities.cloudRecovery' /tmp/readiness.json)"
           MIRROR="$(jq -r '.capabilities.cloudMirror' /tmp/readiness.json)"
           {
             echo ""
@@ -141,6 +142,6 @@ jobs:
             echo "- Agentic Deep ready: \`$DEEP\`"
             echo "- Hierarchical routing: \`$HIERARCHICAL\`"
             echo "- Same-node restart recovery: \`$RESTART\`"
-            echo "- Cross-node source replay: \`$RECOVERY\`"
+            echo "- Cross-node source replay: \`$CROSS_NODE\`"
             echo "- Cloud lifecycle mirror: \`$MIRROR\`"
           } >> "$GITHUB_STEP_SUMMARY"
