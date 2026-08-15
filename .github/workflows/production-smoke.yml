@@ -33,15 +33,36 @@ jobs:
           test -s /tmp/status.html
           echo "Ops page reachable."
 
+      - name: Wait for mesh-aware production readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          ready=false
+          for attempt in $(seq 1 18); do
+            if curl --fail --silent --show-error --location --max-time 25 \
+              "$SITE/api/stem-agent/readiness" -o /tmp/readiness.json; then
+              DYNAMIC="$(jq -r '.capabilities.dynamicRouting // false' /tmp/readiness.json)"
+              FLEET_OK="$(jq -r '.services.workerFleet.ok // false' /tmp/readiness.json)"
+              if [[ "$DYNAMIC" == "true" && "$FLEET_OK" == "true" ]]; then
+                ready=true
+                echo "Mesh-aware production bundle detected on attempt $attempt."
+                break
+              fi
+            fi
+            echo "Netlify has not published the mesh-aware bundle yet ($attempt/18)."
+            sleep 5
+          done
+          if [[ "$ready" != "true" ]]; then
+            echo "Production never exposed the Phase 11 readiness shape." >&2
+            jq . /tmp/readiness.json 2>/dev/null || true
+            exit 1
+          fi
+
       - name: Check production readiness API
         id: readiness
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --silent --show-error --location --max-time 25 \
-            "$SITE/api/stem-agent/readiness" \
-            -o /tmp/readiness.json
-
           jq . /tmp/readiness.json
 
           STATUS="$(jq -r '.status' /tmp/readiness.json)"
