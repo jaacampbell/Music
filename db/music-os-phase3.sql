@@ -69,3 +69,18 @@ begin
     revoke execute on function public.rls_auto_enable() from public, anon, authenticated;
   end if;
 end $$;
+
+-- Foreign-key/RLS support indexes. These keep owner-scoped project queries and
+-- cascade/delete checks efficient as the catalog grows.
+create index if not exists music_versions_user_idx on public.music_versions(user_id);
+create index if not exists music_assets_user_idx on public.music_assets(user_id);
+create index if not exists music_waveform_comments_project_idx on public.music_waveform_comments(project_id);
+create index if not exists music_waveform_comments_user_idx on public.music_waveform_comments(user_id);
+create index if not exists music_tasks_user_idx on public.music_tasks(user_id);
+create index if not exists music_comparisons_project_idx on public.music_comparisons(project_id);
+create index if not exists music_comparisons_user_idx on public.music_comparisons(user_id);
+create index if not exists music_comparisons_version_a_idx on public.music_comparisons(version_a_id);
+create index if not exists music_comparisons_version_b_idx on public.music_comparisons(version_b_id);
+create index if not exists music_releases_user_idx on public.music_releases(user_id);
+create index if not exists music_project_history_user_idx on public.music_project_history(user_id);
+create index if not exists music_agent_messages_user_idx on public.music_agent_messages(user_id);
