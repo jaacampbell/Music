@@ -55,3 +55,17 @@ for update to authenticated using ((select auth.uid()) = user_id)
 with check ((select auth.uid()) = user_id);
 create policy "owner_delete" on public.music_agent_messages
 for delete to authenticated using ((select auth.uid()) = user_id);
+
+-- Production security hardening.
+-- Pin the trigger function search path so it cannot resolve unexpected objects.
+alter function public.set_updated_at() set search_path = pg_catalog;
+
+-- Some Supabase projects may already contain an RLS auto-enable event-trigger
+-- helper. Event-trigger execution does not require exposing that SECURITY DEFINER
+-- function as a public/authenticated RPC, so remove client EXECUTE access when present.
+do $$
+begin
+  if to_regprocedure('public.rls_auto_enable()') is not null then
+    revoke execute on function public.rls_auto_enable() from public, anon, authenticated;
+  end if;
+end $$;
