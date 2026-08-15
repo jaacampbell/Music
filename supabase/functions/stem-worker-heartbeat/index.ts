@@ -77,7 +77,7 @@ Deno.serve(async (req: Request) => {
     const cutoff = new Date(Date.now() - 60_000).toISOString();
     const { data: nodes, error } = await admin
       .from("music_worker_nodes")
-      .select("node_id,status,deep_ready,current_jobs,capacity,gpu_name,worker_version,last_seen")
+      .select("node_id,status,deep_ready,current_jobs,capacity,gpu_name,worker_version,last_seen,hierarchical_routing,restart_recovery,cloud_mirror,sam_audio")
       .gte("last_seen", cutoff)
       .order("last_seen", { ascending: false });
     if (error) return json({ error: "worker mesh registry unavailable" }, 503);
@@ -92,6 +92,10 @@ Deno.serve(async (req: Request) => {
       activeNodes: active.length,
       readyNodes: ready.length,
       deepReadyNodes: deep.length,
+      hierarchicalNodes: ready.filter((node) => node.hierarchical_routing === true).length,
+      recoveryNodes: ready.filter((node) => node.restart_recovery === true).length,
+      cloudMirrorNodes: ready.filter((node) => node.cloud_mirror === true).length,
+      samReadyNodes: ready.filter((node) => node.sam_audio === true).length,
       fleet: active.map((node) => ({
         nodeId: node.node_id,
         status: node.status,
