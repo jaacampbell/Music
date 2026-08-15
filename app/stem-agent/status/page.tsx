@@ -16,8 +16,8 @@ type Readiness = {
   status: "ready" | "control-plane-ready" | "degraded";
   checkedAt: string;
   nextAction: string;
-  configuration: { supabase: boolean; gatewaySecret: boolean; separatorUrl: boolean };
-  services: { edgeMirror: Probe; workerHealth: Probe; workerSystem: Probe; workerMirror: Probe };
+  configuration: { supabase: boolean; gatewaySecret: boolean; separatorUrl: boolean; workerMesh: boolean };
+  services: { edgeMirror: Probe; workerFleet: Probe; workerHealth: Probe; workerSystem: Probe; workerMirror: Probe };
   capabilities: {
     controlPlaneReady: boolean;
     computeReady: boolean;
@@ -27,14 +27,16 @@ type Readiness = {
     hierarchicalRouting: boolean;
     restartRecovery: boolean;
     cloudMirror: boolean;
+    dynamicRouting: boolean;
   };
 };
 
 const labels: Record<keyof Readiness["services"], [string, string]> = {
   edgeMirror: ["Cloud lifecycle gateway", "Supabase Edge Function that receives signed worker job updates."],
-  workerHealth: ["Compute worker", "Public HTTPS stem worker and core model health."],
-  workerSystem: ["Agent orchestration", "Queue, hierarchical routing and restart-recovery runtime."],
-  workerMirror: ["Worker → cloud mirror", "Least-privilege signed lifecycle transport from compute to Music OS."],
+  workerFleet: ["Worker Mesh registry", "Live heartbeats, capacity and Deep compatibility for all active compute nodes."],
+  workerHealth: ["Static fallback worker", "Optional rollback worker URL; dynamic mesh routing does not require it."],
+  workerSystem: ["Static agent orchestration", "Queue and recovery telemetry for the optional static fallback worker."],
+  workerMirror: ["Static worker → cloud mirror", "Lifecycle mirror diagnostics for the optional static fallback worker."],
 };
 
 export default function StemAgentStatusPage(): React.JSX.Element {
@@ -60,9 +62,10 @@ export default function StemAgentStatusPage(): React.JSX.Element {
   useEffect(() => { void refresh(); }, [refresh]);
 
   const capabilities = data ? [
-    ["Control plane", data.capabilities.controlPlaneReady, "Netlify gateway + Supabase Edge mirror"],
-    ["Compute", data.capabilities.computeReady, "Reachable separator worker"],
-    ["Agentic Deep", data.capabilities.deepReady, "CUDA + SAM-Audio"],
+    ["Control plane", data.capabilities.controlPlaneReady, "Netlify gateway + Supabase Edge services"],
+    ["Dynamic routing", data.capabilities.dynamicRouting, "Worker Mesh discovery instead of a build-time URL"],
+    ["Compute", data.capabilities.computeReady, "At least one fresh worker with available capacity"],
+    ["Agentic Deep", data.capabilities.deepReady, "At least one CUDA + SAM-Audio worker"],
     ["Hierarchical routing", data.capabilities.hierarchicalRouting, "Deep targets route through Core parent stems"],
     ["Restart recovery", data.capabilities.restartRecovery, "Persistent jobs can recover after worker restart"],
     ["Cloud mirror", data.capabilities.cloudMirror, "Worker lifecycle sync into Music OS"],
@@ -76,7 +79,7 @@ export default function StemAgentStatusPage(): React.JSX.Element {
       </header>
 
       <section className="opsHero">
-        <div><p className="opsEyebrow">Production control plane</p><h1>Know exactly what is <span>ready.</span></h1><p>Independent diagnostics for cloud orchestration, secure lifecycle mirroring and GPU compute—so “offline” always has a reason and a next action.</p></div>
+        <div><p className="opsEyebrow">Production control plane · Worker Mesh</p><h1>Know exactly what is <span>ready.</span></h1><p>Independent diagnostics for cloud orchestration, secure lifecycle mirroring, fleet discovery and GPU compute—so “offline” always has a reason and a next action.</p></div>
         <button className="opsRefresh" onClick={() => void refresh()} disabled={loading}>{loading ? "Checking…" : "Run diagnostics"}</button>
       </section>
 
@@ -106,8 +109,8 @@ export default function StemAgentStatusPage(): React.JSX.Element {
         </section>
 
         <section className="opsConfig">
-          <div><p className="opsEyebrow">Configuration boundary</p><h2>No secrets are returned by this page.</h2><p>The diagnostic API only reports whether required server-side configuration exists. Gateway keys, Supabase server credentials and model tokens remain inaccessible to browser JavaScript.</p></div>
-          <div className="configChecks"><span className={data.configuration.supabase ? "yes" : "no"}>Supabase</span><span className={data.configuration.gatewaySecret ? "yes" : "no"}>Gateway secret</span><span className={data.configuration.separatorUrl ? "yes" : "no"}>Worker URL</span></div>
+          <div><p className="opsEyebrow">Configuration boundary</p><h2>Dynamic workers do not require a frontend redeploy.</h2><p>The diagnostic API never returns gateway/model credentials. Workers self-register through signed heartbeats, and authenticated job sessions receive only the selected public worker origin plus a short-lived project-scoped token.</p></div>
+          <div className="configChecks"><span className={data.configuration.supabase ? "yes" : "no"}>Supabase</span><span className={data.configuration.gatewaySecret ? "yes" : "no"}>Gateway secret</span><span className={data.configuration.workerMesh ? "yes" : "no"}>Worker Mesh</span><span className={data.configuration.separatorUrl ? "yes" : "no"}>Static fallback</span></div>
         </section>
       </>}
     </main>
