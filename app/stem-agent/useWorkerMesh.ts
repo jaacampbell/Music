@@ -28,6 +28,13 @@ export type WorkerSession = {
   token: string;
   expiresIn: number;
   worker: WorkerSelection;
+  orchestration?: {
+    id: string;
+    status: string;
+    recoveryGeneration: number;
+    previousNodeId: string | null;
+    leaseExpiresAt: string | null;
+  } | null;
 };
 
 export type StemReadiness = {
@@ -43,10 +50,21 @@ export type StemReadiness = {
     hierarchicalRouting: boolean;
     restartRecovery: boolean;
     cloudMirror: boolean;
+    dynamicRouting?: boolean;
+    cloudRecovery?: boolean;
   };
   services?: {
     workerFleet?: { ok: boolean; data?: { activeNodes?: number; readyNodes?: number; deepReadyNodes?: number } };
+    artifactBroker?: { ok: boolean; data?: Record<string, unknown> };
   };
+};
+
+export type AcquireWorkerOptions = {
+  orchestrationId?: string | null;
+  excludeNodeId?: string | null;
+  strategy?: string;
+  instruction?: string;
+  targets?: string[];
 };
 
 export function useWorkerMesh(projectId: string | null, mode: "core" | "deep") {
@@ -80,17 +98,27 @@ export function useWorkerMesh(projectId: string | null, mode: "core" | "deep") {
     }
   }, []);
 
-  const acquire = useCallback(async (): Promise<WorkerSession> => {
+  const acquire = useCallback(async (options: AcquireWorkerOptions = {}): Promise<WorkerSession> => {
     const accessToken = await getSessionAccessToken();
     if (!accessToken) throw new Error("Sign in before using the Agentic Stem System.");
     const response = await fetch("/api/stem-agent/token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ accessToken, projectId, mode })
+      body: JSON.stringify({
+        accessToken,
+        projectId,
+        mode,
+        orchestrationId: options.orchestrationId ?? null,
+        excludeNodeId: options.excludeNodeId ?? null,
+        strategy: options.strategy ?? "auto",
+        instruction: options.instruction ?? "",
+        targets: options.targets ?? []
+      })
     });
-    const body = await response.json().catch(() => ({})) as Partial<WorkerSession> & { error?: string };
+    const body = await response.json().catch(() => ({})) as Partial<WorkerSession> & { error?: string; code?: string };
     if (!response.ok || !body.token || !body.worker?.origin) {
-      throw new Error(body.error ?? "No compatible Stem Worker is currently available.");
+      const detail = body.code ? `${body.error ?? "Worker routing failed."} (${body.code})` : body.error;
+      throw new Error(detail ?? "No compatible Stem Worker is currently available.");
     }
     const session = body as WorkerSession;
     setToken(session.token);

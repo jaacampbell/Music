@@ -2,8 +2,11 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const encoder = new TextEncoder();
 const WORKER_ID = /^[a-f0-9]{12}$/;
+const NODE_ID = /^[A-Za-z0-9._:-]{1,128}$/;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const STATUSES = new Set(["queued", "running", "cancelling", "completed", "failed", "cancelled"]);
+const STATUSES = new Set(["queued", "running", "recovering", "cancelling", "completed", "failed", "cancelled"]);
+const ACTIVE = new Set(["queued", "running", "recovering", "cancelling"]);
+const LEASE_SECONDS = 60;
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -37,12 +40,7 @@ async function verifyHmac(payloadText: string, signatureHex: string, derivedKeyH
       false,
       ["verify"],
     );
-    return await crypto.subtle.verify(
-      "HMAC",
-      key,
-      hexToBytes(signatureHex),
-      encoder.encode(payloadText),
-    );
+    return await crypto.subtle.verify("HMAC", key, hexToBytes(signatureHex), encoder.encode(payloadText));
   } catch {
     return false;
   }
@@ -68,6 +66,7 @@ Deno.serve(async (req: Request) => {
       service: "stem-worker-mirror",
       auth: "derived-hmac-sha256",
       configReady: Boolean(config?.value_hash),
+      orchestrationLeases: true,
     });
   }
 
@@ -93,6 +92,8 @@ Deno.serve(async (req: Request) => {
   const projectId = String(payload.project_id ?? "");
   const userId = String(payload.user_id ?? "");
   const workerJobId = String(payload.worker_job_id ?? "");
+  const workerNodeId = String(payload.worker_node_id ?? "");
+  const orchestrationId = String(payload.orchestration_id ?? "");
   const status = String(payload.status ?? "queued");
   const progress = Math.max(0, Math.min(100, Number(payload.progress ?? 0)));
 
@@ -137,10 +138,47 @@ Deno.serve(async (req: Request) => {
     source_lane: payload.source_lane || null,
     resume_count: Math.max(0, Number(payload.resume_count ?? 0)),
     worker_version: String(payload.worker_version ?? ""),
+    source_sha256: payload.source_sha256 || null,
   };
+
+  if (UUID.test(orchestrationId)) {
+    if (!NODE_ID.test(workerNodeId)) return json({ error: "invalid orchestration worker node" }, 400);
+    const { data: existing } = await admin
+      .from("music_stem_jobs")
+      .select("id,worker_node_id,recovery_generation")
+      .eq("orchestration_id", orchestrationId)
+      .eq("project_id", projectId)
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (!existing) return json({ error: "cloud orchestration was not staged" }, 404);
+    if (existing.worker_node_id && existing.worker_node_id !== workerNodeId) {
+      return json({ error: "stale worker no longer owns this orchestration", code: "STALE_EXECUTION" }, 409);
+    }
+
+    const { data: node } = await admin
+      .from("music_worker_nodes")
+      .select("origin")
+      .eq("node_id", workerNodeId)
+      .maybeSingle();
+    if (!node) return json({ error: "worker node is not registered" }, 409);
+
+    const leaseExpiresAt = ACTIVE.has(status)
+      ? new Date(Date.now() + LEASE_SECONDS * 1000).toISOString()
+      : null;
+    const patch = {
+      ...row,
+      orchestration_id: orchestrationId,
+      worker_node_id: workerNodeId,
+      worker_origin: node.origin,
+      worker_lease_expires_at: leaseExpiresAt,
+      recovery_generation: Math.max(Number(existing.recovery_generation ?? 0), Number(payload.recovery_generation ?? 0)),
+    };
+    const { error } = await admin.from("music_stem_jobs").update(patch).eq("id", existing.id);
+    if (error) return json({ error: "orchestration mirror failed" }, 500);
+    return json({ ok: true, workerJobId, orchestrationId, status, progress: row.progress, leaseExpiresAt });
+  }
 
   const { error } = await admin.from("music_stem_jobs").upsert(row, { onConflict: "user_id,worker_job_id" });
   if (error) return json({ error: "job mirror failed" }, 500);
-
   return json({ ok: true, workerJobId, status, progress: row.progress });
 });

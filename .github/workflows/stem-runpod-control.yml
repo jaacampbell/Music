@@ -127,7 +127,7 @@ jobs:
           if [[ "${{ inputs.interruptible }}" == "true" ]]; then ARGS+=(--interruptible); fi
           python scripts/runpod_stem_ctl.py "${ARGS[@]}"
 
-      - name: Verify Worker Mesh self-registration
+      - name: Verify Worker Mesh and durable recovery
         if: ${{ inputs.operation == 'create' || inputs.operation == 'update' || inputs.operation == 'start' || inputs.operation == 'restart' }}
         shell: bash
         env:
@@ -141,31 +141,47 @@ jobs:
 
           ok=false
           for attempt in $(seq 1 12); do
+            mesh_ok=false
+            recovery_ok=false
+
             if curl --fail --silent --show-error --max-time 10 "$WORKER_URL/agent/mesh/node" -o /tmp/mesh-node.json; then
               jq . /tmp/mesh-node.json
               if [[ "$(jq -r '.heartbeat.ok // false' /tmp/mesh-node.json)" == "true" ]]; then
-                ok=true
-                break
+                mesh_ok=true
               fi
             fi
-            echo "Worker heartbeat not registered yet ($attempt/12)."
+
+            if curl --fail --silent --show-error --max-time 10 "$WORKER_URL/agent/recovery/cloud" -o /tmp/cloud-recovery.json; then
+              jq . /tmp/cloud-recovery.json
+              if [[ "$(jq -r '.enabled // false' /tmp/cloud-recovery.json)" == "true" && "$(jq -r '.sourceOfTruth // ""' /tmp/cloud-recovery.json)" == "supabase-private-storage" ]]; then
+                recovery_ok=true
+              fi
+            fi
+
+            if [[ "$mesh_ok" == "true" && "$recovery_ok" == "true" ]]; then
+              ok=true
+              break
+            fi
+            echo "Worker routing/recovery not fully ready yet ($attempt/12)."
             sleep 5
           done
 
           if [[ "$ok" != "true" ]]; then
-            echo "Worker became healthy but did not self-register with the Worker Mesh." >&2
+            echo "Worker became reachable but did not fully register for Worker Mesh + durable source recovery." >&2
             exit 1
           fi
 
           NODE_ID="$(jq -r '.node.nodeId // "unknown"' /tmp/mesh-node.json)"
           {
             echo ""
-            echo "## Worker Mesh handoff"
+            echo "## Resilient Worker Mesh handoff"
             echo ""
             echo "- Node: \`$NODE_ID\`"
             echo "- Worker: \`$WORKER_URL\`"
-            echo "- Registration: \`healthy\`"
+            echo "- Mesh registration: \`healthy\`"
+            echo "- Durable source recovery: \`healthy\`"
+            echo "- Source of truth: \`supabase-private-storage\`"
             echo "- Netlify redeploy: \`not required\`"
             echo ""
-            echo "Stem Director now discovers this node dynamically through Supabase Worker Mesh heartbeats."
+            echo "The node can now receive cloud orchestration leases and participate in cross-node source replay."
           } >> "$GITHUB_STEP_SUMMARY"

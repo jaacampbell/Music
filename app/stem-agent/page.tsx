@@ -8,6 +8,7 @@ import {
   getCurrentUser,
   isCloudConfigured,
   supabaseRest,
+  uploadPrivateFile,
   uploadPrivateUrl
 } from "@/lib/persistence/supabase-rest";
 import type { CloudUser, MusicAssetRow } from "@/lib/persistence/types";
@@ -18,6 +19,7 @@ import "./stemAgent.css";
 
 type JobState = {
   jobId: string;
+  orchestrationId?: string;
   status: "queued" | "running" | "cancelling" | "completed" | "failed" | "cancelled";
   stage: string;
   progress: number;
@@ -25,6 +27,8 @@ type JobState = {
   plan?: AgentPlan;
   qualitySummary?: QualitySummary;
   events?: AgentEvent[];
+  recoveryGeneration?: number;
+  recoveredFromNode?: string | null;
 };
 
 type AgentEvent = { at: string; agent: string; message: string; data?: Record<string, unknown> };
@@ -53,11 +57,18 @@ type Manifest = {
 };
 type StemJobRow = {
   id: string;
+  orchestration_id: string;
   project_id: string;
   user_id: string;
-  worker_job_id: string;
+  worker_job_id: string | null;
+  worker_node_id?: string | null;
+  worker_origin?: string | null;
+  worker_lease_expires_at?: string | null;
+  recovery_generation?: number;
   status: string;
+  stage?: string;
   progress: number;
+  error?: string | null;
 };
 
 const strategies = [
@@ -79,9 +90,12 @@ export default function StemAgentPage(): React.JSX.Element {
   const [projectId, setProjectId] = useState<string | null>(null);
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [sourceName, setSourceName] = useState("No source selected");
+  const [sourceCloudPath, setSourceCloudPath] = useState<string | null>(null);
   const [mode, setMode] = useState<"core" | "deep">("deep");
   const mesh = useWorkerMesh(projectId, mode);
   const [activeSession, setActiveSession] = useState<WorkerSession | null>(null);
+  const [orchestrationId, setOrchestrationId] = useState<string | null>(null);
+  const [recoveryGeneration, setRecoveryGeneration] = useState(0);
   const [resultOrigin, setResultOrigin] = useState<string | null>(null);
   const [strategy, setStrategy] = useState("auto");
   const [instruction, setInstruction] = useState("Build production-ready stems. Prioritize a clean vocal stack, drums, 808/sub and the main musical layers, then retry technically weak isolates.");
@@ -100,10 +114,10 @@ export default function StemAgentPage(): React.JSX.Element {
   const health = mesh.health;
   const online = health?.status === "ok";
   const fleetReady = mesh.readiness?.capabilities.computeReady === true;
-  const deepReady = health?.samAudio.installed === true && health?.samAudio.cudaAvailable === true;
   const groupedTargets = useMemo(() => STEM_GROUPS.map((group) => ({ group, items: STEM_TARGETS.filter((target) => target.group === group) })), []);
   const events = job?.events ?? [];
   const fleetSummary = mesh.readiness?.services?.workerFleet?.data;
+  const cloudRecoveryReady = mesh.readiness?.capabilities.cloudRecovery === true;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -113,6 +127,7 @@ export default function StemAgentPage(): React.JSX.Element {
     if (linked) {
       const local = loadStoredProjects().find((item) => item.id === linked);
       if (local?.sourceAudio?.name) setSourceName(local.sourceAudio.name);
+      if (local?.sourceAudio?.cloudPath) setSourceCloudPath(local.sourceAudio.cloudPath);
       void getProjectAudio(linked).then((file) => {
         if (file) {
           setSourceFile(file);
@@ -125,23 +140,71 @@ export default function StemAgentPage(): React.JSX.Element {
 
   useEffect(() => {
     setActiveSession(null);
+    setOrchestrationId(null);
+    setRecoveryGeneration(0);
     setResultOrigin(null);
   }, [projectId]);
 
   const authHeaders = (token: string): HeadersInit => ({ Authorization: `Bearer ${token}` });
+
+  const loadCloudJob = async (id: string): Promise<StemJobRow | null> => {
+    if (!projectId || !cloudUser || !isCloudConfigured()) return null;
+    const rows = await supabaseRest<StemJobRow[]>("music_stem_jobs", {
+      query: `select=id,orchestration_id,project_id,user_id,worker_job_id,worker_node_id,worker_origin,worker_lease_expires_at,recovery_generation,status,stage,progress,error&orchestration_id=eq.${id}&limit=1`
+    });
+    return rows[0] ?? null;
+  };
+
+  const stageCloudSource = async (): Promise<{ orchestrationId: string; storagePath: string }> => {
+    if (!projectId || !cloudUser || !sourceFile || !isCloudConfigured()) {
+      throw new Error("Cross-node recovery requires a signed-in Music OS project and source audio.");
+    }
+    const storagePath = sourceCloudPath ?? await uploadPrivateFile(projectId, sourceFile, "stem-ingress");
+    const id = crypto.randomUUID();
+    await supabaseRest<StemJobRow[]>("music_stem_jobs", {
+      method: "POST",
+      body: {
+        orchestration_id: id,
+        project_id: projectId,
+        user_id: cloudUser.id,
+        worker_job_id: null,
+        status: "staging",
+        stage: "durable-source-staged",
+        progress: 0,
+        mode,
+        strategy,
+        instruction,
+        requested_targets: targets,
+        source_storage_path: storagePath,
+        source_original_name: sourceFile.name,
+        source_mime_type: sourceFile.type || null,
+        source_byte_size: sourceFile.size,
+        recovery_generation: 0
+      }
+    });
+    setSourceCloudPath(storagePath);
+    setOrchestrationId(id);
+    setRecoveryGeneration(0);
+    return { orchestrationId: id, storagePath };
+  };
 
   const persistJob = async (
     next: JobState,
     plan?: AgentPlan,
     finalManifest?: Manifest,
     finalReport?: Record<string, unknown>,
-    worker?: WorkerSelection | null
+    worker?: WorkerSelection | null,
+    orchestration?: string | null
   ): Promise<void> => {
     if (!projectId || !cloudUser || !isCloudConfigured()) return;
+    const keyQuery = orchestration
+      ? `orchestration_id=eq.${orchestration}`
+      : `worker_job_id=eq.${next.jobId}`;
     const existing = await supabaseRest<StemJobRow[]>("music_stem_jobs", {
-      query: `select=id,project_id,user_id,worker_job_id,status,progress&worker_job_id=eq.${next.jobId}&limit=1`
+      query: `select=id,orchestration_id,project_id,user_id,worker_job_id,status,progress&${keyQuery}&limit=1`
     });
     const body = {
+      ...(orchestration ? { orchestration_id: orchestration } : {}),
       project_id: projectId,
       user_id: cloudUser.id,
       worker_job_id: next.jobId,
@@ -159,6 +222,7 @@ export default function StemAgentPage(): React.JSX.Element {
       agent_report: finalReport ?? null,
       manifest: finalManifest ?? null,
       error: next.error ?? null,
+      recovery_generation: next.recoveryGeneration ?? recoveryGeneration,
       completed_at: ["completed", "failed", "cancelled"].includes(next.status) ? new Date().toISOString() : null
     };
     if (existing[0]) {
@@ -199,7 +263,7 @@ export default function StemAgentPage(): React.JSX.Element {
     return count;
   };
 
-  const finishJob = async (session: WorkerSession, completed: JobState): Promise<void> => {
+  const finishJob = async (session: WorkerSession, completed: JobState, orchestration?: string | null): Promise<void> => {
     const origin = session.worker.origin;
     const [manifestResponse, reportResponse] = await Promise.all([
       fetch(`${origin}/agent/jobs/${completed.jobId}/manifest`, { headers: authHeaders(session.token), cache: "no-store" }),
@@ -215,33 +279,82 @@ export default function StemAgentPage(): React.JSX.Element {
     if (mixable.length) await player.loadStems(origin, mixable);
     setMessage("Agent job complete. Copying generated stems into the private project library…");
     const saved = await copyOutputsToCloud(nextManifest, origin);
-    await persistJob(completed, nextManifest.agentPlan, nextManifest, nextReport ?? undefined, session.worker);
+    await persistJob(completed, nextManifest.agentPlan, nextManifest, nextReport ?? undefined, session.worker, orchestration);
     setMessage(`Complete · ${nextManifest.stems.length} outputs · ${saved} copied to private cloud storage · ${nextManifest.qualitySummary.review} flagged for review.`);
     void mesh.refreshReadiness();
   };
 
-  const pollJob = async (session: WorkerSession, jobId: string): Promise<void> => {
+  const recoverCloudExecution = async (previous: WorkerSession, orchestration: string): Promise<void> => {
+    setMessage(`Execution lease expired on ${previous.worker.nodeId}. Routing the durable source to another worker…`);
+    const nextSession = await mesh.acquire({
+      orchestrationId: orchestration,
+      excludeNodeId: previous.worker.nodeId,
+      strategy,
+      instruction,
+      targets
+    });
+    const workerHealth = await mesh.probeWorker(nextSession.worker.origin);
+    if (!workerHealth?.status || workerHealth.status !== "ok") {
+      throw new Error("Replacement worker stopped responding before recovery could start.");
+    }
+    const response = await fetch(`${nextSession.worker.origin}/agent/jobs/cloud`, {
+      method: "POST",
+      headers: { ...authHeaders(nextSession.token), "Content-Type": "application/json" },
+      body: JSON.stringify({ orchestrationId: orchestration })
+    });
+    const body = await response.json().catch(() => ({})) as JobState & { detail?: string };
+    if (!response.ok) throw new Error(body.detail ?? `Cross-node recovery failed (${response.status}).`);
+    setActiveSession(nextSession);
+    setRecoveryGeneration(body.recoveryGeneration ?? recoveryGeneration + 1);
+    setJob(body);
+    await persistJob(body, undefined, undefined, undefined, nextSession.worker, orchestration).catch(() => undefined);
+    setMessage(`Recovered on ${nextSession.worker.nodeId} · generation ${body.recoveryGeneration ?? recoveryGeneration + 1}. Replaying from durable private source…`);
+    await pollJob(nextSession, body.jobId, orchestration);
+  };
+
+  const pollJob = async (session: WorkerSession, jobId: string, orchestration?: string | null): Promise<void> => {
     stopPolling.current = false;
     let lastProgress = -1;
     while (!stopPolling.current) {
-      const response = await fetch(`${session.worker.origin}/agent/jobs/${jobId}`, { headers: authHeaders(session.token), cache: "no-store" });
-      const body = await response.json().catch(() => ({})) as JobState & { detail?: string };
-      if (!response.ok) throw new Error(body.detail ?? `Worker status failed (${response.status}).`);
-      setJob(body);
-      setMessage(`${body.stage.replaceAll("-", " ")} · ${body.progress}% · ${session.worker.nodeId}`);
-      if (body.progress !== lastProgress) {
-        lastProgress = body.progress;
-        await persistJob(body, undefined, undefined, undefined, session.worker).catch(() => undefined);
-      }
-      if (body.status === "completed") {
-        await finishJob(session, body);
+      try {
+        const response = await fetch(`${session.worker.origin}/agent/jobs/${jobId}`, { headers: authHeaders(session.token), cache: "no-store" });
+        const body = await response.json().catch(() => ({})) as JobState & { detail?: string };
+        if (!response.ok) throw new Error(body.detail ?? `Worker status failed (${response.status}).`);
+        setJob(body);
+        setMessage(`${body.stage.replaceAll("-", " ")} · ${body.progress}% · ${session.worker.nodeId}${recoveryGeneration ? ` · recovery ${recoveryGeneration}` : ""}`);
+        if (body.progress !== lastProgress) {
+          lastProgress = body.progress;
+          await persistJob(body, undefined, undefined, undefined, session.worker, orchestration).catch(() => undefined);
+        }
+        if (body.status === "completed") {
+          await finishJob(session, body, orchestration);
+          return;
+        }
+        if (body.status === "failed" || body.status === "cancelled") {
+          await persistJob(body, undefined, undefined, undefined, session.worker, orchestration).catch(() => undefined);
+          throw new Error(body.error ?? `Stem job ${body.status}.`);
+        }
+        await sleep(1500);
+      } catch (error) {
+        if (!orchestration || !projectId || !cloudUser) throw error;
+        const cloud = await loadCloudJob(orchestration).catch(() => null);
+        if (!cloud) throw error;
+        setJob((current) => current ? { ...current, progress: cloud.progress, stage: cloud.stage ?? current.stage } : current);
+        if (cloud.status === "failed" || cloud.status === "cancelled") {
+          throw new Error(cloud.error ?? `Cloud orchestration ${cloud.status}.`);
+        }
+        if (cloud.status === "completed") {
+          throw new Error("The cloud record says this execution completed, but its worker is unreachable before result handoff. The source remains durable; run recovery to regenerate the outputs on another node.");
+        }
+        const leaseExpires = cloud.worker_lease_expires_at ? Date.parse(cloud.worker_lease_expires_at) : 0;
+        if (leaseExpires > Date.now()) {
+          setMessage(`Lost direct contact with ${session.worker.nodeId}, but its cloud lease is still alive · ${cloud.progress}% · ${cloud.stage ?? "running"}.`);
+          await sleep(5000);
+          continue;
+        }
+        await recoverCloudExecution(session, orchestration);
         return;
       }
-      if (body.status === "failed" || body.status === "cancelled") {
-        await persistJob(body, undefined, undefined, undefined, session.worker).catch(() => undefined);
-        throw new Error(body.error ?? `Stem job ${body.status}.`);
-      }
-      await sleep(1500);
     }
   };
 
@@ -252,9 +365,36 @@ export default function StemAgentPage(): React.JSX.Element {
     setReport(null);
     setResultOrigin(null);
     setCloudSaved(0);
+    setRecoveryGeneration(0);
     try {
+      const canCloudRecover = Boolean(projectId && cloudUser && isCloudConfigured());
+      if (canCloudRecover) {
+        setMessage(sourceCloudPath ? "Using durable private project source…" : `Staging ${sourceFile.name} in private cloud storage before compute…`);
+        const staged = await stageCloudSource();
+        setMessage(`Finding the best ${mode === "deep" ? "Deep GPU" : "Core"} worker for cloud orchestration…`);
+        const session = await mesh.acquire({ orchestrationId: staged.orchestrationId, strategy, instruction, targets });
+        setActiveSession(session);
+        const workerHealth = await mesh.probeWorker(session.worker.origin);
+        if (!workerHealth?.status || workerHealth.status !== "ok") throw new Error("The selected worker stopped responding before source claim. Try again to route to another node.");
+        if (mode === "deep" && (!workerHealth.samAudio.installed || !workerHealth.samAudio.cudaAvailable)) {
+          throw new Error("The selected node does not currently have CUDA + SAM-Audio ready. Try again to route to another Deep worker.");
+        }
+        setMessage(`Claiming durable source on ${session.worker.nodeId}…`);
+        const response = await fetch(`${session.worker.origin}/agent/jobs/cloud`, {
+          method: "POST",
+          headers: { ...authHeaders(session.token), "Content-Type": "application/json" },
+          body: JSON.stringify({ orchestrationId: staged.orchestrationId })
+        });
+        const body = await response.json().catch(() => ({})) as JobState & { detail?: string };
+        if (!response.ok) throw new Error(body.detail ?? `Cloud job submission failed (${response.status}).`);
+        setJob(body);
+        await persistJob(body, undefined, undefined, undefined, session.worker, staged.orchestrationId).catch(() => undefined);
+        await pollJob(session, body.jobId, staged.orchestrationId);
+        return;
+      }
+
       setMessage(`Finding the best ${mode === "deep" ? "Deep GPU" : "Core"} worker…`);
-      const session = await mesh.acquire();
+      const session = await mesh.acquire({ strategy, instruction, targets });
       setActiveSession(session);
       const workerHealth = await mesh.probeWorker(session.worker.origin);
       if (!workerHealth?.status || workerHealth.status !== "ok") throw new Error("The selected worker stopped responding before upload. Try again to route to another node.");
@@ -268,13 +408,13 @@ export default function StemAgentPage(): React.JSX.Element {
       form.append("instruction", instruction);
       form.append("targets", JSON.stringify(targets));
       if (projectId) form.append("project_id", projectId);
-      setMessage(`Uploading ${sourceFile.name} to ${session.worker.nodeId}…`);
+      setMessage(`Uploading ${sourceFile.name} directly to ${session.worker.nodeId}…`);
       const response = await fetch(`${session.worker.origin}/agent/jobs`, { method: "POST", headers: authHeaders(session.token), body: form });
       const body = await response.json().catch(() => ({})) as JobState & { detail?: string };
       if (!response.ok) throw new Error(body.detail ?? `Job submission failed (${response.status}).`);
       setJob(body);
-      await persistJob(body, undefined, undefined, undefined, session.worker).catch(() => undefined);
-      await pollJob(session, body.jobId);
+      await persistJob(body, undefined, undefined, undefined, session.worker, null).catch(() => undefined);
+      await pollJob(session, body.jobId, null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unexpected Agentic Stem error.");
       void mesh.refreshReadiness();
@@ -298,8 +438,8 @@ export default function StemAgentPage(): React.JSX.Element {
       setReport(null);
       setResultOrigin(null);
       setJob(body);
-      await persistJob(body, undefined, undefined, undefined, activeSession.worker).catch(() => undefined);
-      await pollJob(activeSession, body.jobId);
+      await persistJob(body, undefined, undefined, undefined, activeSession.worker, null).catch(() => undefined);
+      await pollJob(activeSession, body.jobId, null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Refinement failed.");
     } finally {
@@ -340,13 +480,13 @@ export default function StemAgentPage(): React.JSX.Element {
       </header>
 
       <section className="agentHero">
-        <div><p className="eyebrow">Agentic production system · Worker Mesh v3.11</p><h1>Tell it what you need.<br/><span>It routes the right agents.</span></h1><p>The Stem Director discovers available compute, then coordinates source analysis, strategy, Core 6 separation, hierarchical deep isolation, QA, retries, packaging and private project handoff.</p></div>
+        <div><p className="eyebrow">Agentic production system · Resilient Worker Mesh v3.12</p><h1>Tell it what you need.<br/><span>It survives the worker.</span></h1><p>The Stem Director stages project audio privately before compute, discovers available nodes, coordinates Core 6 + hierarchical deep isolation, and can replay the same cloud orchestration on another worker after a real lease failure.</p></div>
         <div className="healthCard">
           <span className={`dot ${online || fleetReady ? "online" : ""}`} />
           <div><strong>{healthTitle}</strong><small>{healthDetail}</small></div>
           <div className="healthGrid">
             <span>Nodes<strong>{fleetSummary?.readyNodes ?? (online ? 1 : 0)}</strong></span>
-            <span>Deep<strong>{deepReady || (fleetSummary?.deepReadyNodes ?? 0) > 0 ? "READY" : "OFF"}</strong></span>
+            <span>Recovery<strong>{cloudRecoveryReady ? "CLOUD" : projectId ? "PENDING" : "DIRECT"}</strong></span>
             <span>GPU<strong>{health?.samAudio.cudaAvailable ? "CUDA" : activeSession?.worker.gpu ?? "—"}</strong></span>
           </div>
         </div>
@@ -363,9 +503,9 @@ export default function StemAgentPage(): React.JSX.Element {
         </div>
 
         <aside className="panel sourcePanel">
-          <p className="eyebrow">02 · Source</p><h2>{sourceName}</h2><p className="muted">{sourceFile ? `${(sourceFile.size / 1024 / 1024).toFixed(1)} MB · ready to route` : "Use the song already attached to this project or select a new audio file."}</p>
+          <p className="eyebrow">02 · Source</p><h2>{sourceName}</h2><p className="muted">{sourceFile ? `${(sourceFile.size / 1024 / 1024).toFixed(1)} MB · ${projectId && cloudUser ? "durable cloud ingress" : "direct worker upload"}` : "Use the song already attached to this project or select a new audio file."}</p>
           <button className="primary" onClick={() => fileRef.current?.click()}>Choose source audio</button>
-          <input ref={fileRef} type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff" hidden onChange={(event) => { const file = event.target.files?.[0]; if (file) { setSourceFile(file); setSourceName(file.name); } }} />
+          <input ref={fileRef} type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff" hidden onChange={(event) => { const file = event.target.files?.[0]; if (file) { setSourceFile(file); setSourceName(file.name); setSourceCloudPath(null); } }} />
           <div className="presetRow"><button onClick={() => applyPreset("vocals")}>Vocals</button><button onClick={() => applyPreset("drums")}>Drums</button><button onClick={() => applyPreset("beat")}>Beat</button><button onClick={() => applyPreset("instruments")}>Instruments</button></div>
           <button className="launch" onClick={() => void startJob()} disabled={busy || !sourceFile}>{busy ? "Agents working…" : "Launch Stem Director"}</button>
           {job && ["queued", "running", "cancelling"].includes(job.status) && <button className="danger" onClick={() => void cancel()}>Cancel job</button>}
@@ -383,7 +523,7 @@ export default function StemAgentPage(): React.JSX.Element {
       {job && <section className="panel runPanel">
         <div className="runHeader"><div><p className="eyebrow">04 · Live agent run</p><h2>{job.stage.replaceAll("-", " ")}</h2></div><strong>{job.progress}%</strong></div>
         <div className="progress"><span style={{ width: `${job.progress}%` }} /></div>
-        {activeSession && <div className="plan"><div><strong>Worker Mesh</strong><p>{activeSession.worker.nodeId} · {activeSession.worker.gpu ?? "Core node"} · load {activeSession.worker.load.current}/{activeSession.worker.load.capacity}</p></div><div className="planTargets"><span>{activeSession.worker.source}</span><span>{activeSession.worker.version ?? "version pending"}</span></div></div>}
+        {activeSession && <div className="plan"><div><strong>Worker Mesh</strong><p>{activeSession.worker.nodeId} · {activeSession.worker.gpu ?? "Core node"} · load {activeSession.worker.load.current}/{activeSession.worker.load.capacity}</p></div><div className="planTargets"><span>{activeSession.worker.source}</span><span>{orchestrationId ? `cloud job ${orchestrationId.slice(0, 8)}` : "direct session"}</span>{recoveryGeneration > 0 && <span>recovery {recoveryGeneration}</span>}</div></div>}
         {job.plan && <div className="plan"><div><strong>{job.plan.planner ?? "Planner"}</strong><p>{job.plan.reasoning?.join(" ")}</p></div><div className="planTargets">{job.plan.targets?.slice(0, 18).map((id) => <span key={id}>{STEM_TARGETS.find((target) => target.id === id)?.label ?? id}</span>)}</div></div>}
         <div className="timeline">{events.slice().reverse().map((event, index) => <article key={`${event.at}-${index}`}><span>{event.agent}</span><div><strong>{event.message}</strong><small>{new Date(event.at).toLocaleTimeString()}</small></div></article>)}</div>
       </section>}
@@ -398,7 +538,7 @@ export default function StemAgentPage(): React.JSX.Element {
 
       {manifest && <section className="panel outputsPanel"><div className="panelHead"><div><p className="eyebrow">06 · Generated assets</p><h2>Agent-reviewed stems</h2></div><span>{manifest.failedTargets.length} failed targets</span></div><div className="outputs">{manifest.stems.map((stem) => <article key={`${stem.group}-${stem.name}`}><div><span className="family">{stem.family}</span><h3>{stem.label ?? stem.name}</h3><p>{stem.engine}{stem.sourceLane ? ` · ${stem.sourceLane}` : ""}</p></div><div className="qa"><strong>{stem.technicalQa?.score ?? "—"}</strong><span>{stem.technicalQa?.grade ?? "QA"}</span></div><div className="outputActions">{resultOrigin && <><audio controls preload="none" src={`${resultOrigin}${stem.url}`} /><a href={`${resultOrigin}${stem.url}`} download={stem.downloadName}>WAV</a></>}</div>{stem.technicalQa?.reasons?.length ? <small>{stem.technicalQa.reasons.join(" · ")}</small> : <small>Technical integrity passed. Isolation quality should still be judged by ear.</small>}</article>)}</div></section>}
 
-      {report && <section className="panel reportPanel"><p className="eyebrow">07 · Agent report</p><h2>Decision trail preserved</h2><p>The full plan, source measurements, routing lane, retry decisions, quality summary and failures are bundled with the stem pack and persisted with the project job record.</p><pre>{JSON.stringify(report, null, 2)}</pre></section>}
+      {report && <section className="panel reportPanel"><p className="eyebrow">07 · Agent report</p><h2>Decision trail preserved</h2><p>The full plan, source measurements, routing lane, retry decisions, recovery generation, quality summary and failures are bundled with the stem pack and persisted with the project job record.</p><pre>{JSON.stringify(report, null, 2)}</pre></section>}
     </main>
   );
 }
