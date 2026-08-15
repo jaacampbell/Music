@@ -24,7 +24,7 @@ RUN python -m pip install --upgrade pip \
 
 COPY requirements.txt ./
 RUN python -m pip install -r requirements.txt
-COPY app.py agent_core.py agent_api.py agent_phase5.py stem_catalog.json ./
+COPY app.py agent_core.py agent_api.py agent_phase5.py agent_phase6.py stem_catalog.json ./
 RUN mkdir -p /data/jobs /data/models
 
 EXPOSE 8000
@@ -32,4 +32,4 @@ VOLUME ["/data"]
 HEALTHCHECK --interval=30s --timeout=8s --start-period=30s --retries=4 \
   CMD python -c "import json,urllib.request; data=json.load(urllib.request.urlopen('http://127.0.0.1:8000/agent/ready',timeout=5)); raise SystemExit(0 if data.get('ready') else 1)"
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["uvicorn", "agent_phase5:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--proxy-headers"]
+CMD ["uvicorn", "agent_phase6:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--proxy-headers"]

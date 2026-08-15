@@ -25,4 +25,4 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: python -m py_compile services/separator/app.py services/separator/agent_core.py services/separator/agent_api.py services/separator/agent_phase5.py
+      - run: python -m py_compile services/separator/app.py services/separator/agent_core.py services/separator/agent_api.py services/separator/agent_phase5.py services/separator/agent_phase6.py
