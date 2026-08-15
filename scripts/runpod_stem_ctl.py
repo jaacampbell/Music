@@ -69,12 +69,15 @@ def worker_env() -> dict[str, str]:
     gateway = os.environ.get("SEPARATOR_GATEWAY_SECRET", "").strip()
     if not gateway:
         raise SystemExit("SEPARATOR_GATEWAY_SECRET is required for a production worker.")
+    supabase_url = os.environ.get("SUPABASE_URL", "").strip().rstrip("/")
+    if not supabase_url.startswith("https://"):
+        raise SystemExit("SUPABASE_URL must be explicitly configured as the production HTTPS Supabase project URL.")
 
     hf = os.environ.get("HF_TOKEN", "").strip()
     openai = os.environ.get("OPENAI_API_KEY", "").strip()
     env = {
         "SEPARATOR_GATEWAY_SECRET": gateway,
-        "SUPABASE_URL": os.environ.get("SUPABASE_URL", "https://jgnsrjjgeodqruafafav.supabase.co").strip(),
+        "SUPABASE_URL": supabase_url,
         "CORS_ORIGINS": os.environ.get("CORS_ORIGINS", "https://musicdevnc.netlify.app").strip(),
         "DEMUCS_DEVICE": "cuda",
         "SAM_AUDIO_DEVICE": "cuda",
@@ -177,7 +180,7 @@ def probe(url: str, timeout: float = 8.0) -> tuple[bool, dict[str, Any] | None, 
         with urllib_request.urlopen(req, timeout=timeout) as response:
             data = json.loads(response.read().decode("utf-8"))
             return response.status < 400, data, None
-    except Exception as exc:  # startup failures are intentionally collapsed into one health state
+    except Exception as exc:
         return False, None, str(exc)
 
 
