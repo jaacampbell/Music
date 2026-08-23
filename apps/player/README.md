@@ -2,6 +2,8 @@
 
 A local-first browser music player for reviewing masters, demos, references, and work-in-progress audio. The interface uses the public display identity **JO₵YN** while keeping **JOCYN** in machine-friendly metadata and internal labels where needed.
 
+The same player is mounted at `/player` in the root Music OS Next.js deployment. Use **Cloud Library** to move from immediate browser-local listening into the authenticated project dashboard and private Supabase storage.
+
 ## What works
 
 - Import multiple browser-supported audio files, including MP3, WAV, M4A, AAC, OGG, FLAC, and audio WebM when the browser can decode them.

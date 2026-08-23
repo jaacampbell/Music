@@ -10,6 +10,7 @@ The Next.js app has one shared song/project identity across its major surfaces:
 
 - `/` — beginner-first Guided Mode + advanced Studio Mode production command center.
 - `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.
+- `/player` — JO₵YN local-first listening room for importing and reviewing audio immediately in the browser.
 - `/stem-studio` — real production separator with project-native cloud stem handoff.
 - `/stem-lab` — deterministic stem workflow/contract MVP.
 - `/login` — Supabase-backed account creation/sign-in.

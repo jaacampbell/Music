@@ -19,6 +19,7 @@ function formatTime(seconds: number): string {
 }
 
 function readFavorites(): string[] {
+  if (typeof window === 'undefined') return []
   try {
     const value = JSON.parse(localStorage.getItem(FAVORITES_KEY) ?? '[]')
     return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []
@@ -28,6 +29,7 @@ function readFavorites(): string[] {
 }
 
 function readVolume(): number {
+  if (typeof window === 'undefined') return 0.8
   const stored = Number(localStorage.getItem(VOLUME_KEY))
   return Number.isFinite(stored) && stored >= 0 && stored <= 1 ? stored : 0.8
 }
@@ -430,9 +432,12 @@ export default function App() {
           <span className="status-dot" />
           LOCAL-FIRST PLAYER
         </div>
-        <button className="button button--primary" type="button" onClick={() => fileInputRef.current?.click()}>
-          {importing ? 'IMPORTING…' : '+ IMPORT AUDIO'}
-        </button>
+        <div className="topbar__actions">
+          <a className="button button--secondary" href="/dashboard">CLOUD LIBRARY</a>
+          <button className="button button--primary" type="button" onClick={() => fileInputRef.current?.click()}>
+            {importing ? 'IMPORTING…' : '+ IMPORT AUDIO'}
+          </button>
+        </div>
         <input ref={fileInputRef} className="visually-hidden" type="file" accept="audio/*,.flac" multiple onChange={onFileInput} />
       </header>
 
