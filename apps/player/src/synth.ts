@@ -59,7 +59,7 @@ export class PlaybackEngine {
     this.pausedAt = 0
     this.scheduledUntil = 0
 
-    if (track.kind === 'local' && track.sourceUrl) {
+    if (track.kind !== 'synth' && track.sourceUrl) {
       const media = new Audio(track.sourceUrl)
       media.preload = 'metadata'
       media.crossOrigin = 'anonymous'

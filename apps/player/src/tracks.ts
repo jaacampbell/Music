@@ -10,7 +10,7 @@ export type Note = {
   type?: OscillatorType
 }
 
-export type TrackKind = 'synth' | 'local'
+export type TrackKind = 'synth' | 'local' | 'cloud'
 
 export type Track = {
   id: string
@@ -24,6 +24,13 @@ export type Track = {
   sourceUrl?: string
   fileName?: string
   createdAt?: number
+  songKey?: string
+  versionLabel?: string
+  artworkUrl?: string
+  projectId?: string
+  versionId?: string
+  storagePath?: string
+  cloudFavorite?: boolean
 }
 
 const SCALE_MAJOR = [0, 2, 4, 5, 7, 9, 11]

@@ -1,11 +1,20 @@
 import { IMPORT_ACCENTS, type Track } from './tracks'
 
 const DATABASE_NAME = 'jocyn-music-player'
-const DATABASE_VERSION = 1
+const DATABASE_VERSION = 2
 const TRACK_STORE = 'local-tracks'
 
 type StoredTrack = Omit<Track, 'kind' | 'notes' | 'sourceUrl'> & {
   blob: Blob
+  artworkBlob?: Blob
+}
+
+export type TrackMetadata = {
+  title: string
+  artist: string
+  bpm?: number
+  songKey?: string
+  versionLabel?: string
 }
 
 function openDatabase(): Promise<IDBDatabase> {
@@ -71,7 +80,7 @@ export function readAudioDuration(file: File): Promise<number> {
   })
 }
 
-function titleFromFileName(fileName: string): string {
+export function titleFromFileName(fileName: string): string {
   return fileName
     .replace(/\.[^/.]+$/, '')
     .replace(/[_-]+/g, ' ')
@@ -79,19 +88,28 @@ function titleFromFileName(fileName: string): string {
     .trim()
 }
 
-export async function importAudioFile(file: File, sequence: number): Promise<Track> {
+export async function importAudioFile(
+  file: File,
+  sequence: number,
+  metadata?: Partial<TrackMetadata>,
+  artworkFile?: File,
+): Promise<Track> {
   const duration = await readAudioDuration(file)
   const id = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : `local-${Date.now()}-${sequence}`
   const track: Track = {
     id,
-    title: titleFromFileName(file.name) || 'Untitled recording',
-    artist: 'JOCYN',
+    title: metadata?.title?.trim() || titleFromFileName(file.name) || 'Untitled recording',
+    artist: metadata?.artist?.trim() || 'JOCYN',
     accent: IMPORT_ACCENTS[sequence % IMPORT_ACCENTS.length],
     duration,
     kind: 'local',
     notes: [],
     fileName: file.name,
     createdAt: Date.now(),
+    bpm: metadata?.bpm,
+    songKey: metadata?.songKey?.trim() || undefined,
+    versionLabel: metadata?.versionLabel?.trim() || 'Imported master',
+    artworkUrl: artworkFile ? URL.createObjectURL(artworkFile) : undefined,
   }
 
   const stored: StoredTrack = {
@@ -102,7 +120,11 @@ export async function importAudioFile(file: File, sequence: number): Promise<Tra
     duration: track.duration,
     fileName: track.fileName,
     createdAt: track.createdAt,
+    bpm: track.bpm,
+    songKey: track.songKey,
+    versionLabel: track.versionLabel,
     blob: file,
+    artworkBlob: artworkFile,
   }
   await runTransaction('readwrite', (store) => store.put(stored))
   return { ...track, sourceUrl: URL.createObjectURL(file) }
@@ -112,12 +134,40 @@ export async function loadImportedTracks(): Promise<Track[]> {
   const stored = await runTransaction<StoredTrack[]>('readonly', (store) => store.getAll())
   return stored
     .sort((first, second) => (second.createdAt ?? 0) - (first.createdAt ?? 0))
-    .map(({ blob, ...track }) => ({
+    .map(({ blob, artworkBlob, ...track }) => ({
       ...track,
       kind: 'local' as const,
       notes: [],
       sourceUrl: URL.createObjectURL(blob),
+      artworkUrl: artworkBlob ? URL.createObjectURL(artworkBlob) : undefined,
     }))
+}
+
+export async function updateImportedTrack(
+  id: string,
+  metadata: TrackMetadata,
+  artworkFile?: File,
+): Promise<Track> {
+  const stored = await runTransaction<StoredTrack | undefined>('readonly', (store) => store.get(id))
+  if (!stored) throw new Error('This track is no longer in the local library.')
+  const next: StoredTrack = {
+    ...stored,
+    title: metadata.title.trim() || stored.title,
+    artist: metadata.artist.trim() || stored.artist,
+    bpm: metadata.bpm,
+    songKey: metadata.songKey?.trim() || undefined,
+    versionLabel: metadata.versionLabel?.trim() || 'Imported master',
+    artworkBlob: artworkFile ?? stored.artworkBlob,
+  }
+  await runTransaction('readwrite', (store) => store.put(next))
+  const { blob, artworkBlob, ...track } = next
+  return {
+    ...track,
+    kind: 'local',
+    notes: [],
+    sourceUrl: URL.createObjectURL(blob),
+    artworkUrl: artworkBlob ? URL.createObjectURL(artworkBlob) : undefined,
+  }
 }
 
 export async function deleteImportedTrack(id: string): Promise<void> {

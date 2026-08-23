@@ -2,7 +2,7 @@
 
 This repository contains **Music OS / Agentic Beat Lab OS** — an artist-first production command center and persistent workspace for song development, versioning, A&R, real stem extraction, analysis, revision, rights/release preparation, and DAW-oriented export.
 
-It also includes the **JO₵YN Music Workspace** in [`apps/player`](apps/player): a local-first Vite + React player for importing real masters, demos, and references. It provides browser-persistent audio storage, search, favorites, shuffle/repeat, media controls, responsive playback, and built-in synth demos for immediate testing.
+It also includes the **JO₵YN Music Workspace** in [`apps/player`](apps/player): a unified Vite + React player for private Supabase cloud uploads and browser-local listening. It provides upload progress, editable title/artist/BPM/key/version metadata, artwork, project-aware version uploads, cross-device cloud playback, IndexedDB fallback, search, favorites, shuffle/repeat, media controls, responsive playback, and built-in synth demos.
 
 ## Product surfaces
 
@@ -10,7 +10,7 @@ The Next.js app has one shared song/project identity across its major surfaces:
 
 - `/` — beginner-first Guided Mode + advanced Studio Mode production command center.
 - `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.
-- `/player` — JO₵YN local-first listening room for importing and reviewing audio immediately in the browser.
+- `/player` — JO₵YN unified listening room for secure cloud uploads, cross-device playback, and device-only audio.
 - `/stem-studio` — real production separator with project-native cloud stem handoff.
 - `/stem-lab` — deterministic stem workflow/contract MVP.
 - `/login` — Supabase-backed account creation/sign-in.

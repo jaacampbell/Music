@@ -17,7 +17,7 @@ This repository is **Music OS / Agentic Beat Lab OS** — a Next.js 16 (App Rout
 ### Product surfaces
 - `/` — beginner Guided Mode + advanced Studio Mode production command center.
 - `/dashboard` — private persistent Song Dashboard and canonical cloud project library.
-- `/player` — JO₵YN local-first audio player, imported from the standalone Vite player source.
+- `/player` — JO₵YN unified audio player with private Supabase cloud uploads and IndexedDB device fallback, imported from the standalone Vite player source.
 - `/stem-studio` — real Demucs Core 6 + optional SAM-Audio Deep isolation.
 - `/stem-lab` — deterministic stem workflow/contract MVP.
 - `/login` — Supabase account sign-in/signup.
