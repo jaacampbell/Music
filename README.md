@@ -2,6 +2,8 @@
 
 This repository contains **Music OS / Agentic Beat Lab OS** — an artist-first production command center and persistent workspace for song development, versioning, A&R, real stem extraction, analysis, revision, rights/release preparation, and DAW-oriented export.
 
+It also includes a standalone browser music player in [`apps/player`](apps/player). The player is a Vite + React page with generated Web Audio tracks, transport controls, seeking, volume, playlist navigation, and a live frequency visualizer.
+
 ## Product surfaces
 
 The Next.js app has one shared song/project identity across its major surfaces:
@@ -123,5 +125,15 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+To run the standalone music player:
+
+```bash
+cd apps/player
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. From the repository root, the same player commands are available as `npm run dev:player`, `npm run build:player`, and `npm run lint:player` after installing the player dependencies.
 
 The GPU worker needs Python 3.11+, FFmpeg, CUDA for practical deep inference, and the appropriate gated-model credentials when SAM-Audio is enabled.

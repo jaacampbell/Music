@@ -9,6 +9,9 @@ This repository is **Music OS / Agentic Beat Lab OS** — a Next.js 16 (App Rout
 - `npm run build` — production build.
 - `npm run start` — serve the production build.
 - `npm run lint` — ESLint.
+- `npm run dev:player` — standalone Vite music player at `http://localhost:5173`.
+- `npm run build:player` — type-check and build the standalone player.
+- `npm run lint:player` — lint the standalone player.
 - CI also runs `python -m py_compile services/separator/app.py`.
 
 ### Product surfaces
@@ -18,6 +21,8 @@ This repository is **Music OS / Agentic Beat Lab OS** — a Next.js 16 (App Rout
 - `/stem-lab` — deterministic stem workflow/contract MVP.
 - `/login` — Supabase account sign-in/signup.
 - `/guide` — plain-language help and glossary.
+
+The separate [`apps/player`](apps/player) project is a self-contained browser music page. Keep its Vite build independent from the main Next.js app unless a future change explicitly integrates it as a Music OS route.
 
 ### Unified project architecture
 The canonical song identity is the UUID in `public.music_projects`.
