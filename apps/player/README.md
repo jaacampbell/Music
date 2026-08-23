@@ -1,36 +1,43 @@
-# Music
+# JO₵YN Music Workspace
 
-A tiny, self-contained music player built with **Vite + React + TypeScript**. It
-ships no audio files — every "track" is composed programmatically and rendered in
-the browser with the **Web Audio API**, complete with a live frequency
-visualizer.
+A local-first browser music player for reviewing masters, demos, references, and work-in-progress audio. The interface uses the public display identity **JO₵YN** while keeping **JOCYN** in machine-friendly metadata and internal labels where needed.
 
-## Features
+## What works
 
-- Synth-powered playback (oscillators + envelopes) with play/pause, next/prev,
-  seek, and volume.
-- Four built-in generated tracks with distinct tempos and moods.
-- Real-time frequency-bar visualizer driven by an `AnalyserNode`.
-- Auto-advance to the next track when the current one ends.
+- Import multiple browser-supported audio files, including MP3, WAV, M4A, AAC, OGG, FLAC, and audio WebM when the browser can decode them.
+- Keep imported audio inside the current browser with IndexedDB persistence.
+- Reload the page without losing the local library.
+- Play, pause, seek, skip, shuffle, repeat one, repeat all, mute, and control volume.
+- Search the library and filter to imported files or favorites.
+- Drag and drop audio directly into the workspace.
+- Remove an imported file only after confirmation.
+- Use keyboard controls: Space for play/pause, Left/Right for a 10-second seek, and M for mute.
+- Use lock-screen and hardware media controls in browsers that support the Media Session API.
+- Start immediately with three generated synth demos when no real audio has been imported.
 
-## Getting started
+## Privacy and storage
+
+Imported files are stored in this browser's IndexedDB. They are not uploaded to a remote server by this app. Clearing site data or using a different browser/device produces a separate library.
+
+## Run locally
 
 ```bash
 npm install
-npm run dev      # start the dev server at http://localhost:5173
+npm run dev
 ```
 
-## Scripts
+Open `http://localhost:5173`.
 
-| Command           | Description                                  |
-| ----------------- | -------------------------------------------- |
-| `npm run dev`     | Start the Vite dev server (development mode) |
-| `npm run build`   | Type-check (`tsc -b`) and build for prod     |
-| `npm run preview` | Preview the production build locally         |
-| `npm run lint`    | Lint the codebase with oxlint                |
+## Validate
 
-## Project structure
+```bash
+npm run build
+npm run lint
+```
 
-- `src/tracks.ts` — track definitions and the procedural music composer.
-- `src/synth.ts` — `SynthEngine`: a Web Audio scheduler (play/pause/seek/volume).
-- `src/App.tsx` — player UI, playlist, and the canvas visualizer.
+## Source map
+
+- `src/App.tsx` — workspace UI, transport, library state, import flow, filters, favorites, and media controls.
+- `src/library.ts` — local IndexedDB audio persistence and browser metadata decoding.
+- `src/synth.ts` — unified real-audio and synth-demo playback engine.
+- `src/tracks.ts` — track model, built-in demos, and visual accent system.

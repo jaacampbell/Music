@@ -1,24 +1,29 @@
 export type Note = {
-  /** start time in seconds from the beginning of the track */
+  /** Start time in seconds from the beginning of the track. */
   time: number
-  /** duration in seconds */
+  /** Duration in seconds. */
   dur: number
-  /** MIDI note number */
+  /** MIDI note number. */
   midi: number
-  /** relative loudness (0..1) */
+  /** Relative loudness (0..1). */
   gain?: number
   type?: OscillatorType
 }
+
+export type TrackKind = 'synth' | 'local'
 
 export type Track = {
   id: string
   title: string
   artist: string
-  bpm: number
-  /** two-stop gradient used for the artwork */
-  gradient: [string, string]
-  notes: Note[]
+  bpm?: number
+  accent: [string, string]
   duration: number
+  kind: TrackKind
+  notes: Note[]
+  sourceUrl?: string
+  fileName?: string
+  createdAt?: number
 }
 
 const SCALE_MAJOR = [0, 2, 4, 5, 7, 9, 11]
@@ -35,84 +40,71 @@ type BuildConfig = {
   title: string
   artist: string
   bpm: number
-  gradient: [string, string]
-  /** chord roots (MIDI) and qualities, one per bar */
+  accent: [string, string]
   progression: ChordSpec[]
-  /** how many times to repeat the progression */
   repeats: number
-  /** scale root used for the melody (MIDI) */
   melodyRoot: number
   type?: OscillatorType
 }
 
-/**
- * Programmatically composes a short, pleasant looping track from a chord
- * progression. Each bar gets a bass note, an arpeggiated chord pad, and a
- * melody line drawn from the major scale. This keeps the app fully
- * self-contained (no audio assets) while producing genuinely musical output.
- */
-function buildTrack(cfg: BuildConfig): Track {
-  const beat = 60 / cfg.bpm
-  const beatsPerBar = 4
+function buildTrack(config: BuildConfig): Track {
+  const beat = 60 / config.bpm
   const notes: Note[] = []
-  let t = 0
+  let time = 0
 
-  for (let r = 0; r < cfg.repeats; r++) {
-    for (const chord of cfg.progression) {
-      const barStart = t
+  for (let repeat = 0; repeat < config.repeats; repeat += 1) {
+    for (const chord of config.progression) {
+      const barStart = time
       const tones = chordNotes(chord)
 
-      // Bass: root, one octave down, on beats 1 and 3.
       notes.push({ time: barStart, dur: beat * 1.8, midi: chord.root - 12, gain: 0.5, type: 'triangle' })
       notes.push({ time: barStart + beat * 2, dur: beat * 1.8, midi: chord.root - 12, gain: 0.45, type: 'triangle' })
 
-      // Pad: arpeggiate the chord across the bar.
-      for (let i = 0; i < beatsPerBar; i++) {
-        const tone = tones[i % tones.length]
+      for (let beatIndex = 0; beatIndex < 4; beatIndex += 1) {
         notes.push({
-          time: barStart + i * beat,
+          time: barStart + beatIndex * beat,
           dur: beat * 0.9,
-          midi: tone,
+          midi: tones[beatIndex % tones.length],
           gain: 0.22,
           type: 'sine',
         })
       }
 
-      // Melody: two notes per beat from the scale, gently rising/falling.
-      for (let i = 0; i < beatsPerBar * 2; i++) {
-        const step = (r * 3 + i) % SCALE_MAJOR.length
-        const octave = i % 4 === 3 ? 12 : 0
+      for (let noteIndex = 0; noteIndex < 8; noteIndex += 1) {
+        const step = (repeat * 3 + noteIndex) % SCALE_MAJOR.length
         notes.push({
-          time: barStart + i * (beat / 2),
+          time: barStart + noteIndex * (beat / 2),
           dur: beat * 0.4,
-          midi: cfg.melodyRoot + SCALE_MAJOR[step] + octave,
+          midi: config.melodyRoot + SCALE_MAJOR[step] + (noteIndex % 4 === 3 ? 12 : 0),
           gain: 0.3,
-          type: cfg.type ?? 'square',
+          type: config.type ?? 'square',
         })
       }
 
-      t += beat * beatsPerBar
+      time += beat * 4
     }
   }
 
   return {
-    id: cfg.id,
-    title: cfg.title,
-    artist: cfg.artist,
-    bpm: cfg.bpm,
-    gradient: cfg.gradient,
+    id: config.id,
+    title: config.title,
+    artist: config.artist,
+    bpm: config.bpm,
+    accent: config.accent,
     notes,
-    duration: t,
+    duration: time,
+    kind: 'synth',
   }
 }
 
-export const TRACKS: Track[] = [
+/** Built-in demos keep the player immediately testable before real audio is imported. */
+export const DEMO_TRACKS: Track[] = [
   buildTrack({
-    id: 'neon-sunrise',
-    title: 'Neon Sunrise',
-    artist: 'Aurora Synth',
+    id: 'demo-night-transit',
+    title: 'Night Transit',
+    artist: 'JOCYN LABS',
     bpm: 110,
-    gradient: ['#ff7e5f', '#feb47b'],
+    accent: ['#b7d52b', '#28330a'],
     melodyRoot: 72,
     progression: [
       { root: 60, quality: 'maj' },
@@ -121,14 +113,13 @@ export const TRACKS: Track[] = [
       { root: 65, quality: 'maj' },
     ],
     repeats: 2,
-    type: 'square',
   }),
   buildTrack({
-    id: 'midnight-drive',
-    title: 'Midnight Drive',
-    artist: 'The Nightowls',
+    id: 'demo-after-hours',
+    title: 'After Hours Draft',
+    artist: 'JOCYN LABS',
     bpm: 96,
-    gradient: ['#654ea3', '#43c6ac'],
+    accent: ['#c56036', '#34170d'],
     melodyRoot: 69,
     progression: [
       { root: 57, quality: 'min' },
@@ -140,11 +131,11 @@ export const TRACKS: Track[] = [
     type: 'sawtooth',
   }),
   buildTrack({
-    id: 'ocean-bloom',
-    title: 'Ocean Bloom',
-    artist: 'Tidal Keys',
+    id: 'demo-distant-water',
+    title: 'Distant Water',
+    artist: 'JOCYN LABS',
     bpm: 84,
-    gradient: ['#2193b0', '#6dd5ed'],
+    accent: ['#4f8da8', '#102c39'],
     melodyRoot: 74,
     progression: [
       { root: 62, quality: 'maj' },
@@ -155,20 +146,12 @@ export const TRACKS: Track[] = [
     repeats: 2,
     type: 'triangle',
   }),
-  buildTrack({
-    id: 'pixel-parade',
-    title: 'Pixel Parade',
-    artist: 'Chip Theory',
-    bpm: 128,
-    gradient: ['#ee0979', '#ff6a00'],
-    melodyRoot: 76,
-    progression: [
-      { root: 64, quality: 'maj' },
-      { root: 60, quality: 'maj' },
-      { root: 67, quality: 'maj' },
-      { root: 62, quality: 'min' },
-    ],
-    repeats: 2,
-    type: 'square',
-  }),
+]
+
+export const IMPORT_ACCENTS: Array<[string, string]> = [
+  ['#b7d52b', '#28330a'],
+  ['#d1794b', '#3d1b10'],
+  ['#7e75d6', '#211d4b'],
+  ['#4fa0a6', '#102e31'],
+  ['#d3b56b', '#382e12'],
 ]

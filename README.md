@@ -2,7 +2,7 @@
 
 This repository contains **Music OS / Agentic Beat Lab OS** — an artist-first production command center and persistent workspace for song development, versioning, A&R, real stem extraction, analysis, revision, rights/release preparation, and DAW-oriented export.
 
-It also includes a standalone browser music player in [`apps/player`](apps/player). The player is a Vite + React page with generated Web Audio tracks, transport controls, seeking, volume, playlist navigation, and a live frequency visualizer.
+It also includes the **JO₵YN Music Workspace** in [`apps/player`](apps/player): a local-first Vite + React player for importing real masters, demos, and references. It provides browser-persistent audio storage, search, favorites, shuffle/repeat, media controls, responsive playback, and built-in synth demos for immediate testing.
 
 ## Product surfaces
 

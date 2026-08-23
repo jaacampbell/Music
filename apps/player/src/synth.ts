@@ -1,49 +1,48 @@
-import type { Track } from './tracks'
+import type { Note, Track } from './tracks'
 
-function midiToFreq(midi: number): number {
+function midiToFrequency(midi: number): number {
   return 440 * Math.pow(2, (midi - 69) / 12)
 }
 
-const LOOKAHEAD_S = 0.15
-const TICK_MS = 25
+const LOOKAHEAD_SECONDS = 0.15
+const TICK_MILLISECONDS = 25
 
 /**
- * A small Web Audio synthesizer that plays {@link Track}s by scheduling
- * oscillators just ahead of the playhead. Supports play/pause/seek, volume,
- * an analyser node for visualisation, and an end-of-track callback.
+ * One playback engine for real browser audio and the built-in synth demos.
+ * Both paths share transport, gain, visualizer analysis, and end handling.
  */
-export class SynthEngine {
-  private ctx: AudioContext | null = null
+export class PlaybackEngine {
+  private context: AudioContext | null = null
   private master: GainNode | null = null
   private analyser: AnalyserNode | null = null
+  private media: HTMLAudioElement | null = null
+  private mediaSource: MediaElementAudioSourceNode | null = null
+  private activeOscillators = new Set<OscillatorNode>()
 
   private track: Track | null = null
   private timer: number | null = null
-
-  /** ctx.currentTime that corresponds to playhead position 0. */
-  private startCtxTime = 0
-  /** playhead position (seconds) captured when paused. */
+  private startContextTime = 0
   private pausedAt = 0
   private scheduledUntil = 0
   private playing = false
   private volume = 0.8
-
   private endedHandler: (() => void) | null = null
 
-  private ensureCtx(): AudioContext {
-    if (!this.ctx) {
-      const ctx = new AudioContext()
-      const master = ctx.createGain()
-      master.gain.value = this.volume
-      const analyser = ctx.createAnalyser()
+  private ensureGraph(): AudioContext {
+    if (!this.context) {
+      const context = new AudioContext()
+      const master = context.createGain()
+      const analyser = context.createAnalyser()
       analyser.fftSize = 128
+      analyser.smoothingTimeConstant = 0.72
+      master.gain.value = this.volume
       master.connect(analyser)
-      analyser.connect(ctx.destination)
-      this.ctx = ctx
+      analyser.connect(context.destination)
+      this.context = context
       this.master = master
       this.analyser = analyser
     }
-    return this.ctx
+    return this.context
   }
 
   getAnalyser(): AnalyserNode | null {
@@ -55,11 +54,22 @@ export class SynthEngine {
   }
 
   load(track: Track) {
-    this.stopTimer()
+    this.stopCurrentPlayback()
     this.track = track
     this.pausedAt = 0
     this.scheduledUntil = 0
-    this.playing = false
+
+    if (track.kind === 'local' && track.sourceUrl) {
+      const media = new Audio(track.sourceUrl)
+      media.preload = 'metadata'
+      media.crossOrigin = 'anonymous'
+      media.onended = () => {
+        this.playing = false
+        this.pausedAt = 0
+        this.endedHandler?.()
+      }
+      this.media = media
+    }
   }
 
   get isPlaying(): boolean {
@@ -67,29 +77,39 @@ export class SynthEngine {
   }
 
   get duration(): number {
+    if (this.media && Number.isFinite(this.media.duration)) return this.media.duration
     return this.track?.duration ?? 0
   }
 
   get position(): number {
+    if (this.media) return Number.isFinite(this.media.currentTime) ? this.media.currentTime : 0
     if (!this.track) return 0
-    if (!this.playing || !this.ctx) return this.pausedAt
-    return Math.min(this.ctx.currentTime - this.startCtxTime, this.track.duration)
+    if (!this.playing || !this.context) return this.pausedAt
+    return Math.min(this.context.currentTime - this.startContextTime, this.track.duration)
   }
 
-  setVolume(v: number) {
-    this.volume = v
-    if (this.master) this.master.gain.value = v
-  }
-
-  getVolume(): number {
-    return this.volume
+  setVolume(value: number) {
+    this.volume = Math.max(0, Math.min(1, value))
+    if (this.master) this.master.gain.value = this.volume
   }
 
   async play() {
     if (!this.track) return
-    const ctx = this.ensureCtx()
-    if (ctx.state === 'suspended') await ctx.resume()
-    this.startCtxTime = ctx.currentTime - this.pausedAt
+    const context = this.ensureGraph()
+    if (context.state === 'suspended') await context.resume()
+
+    if (this.media) {
+      if (!this.mediaSource) {
+        this.mediaSource = context.createMediaElementSource(this.media)
+        this.mediaSource.connect(this.master!)
+      }
+      this.media.currentTime = Math.min(this.pausedAt, this.duration || this.pausedAt)
+      await this.media.play()
+      this.playing = true
+      return
+    }
+
+    this.startContextTime = context.currentTime - this.pausedAt
     this.scheduledUntil = this.pausedAt
     this.playing = true
     this.startTimer()
@@ -97,76 +117,117 @@ export class SynthEngine {
 
   pause() {
     if (!this.playing) return
-    this.pausedAt = this.position
+    if (this.media) {
+      this.media.pause()
+      this.pausedAt = this.media.currentTime
+    } else {
+      this.pausedAt = this.position
+      this.stopTimer()
+      this.stopOscillators()
+    }
     this.playing = false
-    this.stopTimer()
-  }
-
-  toggle() {
-    if (this.playing) this.pause()
-    else void this.play()
   }
 
   seek(seconds: number) {
     if (!this.track) return
-    const clamped = Math.max(0, Math.min(seconds, this.track.duration))
+    const clamped = Math.max(0, Math.min(seconds, this.duration))
     this.pausedAt = clamped
-    if (this.playing && this.ctx) {
-      this.startCtxTime = this.ctx.currentTime - clamped
+
+    if (this.media) {
+      this.media.currentTime = clamped
+      return
+    }
+
+    this.stopOscillators()
+    if (this.playing && this.context) {
+      this.startContextTime = this.context.currentTime - clamped
       this.scheduledUntil = clamped
     }
   }
 
+  destroy() {
+    this.stopCurrentPlayback()
+    if (this.context) void this.context.close()
+    this.context = null
+    this.master = null
+    this.analyser = null
+  }
+
+  private stopCurrentPlayback() {
+    this.stopTimer()
+    this.stopOscillators()
+    if (this.media) {
+      this.media.pause()
+      this.media.onended = null
+      this.media.removeAttribute('src')
+      this.media.load()
+    }
+    if (this.mediaSource) this.mediaSource.disconnect()
+    this.media = null
+    this.mediaSource = null
+    this.playing = false
+  }
+
   private startTimer() {
-    if (this.timer != null) return
-    this.timer = window.setInterval(() => this.tick(), TICK_MS)
+    if (this.timer !== null) return
+    this.timer = window.setInterval(() => this.tick(), TICK_MILLISECONDS)
   }
 
   private stopTimer() {
-    if (this.timer != null) {
+    if (this.timer !== null) {
       window.clearInterval(this.timer)
       this.timer = null
     }
   }
 
-  private tick() {
-    if (!this.ctx || !this.track || !this.playing) return
-    const pos = this.position
+  private stopOscillators() {
+    for (const oscillator of this.activeOscillators) {
+      try {
+        oscillator.stop()
+      } catch {
+        // A node may already have completed between the set iteration and stop.
+      }
+    }
+    this.activeOscillators.clear()
+  }
 
-    if (pos >= this.track.duration) {
-      this.pause()
+  private tick() {
+    if (!this.context || !this.track || !this.playing || this.track.kind !== 'synth') return
+    const position = this.position
+
+    if (position >= this.track.duration) {
+      this.playing = false
       this.pausedAt = 0
+      this.stopTimer()
+      this.stopOscillators()
       this.endedHandler?.()
       return
     }
 
-    const windowEnd = pos + LOOKAHEAD_S
+    const windowEnd = position + LOOKAHEAD_SECONDS
     for (const note of this.track.notes) {
-      if (note.time >= this.scheduledUntil && note.time < windowEnd) {
-        this.scheduleNote(note)
-      }
+      if (note.time >= this.scheduledUntil && note.time < windowEnd) this.scheduleNote(note)
     }
     this.scheduledUntil = windowEnd
   }
 
-  private scheduleNote(note: { time: number; dur: number; midi: number; gain?: number; type?: OscillatorType }) {
-    if (!this.ctx || !this.master) return
-    const when = Math.max(this.ctx.currentTime, this.startCtxTime + note.time)
-    const osc = this.ctx.createOscillator()
-    const env = this.ctx.createGain()
+  private scheduleNote(note: Note) {
+    if (!this.context || !this.master) return
+    const when = Math.max(this.context.currentTime, this.startContextTime + note.time)
+    const oscillator = this.context.createOscillator()
+    const envelope = this.context.createGain()
     const peak = note.gain ?? 0.3
 
-    osc.type = note.type ?? 'sine'
-    osc.frequency.value = midiToFreq(note.midi)
-
-    // Simple attack/decay envelope to avoid clicks.
-    env.gain.setValueAtTime(0.0001, when)
-    env.gain.exponentialRampToValueAtTime(peak, when + 0.01)
-    env.gain.exponentialRampToValueAtTime(0.0001, when + note.dur)
-
-    osc.connect(env)
-    env.connect(this.master)
-    osc.start(when)
-    osc.stop(when + note.dur + 0.02)
+    oscillator.type = note.type ?? 'sine'
+    oscillator.frequency.value = midiToFrequency(note.midi)
+    envelope.gain.setValueAtTime(0.0001, when)
+    envelope.gain.exponentialRampToValueAtTime(peak, when + 0.01)
+    envelope.gain.exponentialRampToValueAtTime(0.0001, when + note.dur)
+    oscillator.connect(envelope)
+    envelope.connect(this.master)
+    oscillator.onended = () => this.activeOscillators.delete(oscillator)
+    this.activeOscillators.add(oscillator)
+    oscillator.start(when)
+    oscillator.stop(when + note.dur + 0.02)
   }
 }
