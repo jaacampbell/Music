@@ -33,7 +33,7 @@ jobs:
           test -s /tmp/status.html
           echo "Ops page reachable."
 
-      - name: Wait for Phase 12 production readiness
+      - name: Wait for Phase 14 production readiness
         shell: bash
         run: |
           set -euo pipefail
@@ -43,19 +43,21 @@ jobs:
               "$SITE/api/stem-agent/readiness" -o /tmp/readiness.json; then
               DYNAMIC="$(jq -r '.capabilities.dynamicRouting // false' /tmp/readiness.json)"
               RECOVERY="$(jq -r '.capabilities.cloudRecovery // false' /tmp/readiness.json)"
+              PERMANENT="$(jq -r '.capabilities.permanentOutputs // false' /tmp/readiness.json)"
+              RESUMABLE="$(jq -r '.capabilities.resumableOutputUpload // false' /tmp/readiness.json)"
               FLEET_OK="$(jq -r '.services.workerFleet.ok // false' /tmp/readiness.json)"
               ARTIFACT_OK="$(jq -r '.services.artifactBroker.ok // false' /tmp/readiness.json)"
-              if [[ "$DYNAMIC" == "true" && "$RECOVERY" == "true" && "$FLEET_OK" == "true" && "$ARTIFACT_OK" == "true" ]]; then
+              if [[ "$DYNAMIC" == "true" && "$RECOVERY" == "true" && "$PERMANENT" == "true" && "$RESUMABLE" == "true" && "$FLEET_OK" == "true" && "$ARTIFACT_OK" == "true" ]]; then
                 ready=true
-                echo "Phase 12 production bundle detected on attempt $attempt."
+                echo "Phase 14 permanent-output bundle detected on attempt $attempt."
                 break
               fi
             fi
-            echo "Netlify has not published the Phase 12 durable-recovery bundle yet ($attempt/18)."
+            echo "Netlify has not published the Phase 14 permanent-output bundle yet ($attempt/18)."
             sleep 5
           done
           if [[ "$ready" != "true" ]]; then
-            echo "Production never exposed the Phase 12 readiness shape." >&2
+            echo "Production never exposed the Phase 14 readiness shape." >&2
             jq . /tmp/readiness.json 2>/dev/null || true
             exit 1
           fi
@@ -72,6 +74,8 @@ jobs:
           COMPUTE="$(jq -r '.capabilities.computeReady' /tmp/readiness.json)"
           DYNAMIC="$(jq -r '.capabilities.dynamicRouting // false' /tmp/readiness.json)"
           RECOVERY="$(jq -r '.capabilities.cloudRecovery // false' /tmp/readiness.json)"
+          PERMANENT="$(jq -r '.capabilities.permanentOutputs // false' /tmp/readiness.json)"
+          RESUMABLE="$(jq -r '.capabilities.resumableOutputUpload // false' /tmp/readiness.json)"
           EDGE_OK="$(jq -r '.services.edgeMirror.ok' /tmp/readiness.json)"
           FLEET_OK="$(jq -r '.services.workerFleet.ok // false' /tmp/readiness.json)"
           ARTIFACT_OK="$(jq -r '.services.artifactBroker.ok // false' /tmp/readiness.json)"
@@ -95,12 +99,16 @@ jobs:
             echo "Durable source recovery is not healthy." >&2
             exit 1
           fi
+          if [[ "$PERMANENT" != "true" || "$RESUMABLE" != "true" ]]; then
+            echo "Permanent resumable stem output persistence is not healthy." >&2
+            exit 1
+          fi
           if [[ "$COMPUTE" == "true" && "$STATUS" != "ready" ]]; then
             echo "Compute is available but production readiness is not ready: $STATUS" >&2
             exit 1
           fi
           if [[ "$COMPUTE" != "true" && "$STATUS" != "control-plane-ready" ]]; then
-            echo "Expected control-plane-ready while no worker has capacity, got: $STATUS" >&2
+            echo "Expected control-plane-ready while compute is in standby, got: $STATUS" >&2
             exit 1
           fi
 
@@ -117,6 +125,8 @@ jobs:
             echo "- Durable source broker: \`$ARTIFACT_OK\`"
             echo "- Dynamic routing: \`$DYNAMIC\`"
             echo "- Cross-node recovery: \`$RECOVERY\`"
+            echo "- Permanent private outputs: \`$PERMANENT\`"
+            echo "- Resumable output upload: \`$RESUMABLE\`"
             echo "- Ready nodes: \`$READY_NODES\`"
             echo "- Deep-ready nodes: \`$DEEP_NODES\`"
             echo "- Compute healthy: \`$COMPUTE\`"
@@ -133,6 +143,7 @@ jobs:
           HIERARCHICAL="$(jq -r '.capabilities.hierarchicalRouting' /tmp/readiness.json)"
           RESTART="$(jq -r '.capabilities.restartRecovery' /tmp/readiness.json)"
           CROSS_NODE="$(jq -r '.capabilities.cloudRecovery' /tmp/readiness.json)"
+          PERMANENT="$(jq -r '.capabilities.permanentOutputs' /tmp/readiness.json)"
           MIRROR="$(jq -r '.capabilities.cloudMirror' /tmp/readiness.json)"
           {
             echo ""
@@ -143,5 +154,6 @@ jobs:
             echo "- Hierarchical routing: \`$HIERARCHICAL\`"
             echo "- Same-node restart recovery: \`$RESTART\`"
             echo "- Cross-node source replay: \`$CROSS_NODE\`"
+            echo "- Permanent private outputs: \`$PERMANENT\`"
             echo "- Cloud lifecycle mirror: \`$MIRROR\`"
           } >> "$GITHUB_STEP_SUMMARY"
