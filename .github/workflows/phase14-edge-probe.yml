@@ -1,0 +1,35 @@
+name: Phase 14 Edge Probe
+
+on:
+  push:
+    branches: [agentic-stem-phase14]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Probe permanent-output broker
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://jgnsrjjgeodqruafafav.supabase.co/functions/v1/stem-worker-artifacts"
+          code="$(curl --silent --show-error --location --max-time 15 -o /tmp/health.json -w '%{http_code}' "$URL")"
+          jq . /tmp/health.json
+          test "$code" = "200"
+          test "$(jq -r '.status' /tmp/health.json)" = "ok"
+          test "$(jq -r '.configReady' /tmp/health.json)" = "true"
+          test "$(jq -r '.permanentOutputs' /tmp/health.json)" = "true"
+          test "$(jq -r '.uploadProtocol' /tmp/health.json)" = "tus-resumable-signed-token"
+          test "$(jq -r '.directStorageHost' /tmp/health.json)" = "true"
+
+          unsigned="$(curl --silent --show-error --location --max-time 15 -o /tmp/unsigned.json -w '%{http_code}' -X POST -H 'Content-Type: application/json' --data '{}' "$URL")"
+          jq . /tmp/unsigned.json
+          if [[ "$unsigned" != "400" && "$unsigned" != "401" ]]; then
+            echo "Unsigned artifact request crossed the authentication boundary: HTTP $unsigned" >&2
+            exit 1
+          fi
