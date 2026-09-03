@@ -68,6 +68,7 @@ export async function GET(): Promise<NextResponse> {
   const systemData = workerSystem.data ?? {};
   const recovery = (systemData.restartRecovery ?? {}) as Record<string, unknown>;
   const fleetData = workerFleet.data ?? {};
+  const artifactData = artifactBroker.data ?? {};
   const fleetReadyNodes = numberField(fleetData, "readyNodes");
   const fleetDeepNodes = numberField(fleetData, "deepReadyNodes");
   const fleetHierarchical = numberField(fleetData, "hierarchicalNodes");
@@ -77,7 +78,14 @@ export async function GET(): Promise<NextResponse> {
 
   const staticComputeReady = Boolean(separatorUrl && workerHealth.ok);
   const fleetComputeReady = Boolean(workerFleet.ok && fleetReadyNodes > 0);
-  const controlPlaneReady = Boolean(supabaseUrl && gatewayConfigured && edgeMirror.ok && workerFleet.ok && artifactBroker.ok);
+  const permanentOutputs = Boolean(
+    artifactBroker.ok &&
+    artifactData.permanentOutputs === true &&
+    artifactData.uploadProtocol === "tus-resumable-signed-token"
+  );
+  const controlPlaneReady = Boolean(
+    supabaseUrl && gatewayConfigured && edgeMirror.ok && workerFleet.ok && artifactBroker.ok && permanentOutputs
+  );
   const computeReady = staticComputeReady || fleetComputeReady;
   const deepReady = Boolean(fleetDeepNodes > 0 || (staticComputeReady && samAudio.installed === true && samAudio.cudaAvailable === true));
   const cloudRecovery = Boolean(artifactBroker.ok && edgeMirror.ok && workerFleet.ok);
@@ -91,12 +99,14 @@ export async function GET(): Promise<NextResponse> {
         : !workerFleet.ok
           ? "Repair the Stem Worker Mesh heartbeat gateway."
           : !artifactBroker.ok
-            ? "Repair the durable stem source artifact broker."
-            : !computeReady
-              ? "Launch a Phase 12 Stem Worker. It will self-register; project sources will remain durable in private cloud storage."
-              : !deepReady
-                ? "Core workers are available. Add a CUDA + SAM-Audio node to unlock Agentic Deep mode."
-                : "Stem Director control plane, durable recovery and Agentic Deep Worker Mesh are ready.";
+            ? "Repair the stem artifact broker."
+            : !permanentOutputs
+              ? "Deploy the Phase 14 artifact broker with resumable permanent-output persistence."
+              : !computeReady
+                ? "Compute is safely in standby. Start or wake an approved Phase 14 worker when a stem job needs GPU capacity."
+                : !deepReady
+                  ? "Core workers are available. Add a CUDA + SAM-Audio node to unlock Agentic Deep mode."
+                  : "Stem Director, wake-on-demand compute, cross-node recovery, and permanent private outputs are ready.";
 
   return NextResponse.json({
     status: controlPlaneReady && computeReady ? "ready" : controlPlaneReady ? "control-plane-ready" : "degraded",
@@ -126,7 +136,9 @@ export async function GET(): Promise<NextResponse> {
       restartRecovery: fleetRecovery > 0 || recovery.enabled === true,
       cloudMirror: fleetMirror > 0 || workerMirror.ok,
       dynamicRouting: workerFleet.ok,
-      cloudRecovery
+      cloudRecovery,
+      permanentOutputs,
+      resumableOutputUpload: permanentOutputs
     }
   }, {
     headers: { "Cache-Control": "no-store" }
