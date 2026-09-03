@@ -1,0 +1,34 @@
+name: Phase 14 Production Probe
+
+on:
+  push:
+    branches: [agentic-stem-phase14]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Verify deployed Phase 14 readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://musicdevnc.netlify.app/api/stem-agent/readiness"
+          code="$(curl --silent --show-error --location --max-time 25 -o /tmp/readiness.json -w '%{http_code}' "$URL")"
+          jq . /tmp/readiness.json
+          test "$code" = "200"
+          test "$(jq -r '.capabilities.controlPlaneReady // false' /tmp/readiness.json)" = "true"
+          test "$(jq -r '.capabilities.dynamicRouting // false' /tmp/readiness.json)" = "true"
+          test "$(jq -r '.capabilities.cloudRecovery // false' /tmp/readiness.json)" = "true"
+          test "$(jq -r '.capabilities.permanentOutputs // false' /tmp/readiness.json)" = "true"
+          test "$(jq -r '.capabilities.resumableOutputUpload // false' /tmp/readiness.json)" = "true"
+          test "$(jq -r '.services.artifactBroker.ok // false' /tmp/readiness.json)" = "true"
+          status="$(jq -r '.status' /tmp/readiness.json)"
+          if [[ "$status" != "ready" && "$status" != "control-plane-ready" ]]; then
+            echo "Unexpected production readiness: $status" >&2
+            exit 1
+          fi
