@@ -1,0 +1,104 @@
+:root { color-scheme: dark; }
+
+.musicStudioHome {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(178, 204, 0, .12), transparent 28rem),
+    radial-gradient(circle at 95% 15%, rgba(255, 255, 255, .06), transparent 24rem),
+    #080a08;
+  color: #f6f7f3;
+  padding-bottom: 5rem;
+}
+
+.musicStudioTopbar {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1rem clamp(1rem, 4vw, 4.5rem);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(18px);
+  background: rgba(8,10,8,.82);
+}
+
+.musicStudioBrand { display:flex; align-items:center; gap:.8rem; color:inherit; text-decoration:none; }
+.musicStudioBrand > span:last-child { display:grid; gap:.1rem; }
+.musicStudioBrand small { color:#92978e; font-size:.7rem; font-weight:600; letter-spacing:.04em; }
+.musicStudioMark { width:38px; height:38px; border-radius:12px; display:grid; place-items:center; background:#b0cc00; color:#0a0c08; font-weight:900; }
+.musicStudioTopbar nav { display:flex; flex-wrap:wrap; gap:1rem; }
+.musicStudioTopbar nav a { color:#c7cbc3; text-decoration:none; font-size:.88rem; font-weight:700; }
+.musicStudioTopbar nav a:hover { color:#fff; }
+
+.musicStudioHero {
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(260px,.55fr);
+  gap:clamp(2rem,5vw,5rem);
+  align-items:end;
+  padding:clamp(4rem,9vw,8rem) clamp(1rem,6vw,7rem) 4rem;
+  max-width:1500px;
+  margin:0 auto;
+}
+
+.musicStudioKicker { color:#b0cc00; font-size:.72rem; font-weight:900; letter-spacing:.17em; margin:0 0 .8rem; }
+.musicStudioHero h1 { max-width:900px; margin:0; font-size:clamp(3rem,7vw,7.25rem); line-height:.92; letter-spacing:-.065em; }
+.musicStudioLead { max-width:760px; color:#b8bdb4; font-size:clamp(1rem,1.6vw,1.3rem); line-height:1.65; margin:1.5rem 0 0; }
+.musicStudioHeroActions { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:2rem; }
+.musicStudioPrimary,.musicStudioSecondary { min-height:48px; display:inline-flex; align-items:center; justify-content:center; padding:0 1.15rem; border-radius:999px; text-decoration:none; font-weight:850; }
+.musicStudioPrimary { background:#b0cc00; color:#0a0c08; }
+.musicStudioSecondary { border:1px solid rgba(255,255,255,.15); color:#fff; background:rgba(255,255,255,.04); }
+
+.musicStudioStatus { border:1px solid rgba(255,255,255,.1); border-radius:24px; padding:1.3rem; background:rgba(255,255,255,.035); box-shadow:0 30px 70px rgba(0,0,0,.3); }
+.musicStudioStatusLabel { margin:0 0 .8rem; color:#8d9388; text-transform:uppercase; font-size:.7rem; font-weight:900; letter-spacing:.14em; }
+.musicStudioStatusRow { display:flex; justify-content:space-between; gap:1rem; padding:.75rem 0; border-top:1px solid rgba(255,255,255,.07); }
+.musicStudioStatusRow span { color:#b8bdb4; }
+.musicStudioStatusRow strong { font-size:.72rem; letter-spacing:.08em; }
+.musicStudioStatusRow .good { color:#b0cc00; }
+.musicStudioStatusRow .warn { color:#ffbf69; }
+.musicStudioStatusRow .standby { color:#8db8ff; }
+.musicStudioNext { margin:.75rem 0 0; color:#8d9388; font-size:.78rem; line-height:1.5; }
+
+.musicStudioSection,.musicStudioPipeline,.musicStudioLegacy { max-width:1500px; margin:0 auto; padding:2.2rem clamp(1rem,6vw,7rem); }
+.musicStudioSectionHead { display:flex; justify-content:space-between; align-items:end; gap:1rem; margin-bottom:1.25rem; }
+.musicStudioSectionHead h2,.musicStudioLegacy h2 { margin:0; font-size:clamp(1.8rem,3vw,3rem); letter-spacing:-.04em; }
+.musicStudioSectionHead > span { color:#858b81; font-size:.9rem; }
+
+.musicStudioGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+.musicStudioCard { min-height:230px; display:flex; flex-direction:column; padding:1.35rem; border-radius:22px; border:1px solid rgba(255,255,255,.09); background:linear-gradient(160deg, rgba(255,255,255,.055), rgba(255,255,255,.02)); text-decoration:none; color:inherit; transition:transform .2s ease,border-color .2s ease,background .2s ease; }
+.musicStudioCard:hover { transform:translateY(-3px); border-color:rgba(176,204,0,.5); background:linear-gradient(160deg, rgba(176,204,0,.09), rgba(255,255,255,.025)); }
+.musicStudioCardTop { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.musicStudioCardTop span { color:#b0cc00; font-size:.67rem; font-weight:900; letter-spacing:.15em; }
+.musicStudioCardTop small { color:#858b81; font-weight:750; }
+.musicStudioCard h3 { margin:1.5rem 0 .65rem; font-size:1.45rem; letter-spacing:-.025em; }
+.musicStudioCard p { color:#aab0a5; line-height:1.55; margin:0; }
+.musicStudioGo { margin-top:auto; padding-top:1.5rem; font-size:.86rem; }
+
+.musicStudioPipeline { margin-top:1rem; }
+.musicStudioFlow { display:grid; grid-template-columns:repeat(8,minmax(120px,1fr)); overflow-x:auto; border:1px solid rgba(255,255,255,.08); border-radius:22px; }
+.musicStudioFlowStep { min-height:130px; padding:1rem; border-right:1px solid rgba(255,255,255,.08); display:flex; flex-direction:column; justify-content:space-between; }
+.musicStudioFlowStep:last-child { border-right:0; }
+.musicStudioFlowStep span { color:#666d62; font-size:.7rem; font-weight:900; }
+.musicStudioFlowStep strong { max-width:120px; font-size:.92rem; }
+
+.musicStudioLegacy { margin-top:1.5rem; display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,.55fr); gap:2rem; border-top:1px solid rgba(255,255,255,.08); }
+.musicStudioLegacy p:not(.musicStudioKicker) { color:#949a90; max-width:760px; line-height:1.6; }
+.musicStudioLegacyLinks { display:grid; gap:.7rem; align-content:start; }
+.musicStudioLegacyLinks a { color:#d8dbd4; text-decoration:none; padding:.85rem 1rem; border:1px solid rgba(255,255,255,.08); border-radius:14px; background:rgba(255,255,255,.025); }
+
+@media (max-width: 980px) {
+  .musicStudioHero,.musicStudioLegacy { grid-template-columns:1fr; }
+  .musicStudioGrid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .musicStudioTopbar nav { display:none; }
+}
+
+@media (max-width: 620px) {
+  .musicStudioHero { padding-top:3rem; }
+  .musicStudioHero h1 { font-size:clamp(2.8rem,16vw,4.5rem); }
+  .musicStudioGrid { grid-template-columns:1fr; }
+  .musicStudioSectionHead { align-items:start; flex-direction:column; }
+  .musicStudioPrimary,.musicStudioSecondary { width:100%; }
+  .musicStudioTopbar { position:relative; }
+}
