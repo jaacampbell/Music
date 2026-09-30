@@ -36,7 +36,7 @@ _shutdown = threading.Event()
 class RefineRequest(BaseModel):
     instruction: str = Field(default="", max_length=2000)
     strategy: str = Field(default="auto", max_length=80)
-    targets: list[str] = Field(default_factory=list, max_length=MAX_DEEP_TARGETS)
+    targets: list[str] = Field(default_factory=list, max_length=MAX_DEEP_TARGETS)\n    styleControl: dict[str, Any] | None = None
 
 
 def _check_cancelled(job_id: str) -> None:
@@ -47,7 +47,7 @@ def _check_cancelled(job_id: str) -> None:
         raise InterruptedError("cancelled")
 
 
-def _parse_targets(raw: str | None) -> list[str]:
+def _parse_style_control(raw: str | None) -> dict[str, Any]:\n    if not raw: return {}\n    try: value = json.loads(raw)\n    except json.JSONDecodeError as exc: raise HTTPException(400, "style_control must be a JSON object") from exc\n    if not isinstance(value, dict): raise HTTPException(400, "style_control must be a JSON object")\n    return value\n\n\ndef _parse_targets(raw: str | None) -> list[str]:
     if not raw: return []
     try: values = json.loads(raw)
     except json.JSONDecodeError as exc: raise HTTPException(400, "targets must be a JSON array") from exc
@@ -137,7 +137,7 @@ def _process(job_id: str) -> None:
         source = audio_profile(source_wav)
         JOBS.update(job_id, sourceProfile=source)
         JOBS.event(job_id, "analysis-agent", "Measured source technical profile.", 12, "source-analysis", source)
-        strategy = plan(job["mode"], job["strategy"], job["instruction"], job["requestedTargets"], source, legacy.TARGETS, MAX_DEEP_TARGETS)
+        strategy = plan(job["mode"], job["strategy"], job["instruction"], job["requestedTargets"], source, legacy.TARGETS, MAX_DEEP_TARGETS, job.get("styleControl") or {})
         JOBS.update(job_id, plan=strategy)
         JOBS.event(job_id, "strategy-agent", f"Plan ready: {len(strategy['targets'])} deep targets via {strategy['planner']}.", 18, "planning", strategy)
         _check_cancelled(job_id)
@@ -175,7 +175,7 @@ def _process(job_id: str) -> None:
             "AI-separated stems are estimates, not original studio multitracks.",
             "Technical QA scores file integrity and signal behavior; judge semantic isolation by ear.",
         ]
-        report = {"jobId": job_id, "generatedAt": now(), "strategy": strategy, "sourceProfile": source,
+        report = {"jobId": job_id, "generatedAt": now(), "strategy": strategy, "styleControl": job.get("styleControl") or {}, "sourceProfile": source,
                   "quality": quality, "failedTargets": failed, "warnings": warnings,
                   "agents": ["intake-agent","analysis-agent","strategy-agent","core-agent","deep-agent","recovery-agent","qa-agent","package-agent"]}
         manifest = {"jobId":job_id,"source":{"filename":job["sourceName"],"sha256":job.get("sourceSha256")},
@@ -183,7 +183,7 @@ def _process(job_id: str) -> None:
                     "channels":core["channels"],"durationSec":core["durationSec"],"stems":stems,"requestedTargets":job["requestedTargets"],
                     "plannedTargets":planned,"failedTargets":failed,"alignment":core["alignment"],"warnings":warnings,
                     "engines":{"core":f"Demucs {legacy.CORE_MODEL}","deep":f"SAM-Audio {legacy.SAM_MODEL_NAME}"},
-                    "agentPlan":strategy,"qualitySummary":quality}
+                    "agentPlan":strategy,"styleControl":job.get("styleControl") or {},"qualitySummary":quality}
         (job_dir / "agent-report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
         (job_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
         JOBS.event(job_id, "package-agent", "Building organized stem pack and decision report.", 96, "packaging")
@@ -246,13 +246,13 @@ async def create_agent_job(request: Request, file: UploadFile = File(...), mode:
                            strategy: str = Form("auto"), instruction: str = Form(""), project_id: str | None = Form(None)) -> dict[str, Any]:
     claims = worker_claims(request)
     if mode not in {"core","deep"}: raise HTTPException(400, "mode must be core or deep")
-    requested = _parse_targets(targets) if mode == "deep" else []
+    requested = _parse_targets(targets) if mode == "deep" else []\n    parsed_style_control = _parse_style_control(style_control)
     suffix = Path(file.filename or "audio").suffix.lower()
     if suffix not in ALLOWED_EXTENSIONS: raise HTTPException(415, f"Unsupported audio extension: {suffix or 'unknown'}")
     job_id = uuid.uuid4().hex[:12]; job_dir = DATA_DIR / job_id; job_dir.mkdir(parents=True, exist_ok=True)
     upload_name = f"source-upload{suffix}"; size, digest = await _save_upload(file, job_dir / upload_name)
     state = JOBS.create(job_id, {"owner":claims.get("sub","unknown"),"projectId":project_id,"mode":mode,"strategy":strategy[:80],
-                                      "instruction":instruction[:2000],"requestedTargets":requested,"sourceName":file.filename or "audio",
+                                      "instruction":instruction[:2000],"requestedTargets":requested,"styleControl":parsed_style_control,"sourceName":file.filename or "audio",
                                       "sourceSize":size,"sourceSha256":digest,"uploadFile":upload_name})
     _executor.submit(_process, job_id)
     return {"jobId":job_id,"status":state["status"],"stage":state["stage"],"progress":state["progress"],"pollUrl":f"/agent/jobs/{job_id}"}
@@ -298,7 +298,7 @@ def refine_agent_job(request: Request, job_id: str, body: RefineRequest) -> dict
     try: os.link(source, child_dir / "source.wav")
     except OSError: shutil.copyfile(source, child_dir / "source.wav")
     JOBS.create(child, {"owner":claims.get("sub","unknown"),"projectId":parent.get("projectId"),"parentJobId":job_id,"mode":"deep",
-                        "strategy":body.strategy,"instruction":body.instruction,"requestedTargets":list(dict.fromkeys(body.targets))[:MAX_DEEP_TARGETS],
+                        "strategy":body.strategy,"instruction":body.instruction,"requestedTargets":list(dict.fromkeys(body.targets))[:MAX_DEEP_TARGETS],"styleControl":body.styleControl or parent.get("styleControl") or {},
                         "sourceName":parent.get("sourceName","source audio"),"sourceSize":parent.get("sourceSize"),"sourceSha256":parent.get("sourceSha256"),"uploadFile":""})
     JOBS.event(child, "strategy-agent", f"Refinement branched from {job_id} without re-uploading source audio.", 3, "queued")
     _executor.submit(_process, child); return {"jobId":child,"parentJobId":job_id,"status":"queued","stage":"queued","progress":3}
