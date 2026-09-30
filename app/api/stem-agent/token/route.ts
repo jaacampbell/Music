@@ -8,7 +8,7 @@ const bodySchema = z.object({
   mode: z.enum(["core", "deep"]).default("deep"),
   strategy: z.string().max(80).default("auto"),
   instruction: z.string().max(2000).default(""),
-  targets: z.array(z.string().max(120)).max(80).default([]),
+  targets: z.array(z.string().max(120)).max(80).default([]),\n  styleControl: z.record(z.string(), z.unknown()).nullable().optional(),
   orchestrationId: z.string().uuid().nullable().optional(),
   excludeNodeId: z.string().max(128).nullable().optional()
 });
