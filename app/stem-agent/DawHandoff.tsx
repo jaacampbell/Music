@@ -50,9 +50,9 @@ export function DawHandoff({ manifest, resultOrigin, projectId, projectTitle }: 
       : `${resultOrigin}${manifest.zipUrl}`;
 
     const handoff = {
-      schema: "jocyn-daw-handoff/v1",
+      schema: "jocyn-daw-handoff/v2",
       createdAt: new Date().toISOString(),
-      action: "stage-stems-for-ableton",
+      action: "auto-import-stems-into-ableton",
       projectId,
       projectTitle: projectTitle || projectFolderName,
       projectFolderName,
@@ -64,6 +64,14 @@ export function DawHandoff({ manifest, resultOrigin, projectId, projectTitle }: 
         abletonSetsFolder: "01_Ableton_Sets",
         stemsFolder: "05_Stems",
         archiveFolder: "12_Archive/DAW_Handoffs"
+      },
+      abletonImport: {
+        autoCreateTracks: true,
+        view: "arrangement",
+        arrangementPositionBeats: 0,
+        trackOrder: ["vocals", "drums", "bass", "guitar", "piano", "other"],
+        colorByFamily: true,
+        groupIntent: true
       },
       stems: manifest.stems.map((stem) => ({
         name: stem.name,
@@ -84,7 +92,7 @@ export function DawHandoff({ manifest, resultOrigin, projectId, projectTitle }: 
     URL.revokeObjectURL(url);
 
     setMessage(
-      `Handoff created for ${projectFolderName}. With JO₵YN DAW Bridge running, stems will land in 05_Stems automatically.`
+      `Handoff created for ${projectFolderName}. With JO₵YN DAW Bridge + Remote Script enabled, stems will land in 05_Stems and populate Ableton Arrangement tracks automatically.`
     );
   };
 
@@ -95,7 +103,7 @@ export function DawHandoff({ manifest, resultOrigin, projectId, projectTitle }: 
         <h3>Send to Ableton</h3>
         <p className="dawHandoffCopy">
           Uses your existing project structure: <strong>01_Ableton_Sets</strong> + <strong>05_Stems</strong>.
-          The browser creates the handoff ticket; the optional Mac bridge handles the local filesystem.
+          The browser creates the handoff ticket; the Mac bridge stages the files and the JO₵YN Remote Script creates populated Arrangement tracks automatically.
         </p>
         <p className="dawHandoffStatus">{message}</p>
       </div>
