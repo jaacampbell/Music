@@ -75,6 +75,7 @@ export type AcquireWorkerOptions = {
   strategy?: string;
   instruction?: string;
   targets?: string[];
+  styleControl?: Record<string, unknown> | null;
   waitForCompute?: boolean;
   maxWaitMs?: number;
   onComputeWait?: (message: string, compute: ComputeState | null) => void;
@@ -133,7 +134,8 @@ export function useWorkerMesh(projectId: string | null, mode: "core" | "deep") {
       excludeNodeId: options.excludeNodeId ?? null,
       strategy: options.strategy ?? "auto",
       instruction: options.instruction ?? "",
-      targets: options.targets ?? []
+      targets: options.targets ?? [],
+      styleControl: options.styleControl ?? null
     };
     const waitForCompute = options.waitForCompute !== false && Boolean(options.orchestrationId);
     const deadline = Date.now() + Math.max(15_000, options.maxWaitMs ?? 4 * 60_000);
