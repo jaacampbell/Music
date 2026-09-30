@@ -232,7 +232,11 @@ def targets_for_group(targets: list[dict[str, Any]], *keywords: str) -> list[str
 def deterministic_plan(mode: str, strategy: str, instruction: str, requested: list[str], targets: list[dict[str, Any]], style_control: dict[str, Any] | None = None) -> dict[str, Any]:
     if mode == "core": return {"strategy": "core", "targets": [], "reasoning": ["Core mode requested."], "qaFocus": ["reconstruction", "clipping"], "planner": "deterministic"}
     if requested: return {"strategy": strategy or "manual", "targets": requested, "reasoning": ["Using explicitly selected deep targets."], "qaFocus": ["signal", "clipping", "silence"], "planner": "deterministic"}
-    style_control = style_control or {}\n    style_terms = " ".join(str(x) for x in (style_control.get("includeTags") or []) + (style_control.get("genreArchetypes") or []) + (style_control.get("soundTextures") or []))\n    unexpected = style_control.get("unexpected") or {}\n    unexpected_terms = " ".join(str(item.get("value") or "") for item in unexpected.values() if isinstance(item, dict) and item.get("enabled"))\n    text = f"{strategy} {instruction} {style_terms} {unexpected_terms}".lower(); selected: list[str] = []; reasons: list[str] = []
+    style_control = style_control or {}
+    style_terms = " ".join(str(x) for x in (style_control.get("includeTags") or []) + (style_control.get("genreArchetypes") or []) + (style_control.get("soundTextures") or []))
+    unexpected = style_control.get("unexpected") or {}
+    unexpected_terms = " ".join(str(item.get("value") or "") for item in unexpected.values() if isinstance(item, dict) and item.get("enabled"))
+    text = f"{strategy} {instruction} {style_terms} {unexpected_terms}".lower(); selected: list[str] = []; reasons: list[str] = []
     if any(x in text for x in ["vocal", "acapella", "ad-lib", "background", "lead"]): selected += targets_for_group(targets, "vocal", "adlib"); reasons.append("Vocal goal detected.")
     if any(x in text for x in ["drum", "kick", "snare", "hi-hat", "percussion"]): selected += targets_for_group(targets, "drum", "kick", "snare", "hat", "percussion"); reasons.append("Drum goal detected.")
     if any(x in text for x in ["beat", "808", "bass", "instrumental"]): selected += targets_for_group(targets, "bass", "808", "sub", "drum"); reasons.append("Beat/low-end goal detected.")
