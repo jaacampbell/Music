@@ -16,6 +16,7 @@ import { PRESETS, STEM_GROUPS, STEM_TARGETS } from "@/app/stem-studio/catalog";
 import { useRealStemPlayer, type StemInfo } from "@/app/stem-studio/useRealStemPlayer";
 import { useWorkerMesh, type WorkerSelection, type WorkerSession } from "./useWorkerMesh";
 import { DawHandoff } from "./DawHandoff";
+import { loadStyleControl, type StyleControlState } from "@/lib/style-control";
 import "./stemAgent.css";
 
 type JobState = {
@@ -107,6 +108,7 @@ export default function StemAgentPage(): React.JSX.Element {
   const [busy, setBusy] = useState(false);
   const [cloudSaved, setCloudSaved] = useState(0);
   const [message, setMessage] = useState("Connect a source and give the Stem Director a production goal.");
+  const [styleControl, setStyleControl] = useState<StyleControlState | null>(null);
 
   const project = useMemo(
     () => projectId ? loadStoredProjects().find((item) => item.id === projectId) ?? null : null,
@@ -122,6 +124,7 @@ export default function StemAgentPage(): React.JSX.Element {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    setStyleControl(loadStyleControl());
     const linked = params.get("projectId");
     setProjectId(linked);
     if (isCloudConfigured()) void getCurrentUser().then(setCloudUser).catch(() => setCloudUser(null));
@@ -287,7 +290,7 @@ export default function StemAgentPage(): React.JSX.Element {
 
   const recoverCloudExecution = async (previous: WorkerSession, orchestration: string): Promise<void> => {
     setMessage(`Execution lease expired on ${previous.worker.nodeId}. Routing the durable source to another worker…`);
-    const nextSession = await mesh.acquire({
+    const nextSession = await mesh.acquire({ styleControl,
       orchestrationId: orchestration,
       excludeNodeId: previous.worker.nodeId,
       strategy,
@@ -373,7 +376,7 @@ export default function StemAgentPage(): React.JSX.Element {
         setMessage(sourceCloudPath ? "Using durable private project source…" : `Staging ${sourceFile.name} in private cloud storage before compute…`);
         const staged = await stageCloudSource();
         setMessage(`Finding the best ${mode === "deep" ? "Deep GPU" : "Core"} worker for cloud orchestration…`);
-        const session = await mesh.acquire({ orchestrationId: staged.orchestrationId, strategy, instruction, targets });
+        const session = await mesh.acquire({ styleControl, orchestrationId: staged.orchestrationId, strategy, instruction, targets });
         setActiveSession(session);
         const workerHealth = await mesh.probeWorker(session.worker.origin);
         if (!workerHealth?.status || workerHealth.status !== "ok") throw new Error("The selected worker stopped responding before source claim. Try again to route to another node.");
@@ -395,7 +398,7 @@ export default function StemAgentPage(): React.JSX.Element {
       }
 
       setMessage(`Finding the best ${mode === "deep" ? "Deep GPU" : "Core"} worker…`);
-      const session = await mesh.acquire({ strategy, instruction, targets });
+      const session = await mesh.acquire({ styleControl, strategy, instruction, targets });
       setActiveSession(session);
       const workerHealth = await mesh.probeWorker(session.worker.origin);
       if (!workerHealth?.status || workerHealth.status !== "ok") throw new Error("The selected worker stopped responding before upload. Try again to route to another node.");
@@ -408,6 +411,7 @@ export default function StemAgentPage(): React.JSX.Element {
       form.append("strategy", strategy);
       form.append("instruction", instruction);
       form.append("targets", JSON.stringify(targets));
+      if (styleControl) form.append("style_control", JSON.stringify(styleControl));
       if (projectId) form.append("project_id", projectId);
       setMessage(`Uploading ${sourceFile.name} directly to ${session.worker.nodeId}…`);
       const response = await fetch(`${session.worker.origin}/agent/jobs`, { method: "POST", headers: authHeaders(session.token), body: form });
@@ -431,7 +435,7 @@ export default function StemAgentPage(): React.JSX.Element {
       const response = await fetch(`${activeSession.worker.origin}/agent/jobs/${job.jobId}/refine`, {
         method: "POST",
         headers: { ...authHeaders(activeSession.token), "Content-Type": "application/json" },
-        body: JSON.stringify({ instruction, strategy, targets })
+        body: JSON.stringify({ instruction, strategy, targets, styleControl })
       });
       const body = await response.json().catch(() => ({})) as JobState & { detail?: string };
       if (!response.ok) throw new Error(body.detail ?? "Could not start refinement job.");

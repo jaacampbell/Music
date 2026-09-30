@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import "./musicStudio.css";
+import { StyleControl } from "./StyleControl";
 
 type Readiness = {
   status?: string;
@@ -145,6 +146,8 @@ export default function MusicStudioHome(): React.JSX.Element {
           ))}
         </div>
       </section>
+
+      <StyleControl />
 
       <section className="musicStudioPipeline">
         <p className="musicStudioKicker">PRODUCTION FLOW</p>
