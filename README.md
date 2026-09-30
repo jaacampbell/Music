@@ -6,17 +6,17 @@ It also includes the **JO₵YN Music Workspace** in [`apps/player`](apps/player)
 
 ## Product surfaces
 
-The Next.js app has one shared song/project identity across its major surfaces:
+The Next.js app has one shared song/project identity across its major surfaces. The hosted Netlify app is the primary production experience; local services are optional development and diagnostic tools:
 
-- `/` — beginner-first Guided Mode + advanced Studio Mode production command center.
+- `/studio` — hosted JO₵YN Music Studio launchpad and production entry point.\n- `/` — beginner-first Guided Mode + advanced Studio Mode production command center.
 - `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.
 - `/player` — JO₵YN unified listening room for secure cloud uploads, cross-device playback, and device-only audio.
-- `/stem-studio` — real production separator with project-native cloud stem handoff.
+- `/stem-agent` — production Stem Director with worker-mesh routing, durable cloud staging, recovery, and permanent private outputs.\n- `/stem-studio` — direct-worker separator retained for local testing and diagnostics.
 - `/stem-lab` — deterministic stem workflow/contract MVP.
 - `/login` — Supabase-backed account creation/sign-in.
 - `/guide` — plain-language walkthrough and glossary.
 
-Use `?projectId=<uuid>` to move the same song between Dashboard, Guided/Studio, and Stem Studio.
+Use `?projectId=<uuid>` to move the same song between Dashboard, Guided/Studio, and production stem workflows. Prefer `/stem-agent` for hosted separation.
 
 ## One song, one project graph
 
