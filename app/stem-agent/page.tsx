@@ -15,7 +15,8 @@ import type { CloudUser, MusicAssetRow } from "@/lib/persistence/types";
 import { PRESETS, STEM_GROUPS, STEM_TARGETS } from "@/app/stem-studio/catalog";
 import { useRealStemPlayer, type StemInfo } from "@/app/stem-studio/useRealStemPlayer";
 import { useWorkerMesh, type WorkerSelection, type WorkerSession } from "./useWorkerMesh";
-import { DawHandoff } from "./DawHandoff";\nimport { loadStyleControl, type StyleControlState } from "@/lib/style-control";
+import { DawHandoff } from "./DawHandoff";
+import { loadStyleControl, type StyleControlState } from "@/lib/style-control";
 import "./stemAgent.css";
 
 type JobState = {
