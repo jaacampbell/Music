@@ -15,6 +15,7 @@ import type { CloudUser, MusicAssetRow } from "@/lib/persistence/types";
 import { PRESETS, STEM_GROUPS, STEM_TARGETS } from "@/app/stem-studio/catalog";
 import { useRealStemPlayer, type StemInfo } from "@/app/stem-studio/useRealStemPlayer";
 import { useWorkerMesh, type WorkerSelection, type WorkerSession } from "./useWorkerMesh";
+import { DawHandoff } from "./DawHandoff";
 import "./stemAgent.css";
 
 type JobState = {
@@ -535,6 +536,8 @@ export default function StemAgentPage(): React.JSX.Element {
         </div>
         <aside className="panel scorePanel"><p className="eyebrow">Quality control</p><h2>{manifest.qualitySummary.stemCount} outputs</h2><div className="scoreGrid"><span>Excellent<strong>{manifest.qualitySummary.excellent}</strong></span><span>Good<strong>{manifest.qualitySummary.good}</strong></span><span>Review<strong>{manifest.qualitySummary.review}</strong></span><span>Cloud<strong>{cloudSaved}</strong></span></div>{resultOrigin && <a className="primary download" href={`${resultOrigin}${manifest.zipUrl}`}>Download organized pack</a>}<button className="ghost full" onClick={() => void refine()} disabled={busy || !activeSession}>Refine from same source</button></aside>
       </section>}
+
+      {manifest && <DawHandoff manifest={manifest} resultOrigin={resultOrigin} projectId={projectId} projectTitle={project?.title ?? null} />}
 
       {manifest && <section className="panel outputsPanel"><div className="panelHead"><div><p className="eyebrow">06 · Generated assets</p><h2>Agent-reviewed stems</h2></div><span>{manifest.failedTargets.length} failed targets</span></div><div className="outputs">{manifest.stems.map((stem) => <article key={`${stem.group}-${stem.name}`}><div><span className="family">{stem.family}</span><h3>{stem.label ?? stem.name}</h3><p>{stem.engine}{stem.sourceLane ? ` · ${stem.sourceLane}` : ""}</p></div><div className="qa"><strong>{stem.technicalQa?.score ?? "—"}</strong><span>{stem.technicalQa?.grade ?? "QA"}</span></div><div className="outputActions">{resultOrigin && <><audio controls preload="none" src={`${resultOrigin}${stem.url}`} /><a href={`${resultOrigin}${stem.url}`} download={stem.downloadName}>WAV</a></>}</div>{stem.technicalQa?.reasons?.length ? <small>{stem.technicalQa.reasons.join(" · ")}</small> : <small>Technical integrity passed. Isolation quality should still be judged by ear.</small>}</article>)}</div></section>}
 
