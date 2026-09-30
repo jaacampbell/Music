@@ -107,6 +107,10 @@ The command-center agent loop, planning scorecards, `/stem-lab` extraction contr
 
 Browser audio analysis and the external separator are real processing paths. Waveforms are rendered only from decoded audio; decode failure does not produce a fabricated waveform.
 
+## DAW handoff
+
+Stem Director can create a small `.jocynhandoff` ticket for Ableton handoff. The optional macOS bridge in [`tools/daw-bridge`](tools/daw-bridge) watches Downloads, stages the organized stem package into the existing song `05_Stems` folder, archives the handoff ticket, and opens the song's `01_Ableton_Sets` folder or newest Live Set. It is optional; hosted Music OS remains the primary production environment.
+
 ## Documents
 
 - [`docs/phase3-unified-music-os.md`](docs/phase3-unified-music-os.md): unified project graph, source/version sync, Stem Studio handoff, Ask Music, and security.
