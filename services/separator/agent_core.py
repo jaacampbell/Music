@@ -229,10 +229,10 @@ def targets_for_group(targets: list[dict[str, Any]], *keywords: str) -> list[str
     return result
 
 
-def deterministic_plan(mode: str, strategy: str, instruction: str, requested: list[str], targets: list[dict[str, Any]]) -> dict[str, Any]:
+def deterministic_plan(mode: str, strategy: str, instruction: str, requested: list[str], targets: list[dict[str, Any]], style_control: dict[str, Any] | None = None) -> dict[str, Any]:
     if mode == "core": return {"strategy": "core", "targets": [], "reasoning": ["Core mode requested."], "qaFocus": ["reconstruction", "clipping"], "planner": "deterministic"}
     if requested: return {"strategy": strategy or "manual", "targets": requested, "reasoning": ["Using explicitly selected deep targets."], "qaFocus": ["signal", "clipping", "silence"], "planner": "deterministic"}
-    text = f"{strategy} {instruction}".lower(); selected: list[str] = []; reasons: list[str] = []
+    style_control = style_control or {}\n    style_terms = " ".join(str(x) for x in (style_control.get("includeTags") or []) + (style_control.get("genreArchetypes") or []) + (style_control.get("soundTextures") or []))\n    unexpected = style_control.get("unexpected") or {}\n    unexpected_terms = " ".join(str(item.get("value") or "") for item in unexpected.values() if isinstance(item, dict) and item.get("enabled"))\n    text = f"{strategy} {instruction} {style_terms} {unexpected_terms}".lower(); selected: list[str] = []; reasons: list[str] = []
     if any(x in text for x in ["vocal", "acapella", "ad-lib", "background", "lead"]): selected += targets_for_group(targets, "vocal", "adlib"); reasons.append("Vocal goal detected.")
     if any(x in text for x in ["drum", "kick", "snare", "hi-hat", "percussion"]): selected += targets_for_group(targets, "drum", "kick", "snare", "hat", "percussion"); reasons.append("Drum goal detected.")
     if any(x in text for x in ["beat", "808", "bass", "instrumental"]): selected += targets_for_group(targets, "bass", "808", "sub", "drum"); reasons.append("Beat/low-end goal detected.")
@@ -244,13 +244,13 @@ def deterministic_plan(mode: str, strategy: str, instruction: str, requested: li
     return {"strategy": strategy or "auto", "targets": selected, "reasoning": reasons, "qaFocus": ["signal", "clipping", "silence", "retries"], "planner": "deterministic"}
 
 
-def openai_plan(mode: str, strategy: str, instruction: str, requested: list[str], source: dict[str, Any], targets: list[dict[str, Any]], limit: int) -> dict[str, Any] | None:
+def openai_plan(mode: str, strategy: str, instruction: str, requested: list[str], source: dict[str, Any], targets: list[dict[str, Any]], limit: int, style_control: dict[str, Any] | None = None) -> dict[str, Any] | None:
     if not (OPENAI_API_KEY and STEM_AGENT_USE_LLM and mode == "deep"): return None
     ids = [t["id"] for t in targets]
     schema = {"type":"object","properties":{"strategy":{"type":"string"},"targets":{"type":"array","items":{"type":"string","enum":ids},"maxItems":limit},"reasoning":{"type":"array","items":{"type":"string"},"maxItems":6},"qaFocus":{"type":"array","items":{"type":"string"},"maxItems":6}},"required":["strategy","targets","reasoning","qaFocus"],"additionalProperties":False}
     payload = {"model": STEM_AGENT_MODEL, "store": False,
                "instructions": "You are a stem-separation strategy agent. Choose only target IDs in the schema. You receive measured signal metadata, not audio, so never claim you heard the song. Prefer a focused production-useful set.",
-               "input": json.dumps({"mode":mode,"strategy":strategy,"instruction":instruction,"requestedTargets":requested,"sourceProfile":source}),
+               "input": json.dumps({"mode":mode,"strategy":strategy,"instruction":instruction,"requestedTargets":requested,"sourceProfile":source,"styleControl":style_control or {}}),
                "text":{"format":{"type":"json_schema","name":"stem_agent_plan","strict":True,"schema":schema}}}
     req = urllib_request.Request("https://api.openai.com/v1/responses", data=json.dumps(payload).encode(), headers={"Authorization":f"Bearer {OPENAI_API_KEY}","Content-Type":"application/json"}, method="POST")
     try:
