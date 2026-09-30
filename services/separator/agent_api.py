@@ -36,7 +36,8 @@ _shutdown = threading.Event()
 class RefineRequest(BaseModel):
     instruction: str = Field(default="", max_length=2000)
     strategy: str = Field(default="auto", max_length=80)
-    targets: list[str] = Field(default_factory=list, max_length=MAX_DEEP_TARGETS)\n    styleControl: dict[str, Any] | None = None
+    targets: list[str] = Field(default_factory=list, max_length=MAX_DEEP_TARGETS)
+    styleControl: dict[str, Any] | None = None
 
 
 def _check_cancelled(job_id: str) -> None:
@@ -47,7 +48,19 @@ def _check_cancelled(job_id: str) -> None:
         raise InterruptedError("cancelled")
 
 
-def _parse_style_control(raw: str | None) -> dict[str, Any]:\n    if not raw: return {}\n    try: value = json.loads(raw)\n    except json.JSONDecodeError as exc: raise HTTPException(400, "style_control must be a JSON object") from exc\n    if not isinstance(value, dict): raise HTTPException(400, "style_control must be a JSON object")\n    return value\n\n\ndef _parse_targets(raw: str | None) -> list[str]:
+def _parse_style_control(raw: str | None) -> dict[str, Any]:
+    if not raw:
+        return {}
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(400, "style_control must be a JSON object") from exc
+    if not isinstance(value, dict):
+        raise HTTPException(400, "style_control must be a JSON object")
+    return value
+
+
+def _parse_targets(raw: str | None) -> list[str]:
     if not raw: return []
     try: values = json.loads(raw)
     except json.JSONDecodeError as exc: raise HTTPException(400, "targets must be a JSON array") from exc
@@ -243,10 +256,12 @@ async def _save_upload(file: UploadFile, destination: Path) -> tuple[int, str]:
 
 @app.post("/agent/jobs", status_code=202)
 async def create_agent_job(request: Request, file: UploadFile = File(...), mode: str = Form("deep"), targets: str | None = Form(None),
-                           strategy: str = Form("auto"), instruction: str = Form(""), project_id: str | None = Form(None)) -> dict[str, Any]:
+                           strategy: str = Form("auto"), instruction: str = Form(""), project_id: str | None = Form(None),
+                           style_control: str | None = Form(None)) -> dict[str, Any]:
     claims = worker_claims(request)
     if mode not in {"core","deep"}: raise HTTPException(400, "mode must be core or deep")
-    requested = _parse_targets(targets) if mode == "deep" else []\n    parsed_style_control = _parse_style_control(style_control)
+    requested = _parse_targets(targets) if mode == "deep" else []
+    parsed_style_control = _parse_style_control(style_control)
     suffix = Path(file.filename or "audio").suffix.lower()
     if suffix not in ALLOWED_EXTENSIONS: raise HTTPException(415, f"Unsupported audio extension: {suffix or 'unknown'}")
     job_id = uuid.uuid4().hex[:12]; job_dir = DATA_DIR / job_id; job_dir.mkdir(parents=True, exist_ok=True)
