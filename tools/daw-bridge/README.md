@@ -1,50 +1,78 @@
-# JO₵YN DAW Bridge
+# JO₵YN DAW Bridge 2.0
 
-Optional macOS companion for Music OS / Stem Director.
+The hosted Music OS remains the primary production environment. This optional
+macOS companion turns a completed Stem Director job into real Ableton Live
+Arrangement tracks without Finder dragging or mouse automation.
 
-## What it does
+## End-to-end flow
 
-When Stem Director creates a `.jocynhandoff` ticket, the bridge:
+```text
+Stem Director
+  -> Send to Ableton
+  -> .jocynhandoff
+  -> JO₵YN DAW Bridge
+  -> 05_Stems/Stem_Director_<JOB_ID>
+  -> local Ableton import command
+  -> JOcYNStemImporter Remote Script
+  -> Live Arrangement tracks at 1.1.1
+```
 
-1. watches `~/Downloads`;
-2. validates the handoff schema and HTTPS stem-pack URL;
-3. downloads the organized stem ZIP;
-4. safely extracts it under:
-   `~/Music/JOcYN/Ableton Projects/<PROJECT>/05_Stems/Stem_Director_<JOB_ID>/`;
-5. writes `DAW_HANDOFF.json` beside the imported stems;
-6. archives the handoff ticket under `12_Archive/DAW_Handoffs/`;
-7. opens the newest `.als` from `01_Ableton_Sets/`, or opens that folder when no Live Set exists.
+The importer:
 
-The bridge does **not** use brittle GUI automation to create tracks inside an already-open Ableton Live Set. True one-click track creation should be implemented later with an Ableton Remote Script or Max for Live device.
+- creates one Audio Track per stem;
+- places each audio file at beat 0 in Arrangement View;
+- names tracks by family and stem, such as `VOCALS — LEAD VOCALS`;
+- orders tracks as Vocals, Drums, Bass, Guitar, Piano/Keys, Other;
+- color-codes those families;
+- writes a success/failure result under
+  `~/.local/share/jocyn-daw-bridge/ableton_processed` or
+  `ableton_failed`.
+
+Ableton Live exposes audio-clip creation to Remote Scripts in current Live 12
+builds. Automatic import requires Live 12.0.5 or newer.
+
+## Group Track limitation
+
+Current Live 12.1.x Python Remote Script APIs do not expose programmatic Group
+Track creation. The importer therefore keeps family tracks contiguous and
+color-coded and records the group intent in the import command. It does not
+pretend grouping succeeded.
 
 ## Install
 
-From this directory:
-
 ```bash
+cd tools/daw-bridge
 chmod +x install.sh
 ./install.sh
 ```
 
-After install, the bridge runs as a user LaunchAgent.
+Then restart Ableton Live and select **JOcYNStemImporter** in:
 
-Manual foreground run:
+`Live > Settings/Preferences > MIDI > Control Surface`
 
-```bash
-~/.local/bin/jocyn-daw-bridge
-```
+No MIDI input or output port is required.
 
 ## Project structure
-
-The bridge intentionally reuses the existing JO₵YN song structure:
 
 ```text
 PROJECT/
 ├── 01_Ableton_Sets/
 ├── 05_Stems/
 │   └── Stem_Director_<JOB_ID>/
-│       ├── ...
+│       ├── stems/...
+│       ├── manifest.json
 │       └── DAW_HANDOFF.json
 └── 12_Archive/
     └── DAW_Handoffs/
 ```
+
+## Diagnostics
+
+Bridge logs:
+
+```text
+~/.local/share/jocyn-daw-bridge/bridge.log
+~/.local/share/jocyn-daw-bridge/bridge.err.log
+```
+
+Ableton Remote Script errors appear in Ableton's `Log.txt`.
