@@ -106,7 +106,8 @@ export default function StemAgentPage(): React.JSX.Element {
   const [report, setReport] = useState<Record<string, unknown> | null>(null);
   const [busy, setBusy] = useState(false);
   const [cloudSaved, setCloudSaved] = useState(0);
-  const [message, setMessage] = useState("Connect a source and give the Stem Director a production goal.");\n  const [styleControl, setStyleControl] = useState<StyleControlState | null>(null);
+  const [message, setMessage] = useState("Connect a source and give the Stem Director a production goal.");
+  const [styleControl, setStyleControl] = useState<StyleControlState | null>(null);
 
   const project = useMemo(
     () => projectId ? loadStoredProjects().find((item) => item.id === projectId) ?? null : null,
@@ -121,7 +122,8 @@ export default function StemAgentPage(): React.JSX.Element {
   const cloudRecoveryReady = mesh.readiness?.capabilities.cloudRecovery === true;
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);\n    setStyleControl(loadStyleControl());
+    const params = new URLSearchParams(window.location.search);
+    setStyleControl(loadStyleControl());
     const linked = params.get("projectId");
     setProjectId(linked);
     if (isCloudConfigured()) void getCurrentUser().then(setCloudUser).catch(() => setCloudUser(null));
@@ -407,7 +409,8 @@ export default function StemAgentPage(): React.JSX.Element {
       form.append("mode", mode);
       form.append("strategy", strategy);
       form.append("instruction", instruction);
-      form.append("targets", JSON.stringify(targets));\n      if (styleControl) form.append("style_control", JSON.stringify(styleControl));
+      form.append("targets", JSON.stringify(targets));
+      if (styleControl) form.append("style_control", JSON.stringify(styleControl));
       if (projectId) form.append("project_id", projectId);
       setMessage(`Uploading ${sourceFile.name} directly to ${session.worker.nodeId}…`);
       const response = await fetch(`${session.worker.origin}/agent/jobs`, { method: "POST", headers: authHeaders(session.token), body: form });
