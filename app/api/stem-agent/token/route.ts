@@ -8,7 +8,8 @@ const bodySchema = z.object({
   mode: z.enum(["core", "deep"]).default("deep"),
   strategy: z.string().max(80).default("auto"),
   instruction: z.string().max(2000).default(""),
-  targets: z.array(z.string().max(120)).max(80).default([]),\n  styleControl: z.record(z.string(), z.unknown()).nullable().optional(),
+  targets: z.array(z.string().max(120)).max(80).default([]),
+  styleControl: z.record(z.string(), z.unknown()).nullable().optional(),
   orchestrationId: z.string().uuid().nullable().optional(),
   excludeNodeId: z.string().max(128).nullable().optional()
 });
@@ -67,6 +68,7 @@ function signWorkerToken(
     strategy: string;
     instruction: string;
     targets: string[];
+    styleControl?: Record<string, unknown> | null;
     orchestrationId?: string | null;
   }
 ): string {
@@ -78,6 +80,7 @@ function signWorkerToken(
     strategy: input.strategy,
     instruction: input.instruction,
     targets: input.targets,
+    styleControl: input.styleControl ?? null,
     orchestrationId: input.orchestrationId ?? null,
     scope: "worker",
     sub: userId
@@ -258,6 +261,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       strategy: parsed.data.strategy,
       instruction: parsed.data.instruction,
       targets: parsed.data.targets,
+      styleControl: parsed.data.styleControl ?? null,
       orchestrationId: parsed.data.orchestrationId
     }),
     expiresIn: 6 * 60 * 60,
