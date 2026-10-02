@@ -95,17 +95,22 @@ class Controller:
 
     def supabase(self, method: str, path: str, body: dict[str, Any] | None = None) -> Any:
         payload = json.dumps(body).encode("utf-8") if body is not None else None
+        headers = {
+            "apikey": self.config.supabase_key,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation,resolution=merge-duplicates",
+            "User-Agent": "MusicOS-StemComputeController/1.0",
+        }
+        # Modern sb_secret_* keys are API keys, not JWTs. Sending them as
+        # Authorization: Bearer causes PostgREST to reject them as invalid JWTs.
+        # Legacy service_role keys are JWTs and still require Authorization.
+        if self.config.supabase_key.startswith("eyJ"):
+            headers["Authorization"] = f"Bearer {self.config.supabase_key}"
         req = urllib_request.Request(
             f"{self.config.supabase_url}{path}",
             data=payload,
             method=method,
-            headers={
-                "apikey": self.config.supabase_key,
-                "Authorization": f"Bearer {self.config.supabase_key}",
-                "Content-Type": "application/json",
-                "Prefer": "return=representation,resolution=merge-duplicates",
-                "User-Agent": "MusicOS-StemComputeController/1.0",
-            },
+            headers=headers,
         )
         with urllib_request.urlopen(req, timeout=20) as response:
             raw = response.read().decode("utf-8")
