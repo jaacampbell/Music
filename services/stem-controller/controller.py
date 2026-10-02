@@ -176,7 +176,7 @@ class Controller:
         state = str(pod.get("desiredStatus") or pod.get("status") or "").upper()
         return state in {"RUNNING", "STARTING"}
 
-    def publish(self, state: str, *, pending: int, active: int, ready: int, deep: int, error: str | None = None, action: str | None = None, provider_status: str | None = None) -> None:
+    def publish(self, state: str, *, pending: int, active: int, ready: int, deep: int, error: str | None = None, action: str | None = None, provider_status: str | None = None, provider_image: str | None = None, provider_ports: list[Any] | None = None, provider_env_keys: list[str] | None = None) -> None:
         payload = {
             "key": STATE_KEY,
             "provider": "runpod",
@@ -197,6 +197,9 @@ class Controller:
                 "paidAutoStartRequested": self.config.auto_start_requested,
                 "providerReachable": provider_status not in {None, "unconfigured"},
                 "providerStatus": provider_status,
+                "providerImage": provider_image,
+                "providerPorts": provider_ports,
+                "providerEnvKeys": provider_env_keys or [],
             },
         }
         if pending or active:
@@ -219,6 +222,9 @@ class Controller:
                 "lastAction": action,
                 "providerReachable": provider_status not in {None, "unconfigured"},
                 "providerStatus": provider_status,
+                "providerImage": provider_image,
+                "providerPorts": provider_ports,
+                "providerEnvKeys": provider_env_keys or [],
                 "checkedAt": now_iso(),
             }
 
@@ -241,33 +247,42 @@ class Controller:
         pod = self.provider_state()
         running = self.pod_running(pod)
         provider_status = str((pod or {}).get("desiredStatus") or (pod or {}).get("status") or "unknown").lower() if pod is not None else "unconfigured"
+        provider_image = str((pod or {}).get("imageName") or "") or None
+        provider_ports = (pod or {}).get("ports") if isinstance((pod or {}).get("ports"), list) else None
+        raw_env = (pod or {}).get("env")
+        if isinstance(raw_env, dict):
+            provider_env_keys = sorted(str(key) for key in raw_env.keys())
+        elif isinstance(raw_env, list):
+            provider_env_keys = sorted(str(item.get("key")) for item in raw_env if isinstance(item, dict) and item.get("key"))
+        else:
+            provider_env_keys = []
 
         if pending_jobs and not compatible:
             if self.config.auto_start:
                 if not running:
                     self.runpod("POST", f"/pods/{self.config.pod_id}/start")
-                    self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), action="start", provider_status=provider_status)
+                    self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), action="start", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
                     return
-                self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
+                self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
                 return
-            self.publish("demand", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
+            self.publish("demand", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
             return
 
         if active_jobs:
             state = "busy" if any(int(row.get("current_jobs") or 0) > 0 for row in workers) else "ready"
-            self.publish(state, pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
+            self.publish(state, pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
             return
 
         idle_for = time.monotonic() - self.last_demand_monotonic
         if self.config.auto_stop and running:
             if idle_for >= self.config.idle_seconds:
-                self.publish("stopping", pending=0, active=0, ready=len(ready), deep=len(deep_ready), action="stop", provider_status=provider_status)
+                self.publish("stopping", pending=0, active=0, ready=len(ready), deep=len(deep_ready), action="stop", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
                 self.runpod("POST", f"/pods/{self.config.pod_id}/stop")
                 return
-            self.publish("cooldown", pending=0, active=0, ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
+            self.publish("cooldown", pending=0, active=0, ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
             return
 
-        self.publish("standby", pending=0, active=0, ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
+        self.publish("standby", pending=0, active=0, ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
 
     def loop(self) -> None:
         while not self.stop_event.is_set():
