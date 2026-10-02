@@ -176,7 +176,7 @@ class Controller:
         state = str(pod.get("desiredStatus") or pod.get("status") or "").upper()
         return state in {"RUNNING", "STARTING"}
 
-    def publish(self, state: str, *, pending: int, active: int, ready: int, deep: int, error: str | None = None, action: str | None = None) -> None:
+    def publish(self, state: str, *, pending: int, active: int, ready: int, deep: int, error: str | None = None, action: str | None = None, provider_status: str | None = None) -> None:
         payload = {
             "key": STATE_KEY,
             "provider": "runpod",
@@ -195,6 +195,8 @@ class Controller:
                 "controllerVersion": "1.0.0",
                 "policy": "approved-existing-pod-only",
                 "paidAutoStartRequested": self.config.auto_start_requested,
+                "providerReachable": provider_status not in {None, "unconfigured"},
+                "providerStatus": provider_status,
             },
         }
         if pending or active:
@@ -215,6 +217,8 @@ class Controller:
                 "deepReadyWorkers": deep,
                 "lastError": error,
                 "lastAction": action,
+                "providerReachable": provider_status not in {None, "unconfigured"},
+                "providerStatus": provider_status,
                 "checkedAt": now_iso(),
             }
 
@@ -231,35 +235,39 @@ class Controller:
         if active_jobs:
             self.last_demand_monotonic = time.monotonic()
 
-        pod = self.provider_state() if (self.config.auto_start or self.config.auto_stop) else None
+        # Read-only provider probe is safe even when lifecycle automation is disabled.
+        # This validates the configured RunPod API key + approved Pod ID without
+        # starting or stopping compute.
+        pod = self.provider_state()
         running = self.pod_running(pod)
+        provider_status = str((pod or {}).get("desiredStatus") or (pod or {}).get("status") or "unknown").lower() if pod is not None else "unconfigured"
 
         if pending_jobs and not compatible:
             if self.config.auto_start:
                 if not running:
                     self.runpod("POST", f"/pods/{self.config.pod_id}/start")
-                    self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), action="start")
+                    self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), action="start", provider_status=provider_status)
                     return
-                self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready))
+                self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
                 return
-            self.publish("demand", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready))
+            self.publish("demand", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
             return
 
         if active_jobs:
             state = "busy" if any(int(row.get("current_jobs") or 0) > 0 for row in workers) else "ready"
-            self.publish(state, pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready))
+            self.publish(state, pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
             return
 
         idle_for = time.monotonic() - self.last_demand_monotonic
         if self.config.auto_stop and running:
             if idle_for >= self.config.idle_seconds:
-                self.publish("stopping", pending=0, active=0, ready=len(ready), deep=len(deep_ready), action="stop")
+                self.publish("stopping", pending=0, active=0, ready=len(ready), deep=len(deep_ready), action="stop", provider_status=provider_status)
                 self.runpod("POST", f"/pods/{self.config.pod_id}/stop")
                 return
-            self.publish("cooldown", pending=0, active=0, ready=len(ready), deep=len(deep_ready))
+            self.publish("cooldown", pending=0, active=0, ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
             return
 
-        self.publish("standby", pending=0, active=0, ready=len(ready), deep=len(deep_ready))
+        self.publish("standby", pending=0, active=0, ready=len(ready), deep=len(deep_ready), provider_status=provider_status)
 
     def loop(self) -> None:
         while not self.stop_event.is_set():
