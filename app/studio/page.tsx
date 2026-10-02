@@ -10,6 +10,8 @@ type Readiness = {
   status?: string;
   capabilities?: {
     controlPlaneReady?: boolean;
+    controllerOnline?: boolean;
+    controllerBootstrap?: boolean;
     computeReady?: boolean;
     deepReady?: boolean;
     permanentOutputs?: boolean;
@@ -95,6 +97,8 @@ export default function MusicStudioHome(): React.JSX.Element {
   }, []);
 
   const controlReady = readiness?.capabilities?.controlPlaneReady === true;
+  const controllerOnline = readiness?.capabilities?.controllerOnline === true;
+  const controllerBootstrap = readiness?.capabilities?.controllerBootstrap === true;
   const computeReady = readiness?.capabilities?.computeReady === true;
 
   return (
@@ -133,6 +137,12 @@ export default function MusicStudioHome(): React.JSX.Element {
           <div className="musicStudioStatusRow">
             <span>Control plane</span>
             <strong className={controlReady ? "good" : "warn"}>{readiness ? (controlReady ? "READY" : "CHECK") : "…"}</strong>
+          </div>
+          <div className="musicStudioStatusRow">
+            <span>Controller</span>
+            <strong className={controllerOnline ? (controllerBootstrap ? "standby" : "good") : "warn"}>
+              {readiness ? (controllerOnline ? (controllerBootstrap ? "BOOTSTRAP" : "ONLINE") : "OFFLINE") : "…"}
+            </strong>
           </div>
           <div className="musicStudioStatusRow">
             <span>Compute</span>
