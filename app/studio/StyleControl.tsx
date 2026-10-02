@@ -12,6 +12,17 @@ import {
   type StyleControlState,
   type UnexpectedStyleCategory
 } from "@/lib/style-control";
+import {
+  BUILT_IN_STYLE_PRESETS,
+  applyStylePreset,
+  deleteUserStylePreset,
+  describeStyleControl,
+  diffStyleControl,
+  loadUserStylePresets,
+  sameStyleControl,
+  saveUserStylePreset,
+  type StylePreset
+} from "@/lib/style-presets";
 
 const textures = ["dry", "warm", "dark", "airy", "gritty", "analog", "glossy", "distorted", "wide", "intimate", "lo-fi", "hi-fi"];
 const genres = ["Afro-club rap", "hard reggaetón", "trap", "R&B", "house", "dancehall", "Afrobeats", "jersey club", "pop rap", "alternative R&B", "cinematic hip-hop", "electronic"];
@@ -44,14 +55,61 @@ export function StyleControl(): React.JSX.Element {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const projectId = useMemo(() => typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("projectId"), []);
 
-  useEffect(() => setValue(loadStyleControl()), []);
+  const [savedValue, setSavedValue] = useState<StyleControlState>(DEFAULT_STYLE_CONTROL);
+  const [userPresets, setUserPresets] = useState<StylePreset[]>([]);
+  const [presetName, setPresetName] = useState("");
+  const [slots, setSlots] = useState<{ A: StyleControlState | null; B: StyleControlState | null }>({ A: null, B: null });
+  const [activeSlot, setActiveSlot] = useState<"A" | "B" | null>(null);
+
+  useEffect(() => {
+    const loaded = loadStyleControl();
+    setValue(loaded);
+    setSavedValue(loaded);
+    setUserPresets(loadUserStylePresets());
+  }, []);
 
   const update = (patch: Partial<StyleControlState>): void => setValue((current) => ({ ...current, ...patch }));
+  const dirty = !sameStyleControl(value, savedValue);
+  const brief = useMemo(() => describeStyleControl(value), [value]);
+  const diff = useMemo(() => slots.A && slots.B ? diffStyleControl(slots.A, slots.B) : [], [slots]);
 
   const persist = (): void => {
     const saved = saveStyleControl(value);
     setValue(saved);
+    setSavedValue(saved);
     setStatus("Style Control saved. New Stem Director and refinement jobs will use this configuration.");
+  };
+
+  const loadPreset = (preset: StylePreset): void => {
+    setValue((current) => applyStylePreset(current, preset.state));
+    setActiveSlot(null);
+    setStatus(`Loaded “${preset.name}”. Your reference audio stays attached. Save to apply.`);
+  };
+
+  const savePreset = (): void => {
+    const name = presetName.trim() || `Preset ${userPresets.length + 1}`;
+    setUserPresets(saveUserStylePreset(name, value));
+    setPresetName("");
+    setStatus(`Saved preset “${name}” in this browser.`);
+  };
+
+  const removePreset = (preset: StylePreset): void => {
+    setUserPresets(deleteUserStylePreset(preset.id));
+    setStatus(`Deleted preset “${preset.name}”.`);
+  };
+
+  const captureSlot = (slot: "A" | "B"): void => {
+    setSlots((current) => ({ ...current, [slot]: value }));
+    setActiveSlot(slot);
+    setStatus(`Captured the current controls as ${slot}.`);
+  };
+
+  const recallSlot = (slot: "A" | "B"): void => {
+    const snapshot = slots[slot];
+    if (!snapshot) return;
+    setValue((current) => applyStylePreset(current, snapshot));
+    setActiveSlot(slot);
+    setStatus(`Switched to ${slot}. Save to make it the active configuration.`);
   };
 
   const toggleListValue = (key: "soundTextures" | "genreArchetypes", item: string): void => {
@@ -81,8 +139,36 @@ export function StyleControl(): React.JSX.Element {
 
   const stemHref = projectId ? `/stem-agent?projectId=${encodeURIComponent(projectId)}` : "/stem-agent";
 
-  return <section className="styleControl">
-    <div className="styleControlHead"><div><p className="musicStudioKicker">AI STYLE CONTROL</p><h2>Direct the sound before the model makes decisions.</h2><p>Granular inclusion, exclusion, influence, controlled randomness, reference anchoring, and unexpected-style injection.</p></div><div className="styleControlHeadActions"><button className="musicStudioSecondary" type="button" onClick={() => { setValue(DEFAULT_STYLE_CONTROL); setStatus("Defaults restored. Save to apply."); }}>Reset</button><button className="musicStudioPrimary" type="button" onClick={persist}>Save controls</button></div></div>
+  return <section className="styleControl" id="style-control">
+    <div className="styleControlHead"><div><p className="musicStudioKicker">AI STYLE CONTROL</p><h2>Direct the sound before the model makes decisions.</h2><p>Granular inclusion, exclusion, influence, controlled randomness, reference anchoring, and unexpected-style injection.</p></div><div className="styleControlHeadActions"><button className="musicStudioSecondary" type="button" onClick={() => { setValue((current) => applyStylePreset(current, DEFAULT_STYLE_CONTROL)); setActiveSlot(null); setStatus("Defaults restored. Save to apply."); }}>Reset</button><button className="musicStudioPrimary" type="button" onClick={persist}>{dirty ? "Save changes" : "Saved ✓"}</button></div></div>
+
+    <div className="styleLibrary">
+      <div className="styleLibraryPresets">
+        <div className="styleLibraryLabel"><strong>Presets</strong><span>Starting points and your saved setups</span></div>
+        <div className="stylePresetList">
+          {BUILT_IN_STYLE_PRESETS.map((preset) => <button type="button" className="stylePresetChip builtIn" key={preset.id} onClick={() => loadPreset(preset)}>{preset.name}</button>)}
+          {userPresets.map((preset) => <span className="stylePresetChip user" key={preset.id}><button type="button" onClick={() => loadPreset(preset)}>{preset.name}</button><button type="button" aria-label={`Delete preset ${preset.name}`} onClick={() => removePreset(preset)}>×</button></span>)}
+        </div>
+        <div className="stylePresetSave"><input value={presetName} maxLength={60} onChange={(event) => setPresetName(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); savePreset(); } }} placeholder="Name this setup…" aria-label="Preset name"/><button type="button" onClick={savePreset}>Save as preset</button></div>
+      </div>
+      <div className="styleAb">
+        <div className="styleLibraryLabel"><strong>A / B</strong><span>Capture two directions, flip between them</span></div>
+        <div className="styleAbSlots">{(["A", "B"] as const).map((slot) => <div className={`styleAbSlot ${activeSlot === slot ? "active" : ""}`} key={slot}>
+          <button type="button" className="styleAbRecall" disabled={!slots[slot]} onClick={() => recallSlot(slot)}><span>{slot}</span><small>{slots[slot] ? "Recall" : "Empty"}</small></button>
+          <button type="button" className="styleAbCapture" onClick={() => captureSlot(slot)}>Capture</button>
+        </div>)}</div>
+        {slots.A && slots.B && <details className="styleAbDiff" open={diff.length > 0 && diff.length <= 6}>
+          <summary>{diff.length ? `${diff.length} difference${diff.length === 1 ? "" : "s"} between A and B` : "A and B are identical"}</summary>
+          {diff.length > 0 && <table><thead><tr><th>Setting</th><th>A</th><th>B</th></tr></thead><tbody>{diff.map((row) => <tr key={row.label}><th>{row.label}</th><td>{row.a}</td><td>{row.b}</td></tr>)}</tbody></table>}
+        </details>}
+      </div>
+    </div>
+
+    <aside className="styleBrief" aria-live="polite">
+      <div className="styleBriefHead"><p className="musicStudioKicker">DIRECTION BRIEF</p><span className={dirty ? "dirty" : "clean"}>{dirty ? "Unsaved changes" : "Saved"}</span></div>
+      <ul>{brief.map((line) => <li key={line}>{line}</li>)}</ul>
+      <small>This brief restates your settings. It is guidance for the planner, not a measurement of any audio.</small>
+    </aside>
 
     <div className="styleControlGrid">
       <div className="stylePanel stylePanelWide">

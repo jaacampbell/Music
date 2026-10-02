@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import "./musicStudio.css";
+import { RecentProjects } from "./RecentProjects";
 import { StyleControl } from "./StyleControl";
 
 type Readiness = {
@@ -62,6 +63,17 @@ const cards = [
   }
 ];
 
+const flow: Array<{ label: string; href: string | null }> = [
+  { label: "Idea / Reference", href: "#style-control" },
+  { label: "Song Project", href: "/dashboard" },
+  { label: "Audio Analysis", href: "/?mode=studio" },
+  { label: "Stem Director", href: "/stem-agent" },
+  { label: "Revision + Mix", href: "/dashboard" },
+  { label: "DAW Export", href: "/?mode=studio" },
+  { label: "Video / Lip Sync", href: null },
+  { label: "Release", href: "/dashboard" }
+];
+
 export default function MusicStudioHome(): React.JSX.Element {
   const [readiness, setReadiness] = useState<Readiness | null>(null);
 
@@ -91,7 +103,8 @@ export default function MusicStudioHome(): React.JSX.Element {
       </header>
 
       <section className="musicStudioHero">
-        <div>
+        <div className="musicStudioHeroGlow" aria-hidden="true"><span/><span/><span/></div>
+        <div className="musicStudioHeroCopy">
           <p className="musicStudioKicker">ONE STUDIO · ONE PROJECT GRAPH</p>
           <h1>Make the song. Separate it. Fix it. Finish it.</h1>
           <p className="musicStudioLead">
@@ -100,11 +113,12 @@ export default function MusicStudioHome(): React.JSX.Element {
           <div className="musicStudioHeroActions">
             <Link className="musicStudioPrimary" href="/">Open Music OS</Link>
             <Link className="musicStudioSecondary" href="/stem-agent">Separate Stems</Link>
+            <a className="musicStudioGhost" href="#style-control">Shape the sound ↓</a>
           </div>
         </div>
 
         <aside className="musicStudioStatus">
-          <p className="musicStudioStatusLabel">Production health</p>
+          <p className="musicStudioStatusLabel"><span className={`musicStudioPulse ${readiness ? (controlReady && computeReady ? "good" : "warn") : ""}`} aria-hidden="true"/>Production health</p>
           <div className="musicStudioStatusRow">
             <span>Control plane</span>
             <strong className={controlReady ? "good" : "warn"}>{readiness ? (controlReady ? "READY" : "CHECK") : "…"}</strong>
@@ -133,8 +147,9 @@ export default function MusicStudioHome(): React.JSX.Element {
         </div>
 
         <div className="musicStudioGrid">
-          {cards.map((card) => (
-            <Link className="musicStudioCard" href={card.href} key={card.title}>
+          {cards.map((card, index) => (
+            <Link className="musicStudioCard" href={card.href} key={card.title} style={{ "--card-index": index } as React.CSSProperties}>
+              <span className="musicStudioCardIndex" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
               <div className="musicStudioCardTop">
                 <span>{card.eyebrow}</span>
                 <small>{card.badge}</small>
@@ -147,17 +162,19 @@ export default function MusicStudioHome(): React.JSX.Element {
         </div>
       </section>
 
+      <RecentProjects />
+
       <StyleControl />
 
       <section className="musicStudioPipeline">
         <p className="musicStudioKicker">PRODUCTION FLOW</p>
         <div className="musicStudioFlow">
-          {["Idea / Reference", "Song Project", "Audio Analysis", "Stem Director", "Revision + Mix", "DAW Export", "Video / Lip Sync", "Release"].map((step, index) => (
-            <div className="musicStudioFlowStep" key={step}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{step}</strong>
-            </div>
-          ))}
+          {flow.map((step, index) => {
+            const content = <><span>{String(index + 1).padStart(2, "0")}</span><strong>{step.label}</strong><small>{step.href ? "Open →" : "Coming next"}</small></>;
+            return step.href
+              ? <Link className="musicStudioFlowStep" href={step.href} key={step.label}>{content}</Link>
+              : <div className="musicStudioFlowStep muted" key={step.label}>{content}</div>;
+          })}
         </div>
       </section>
 
