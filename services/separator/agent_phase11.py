@@ -41,6 +41,10 @@ def _node_identity() -> dict[str, str]:
     }
 
 
+# Shared identity used by cloud recovery and permanent persistence.
+NODE_ID = _node_identity()["node_id"]
+
+
 def _gpu_name() -> str:
     try:
         import torch
