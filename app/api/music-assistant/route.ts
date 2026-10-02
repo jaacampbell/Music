@@ -29,7 +29,7 @@ function fallback(question: string, context: Record<string, unknown>): string {
   }
   if (lowered.includes("muddy")) return "Mark the exact muddy timestamps, then check kick/808 overlap, low-mid buildup, arrangement density under the vocal, and long reverb tails. I will not claim a measured frequency problem unless an audio analysis has actually produced that result.";
   if (lowered.includes("ad-lib") || lowered.includes("adlib")) return "Open Stem Studio for this project, choose Deep isolation, select ad-libs/background vocals, run separation, and the generated stems will be saved back into the same project library when cloud persistence is connected.";
-  return "I can reason from the project data you supplied, but the live AI key is not configured on this deployment. Add OPENAI_API_KEY to enable the full project-aware Music OS assistant.";
+  return "I can reason from the project data you supplied, but the live AI key is not configured on this deployment. Add OPENAI_API_KEY to enable the full project-aware TM Assistant.";
 }
 
 function outputText(payload: ResponsesPayload): string | null {
@@ -92,13 +92,13 @@ export async function POST(request: Request): Promise<NextResponse> {
   if (!apiKey) return NextResponse.json({ answer: fallback(question, context), model: "local-fallback" });
 
   const instructions = [
-    "You are Ask Music inside Music OS, an artist-first production workspace.",
+    "You are TM Assistant inside TM Music Studio, an artist-first production and artist-development workspace.",
     "Use only the supplied project context plus general music-production knowledge.",
     "Never invent measurements, legal clearances, ownership, credits, or audio findings that are not present in the context.",
     "When the user asks what to do next, give a prioritized actionable recommendation tied to this project.",
     "When discussing mixing, distinguish measured findings from listening hypotheses.",
     "For copyright, contracts, ownership, publishing, or release-law questions, state that the answer is workflow guidance rather than legal advice.",
-    "Keep answers concise, practical, and understandable to a non-engineer."
+    "Use the supplied song/project context when available. Keep answers practical, specific, and understandable to a non-engineer. Prioritize the next useful creative or business action rather than generic advice."
   ].join("\n");
 
   const response = await fetch("https://api.openai.com/v1/responses", {
