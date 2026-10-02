@@ -106,12 +106,13 @@ export default function MusicStudioHome(): React.JSX.Element {
       <header className="musicStudioTopbar">
         <Link className="musicStudioBrand" href="/studio" aria-label="Music Studio home">
           <span className="musicStudioMark">M</span>
-          <span><strong>JO₵YN Music Studio</strong><small>Hosted production workspace</small></span>
+          <span><strong>TM Music Studio</strong><small>Hosted production workspace</small></span>
         </Link>
         <nav>
           <Link href="/">Song Workspace</Link>
           <Link href="#tm-assistant">TM Assistant</Link>
           <Link href="/producer-dna">Producer DNA</Link>
+          <Link href="/studio-brain">Studio Brain</Link>
           <Link href="/dashboard">Projects</Link>
           <Link href="/stem-agent">Stems</Link>
           <Link href="/midi-shredder">MIDI</Link>
@@ -127,7 +128,8 @@ export default function MusicStudioHome(): React.JSX.Element {
             The hosted studio is the main experience. Local tools are optional support utilities, not a requirement for normal production.
           </p>
           <div className="musicStudioHeroActions">
-            <Link className="musicStudioPrimary" href="/">Open Song Workspace</Link>
+            <Link className="musicStudioPrimary" href="/studio-brain">Ask the Studio Brain</Link>
+            <Link className="musicStudioSecondary" href="/">Open Song Workspace</Link>
             <Link className="musicStudioSecondary" href="/stem-agent">Separate Stems</Link>
           </div>
         </div>
@@ -183,7 +185,14 @@ export default function MusicStudioHome(): React.JSX.Element {
       </section>
 
       <StudioAssistant />
-
+      <section className="musicStudioSection">
+        <div className="musicStudioSectionHead"><div><p className="musicStudioKicker">YOUR METHOD · YOUR NEXT MOVE</p><h2>A studio brain behind the software.</h2></div></div>
+        <div className="musicStudioGrid">
+          <Link className="musicStudioCard" href="/studio-brain"><div className="musicStudioCardTop"><span>ASSISTANT</span><small>Creative + technical</small></div><h3>Ask Studio Brain</h3><p>Production advice, song development, release guidance, and feature specifications using verified song context.</p><strong className="musicStudioGo">Start a session →</strong></Link>
+          <Link className="musicStudioCard" href="/studio-brain"><div className="musicStudioCardTop"><span>PRODUCER DNA</span><small>Editable method</small></div><h3>Your decisions. Documented.</h3><p>Capture your sound, workflow, coaching style, and creative rules. Add course notes and save private project snapshots.</p><strong className="musicStudioGo">Build your DNA →</strong></Link>
+          <Link className="musicStudioCard" href="/studio-brain"><div className="musicStudioCardTop"><span>DNA TOOLS</span><small>Guided concepts</small></div><h3>From course to workflow.</h3><p>Ten tool specifications covering vocal chains, beats, hooks, arrangements, presets, identity, and release preparation.</p><strong className="musicStudioGo">Explore tools →</strong></Link>
+        </div>
+      </section>
       <StyleControl />
 
       <section className="musicStudioPipeline">

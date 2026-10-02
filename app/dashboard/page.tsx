@@ -6,6 +6,7 @@ import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "re
 import {
   downloadPrivateFile,
   getCurrentUser,
+  getSessionAccessToken,
   isCloudConfigured,
   signOut,
   supabaseRest,
@@ -410,7 +411,8 @@ export default function SongDashboardPage(): React.JSX.Element {
     const question = askInput.trim(); setAskInput(""); setAskAnswer("Thinking with this project’s current context…");
     await run(async () => {
       await supabaseRest<AgentMessageRow[]>("music_agent_messages", { method: "POST", body: { project_id: activeProject.id, user_id: user.id, role: "user", body: question } }).catch(() => undefined);
-      const response = await fetch("/api/music-assistant", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, context: { project: activeProject, versions: versions.map(({ id, label, notes, bpm, song_key, duration_sec, created_at }) => ({ id, label, notes, bpm, song_key, duration_sec, created_at })), tasks, comments: comments.slice(-20), comparisons: comparisons.slice(0, 8), release } }) });
+      const token = await getSessionAccessToken();
+      const response = await fetch("/api/music-assistant", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token ?? ""}` }, body: JSON.stringify({ question, projectId: activeProject.id, history: agentMessages.slice(-8).map(({ role, body }) => ({ role, body })) }) });
       const payload = (await response.json().catch(() => ({}))) as { answer?: string; model?: string; error?: string };
       if (!response.ok || !payload.answer) throw new Error(payload.error ?? `Ask Music failed (${response.status}).`);
       setAskAnswer(payload.answer);

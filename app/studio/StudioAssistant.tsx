@@ -160,6 +160,7 @@ export function StudioAssistant(): React.JSX.Element {
             <button key={prompt} disabled={!ready} onClick={() => void ask(prompt)}>{prompt}</button>
           ))}
           <Link href="/producer-dna">Open Producer DNA →</Link>
+          <Link href="/studio-brain">Open full Studio Brain and personal DNA →</Link>
           <Link href="/stem-agent">Open Stem Director →</Link>
         </aside>
       </div>

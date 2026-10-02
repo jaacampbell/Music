@@ -52,6 +52,14 @@ See [`docs/phase3-unified-music-os.md`](docs/phase3-unified-music-os.md).
 
 ## Ask Music
 
+TM Studio Brain is now available at `/studio-brain`, linked from `/studio`.
+It adds editable personal Producer DNA, private project DNA snapshots,
+course excerpts, curated industry references, and ten guided tool
+specifications. See [the implementation notes](docs/tm-studio-brain.md).
+The assistant requires a verified bearer session and retrieves song context
+through owner-scoped server reads, rather than trusting a cookie hint or
+client-supplied ownership.
+
 `/api/music-assistant` is a server-side project-aware assistant route. It verifies a Music OS session and project ownership before using a configured OpenAI model. The server-only configuration is:
 
 ```text
