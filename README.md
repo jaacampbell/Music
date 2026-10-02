@@ -156,3 +156,7 @@ The GPU worker needs Python 3.11+, FFmpeg, CUDA for practical deep inference, an
 ## Native TM Vocal
 
 The first native TM Music Studio plugin lives in [`native/tm-vocal`](native/tm-vocal). It implements a real C++ vocal chain, DAW automation and preset recall, with VST3/standalone targets and AU on macOS. The native workflow builds and packages bundles for Mac, Windows and Linux. This is an alpha; platform DAW acceptance testing and signing remain pending. No pricing or customer tiers are enabled.
+
+## Cursor native CLI workflow
+
+Run `agent "Read .cursor/prompts/tm-native-cli.md and execute the native TM Vocal workflow on this machine."` from the repository, or run `python3 tools/native/tm_native.py all --install --validate` directly on Mac. See [`docs/cursor-native-workflow.md`](docs/cursor-native-workflow.md) for prerequisites, Windows/Linux commands, installation backups, validators and Ableton acceptance.
