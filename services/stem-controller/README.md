@@ -70,3 +70,17 @@ The health endpoint reports only safe operational state: standby/waking/ready/bu
 ## Recommended production policy
 
 Start with both auto-start and auto-stop disabled. Provision and verify the GPU Pod once through `Stem GPU Control`, stop it, then explicitly enable auto-start and auto-stop on the trusted VPS after accepting the billing behavior. A 10-minute idle timeout is the default recommendation so repeated stem jobs do not thrash the GPU lifecycle.
+
+
+## Railway bootstrap mode
+
+To bring the controller host online before trusted provider credentials are added, set:
+
+```text
+STEM_CONTROLLER_BOOTSTRAP_ONLY=true
+SUPABASE_URL=https://jgnsrjjgeodqruafafav.supabase.co
+STEM_CONTROLLER_AUTO_START=false
+STEM_CONTROLLER_AUTO_STOP=false
+```
+
+Bootstrap mode exposes `/health` and `/status` but does not poll Supabase or call RunPod. After adding `SUPABASE_SERVICE_ROLE_KEY`, `RUNPOD_API_KEY`, and `RUNPOD_STEM_POD_ID`, set `STEM_CONTROLLER_BOOTSTRAP_ONLY=false` and redeploy. Paid GPU wake-up still remains disabled until the explicit charge confirmation variables are enabled.
