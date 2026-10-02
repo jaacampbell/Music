@@ -268,6 +268,7 @@ class Controller:
             self.stop_event.wait(self.config.poll_seconds)
 
     def _error(self, message: str) -> None:
+        print(f"Stem Compute Controller runtime error: {message}", flush=True)
         with self.lock:
             self.snapshot = {**self.snapshot, "status": "degraded", "state": "error", "lastError": message, "checkedAt": now_iso()}
         try:
