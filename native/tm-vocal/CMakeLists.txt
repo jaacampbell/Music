@@ -38,7 +38,9 @@ target_link_libraries(TMVocal PRIVATE juce::juce_audio_utils
   PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
 juce_add_console_app(tm_vocal_processor_tests PRODUCT_NAME "TM Vocal processor tests")
 target_sources(tm_vocal_processor_tests PRIVATE tests/ProcessorTests.cpp)
-target_include_directories(tm_vocal_processor_tests PRIVATE src)
-target_compile_definitions(tm_vocal_processor_tests PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
-target_link_libraries(tm_vocal_processor_tests PRIVATE TMVocal juce::juce_audio_utils)
+target_include_directories(tm_vocal_processor_tests PRIVATE src
+  "$<TARGET_PROPERTY:juce::juce_audio_utils,INTERFACE_INCLUDE_DIRECTORIES>")
+target_compile_definitions(tm_vocal_processor_tests PRIVATE
+  JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1 JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0)
+target_link_libraries(tm_vocal_processor_tests PRIVATE TMVocal)
 add_test(NAME tm_vocal_processor COMMAND tm_vocal_processor_tests)
