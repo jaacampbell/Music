@@ -47,6 +47,7 @@ class Config:
         )
         self.runpod_api_key = os.environ.get("RUNPOD_API_KEY", "").strip()
         self.pod_id = os.environ.get("RUNPOD_STEM_POD_ID", "").strip()
+        self.bootstrap_only = env_bool("STEM_CONTROLLER_BOOTSTRAP_ONLY", False)
         self.auto_start_requested = env_bool("STEM_CONTROLLER_AUTO_START", False)
         self.charge_confirmation = os.environ.get("STEM_CONTROLLER_ACCEPT_GPU_CHARGES", "").strip()
         self.auto_start = self.auto_start_requested and self.charge_confirmation == CHARGE_CONFIRMATION
@@ -56,6 +57,8 @@ class Config:
         self.port = int(os.environ.get("STEM_CONTROLLER_PORT", "8080"))
 
     def validate(self) -> None:
+        if self.bootstrap_only:
+            return
         if not self.supabase_url.startswith("https://"):
             raise RuntimeError("SUPABASE_URL must be the canonical production HTTPS project URL.")
         if not self.supabase_key:
@@ -73,8 +76,8 @@ class Controller:
         self.config = config
         self.lock = threading.Lock()
         self.snapshot: dict[str, Any] = {
-            "status": "starting",
-            "state": "standby",
+            "status": "bootstrap" if config.bootstrap_only else "starting",
+            "state": "disabled" if config.bootstrap_only else "standby",
             "autoStartEnabled": config.auto_start,
             "autoStopEnabled": config.auto_stop,
             "podIdConfigured": bool(config.pod_id),
@@ -83,6 +86,8 @@ class Controller:
             "readyWorkers": 0,
             "deepReadyWorkers": 0,
             "lastError": None,
+            "bootstrapOnly": config.bootstrap_only,
+            "nextAction": "Add SUPABASE_SERVICE_ROLE_KEY, RUNPOD_API_KEY, and RUNPOD_STEM_POD_ID, then disable bootstrap mode." if config.bootstrap_only else None,
             "checkedAt": now_iso(),
         }
         self.last_demand_monotonic = time.monotonic()
@@ -297,10 +302,11 @@ def main() -> None:
     config.validate()
     controller = Controller(config)
     HealthHandler.controller = controller
-    worker = threading.Thread(target=controller.loop, name="compute-controller", daemon=True)
-    worker.start()
+    if not config.bootstrap_only:
+        worker = threading.Thread(target=controller.loop, name="compute-controller", daemon=True)
+        worker.start()
     server = ThreadingHTTPServer(("0.0.0.0", config.port), HealthHandler)
-    print(f"Music OS Stem Compute Controller listening on :{config.port}; auto-start={config.auto_start}; auto-stop={config.auto_stop}", flush=True)
+    print(f"TM Music Studio Stem Compute Controller listening on :{config.port}; bootstrap={config.bootstrap_only}; auto-start={config.auto_start}; auto-stop={config.auto_stop}", flush=True)
     try:
         server.serve_forever()
     finally:
