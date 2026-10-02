@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ProducerDnaPanel } from "@/app/components/ProducerDnaPanel";
@@ -60,6 +61,7 @@ interface LiveManifest {
 }
 
 const SEPARATOR_URL = process.env.NEXT_PUBLIC_SEPARATOR_URL ?? "http://localhost:8000";
+const TM_STUDIO_HOME = process.env.NEXT_PUBLIC_TM_STUDIO_HOME === "true";
 
 const TABS: Array<{ id: TabName; label: string; description: string }> = [
   { id: "Song Brief", label: "Song Idea", description: "What you want to make and how it should feel." },
@@ -136,8 +138,13 @@ function formatBytes(bytes: number): string {
 }
 
 export default function HomePage(): React.JSX.Element {
+  const router = useRouter();
   const [mode, setMode] = useState<AppMode>("guided");
   const [helpOpen, setHelpOpen] = useState(false);
+
+  useEffect(() => {
+    if (TM_STUDIO_HOME) router.replace("/studio");
+  }, [router]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabName>("Song Brief");
@@ -417,6 +424,10 @@ export default function HomePage(): React.JSX.Element {
         return <div />;
     }
   };
+
+  if (TM_STUDIO_HOME) {
+    return <main className="musicOs"><div className="statusBar">Opening TM Music Studio…</div></main>;
+  }
 
   return (
     <main className="musicOs">
