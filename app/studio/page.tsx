@@ -21,6 +21,7 @@ type Readiness = {
 };
 
 const cards = [
+  { eyebrow: "VOCAL", title: "TM Vocal", description: "Process your dry take, compare a reference vocal, audition against the beat, save signature chains, and export WAVs with exact settings.", href: "/tm-vocal", badge: "Browser DSP" },
   {
     eyebrow: "ASSIST",
     title: "TM Assistant",
@@ -116,6 +117,7 @@ export default function MusicStudioHome(): React.JSX.Element {
           <Link href="/dashboard">Projects</Link>
           <Link href="/stem-agent">Stems</Link>
           <Link href="/midi-shredder">MIDI</Link>
+          <Link href="/tm-vocal">TM Vocal</Link>
           <Link href="/player">Player</Link>
         </nav>
       </header>
