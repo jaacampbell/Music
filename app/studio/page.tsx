@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import "./musicStudio.css";
 import { StyleControl } from "./StyleControl";
+import { StudioAssistant } from "./StudioAssistant";
 
 type Readiness = {
   status?: string;
@@ -19,11 +20,25 @@ type Readiness = {
 
 const cards = [
   {
+    eyebrow: "ASSIST",
+    title: "TM Assistant",
+    description: "Use the built-in project-aware development assistant for songwriting, production decisions, mix priorities, release prep, branding, publishing workflow, and next steps.",
+    href: "#tm-assistant",
+    badge: "AI + Project Context"
+  },
+  {
+    eyebrow: "DNA",
+    title: "Producer DNA",
+    description: "Research production traits, rhythm, arrangement logic, technical decisions, scenes, and creative directions without copying another artist too closely.",
+    href: "/producer-dna",
+    badge: "Research System"
+  },
+  {
     eyebrow: "CREATE",
     title: "Start / Resume Song",
-    description: "Open Music OS for song direction, Song DNA, arrangement, revisions, mix notes, and project history.",
+    description: "Open the song workspace for concept, Song DNA, arrangement, revisions, mix notes, and project history.",
     href: "/",
-    badge: "Music OS"
+    badge: "Song Workspace"
   },
   {
     eyebrow: "STEMS",
@@ -90,7 +105,9 @@ export default function MusicStudioHome(): React.JSX.Element {
           <span><strong>JO₵YN Music Studio</strong><small>Hosted production workspace</small></span>
         </Link>
         <nav>
-          <Link href="/">Music OS</Link>
+          <Link href="/">Song Workspace</Link>
+          <Link href="#tm-assistant">TM Assistant</Link>
+          <Link href="/producer-dna">Producer DNA</Link>
           <Link href="/dashboard">Projects</Link>
           <Link href="/stem-agent">Stems</Link>
           <Link href="/midi-shredder">MIDI</Link>
@@ -106,7 +123,7 @@ export default function MusicStudioHome(): React.JSX.Element {
             The hosted studio is the main experience. Local tools are optional support utilities, not a requirement for normal production.
           </p>
           <div className="musicStudioHeroActions">
-            <Link className="musicStudioPrimary" href="/">Open Music OS</Link>
+            <Link className="musicStudioPrimary" href="/">Open Song Workspace</Link>
             <Link className="musicStudioSecondary" href="/stem-agent">Separate Stems</Link>
           </div>
         </div>
@@ -154,6 +171,8 @@ export default function MusicStudioHome(): React.JSX.Element {
           ))}
         </div>
       </section>
+
+      <StudioAssistant />
 
       <StyleControl />
 
