@@ -1,0 +1,97 @@
+name: One-time Stem Pod Refresh
+
+on:
+  push:
+    branches:
+      - ops/runpod-separator-refresh
+    paths:
+      - .github/workflows/one-time-stem-refresh.yml
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: one-time-stem-pod-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      RUNPOD_API_KEY: ${{ secrets.RUNPOD_API_KEY }}
+      SEPARATOR_GATEWAY_SECRET: ${{ secrets.SEPARATOR_GATEWAY_SECRET }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      SUPABASE_URL: https://jgnsrjjgeodqruafafav.supabase.co
+      CORS_ORIGINS: https://tm-music-studio.netlify.app
+      POD_ID: ${{ vars.RUNPOD_STEM_POD_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate existing Pod and credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$POD_ID" || { echo "RUNPOD_STEM_POD_ID repository variable is required."; exit 1; }
+          test -n "$RUNPOD_API_KEY" || { echo "RUNPOD_API_KEY secret is required."; exit 1; }
+          test -n "$SEPARATOR_GATEWAY_SECRET" || { echo "SEPARATOR_GATEWAY_SECRET secret is required."; exit 1; }
+
+      - name: Update existing TM separator Pod
+        id: refresh
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/runpod_stem_ctl.py \
+            --operation update \
+            --pod-id "$POD_ID" \
+            --image "ghcr.io/jaacampbell/music-separator:latest" \
+            --confirm-charges "I ACCEPT GPU CHARGES"
+
+      - name: Verify Worker Mesh and durable storage
+        shell: bash
+        env:
+          WORKER_URL: ${{ steps.refresh.outputs.worker_url }}
+        run: |
+          set -euo pipefail
+          test -n "$WORKER_URL" || { echo "Worker URL was not produced."; exit 1; }
+
+          ready=false
+          for attempt in $(seq 1 18); do
+            mesh=false
+            recovery=false
+            persistence=false
+            core=false
+
+            if curl --fail --silent --show-error --max-time 15 "$WORKER_URL/agent/mesh/node" -o /tmp/mesh.json; then
+              jq . /tmp/mesh.json
+              [[ "$(jq -r '.heartbeat.ok // false' /tmp/mesh.json)" == "true" ]] && mesh=true
+            fi
+
+            if curl --fail --silent --show-error --max-time 15 "$WORKER_URL/agent/recovery/cloud" -o /tmp/recovery.json; then
+              jq . /tmp/recovery.json
+              [[ "$(jq -r '.enabled // false' /tmp/recovery.json)" == "true" ]] && recovery=true
+            fi
+
+            if curl --fail --silent --show-error --max-time 15 "$WORKER_URL/agent/persistence/cloud" -o /tmp/persistence.json; then
+              jq . /tmp/persistence.json
+              [[ "$(jq -r '.enabled // false' /tmp/persistence.json)" == "true" ]] && persistence=true
+            fi
+
+            if curl --fail --silent --show-error --max-time 15 "$WORKER_URL/health" -o /tmp/health.json; then
+              jq . /tmp/health.json
+              core=true
+            fi
+
+            if [[ "$mesh" == "true" && "$recovery" == "true" && "$persistence" == "true" && "$core" == "true" ]]; then
+              ready=true
+              break
+            fi
+            sleep 5
+          done
+
+          [[ "$ready" == "true" ]] || { echo "Separator Pod updated but full Worker Mesh readiness did not complete."; exit 1; }
+
+          echo "Existing RunPod Pod successfully refreshed and registered." >> "$GITHUB_STEP_SUMMARY"
