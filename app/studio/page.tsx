@@ -33,6 +33,13 @@ const cards = [
     badge: "Production"
   },
   {
+    eyebrow: "MIDI",
+    title: "MIDI Shredder",
+    description: "Turn isolated vocals, bass, keys, guitar, and melodies into playable MIDI for Ableton and other DAWs.",
+    href: "/midi-shredder",
+    badge: "Audio → MIDI"
+  },
+  {
     eyebrow: "VOCALS",
     title: "Vocal Isolation",
     description: "Open Stem Director and focus on lead vocals, backgrounds, doubles, ad-libs, and instrumental-ready separation.",
@@ -78,14 +85,15 @@ export default function MusicStudioHome(): React.JSX.Element {
   return (
     <main className="musicStudioHome">
       <header className="musicStudioTopbar">
-        <Link className="musicStudioBrand" href="/studio" aria-label="TM Music Studio home">
+        <Link className="musicStudioBrand" href="/studio" aria-label="Music Studio home">
           <span className="musicStudioMark">M</span>
-          <span><strong>TM Music Studio</strong><small>AI production + artist development workspace</small></span>
+          <span><strong>JO₵YN Music Studio</strong><small>Hosted production workspace</small></span>
         </Link>
         <nav>
           <Link href="/">Music OS</Link>
           <Link href="/dashboard">Projects</Link>
           <Link href="/stem-agent">Stems</Link>
+          <Link href="/midi-shredder">MIDI</Link>
           <Link href="/player">Player</Link>
         </nav>
       </header>
@@ -95,7 +103,7 @@ export default function MusicStudioHome(): React.JSX.Element {
           <p className="musicStudioKicker">ONE STUDIO · ONE PROJECT GRAPH</p>
           <h1>Make the song. Separate it. Fix it. Finish it.</h1>
           <p className="musicStudioLead">
-            TM Music Studio is the main experience. Song development, Producer DNA, AI Style Control, Stem Director, project files, DAW handoff, and release tools live inside one connected workspace.
+            The hosted studio is the main experience. Local tools are optional support utilities, not a requirement for normal production.
           </p>
           <div className="musicStudioHeroActions">
             <Link className="musicStudioPrimary" href="/">Open Music OS</Link>
@@ -152,7 +160,7 @@ export default function MusicStudioHome(): React.JSX.Element {
       <section className="musicStudioPipeline">
         <p className="musicStudioKicker">PRODUCTION FLOW</p>
         <div className="musicStudioFlow">
-          {["Idea / Reference", "Song Project", "Audio Analysis", "Stem Director", "Revision + Mix", "DAW Export", "Video / Lip Sync", "Release"].map((step, index) => (
+          {["Idea / Reference", "Song Project", "Audio Analysis", "Stem Director", "MIDI Shredder", "Revision + Mix", "DAW Export", "Release"].map((step, index) => (
             <div className="musicStudioFlowStep" key={step}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <strong>{step}</strong>

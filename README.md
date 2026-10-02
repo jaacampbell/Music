@@ -12,6 +12,8 @@ The Next.js app has one shared song/project identity across its major surfaces. 
 - `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.
 - `/player` — JO₵YN unified listening room for secure cloud uploads, cross-device playback, and device-only audio.
 - `/stem-agent` — production Stem Director with worker-mesh routing, durable cloud staging, recovery, and permanent private outputs.\n- `/stem-studio` — direct-worker separator retained for local testing and diagnostics.
+- `/midi-shredder` — browser-based audio-to-MIDI transcription for isolated vocals and instruments, with synth preview, `.mid` download, and project-library saving.
+- `/stem-studio` — direct-worker separator retained for local testing and diagnostics.
 - `/stem-lab` — deterministic stem workflow/contract MVP.
 - `/login` — Supabase-backed account creation/sign-in.
 - `/guide` — plain-language walkthrough and glossary.
