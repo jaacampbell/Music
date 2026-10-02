@@ -16,6 +16,14 @@ import "./midiShredder.css";
 
 type DetailMode = "clean" | "balanced" | "detailed";
 type PreviewSound = "keys" | "synth" | "bass";
+type QuantizeGrid = "off" | "1/8" | "1/16" | "1/32";
+type ScaleMode = "chromatic" | "major" | "minor";
+
+const NOTE_NAMES = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
+const SCALE_INTERVALS: Record<Exclude<ScaleMode, "chromatic">, number[]> = {
+  major: [0, 2, 4, 5, 7, 9, 11],
+  minor: [0, 2, 3, 5, 7, 8, 10]
+};
 
 const DETAIL_SETTINGS: Record<DetailMode, {
   label: string;
@@ -73,8 +81,35 @@ async function decodeAndResample(file: File): Promise<AudioBuffer> {
 }
 
 function noteName(midi: number): string {
-  const names = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
-  return `${names[midi % 12]}${Math.floor(midi / 12) - 1}`;
+  return `${NOTE_NAMES[midi % 12]}${Math.floor(midi / 12) - 1}`;
+}
+
+function waveformPeaks(audio: AudioBuffer, bins = 160): number[] {
+  const samples = audio.getChannelData(0);
+  const bucketSize = Math.max(1, Math.floor(samples.length / bins));
+  return Array.from({ length: bins }, (_, index) => {
+    const start = index * bucketSize;
+    const end = Math.min(samples.length, start + bucketSize);
+    let peak = 0;
+    for (let cursor = start; cursor < end; cursor += 1) peak = Math.max(peak, Math.abs(samples[cursor]));
+    return peak;
+  });
+}
+
+function snapPitchToScale(pitch: number, root: number, scale: ScaleMode): number {
+  if (scale === "chromatic") return pitch;
+  const allowed = SCALE_INTERVALS[scale];
+  let best = pitch;
+  let bestDistance = Number.POSITIVE_INFINITY;
+  for (let candidate = Math.max(0, pitch - 6); candidate <= Math.min(127, pitch + 6); candidate += 1) {
+    if (!allowed.includes((candidate - root + 120) % 12)) continue;
+    const distance = Math.abs(candidate - pitch);
+    if (distance < bestDistance) {
+      best = candidate;
+      bestDistance = distance;
+    }
+  }
+  return best;
 }
 
 export default function MidiShredderPage(): React.JSX.Element {
@@ -92,6 +127,13 @@ export default function MidiShredderPage(): React.JSX.Element {
   const [busy, setBusy] = useState(false);
   const [previewing, setPreviewing] = useState(false);
   const [notes, setNotes] = useState<NoteEventTime[]>([]);
+  const [detectedNotes, setDetectedNotes] = useState<NoteEventTime[]>([]);
+  const [history, setHistory] = useState<NoteEventTime[][]>([]);
+  const [selectedNote, setSelectedNote] = useState<number | null>(null);
+  const [waveform, setWaveform] = useState<number[]>([]);
+  const [quantizeGrid, setQuantizeGrid] = useState<QuantizeGrid>("1/16");
+  const [keyRoot, setKeyRoot] = useState(0);
+  const [scaleMode, setScaleMode] = useState<ScaleMode>("chromatic");
   const [midiBlob, setMidiBlob] = useState<Blob | null>(null);
   const [saved, setSaved] = useState(false);
 
@@ -138,6 +180,10 @@ export default function MidiShredderPage(): React.JSX.Element {
     }
     setFile(next);
     setNotes([]);
+    setDetectedNotes([]);
+    setHistory([]);
+    setSelectedNote(null);
+    setWaveform([]);
     setMidiBlob(null);
     setSaved(false);
     setProgress(0);
@@ -162,6 +208,7 @@ export default function MidiShredderPage(): React.JSX.Element {
     setStatus("Decoding and preparing the audio…");
     try {
       const audio = await decodeAndResample(file);
+      setWaveform(waveformPeaks(audio));
       setProgress(0.08);
       setStatus("Loading the note-detection model…");
       const [pitchModule, midiModule] = await Promise.all([
@@ -223,6 +270,9 @@ export default function MidiShredderPage(): React.JSX.Element {
         0
       );
       setNotes(detected);
+      setDetectedNotes(detected);
+      setHistory([]);
+      setSelectedNote(null);
       setMidiBlob(output);
       setProgress(1);
       setStatus(`MIDI ready: ${detected.length.toLocaleString()} notes across ${detectedDuration.toFixed(1)} seconds. Preview it, then download or save it to the song project.`);
@@ -232,6 +282,111 @@ export default function MidiShredderPage(): React.JSX.Element {
     } finally {
       setBusy(false);
     }
+  };
+
+  const rebuildMidi = async (nextNotes: NoteEventTime[], tempo = bpm): Promise<void> => {
+    if (!file) return;
+    const { Midi } = await import("@tonejs/midi");
+    const midi = new Midi();
+    midi.header.name = `TM MIDI · ${filenameBase(file.name)}`;
+    midi.header.setTempo(tempo);
+    const track = midi.addTrack();
+    track.name = `${filenameBase(file.name)} · edited in TM MIDI Shredder`;
+    nextNotes.forEach((note) => track.addNote({
+      midi: Math.max(0, Math.min(127, Math.round(note.pitchMidi))),
+      time: Math.max(0, note.startTimeSeconds),
+      duration: Math.max(0.03, note.durationSeconds),
+      velocity: Math.max(0.05, Math.min(1, note.amplitude))
+    }));
+    setMidiBlob(new Blob([new Uint8Array(midi.toArray())], { type: "audio/midi" }));
+    setSaved(false);
+  };
+
+  const commitEdit = (nextNotes: NoteEventTime[], message: string): void => {
+    if (!nextNotes.length) {
+      setStatus("That edit would remove every note. Keep at least one note or start again with Detailed mode.");
+      return;
+    }
+    setHistory((current) => [...current.slice(-19), notes]);
+    setNotes(nextNotes);
+    setSelectedNote(null);
+    setStatus(message);
+    void rebuildMidi(nextNotes);
+  };
+
+  const updateTempo = (nextTempo: number): void => {
+    setBpm(nextTempo);
+    if (notes.length) {
+      setStatus(`Project tempo updated to ${nextTempo} BPM.`);
+      void rebuildMidi(notes, nextTempo);
+    }
+  };
+
+  const undoEdit = (): void => {
+    const previous = history.at(-1);
+    if (!previous) return;
+    setHistory((current) => current.slice(0, -1));
+    setNotes(previous);
+    setSelectedNote(null);
+    setStatus("Last MIDI edit undone.");
+    void rebuildMidi(previous);
+  };
+
+  const resetEdits = (): void => {
+    if (!detectedNotes.length) return;
+    setHistory((current) => [...current.slice(-19), notes]);
+    setNotes(detectedNotes);
+    setSelectedNote(null);
+    setStatus("Restored the original detected notes.");
+    void rebuildMidi(detectedNotes);
+  };
+
+  const transpose = (semitones: number): void => {
+    const next = notes.map((note) => ({ ...note, pitchMidi: Math.max(0, Math.min(127, note.pitchMidi + semitones)) }));
+    commitEdit(next, `Transposed ${semitones > 0 ? "+" : ""}${semitones} semitones.`);
+  };
+
+  const quantize = (): void => {
+    if (quantizeGrid === "off") {
+      setStatus("Choose a timing grid before applying quantize.");
+      return;
+    }
+    const denominator = Number(quantizeGrid.split("/")[1]);
+    const gridSeconds = (60 / bpm) * (4 / denominator);
+    const next = notes.map((note) => ({
+      ...note,
+      startTimeSeconds: Math.max(0, Math.round(note.startTimeSeconds / gridSeconds) * gridSeconds),
+      durationSeconds: Math.max(gridSeconds / 4, Math.round(note.durationSeconds / gridSeconds) * gridSeconds)
+    }));
+    commitEdit(next, `Quantized note starts and lengths to ${quantizeGrid} at ${bpm} BPM.`);
+  };
+
+  const snapToKey = (): void => {
+    if (scaleMode === "chromatic") {
+      setStatus("Choose Major or Minor before snapping notes to a key.");
+      return;
+    }
+    const next = notes.map((note) => ({ ...note, pitchMidi: snapPitchToScale(note.pitchMidi, keyRoot, scaleMode) }));
+    commitEdit(next, `Snapped pitches to ${NOTE_NAMES[keyRoot]} ${scaleMode}.`);
+  };
+
+  const removeWeakNotes = (): void => {
+    const next = notes.filter((note) => note.amplitude >= 0.18 && note.durationSeconds >= 0.06);
+    commitEdit(next, `Removed ${notes.length - next.length} weak or tiny notes.`);
+  };
+
+  const updateSelectedPitch = (semitones: number): void => {
+    if (selectedNote === null || !notes[selectedNote]) return;
+    const next = notes.map((note, index) => index === selectedNote
+      ? { ...note, pitchMidi: Math.max(0, Math.min(127, note.pitchMidi + semitones)) }
+      : note);
+    commitEdit(next, `Moved the selected note ${semitones > 0 ? "up" : "down"} one semitone.`);
+  };
+
+  const deleteSelected = (): void => {
+    if (selectedNote === null || !notes[selectedNote]) return;
+    const removed = notes[selectedNote];
+    commitEdit(notes.filter((_, index) => index !== selectedNote), `Deleted ${noteName(removed.pitchMidi)} at ${removed.startTimeSeconds.toFixed(2)}s.`);
   };
 
   const previewMidi = async (): Promise<void> => {
@@ -347,7 +502,7 @@ export default function MidiShredderPage(): React.JSX.Element {
           </div>
 
           <div className="midiSettingsRow">
-            <label><span>Project tempo</span><div><input type="number" min="40" max="240" value={bpm} onChange={(event) => setBpm(Math.max(40, Math.min(240, Number(event.target.value) || 120)))} /><small>BPM</small></div></label>
+            <label><span>Project tempo</span><div><input type="number" min="40" max="240" value={bpm} onChange={(event) => updateTempo(Math.max(40, Math.min(240, Number(event.target.value) || 120)))} /><small>BPM</small></div></label>
             <button className="midiConvert" type="button" disabled={!file || busy} onClick={() => void transcribe()}>{busy ? "Listening…" : "Shred to MIDI"}</button>
           </div>
 
@@ -374,10 +529,21 @@ export default function MidiShredderPage(): React.JSX.Element {
 
           <div className="pianoRoll" aria-label="Detected MIDI notes piano roll">
             <div className="pianoRollGrid" />
+            <div className="midiWaveform" aria-hidden="true">{waveform.map((peak, index) => <span key={index} style={{ height: `${Math.max(2, peak * 78)}%` }} />)}</div>
             {notes.slice(0, 800).map((note, index) => {
               const range = Math.max(1, pitchRange.max - pitchRange.min + 1);
-              return <i key={`${note.startTimeSeconds}-${note.pitchMidi}-${index}`} title={`${noteName(note.pitchMidi)} · ${note.startTimeSeconds.toFixed(2)}s`} style={{ left: `${(note.startTimeSeconds / Math.max(duration, 1)) * 100}%`, width: `${Math.max(0.18, (note.durationSeconds / Math.max(duration, 1)) * 100)}%`, bottom: `${((note.pitchMidi - pitchRange.min) / range) * 92 + 3}%`, opacity: Math.max(0.35, Math.min(1, note.amplitude)) }} />;
+              return <button className={`pianoNote ${selectedNote === index ? "selected" : ""}`} type="button" key={`${note.startTimeSeconds}-${note.pitchMidi}-${index}`} aria-label={`Select ${noteName(note.pitchMidi)} at ${note.startTimeSeconds.toFixed(2)} seconds`} title={`${noteName(note.pitchMidi)} · ${note.startTimeSeconds.toFixed(2)}s`} onClick={() => setSelectedNote(index)} style={{ left: `${(note.startTimeSeconds / Math.max(duration, 1)) * 100}%`, width: `${Math.max(0.18, (note.durationSeconds / Math.max(duration, 1)) * 100)}%`, bottom: `${((note.pitchMidi - pitchRange.min) / range) * 92 + 3}%`, opacity: Math.max(0.4, Math.min(1, note.amplitude)) }} />;
             })}
+          </div>
+
+          <div className="midiEditDesk">
+            <div className="midiEditHead"><div><p className="midiKicker">CLEANUP DESK</p><h3>Shape the performance before export.</h3></div><div className="midiHistory"><button type="button" disabled={!history.length} onClick={undoEdit}>Undo</button><button type="button" onClick={resetEdits}>Reset</button></div></div>
+            <div className="midiEditGrid">
+              <section><strong>Timing</strong><label><span>Grid</span><select value={quantizeGrid} onChange={(event) => setQuantizeGrid(event.target.value as QuantizeGrid)}><option value="off">Off</option><option value="1/8">1/8</option><option value="1/16">1/16</option><option value="1/32">1/32</option></select></label><button type="button" onClick={quantize}>Apply Quantize</button></section>
+              <section><strong>Key + scale</strong><div className="midiInlineFields"><label><span>Key</span><select value={keyRoot} onChange={(event) => setKeyRoot(Number(event.target.value))}>{NOTE_NAMES.map((name, index) => <option value={index} key={name}>{name}</option>)}</select></label><label><span>Scale</span><select value={scaleMode} onChange={(event) => setScaleMode(event.target.value as ScaleMode)}><option value="chromatic">Chromatic</option><option value="major">Major</option><option value="minor">Minor</option></select></label></div><button type="button" onClick={snapToKey}>Snap to Key</button></section>
+              <section><strong>Pitch + cleanup</strong><div className="midiButtonRow"><button type="button" onClick={() => transpose(-12)}>− Octave</button><button type="button" onClick={() => transpose(12)}>+ Octave</button></div><button type="button" onClick={removeWeakNotes}>Remove Weak Notes</button></section>
+              <section className={selectedNote === null ? "midiSelected isEmpty" : "midiSelected"}><strong>Selected note</strong>{selectedNote === null || !notes[selectedNote] ? <p>Tap a green note above to edit it.</p> : <><p><b>{noteName(notes[selectedNote].pitchMidi)}</b> · {notes[selectedNote].startTimeSeconds.toFixed(2)}s</p><div className="midiButtonRow"><button type="button" onClick={() => updateSelectedPitch(-1)}>− Semitone</button><button type="button" onClick={() => updateSelectedPitch(1)}>+ Semitone</button></div><button className="danger" type="button" onClick={deleteSelected}>Delete Note</button></>}</section>
+            </div>
           </div>
 
           <div className="midiResultActions">
