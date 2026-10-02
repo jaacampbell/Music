@@ -78,9 +78,9 @@ export default function MusicStudioHome(): React.JSX.Element {
   return (
     <main className="musicStudioHome">
       <header className="musicStudioTopbar">
-        <Link className="musicStudioBrand" href="/studio" aria-label="Music Studio home">
+        <Link className="musicStudioBrand" href="/studio" aria-label="TM Music Studio home">
           <span className="musicStudioMark">M</span>
-          <span><strong>JO₵YN Music Studio</strong><small>Hosted production workspace</small></span>
+          <span><strong>TM Music Studio</strong><small>AI production + artist development workspace</small></span>
         </Link>
         <nav>
           <Link href="/">Music OS</Link>
@@ -95,7 +95,7 @@ export default function MusicStudioHome(): React.JSX.Element {
           <p className="musicStudioKicker">ONE STUDIO · ONE PROJECT GRAPH</p>
           <h1>Make the song. Separate it. Fix it. Finish it.</h1>
           <p className="musicStudioLead">
-            The hosted studio is the main experience. Local tools are optional support utilities, not a requirement for normal production.
+            TM Music Studio is the main experience. Song development, Producer DNA, AI Style Control, Stem Director, project files, DAW handoff, and release tools live inside one connected workspace.
           </p>
           <div className="musicStudioHeroActions">
             <Link className="musicStudioPrimary" href="/">Open Music OS</Link>
