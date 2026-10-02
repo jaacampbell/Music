@@ -480,7 +480,7 @@ export default function StemAgentPage(): React.JSX.Element {
   return (
     <main className="agentPage">
       <header className="agentTopbar">
-        <Link href={projectId ? `/?projectId=${projectId}` : "/"} className="agentBrand"><span>JO₵YN</span> Stem Director</Link>
+        <Link href="/studio" className="agentBrand"><span>TM</span> Music Studio · Stem Director</Link>
         <nav><Link href={projectId ? `/dashboard?projectId=${projectId}` : "/dashboard"}>Dashboard</Link><Link href="/stem-agent/status">Ops</Link><Link href={projectId ? `/stem-studio?projectId=${projectId}` : "/stem-studio"}>Classic Stem Studio</Link></nav>
       </header>
 
