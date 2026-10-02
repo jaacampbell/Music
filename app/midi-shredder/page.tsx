@@ -19,9 +19,11 @@ type DetailMode = "clean" | "balanced" | "detailed";
 type PreviewSound = "keys" | "synth" | "bass";
 type QuantizeGrid = "off" | "1/8" | "1/16" | "1/32";
 type ScaleMode = "chromatic" | "major" | "minor";
-type MidiTrackResult = { id: string; label: string; notes: NoteEventTime[] };
+type SourceType = "melodic" | "drums";
+type MidiTrackResult = { id: string; label: string; notes: NoteEventTime[]; kind: SourceType };
 type KeyEstimate = { label: string; root: number; mode: "major" | "minor"; confidence: number };
 type ChordEstimate = { time: number; label: string };
+type TempoEstimate = { bpm: number; confidence: number };
 
 const NOTE_NAMES = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
 const SCALE_INTERVALS: Record<Exclude<ScaleMode, "chromatic">, number[]> = {
@@ -163,6 +165,57 @@ function estimateChords(notes: NoteEventTime[], bpm: number): ChordEstimate[] {
   return chords.filter((chord) => chord.label !== "—").slice(0, 24);
 }
 
+function estimateTempo(notes: NoteEventTime[]): TempoEstimate | null {
+  const onsets = [...new Set(notes.map((note) => Math.round(note.startTimeSeconds * 1000)))].sort((a, b) => a - b).map((value) => value / 1000);
+  if (onsets.length < 4) return null;
+  const histogram = new Map<number, number>();
+  for (let index = 1; index < onsets.length; index += 1) {
+    const gap = onsets[index] - onsets[index - 1];
+    if (gap < 0.12 || gap > 2) continue;
+    let candidate = 60 / gap;
+    while (candidate < 70) candidate *= 2;
+    while (candidate > 180) candidate /= 2;
+    const rounded = Math.round(candidate);
+    histogram.set(rounded, (histogram.get(rounded) ?? 0) + 1);
+  }
+  const ranked = [...histogram.entries()].sort((a, b) => b[1] - a[1]);
+  if (!ranked.length) return null;
+  return { bpm: ranked[0][0], confidence: Math.min(1, ranked[0][1] / Math.max(3, onsets.length - 1)) };
+}
+
+function detectDrumHits(audio: AudioBuffer): NoteEventTime[] {
+  const samples = audio.getChannelData(0);
+  const frameSize = 512;
+  const hopSize = 256;
+  const frames: Array<{ rms: number; zcr: number }> = [];
+  for (let start = 0; start + frameSize < samples.length; start += hopSize) {
+    let energy = 0;
+    let crossings = 0;
+    for (let cursor = start; cursor < start + frameSize; cursor += 1) {
+      const sample = samples[cursor];
+      energy += sample * sample;
+      if (cursor > start && (sample >= 0) !== (samples[cursor - 1] >= 0)) crossings += 1;
+    }
+    frames.push({ rms: Math.sqrt(energy / frameSize), zcr: crossings / frameSize });
+  }
+  const mean = frames.reduce((total, frame) => total + frame.rms, 0) / Math.max(1, frames.length);
+  const variance = frames.reduce((total, frame) => total + (frame.rms - mean) ** 2, 0) / Math.max(1, frames.length);
+  const threshold = mean + Math.sqrt(variance) * 0.65;
+  const strongest = frames.reduce((max, frame) => Math.max(max, frame.rms), threshold);
+  const hits: NoteEventTime[] = [];
+  let lastHit = -1;
+  frames.forEach((frame, index) => {
+    const previous = frames[index - 1]?.rms ?? 0;
+    const next = frames[index + 1]?.rms ?? 0;
+    const time = index * hopSize / audio.sampleRate;
+    if (frame.rms < threshold || frame.rms < previous * 1.08 || frame.rms < next || time - lastHit < 0.055) return;
+    const pitchMidi = frame.zcr < 0.075 ? 36 : frame.zcr > 0.2 ? 42 : 38;
+    hits.push({ startTimeSeconds: time, durationSeconds: 0.08, pitchMidi, amplitude: Math.max(0.15, Math.min(1, frame.rms / Math.max(0.0001, strongest))) });
+    lastHit = time;
+  });
+  return hits;
+}
+
 export default function MidiShredderPage(): React.JSX.Element {
   const fileInput = useRef<HTMLInputElement | null>(null);
   const previewContext = useRef<AudioContext | null>(null);
@@ -172,6 +225,7 @@ export default function MidiShredderPage(): React.JSX.Element {
   const [cloudUser, setCloudUser] = useState<CloudUser | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [detail, setDetail] = useState<DetailMode>("balanced");
+  const [sourceType, setSourceType] = useState<SourceType>("melodic");
   const [previewSound, setPreviewSound] = useState<PreviewSound>("keys");
   const [bpm, setBpm] = useState(120);
   const [progress, setProgress] = useState(0);
@@ -239,7 +293,8 @@ export default function MidiShredderPage(): React.JSX.Element {
   }, [notes]);
   const keyEstimate = useMemo(() => estimateKey(notes), [notes]);
   const chordMap = useMemo(() => estimateChords(notes, bpm), [notes, bpm]);
-  const downloadName = `${filenameBase(file?.name ?? "tm-midi")}-${detail}.mid`;
+  const tempoEstimate = useMemo(() => estimateTempo(notes), [notes]);
+  const downloadName = `${filenameBase(file?.name ?? "tm-midi")}-${sourceType === "drums" ? "gm-drums" : detail}.mid`;
 
   const selectFile = (next: File | null): void => {
     if (!next) return;
@@ -283,42 +338,31 @@ export default function MidiShredderPage(): React.JSX.Element {
       sourceAudio.current = audio;
       setWaveform(waveformPeaks(audio));
       setProgress(0.08);
-      setStatus("Loading the note-detection model…");
-      const [pitchModule, midiModule] = await Promise.all([
-        import("@spotify/basic-pitch"),
-        import("@tonejs/midi")
-      ]);
-      const pitch = new pitchModule.BasicPitch(MODEL_URL);
-      const frames: number[][] = [];
-      const onsets: number[][] = [];
-      const contours: number[][] = [];
-      setStatus("Listening for notes, timing, velocity, and pitch movement…");
-      await pitch.evaluateModel(
-        audio,
-        (nextFrames, nextOnsets, nextContours) => {
+      const midiModule = await import("@tonejs/midi");
+      let detected: NoteEventTime[];
+      if (sourceType === "drums") {
+        setStatus("Detecting drum transients and classifying kick, snare, and hi-hat hits…");
+        detected = detectDrumHits(audio);
+        setProgress(0.88);
+      } else {
+        setStatus("Loading the melodic note-detection model…");
+        const pitchModule = await import("@spotify/basic-pitch");
+        const pitch = new pitchModule.BasicPitch(MODEL_URL);
+        const frames: number[][] = [];
+        const onsets: number[][] = [];
+        const contours: number[][] = [];
+        setStatus("Listening for notes, timing, velocity, and pitch movement…");
+        await pitch.evaluateModel(audio, (nextFrames, nextOnsets, nextContours) => {
           frames.push(...nextFrames);
           onsets.push(...nextOnsets);
           contours.push(...nextContours);
-        },
-        (amount) => setProgress(0.08 + amount * 0.78)
-      );
-
-      const settings = DETAIL_SETTINGS[detail];
-      const detected = pitchModule.noteFramesToTime(
-        pitchModule.addPitchBendsToNoteEvents(
-          contours,
-          pitchModule.outputToNotesPoly(
-            frames,
-            onsets,
-            settings.onset,
-            settings.frame,
-            settings.minimumLength
-          )
-        )
-      ).filter((note) => note.durationSeconds >= 0.03);
+        }, (amount) => setProgress(0.08 + amount * 0.78));
+        const settings = DETAIL_SETTINGS[detail];
+        detected = pitchModule.noteFramesToTime(pitchModule.addPitchBendsToNoteEvents(contours, pitchModule.outputToNotesPoly(frames, onsets, settings.onset, settings.frame, settings.minimumLength))).filter((note) => note.durationSeconds >= 0.03);
+      }
 
       if (!detected.length) {
-        throw new Error("No confident notes were detected. Try Balanced or Detailed mode, or use a cleaner isolated stem.");
+        throw new Error(sourceType === "drums" ? "No clear drum hits were detected. Try a cleaner isolated drum stem." : "No confident notes were detected. Try Balanced or Detailed mode, or use a cleaner isolated stem.");
       }
 
       setProgress(0.9);
@@ -327,7 +371,8 @@ export default function MidiShredderPage(): React.JSX.Element {
       midi.header.name = `TM MIDI · ${filenameBase(file.name)}`;
       midi.header.setTempo(bpm);
       const track = midi.addTrack();
-      track.name = `${filenameBase(file.name)} · ${DETAIL_SETTINGS[detail].label}`;
+      track.name = sourceType === "drums" ? `${filenameBase(file.name)} · GM Drums` : `${filenameBase(file.name)} · ${DETAIL_SETTINGS[detail].label}`;
+      if (sourceType === "drums") track.channel = 9;
       for (const note of detected) {
         track.addNote({
           midi: Math.max(0, Math.min(127, Math.round(note.pitchMidi))),
@@ -366,7 +411,8 @@ export default function MidiShredderPage(): React.JSX.Element {
     midi.header.name = `TM MIDI · ${filenameBase(file.name)}`;
     midi.header.setTempo(tempo);
     const track = midi.addTrack();
-    track.name = `${filenameBase(file.name)} · edited in TM MIDI Shredder`;
+    track.name = sourceType === "drums" ? `${filenameBase(file.name)} · edited GM Drums` : `${filenameBase(file.name)} · edited in TM MIDI Shredder`;
+    if (sourceType === "drums") track.channel = 9;
     nextNotes.forEach((note) => track.addNote({
       midi: Math.max(0, Math.min(127, Math.round(note.pitchMidi))),
       time: Math.max(0, note.startTimeSeconds),
@@ -377,14 +423,14 @@ export default function MidiShredderPage(): React.JSX.Element {
     setSaved(false);
   };
 
-  const commitEdit = (nextNotes: NoteEventTime[], message: string): void => {
+  const commitEdit = (nextNotes: NoteEventTime[], message: string, nextSelected: number | null = null): void => {
     if (!nextNotes.length) {
       setStatus("That edit would remove every note. Keep at least one note or start again with Detailed mode.");
       return;
     }
     setHistory((current) => [...current.slice(-19), notes]);
     setNotes(nextNotes);
-    setSelectedNote(null);
+    setSelectedNote(nextSelected);
     setStatus(message);
     void rebuildMidi(nextNotes);
   };
@@ -395,6 +441,18 @@ export default function MidiShredderPage(): React.JSX.Element {
       setStatus(`Project tempo updated to ${nextTempo} BPM.`);
       void rebuildMidi(notes, nextTempo);
     }
+  };
+
+  const updateSourceType = (nextType: SourceType): void => {
+    setSourceType(nextType);
+    if (!notes.length) return;
+    setNotes([]);
+    setDetectedNotes([]);
+    setHistory([]);
+    setSelectedNote(null);
+    setMidiBlob(null);
+    setProgress(0);
+    setStatus(`Source type changed to ${nextType === "drums" ? "Drums / Percussion" : "Vocal / Instrument"}. Run Shred to MIDI again.`);
   };
 
   const undoEdit = (): void => {
@@ -455,7 +513,37 @@ export default function MidiShredderPage(): React.JSX.Element {
     const next = notes.map((note, index) => index === selectedNote
       ? { ...note, pitchMidi: Math.max(0, Math.min(127, note.pitchMidi + semitones)) }
       : note);
-    commitEdit(next, `Moved the selected note ${semitones > 0 ? "up" : "down"} one semitone.`);
+    commitEdit(next, `Moved the selected note ${semitones > 0 ? "up" : "down"} one semitone.`, selectedNote);
+  };
+
+  const selectedGridSeconds = (): number => {
+    const denominator = quantizeGrid === "off" ? 16 : Number(quantizeGrid.split("/")[1]);
+    return (60 / bpm) * (4 / denominator);
+  };
+
+  const nudgeSelected = (direction: -1 | 1): void => {
+    if (selectedNote === null || !notes[selectedNote]) return;
+    const amount = selectedGridSeconds() * direction;
+    const next = notes.map((note, index) => index === selectedNote ? { ...note, startTimeSeconds: Math.max(0, note.startTimeSeconds + amount) } : note);
+    commitEdit(next, `Nudged the selected note ${direction < 0 ? "earlier" : "later"} by ${quantizeGrid === "off" ? "1/16" : quantizeGrid}.`, selectedNote);
+  };
+
+  const resizeSelected = (factor: number): void => {
+    if (selectedNote === null || !notes[selectedNote]) return;
+    const next = notes.map((note, index) => index === selectedNote ? { ...note, durationSeconds: Math.max(0.03, note.durationSeconds * factor) } : note);
+    commitEdit(next, `${factor < 1 ? "Shortened" : "Lengthened"} the selected note.`, selectedNote);
+  };
+
+  const splitSelected = (): void => {
+    if (selectedNote === null || !notes[selectedNote]) return;
+    const original = notes[selectedNote];
+    if (original.durationSeconds < 0.08) {
+      setStatus("That note is already too short to split cleanly.");
+      return;
+    }
+    const half = original.durationSeconds / 2;
+    const next = [...notes.slice(0, selectedNote), { ...original, durationSeconds: half }, { ...original, startTimeSeconds: original.startTimeSeconds + half, durationSeconds: half }, ...notes.slice(selectedNote + 1)];
+    commitEdit(next, `Split ${noteName(original.pitchMidi)} into two notes.`, selectedNote);
   };
 
   const deleteSelected = (): void => {
@@ -483,6 +571,7 @@ export default function MidiShredderPage(): React.JSX.Element {
       const blob = await downloadPrivateFile(asset.storage_path);
       const nextFile = new File([blob], asset.original_name || `${filenameBase(asset.label)}.wav`, { type: asset.mime_type || blob.type || "audio/wav", lastModified: Date.now() });
       selectFile(nextFile);
+      setSourceType(/\b(drums?|kick|snare|hi-?hat|percussion|cymbal)\b/i.test(`${asset.label} ${asset.original_name}`) ? "drums" : "melodic");
       setStatus(`${asset.label} is ready to shred.`);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "The project stem could not be loaded.");
@@ -515,30 +604,34 @@ export default function MidiShredderPage(): React.JSX.Element {
       for (let index = 0; index < selected.length; index += 1) {
         const asset = selected[index];
         setStatus(`Transcribing ${asset.label} · track ${index + 1} of ${selected.length}…`);
-        if (/\b(drums?|kick|snare|hi-?hat|percussion|cymbal)\b/i.test(`${asset.label} ${asset.original_name}`)) {
-          setBatchProgress((index + 1) / selected.length);
-          continue;
-        }
+        const kind: SourceType = /\b(drums?|kick|snare|hi-?hat|percussion|cymbal)\b/i.test(`${asset.label} ${asset.original_name}`) ? "drums" : "melodic";
         const blob = await downloadPrivateFile(asset.storage_path);
         const assetFile = new File([blob], asset.original_name, { type: asset.mime_type || blob.type || "audio/wav" });
         const audio = await decodeAndResample(assetFile);
-        const frames: number[][] = [];
-        const onsets: number[][] = [];
-        const contours: number[][] = [];
-        await pitch.evaluateModel(audio, (nextFrames, nextOnsets, nextContours) => {
-          frames.push(...nextFrames);
-          onsets.push(...nextOnsets);
-          contours.push(...nextContours);
-        }, (amount) => setBatchProgress((index + amount) / selected.length));
-        const settings = DETAIL_SETTINGS[detail];
-        const detected = pitchModule.noteFramesToTime(pitchModule.addPitchBendsToNoteEvents(contours, pitchModule.outputToNotesPoly(frames, onsets, settings.onset, settings.frame, settings.minimumLength))).filter((note) => note.durationSeconds >= 0.03);
+        let detected: NoteEventTime[];
+        if (kind === "drums") {
+          detected = detectDrumHits(audio);
+          setBatchProgress((index + 1) / selected.length);
+        } else {
+          const frames: number[][] = [];
+          const onsets: number[][] = [];
+          const contours: number[][] = [];
+          await pitch.evaluateModel(audio, (nextFrames, nextOnsets, nextContours) => {
+            frames.push(...nextFrames);
+            onsets.push(...nextOnsets);
+            contours.push(...nextContours);
+          }, (amount) => setBatchProgress((index + amount) / selected.length));
+          const settings = DETAIL_SETTINGS[detail];
+          detected = pitchModule.noteFramesToTime(pitchModule.addPitchBendsToNoteEvents(contours, pitchModule.outputToNotesPoly(frames, onsets, settings.onset, settings.frame, settings.minimumLength))).filter((note) => note.durationSeconds >= 0.03);
+        }
         if (!detected.length) continue;
         const track = midi.addTrack();
-        track.name = asset.label.slice(0, 80);
+        track.name = `${asset.label}${kind === "drums" ? " · GM Drums" : ""}`.slice(0, 80);
+        if (kind === "drums") track.channel = 9;
         detected.forEach((note) => track.addNote({ midi: Math.max(0, Math.min(127, Math.round(note.pitchMidi))), time: Math.max(0, note.startTimeSeconds), duration: Math.max(0.03, note.durationSeconds), velocity: Math.max(0.05, Math.min(1, note.amplitude)) }));
-        results.push({ id: asset.id, label: asset.label, notes: detected });
+        results.push({ id: asset.id, label: asset.label, notes: detected, kind });
       }
-      if (!results.length) throw new Error("No confident melodic notes were found in the selected stems. Drum-only and effects stems need a dedicated drum model.");
+      if (!results.length) throw new Error("No confident melodic notes or drum hits were found in the selected stems.");
       const output = new Blob([new Uint8Array(midi.toArray())], { type: "audio/midi" });
       setBatchTracks(results);
       setBatchMidiBlob(output);
@@ -607,6 +700,27 @@ export default function MidiShredderPage(): React.JSX.Element {
     const anchor = document.createElement("a");
     anchor.href = url;
     anchor.download = `${filenameBase(projectTitle ?? "tm-song")}-ableton-midi-pack.mid`;
+    anchor.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const downloadAnalysisManifest = (): void => {
+    const manifest = {
+      format: "tm-midi-shredder-analysis",
+      version: 1,
+      generated_at: new Date().toISOString(),
+      source: { filename: file?.name ?? null, type: sourceType, detail_mode: detail },
+      tempo: { project_bpm: bpm, estimated_bpm: tempoEstimate?.bpm ?? null, estimate_confidence: tempoEstimate?.confidence ?? null },
+      key: sourceType === "drums" ? null : keyEstimate,
+      chords: sourceType === "drums" ? [] : chordMap,
+      notes: notes.map((note) => ({ pitch_midi: Math.round(note.pitchMidi), name: noteName(note.pitchMidi), start_seconds: Number(note.startTimeSeconds.toFixed(4)), duration_seconds: Number(note.durationSeconds.toFixed(4)), velocity: Number(note.amplitude.toFixed(4)) })),
+      disclaimer: "Tempo, key, chords, and transcription are best-effort estimates. Verify in Ableton Live before production use."
+    };
+    const blob = new Blob([JSON.stringify(manifest, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `${filenameBase(file?.name ?? "tm-midi")}-analysis.json`;
     anchor.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
@@ -690,7 +804,7 @@ export default function MidiShredderPage(): React.JSX.Element {
             <section className="midiStemPack">
               <div className="midiStemPackHead"><div><p className="midiKicker">PROJECT STEMS → MULTI-TRACK MIDI</p><h2>Build the Ableton pack.</h2></div><span>{selectedStemIds.length} selected</span></div>
               {projectStems.length ? <><div className="midiStemList">{projectStems.map((asset) => <article className={selectedStemIds.includes(asset.id) ? "selected" : ""} key={asset.id}><button className="midiStemCheck" type="button" onClick={() => toggleStemSelection(asset.id)} aria-label={`${selectedStemIds.includes(asset.id) ? "Remove" : "Add"} ${asset.label}`}><span>{selectedStemIds.includes(asset.id) ? "✓" : "+"}</span><strong>{asset.label}</strong><small>{asset.original_name}</small></button><button className="midiStemUse" type="button" onClick={() => void useProjectStem(asset)}>Use one</button></article>)}</div><div className="midiPackAction"><div><span style={{ width: `${Math.round(batchProgress * 100)}%` }} /></div><button type="button" disabled={!selectedStemIds.length || batchBusy} onClick={() => void convertStemPack()}>{batchBusy ? "Building MIDI Pack…" : `Convert ${selectedStemIds.length || "Selected"} Stems`}</button></div></> : <div className="midiNoStems"><p>No private project stems are available yet.</p><Link href={`/stem-agent?projectId=${projectId}`}>Create stems in Stem Director →</Link></div>}
-              <p className="midiTruth">Melodic and vocal stems use polyphonic pitch detection. Drum-only stems are skipped rather than mislabeled as pitched MIDI.</p>
+              <p className="midiTruth">Melodic and vocal stems use polyphonic pitch detection. Drum stems use transient detection mapped to General MIDI kick, snare, and hi-hat notes.</p>
             </section>
           )}
 
@@ -707,6 +821,7 @@ export default function MidiShredderPage(): React.JSX.Element {
 
           <div className="midiSettingsRow">
             <label><span>Project tempo</span><div><input type="number" min="40" max="240" value={bpm} onChange={(event) => updateTempo(Math.max(40, Math.min(240, Number(event.target.value) || 120)))} /><small>BPM</small></div></label>
+            {proMode && <label><span>Source type</span><div><select value={sourceType} onChange={(event) => updateSourceType(event.target.value as SourceType)}><option value="melodic">Vocal / Instrument</option><option value="drums">Drums / Percussion</option></select></div></label>}
             <button className="midiConvert" type="button" disabled={!file || busy} onClick={() => void transcribe()}>{busy ? "Listening…" : "Shred to MIDI"}</button>
           </div>
 
@@ -727,7 +842,7 @@ export default function MidiShredderPage(): React.JSX.Element {
       {batchTracks.length > 0 && batchMidiBlob && (
         <section className="midiResults midiBatchResults">
           <div className="midiResultsHead"><div><p className="midiKicker">ABLETON MIDI PACK READY</p><h2>{batchTracks.length} named tracks</h2></div><div className="midiStats"><span><strong>{batchTracks.reduce((total, track) => total + track.notes.length, 0).toLocaleString()}</strong> notes</span><span><strong>{bpm}</strong> BPM</span><span><strong>.MID</strong> multi-track</span></div></div>
-          <div className="midiTrackGrid">{batchTracks.map((track, index) => <article key={track.id}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{track.label}</strong><small>{track.notes.length.toLocaleString()} detected notes · {noteName(Math.min(...track.notes.map((note) => note.pitchMidi)))}–{noteName(Math.max(...track.notes.map((note) => note.pitchMidi)))}</small></div></article>)}</div>
+          <div className="midiTrackGrid">{batchTracks.map((track, index) => <article key={track.id}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{track.label}</strong><small>{track.notes.length.toLocaleString()} detected {track.kind === "drums" ? "drum hits · GM channel 10" : `notes · ${noteName(Math.min(...track.notes.map((note) => note.pitchMidi)))}–${noteName(Math.max(...track.notes.map((note) => note.pitchMidi)))}`}</small></div></article>)}</div>
           <div className="midiResultActions"><button className="primary" type="button" onClick={downloadBatchMidi}>Download Ableton MIDI Pack</button>{projectId && cloudUser && <button type="button" disabled={batchSaved} onClick={() => void saveBatchToProject()}>{batchSaved ? "Saved to Project" : "Save Pack to Project"}</button>}</div>
           <p className="midiTruth">Import the `.mid` into Ableton Live to create separate named MIDI tracks. Assign your instruments after import; Ableton remains the audio authority.</p>
         </section>
@@ -749,15 +864,15 @@ export default function MidiShredderPage(): React.JSX.Element {
             })}
           </div>
 
-          {proMode && <><div className="midiProAnalysis"><article><span>Estimated key</span><strong>{keyEstimate?.label ?? "—"}</strong><small>{keyEstimate ? `${Math.round(keyEstimate.confidence * 100)}% separation from next match` : "Run transcription first"}</small>{keyEstimate && <button type="button" onClick={() => { setKeyRoot(keyEstimate.root); setScaleMode(keyEstimate.mode); }}>Use for Snap</button>}</article><article className="midiChordMap"><span>Chord map · 2-beat windows</span><div>{chordMap.length ? chordMap.map((chord) => <b key={`${chord.time}-${chord.label}`}>{chord.label}<small>{chord.time.toFixed(1)}s</small></b>) : <small>No stable triads detected.</small>}</div></article></div>
+          {proMode && <><div className="midiProAnalysis"><article><span>Estimated tempo</span><strong>{tempoEstimate ? `${tempoEstimate.bpm} BPM` : "—"}</strong><small>{tempoEstimate ? `${Math.round(tempoEstimate.confidence * 100)}% onset agreement` : "Not enough note onsets"}</small>{tempoEstimate && <button type="button" onClick={() => updateTempo(tempoEstimate.bpm)}>Use Tempo</button>}</article>{sourceType === "melodic" && <article><span>Estimated key</span><strong>{keyEstimate?.label ?? "—"}</strong><small>{keyEstimate ? `${Math.round(keyEstimate.confidence * 100)}% separation from next match` : "Run transcription first"}</small>{keyEstimate && <button type="button" onClick={() => { setKeyRoot(keyEstimate.root); setScaleMode(keyEstimate.mode); }}>Use for Snap</button>}</article>}{sourceType === "melodic" && <article className="midiChordMap"><span>Chord map · 2-beat windows</span><div>{chordMap.length ? chordMap.map((chord) => <b key={`${chord.time}-${chord.label}`}>{chord.label}<small>{chord.time.toFixed(1)}s</small></b>) : <small>No stable triads detected.</small>}</div></article>}</div>
 
           <div className="midiEditDesk">
             <div className="midiEditHead"><div><p className="midiKicker">CLEANUP DESK</p><h3>Shape the performance before export.</h3></div><div className="midiHistory"><button type="button" disabled={!history.length} onClick={undoEdit}>Undo</button><button type="button" onClick={resetEdits}>Reset</button></div></div>
             <div className="midiEditGrid">
               <section><strong>Timing</strong><label><span>Grid</span><select value={quantizeGrid} onChange={(event) => setQuantizeGrid(event.target.value as QuantizeGrid)}><option value="off">Off</option><option value="1/8">1/8</option><option value="1/16">1/16</option><option value="1/32">1/32</option></select></label><button type="button" onClick={quantize}>Apply Quantize</button></section>
-              <section><strong>Key + scale</strong><div className="midiInlineFields"><label><span>Key</span><select value={keyRoot} onChange={(event) => setKeyRoot(Number(event.target.value))}>{NOTE_NAMES.map((name, index) => <option value={index} key={name}>{name}</option>)}</select></label><label><span>Scale</span><select value={scaleMode} onChange={(event) => setScaleMode(event.target.value as ScaleMode)}><option value="chromatic">Chromatic</option><option value="major">Major</option><option value="minor">Minor</option></select></label></div><button type="button" onClick={snapToKey}>Snap to Key</button></section>
-              <section><strong>Pitch + cleanup</strong><div className="midiButtonRow"><button type="button" onClick={() => transpose(-12)}>− Octave</button><button type="button" onClick={() => transpose(12)}>+ Octave</button></div><button type="button" onClick={removeWeakNotes}>Remove Weak Notes</button></section>
-              <section className={selectedNote === null ? "midiSelected isEmpty" : "midiSelected"}><strong>Selected note</strong>{selectedNote === null || !notes[selectedNote] ? <p>Tap a green note above to edit it.</p> : <><p><b>{noteName(notes[selectedNote].pitchMidi)}</b> · {notes[selectedNote].startTimeSeconds.toFixed(2)}s</p><div className="midiButtonRow"><button type="button" onClick={() => updateSelectedPitch(-1)}>− Semitone</button><button type="button" onClick={() => updateSelectedPitch(1)}>+ Semitone</button></div><button className="danger" type="button" onClick={deleteSelected}>Delete Note</button></>}</section>
+              {sourceType === "melodic" && <section><strong>Key + scale</strong><div className="midiInlineFields"><label><span>Key</span><select value={keyRoot} onChange={(event) => setKeyRoot(Number(event.target.value))}>{NOTE_NAMES.map((name, index) => <option value={index} key={name}>{name}</option>)}</select></label><label><span>Scale</span><select value={scaleMode} onChange={(event) => setScaleMode(event.target.value as ScaleMode)}><option value="chromatic">Chromatic</option><option value="major">Major</option><option value="minor">Minor</option></select></label></div><button type="button" onClick={snapToKey}>Snap to Key</button></section>}
+              <section><strong>{sourceType === "drums" ? "Drum cleanup" : "Pitch + cleanup"}</strong>{sourceType === "melodic" && <div className="midiButtonRow"><button type="button" onClick={() => transpose(-12)}>− Octave</button><button type="button" onClick={() => transpose(12)}>+ Octave</button></div>}<button type="button" onClick={removeWeakNotes}>Remove Weak Notes</button></section>
+              <section className={selectedNote === null ? "midiSelected isEmpty" : "midiSelected"}><strong>Selected note</strong>{selectedNote === null || !notes[selectedNote] ? <p>Tap a green note above to edit it.</p> : <><p><b>{sourceType === "drums" ? ({ 36: "Kick", 38: "Snare", 42: "Hi-hat" } as Record<number, string>)[Math.round(notes[selectedNote].pitchMidi)] ?? noteName(notes[selectedNote].pitchMidi) : noteName(notes[selectedNote].pitchMidi)}</b> · {notes[selectedNote].startTimeSeconds.toFixed(2)}s</p>{sourceType === "melodic" && <div className="midiButtonRow"><button type="button" onClick={() => updateSelectedPitch(-1)}>− Semitone</button><button type="button" onClick={() => updateSelectedPitch(1)}>+ Semitone</button></div>}<div className="midiButtonRow"><button type="button" onClick={() => nudgeSelected(-1)}>← Grid</button><button type="button" onClick={() => nudgeSelected(1)}>Grid →</button></div><div className="midiButtonRow"><button type="button" onClick={() => resizeSelected(.5)}>Shorter</button><button type="button" onClick={() => resizeSelected(2)}>Longer</button><button type="button" onClick={splitSelected}>Split</button></div><button className="danger" type="button" onClick={deleteSelected}>Delete Note</button></>}</section>
               <section><strong>Loop range</strong><div className="midiInlineFields"><label><span>Start</span><input type="number" min="0" max={duration} step="0.1" value={loopStart} onChange={(event) => setLoopStart(Number(event.target.value) || 0)} /></label><label><span>End</span><input type="number" min="0.1" max={duration} step="0.1" value={loopEnd} onChange={(event) => setLoopEnd(Number(event.target.value) || duration)} /></label></div><button type="button" onClick={extractLoop}>Create Loop MIDI</button></section>
             </div>
           </div></>}
@@ -766,6 +881,7 @@ export default function MidiShredderPage(): React.JSX.Element {
             <label><span>Preview sound</span><select value={previewSound} onChange={(event) => setPreviewSound(event.target.value as PreviewSound)}><option value="keys">Clean Keys</option><option value="synth">Bright Synth</option><option value="bass">Bass</option></select></label>
             <button type="button" onClick={() => previewing ? void stopPreview() : void previewMidi()}>{previewing ? "Stop Preview" : "Preview MIDI"}</button>
             {proMode && sourceAudio.current && !previewing && <button type="button" onClick={() => void previewMidi(true)}>Compare With Source</button>}
+            {proMode && <button type="button" onClick={downloadAnalysisManifest}>Download Analysis</button>}
             <button className="primary" type="button" onClick={downloadMidi}>Download .MID</button>
             {projectId && cloudUser && <button type="button" disabled={saved} onClick={() => void saveToProject()}>{saved ? "Saved to Project" : "Save to Project"}</button>}
           </div>
