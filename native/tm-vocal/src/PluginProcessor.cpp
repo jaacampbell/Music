@@ -73,7 +73,7 @@ void TMVocalProcessor::restore(const juce::ValueTree& tree) {
 void TMVocalProcessor::setStateInformation(const void* data,int size) {
     if(auto xml=getXmlFromBinary(data,size)) restore(juce::ValueTree::fromXml(*xml));
 }
-void TMVocalProcessor::savePreset(const juce::File& file) { state.copyState().createXml()->writeTo(file); }
+bool TMVocalProcessor::savePreset(const juce::File& file) { return state.copyState().createXml()->writeTo(file); }
 bool TMVocalProcessor::loadPreset(const juce::File& file) {
     if(file.getSize()>1024*1024) return false;
     if(auto xml=juce::XmlDocument::parse(file)) {

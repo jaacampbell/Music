@@ -21,7 +21,8 @@ TMVocalEditor::TMVocalEditor(TMVocalProcessor& p):AudioProcessorEditor(p),proces
         buttons.push_back(std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(p.state,toggleIds[i],toggles[i]));
     }
     preset.addItemList(juce::StringArray{"Neutral Start","Baritone Forward","Dry Southern Lead","Wide Hook"},1);
-    preset.setText("Choose a starting point");preset.onChange=[this]{processor.applyPreset(preset.getSelectedId()-1);};addAndMakeVisible(preset);
+    preset.setText("Choose a starting point",juce::dontSendNotification);
+    preset.onChange=[this]{if(preset.getSelectedId()>0) processor.applyPreset(preset.getSelectedId()-1);presetNotice.clear();};addAndMakeVisible(preset);
     division.addItemList(juce::StringArray{"1/4","1/8","1/8 dotted","1/16"},1);addAndMakeVisible(division);
     divisionAttachment=std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(p.state,"division",division);
     advanced.onClick=[this]{expanded=!expanded;advanced.setButtonText(expanded?"Simple":"Advanced");resized();};
@@ -61,7 +62,7 @@ void TMVocalEditor::resized() {
 void TMVocalEditor::timerCallback() {
     auto db=[](float x){return juce::String(20*std::log10(std::max(x,1.0e-6f)),1);};
     meters.setText("IN "+db(processor.inputMeter.load())+" dBFS    OUT "+db(processor.outputMeter.load())+" dBFS\nGAIN REDUCTION "+juce::String(processor.gainReduction.load(),1)+" dB",juce::dontSendNotification);
-    status.setText(toggles[7].getToggleState()?"Tracking: space muted":"0 added latency",juce::dontSendNotification);
+    status.setText(presetNotice.isNotEmpty()?presetNotice:(toggles[7].getToggleState()?"Tracking: space muted":"0 added latency"),juce::dontSendNotification);
 }
 void TMVocalEditor::chooseFile(bool saving) {
     chooser=std::make_unique<juce::FileChooser>(saving?"Save TM Vocal preset":"Load TM Vocal preset",juce::File::getSpecialLocation(juce::File::userDocumentsDirectory),"*.tmvocal");
@@ -69,7 +70,7 @@ void TMVocalEditor::chooseFile(bool saving) {
     chooser->launchAsync((saving?juce::FileBrowserComponent::saveMode|juce::FileBrowserComponent::warnAboutOverwriting:juce::FileBrowserComponent::openMode)|juce::FileBrowserComponent::canSelectFiles,
         [safe,saving](const juce::FileChooser& fc){if(safe==nullptr) return;
             auto file=fc.getResult();if(file==juce::File{}) return;
-            if(saving) safe->processor.savePreset(file.withFileExtension("tmvocal"));
-            else if(!safe->processor.loadPreset(file)) safe->status.setText("Invalid preset",juce::dontSendNotification);
+            if(saving) safe->presetNotice=safe->processor.savePreset(file.withFileExtension("tmvocal"))?"Preset saved":"Could not save preset";
+            else safe->presetNotice=safe->processor.loadPreset(file)?"Preset loaded":"Invalid preset";
         });
 }

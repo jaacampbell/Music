@@ -15,8 +15,10 @@ if(TM_JUCE_SOURCE)
   add_subdirectory("${TM_JUCE_SOURCE}" "${CMAKE_BINARY_DIR}/JUCE")
 else()
   include(FetchContent)
-  FetchContent_Declare(JUCE GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
-    GIT_TAG 29396c22c93392d6738e021b83196283d6e4d850 GIT_SHALLOW FALSE)
+  FetchContent_Declare(JUCE
+    URL https://codeload.github.com/juce-framework/JUCE/tar.gz/29396c22c93392d6738e021b83196283d6e4d850
+    URL_HASH SHA256=97cc01e0fe15278f6edadc895a3cf0aac2fd98bcd023823384d5ca7025beb91c
+    DOWNLOAD_EXTRACT_TIMESTAMP FALSE)
   FetchContent_MakeAvailable(JUCE)
 endif()
 set(TM_FORMATS VST3 Standalone)

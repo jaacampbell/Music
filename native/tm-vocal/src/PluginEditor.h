@@ -21,6 +21,7 @@ private:
     juce::TextButton advanced{"Advanced"},save{"Save preset"},load{"Load preset"};
     juce::Label meters,status;
     bool expanded=false;
+    juce::String presetNotice;
     std::unique_ptr<juce::FileChooser> chooser;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TMVocalEditor)
 };

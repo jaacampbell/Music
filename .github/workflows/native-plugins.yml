@@ -2,6 +2,7 @@ name: Native TM Vocal
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     paths: ['native/**', '.github/workflows/native-plugins.yml']
   pull_request:
     paths: ['native/**', '.github/workflows/native-plugins.yml']

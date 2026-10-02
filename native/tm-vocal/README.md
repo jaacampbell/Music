@@ -22,7 +22,7 @@ cmake --build native/build --config Release --parallel 2
 ctest --test-dir native/build -C Release --output-on-failure
 ```
 
-For a Mac universal build add `'-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64' -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0`. An existing JUCE checkout can be passed with `-DTM_JUCE_SOURCE=/absolute/path/to/JUCE`. Otherwise CMake fetches the pinned JUCE 8.0.12 commit. DSP tests can build offline with `-DTM_BUILD_PLUGIN=OFF`.
+For a Mac universal build add `'-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64' -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0`. An existing JUCE checkout can be passed with `-DTM_JUCE_SOURCE=/absolute/path/to/JUCE`. Otherwise CMake fetches a SHA-256 verified archive of the pinned JUCE 8.0.12 commit. DSP tests can build offline with `-DTM_BUILD_PLUGIN=OFF`.
 
 Output: `native/build/TMVocal_artefacts/Release/{VST3,AU,Standalone}`. The **Native TM Vocal** GitHub workflow packages platform-specific bundles as downloadable artifacts.
 
