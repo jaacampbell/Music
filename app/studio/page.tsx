@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import "./musicStudio.css";
 import { StyleControl } from "./StyleControl";
+import { StudioAssistant } from "./StudioAssistant";
 
 type Readiness = {
   status?: string;
@@ -19,11 +20,25 @@ type Readiness = {
 
 const cards = [
   {
+    eyebrow: "ASSIST",
+    title: "TM Assistant",
+    description: "Use the built-in project-aware development assistant for songwriting, production decisions, mix priorities, release prep, branding, publishing workflow, and next steps.",
+    href: "#tm-assistant",
+    badge: "AI + Project Context"
+  },
+  {
+    eyebrow: "DNA",
+    title: "Producer DNA",
+    description: "Research production traits, rhythm, arrangement logic, technical decisions, scenes, and creative directions without copying another artist too closely.",
+    href: "/producer-dna",
+    badge: "Research System"
+  },
+  {
     eyebrow: "CREATE",
     title: "Start / Resume Song",
-    description: "Open Music OS for song direction, Song DNA, arrangement, revisions, mix notes, and project history.",
+    description: "Open the song workspace for concept, Song DNA, arrangement, revisions, mix notes, and project history.",
     href: "/",
-    badge: "Music OS"
+    badge: "Song Workspace"
   },
   {
     eyebrow: "STEMS",
@@ -83,7 +98,9 @@ export default function MusicStudioHome(): React.JSX.Element {
           <span><strong>TM Music Studio</strong><small>AI production + artist development workspace</small></span>
         </Link>
         <nav>
-          <Link href="/">Music OS</Link>
+          <Link href="/">Song Workspace</Link>
+          <Link href="#tm-assistant">TM Assistant</Link>
+          <Link href="/producer-dna">Producer DNA</Link>
           <Link href="/dashboard">Projects</Link>
           <Link href="/stem-agent">Stems</Link>
           <Link href="/player">Player</Link>
@@ -98,7 +115,7 @@ export default function MusicStudioHome(): React.JSX.Element {
             TM Music Studio is the main experience. Song development, Producer DNA, AI Style Control, Stem Director, project files, DAW handoff, and release tools live inside one connected workspace.
           </p>
           <div className="musicStudioHeroActions">
-            <Link className="musicStudioPrimary" href="/">Open Music OS</Link>
+            <Link className="musicStudioPrimary" href="/">Open Song Workspace</Link>
             <Link className="musicStudioSecondary" href="/stem-agent">Separate Stems</Link>
           </div>
         </div>
@@ -147,12 +164,14 @@ export default function MusicStudioHome(): React.JSX.Element {
         </div>
       </section>
 
+      <StudioAssistant />
+
       <StyleControl />
 
       <section className="musicStudioPipeline">
         <p className="musicStudioKicker">PRODUCTION FLOW</p>
         <div className="musicStudioFlow">
-          {["Idea / Reference", "Song Project", "Audio Analysis", "Stem Director", "Revision + Mix", "DAW Export", "Video / Lip Sync", "Release"].map((step, index) => (
+          {["Idea / Reference", "TM Assistant", "Song Project", "Producer DNA", "Stem Director", "Revision + Mix", "DAW Export", "Release"].map((step, index) => (
             <div className="musicStudioFlowStep" key={step}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <strong>{step}</strong>
