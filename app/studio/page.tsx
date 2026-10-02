@@ -2,228 +2,175 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import "./musicStudio.css";
+import { loadActiveProjectId } from "@/lib/browser-project-storage";
 import { StyleControl } from "./StyleControl";
 import { StudioAssistant } from "./StudioAssistant";
+import "./musicStudio.css";
 
+type Area = "song" | "vocal" | "production" | "assistant";
 type Readiness = {
-  status?: string;
   capabilities?: {
     controlPlaneReady?: boolean;
     controllerOnline?: boolean;
-    controllerBootstrap?: boolean;
     computeReady?: boolean;
-    deepReady?: boolean;
     permanentOutputs?: boolean;
-    cloudRecovery?: boolean;
   };
   nextAction?: string;
 };
 
-const cards = [
-  { eyebrow: "VOCAL", title: "TM Vocal", description: "Process your dry take, compare a reference vocal, audition against the beat, save signature chains, and export WAVs with exact settings.", href: "/tm-vocal", badge: "Browser DSP" },
-  {
-    eyebrow: "ASSIST",
-    title: "TM Assistant",
-    description: "Use the built-in project-aware development assistant for songwriting, production decisions, mix priorities, release prep, branding, publishing workflow, and next steps.",
-    href: "#tm-assistant",
-    badge: "AI + Project Context"
-  },
-  {
-    eyebrow: "DNA",
-    title: "Producer DNA",
-    description: "Research production traits, rhythm, arrangement logic, technical decisions, scenes, and creative directions without copying another artist too closely.",
-    href: "/producer-dna",
-    badge: "Research System"
-  },
-  {
-    eyebrow: "CREATE",
-    title: "Start / Resume Song",
-    description: "Open the song workspace for concept, Song DNA, arrangement, revisions, mix notes, and project history.",
-    href: "/",
-    badge: "Song Workspace"
-  },
-  {
-    eyebrow: "STEMS",
-    title: "Stem Director",
-    description: "Use the production worker mesh for Core 6, Deep isolation, durable cloud staging, recovery, and permanent private outputs.",
-    href: "/stem-agent",
-    badge: "Production"
-  },
-  {
-    eyebrow: "MIDI",
-    title: "MIDI Shredder",
-    description: "Turn isolated vocals, bass, keys, guitar, and melodies into playable MIDI for Ableton and other DAWs.",
-    href: "/midi-shredder",
-    badge: "Audio → MIDI"
-  },
-  {
-    eyebrow: "VOCALS",
-    title: "Vocal Isolation",
-    description: "Open Stem Director and focus on lead vocals, backgrounds, doubles, ad-libs, and instrumental-ready separation.",
-    href: "/stem-agent?strategy=vocal-suite",
-    badge: "Fast path"
-  },
-  {
-    eyebrow: "PROJECTS",
-    title: "Song Dashboard",
-    description: "Manage private projects, versions, files, timestamped notes, credits, ownership, release prep, and saved decisions.",
-    href: "/dashboard",
-    badge: "Persistent"
-  },
-  {
-    eyebrow: "LISTEN",
-    title: "Player",
-    description: "Review private uploads and versions across devices without opening the full production workspace.",
-    href: "/player",
-    badge: "Cloud + local"
-  },
-  {
-    eyebrow: "EXPORT",
-    title: "DAW / Ableton Handoff",
-    description: "Prepare organized WAV stems, production notes, and project handoff packages for Ableton, engineers, collaborators, or archive.",
-    href: "/?mode=studio",
-    badge: "WAV-ready"
-  }
+const areas: { id: Area; label: string; detail: string }[] = [
+  { id: "song", label: "Make a Song", detail: "Write, arrange and manage your project" },
+  { id: "vocal", label: "Mix Vocals", detail: "Record, reference and finish a take" },
+  { id: "production", label: "Stems & MIDI", detail: "Separate audio and build sounds" },
+  { id: "assistant", label: "Assistant", detail: "Get advice and document your method" }
 ];
 
+function readArea(): Area {
+  const value = new URLSearchParams(window.location.search).get("area");
+  return areas.some((item) => item.id === value) ? value as Area : "song";
+}
+
+function WorkspaceCard({ eyebrow, title, description, href, primary = false }: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  href: string;
+  primary?: boolean;
+}) {
+  return <Link className={`musicStudioCard ${primary ? "musicStudioCardFeatured" : ""}`} href={href}>
+    <span className="musicStudioKicker">{eyebrow}</span>
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <strong className="musicStudioGo">Open workspace →</strong>
+  </Link>;
+}
+
 export default function MusicStudioHome(): React.JSX.Element {
+  const [area, setArea] = useState<Area>("song");
+  const [projectId, setProjectId] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
+  const [showStyle, setShowStyle] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
   const [readiness, setReadiness] = useState<Readiness | null>(null);
 
   useEffect(() => {
+    setArea(readArea());
+    const requested = new URLSearchParams(window.location.search).get("projectId");
+    setProjectId(requested && /^[0-9a-f-]{36}$/i.test(requested) ? requested : loadActiveProjectId());
+    setReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!showStatus) return;
     void fetch("/api/stem-agent/readiness", { cache: "no-store" })
       .then(async (response) => response.ok ? response.json() as Promise<Readiness> : null)
       .then(setReadiness)
       .catch(() => setReadiness(null));
-  }, []);
+  }, [showStatus]);
 
-  const controlReady = readiness?.capabilities?.controlPlaneReady === true;
-  const controllerOnline = readiness?.capabilities?.controllerOnline === true;
-  const controllerBootstrap = readiness?.capabilities?.controllerBootstrap === true;
-  const computeReady = readiness?.capabilities?.computeReady === true;
+  function selectArea(next: Area): void {
+    setArea(next);
+    setShowStyle(false);
+    const url = new URL(window.location.href);
+    url.searchParams.set("area", next);
+    window.history.replaceState(null, "", url.pathname + url.search);
+  }
 
-  return (
-    <main className="musicStudioHome">
-      <header className="musicStudioTopbar">
-        <Link className="musicStudioBrand" href="/studio" aria-label="Music Studio home">
-          <span className="musicStudioMark">M</span>
-          <span><strong>TM Music Studio</strong><small>Hosted production workspace</small></span>
-        </Link>
-        <nav>
-          <Link href="/">Song Workspace</Link>
-          <Link href="#tm-assistant">TM Assistant</Link>
-          <Link href="/producer-dna">Producer DNA</Link>
-          <Link href="/studio-brain">Studio Brain</Link>
-          <Link href="/dashboard">Projects</Link>
-          <Link href="/stem-agent">Stems</Link>
-          <Link href="/midi-shredder">MIDI</Link>
-          <Link href="/tm-vocal">TM Vocal</Link>
-          <Link href="/player">Player</Link>
-        </nav>
-      </header>
+  const withProject = (path: string): string => {
+    if (!projectId) return path;
+    const [route, query] = path.split("?");
+    return `${route}?${query ? `${query}&` : ""}projectId=${encodeURIComponent(projectId)}`;
+  };
 
-      <section className="musicStudioHero">
-        <div>
-          <p className="musicStudioKicker">ONE STUDIO · ONE PROJECT GRAPH</p>
-          <h1>Make the song. Separate it. Fix it. Finish it.</h1>
-          <p className="musicStudioLead">
-            The hosted studio is the main experience. Local tools are optional support utilities, not a requirement for normal production.
-          </p>
-          <div className="musicStudioHeroActions">
-            <Link className="musicStudioPrimary" href="/studio-brain">Ask the Studio Brain</Link>
-            <Link className="musicStudioSecondary" href="/">Open Song Workspace</Link>
-            <Link className="musicStudioSecondary" href="/stem-agent">Separate Stems</Link>
+  return <main className="musicStudioHome">
+    <header className="musicStudioTopbar">
+      <Link className="musicStudioBrand" href="/studio" aria-label="TM Music Studio home">
+        <span className="musicStudioMark">M</span>
+        <span><strong>TM Music Studio</strong><small>One place to start your next move</small></span>
+      </Link>
+      <nav aria-label="Studio shortcuts">
+        <Link href={withProject("/dashboard")}>My Songs</Link>
+        <Link href="/guide">Help</Link>
+        <Link href="/login">Account</Link>
+      </nav>
+    </header>
+
+    <section className="musicStudioCompactHero">
+      <p className="musicStudioKicker">TM MUSIC STUDIO</p>
+      <h1>What are you making today?</h1>
+      <p>Choose a work area. Your song, vocal tools, production tools and assistant stay connected through the same project.</p>
+    </section>
+
+    <section className="musicStudioWorkspace" aria-label="Studio work areas">
+      <div className="musicStudioAreaTabs" role="tablist" aria-label="Choose a work area">
+        {areas.map((item) => <button
+          key={item.id}
+          id={`studio-tab-${item.id}`}
+          type="button"
+          role="tab"
+          aria-selected={area === item.id}
+          aria-controls={`studio-panel-${item.id}`}
+          className={area === item.id ? "active" : ""}
+          onClick={() => selectArea(item.id)}
+        ><strong>{item.label}</strong><small>{item.detail}</small></button>)}
+      </div>
+
+      <div role="tabpanel" id={`studio-panel-${area}`} aria-labelledby={`studio-tab-${area}`} className="musicStudioAreaContent">
+        {area === "song" && <>
+          <div className="musicStudioAreaIntro"><p className="musicStudioKicker">SONG WORKSPACE</p><h2>Pick up the record where you left off.</h2><p>Build the idea, shape the arrangement, and keep the versions together.</p></div>
+          <div className="musicStudioFocusGrid">
+            <WorkspaceCard primary eyebrow="CREATE" title="Start or resume a song" description="Work on the concept, structure, revisions and mix plan." href={withProject("/?workspace=1")} />
+            <WorkspaceCard eyebrow="LIBRARY" title="My song projects" description="Find your files, versions, credits and saved decisions." href={withProject("/dashboard")} />
+            <WorkspaceCard eyebrow="LISTEN" title="Review in the player" description="Listen to your music and compare saved versions." href="/player" />
           </div>
-        </div>
-
-        <aside className="musicStudioStatus">
-          <p className="musicStudioStatusLabel">Production health</p>
-          <div className="musicStudioStatusRow">
-            <span>Control plane</span>
-            <strong className={controlReady ? "good" : "warn"}>{readiness ? (controlReady ? "READY" : "CHECK") : "…"}</strong>
+        </>}
+        {area === "vocal" && <>
+          <div className="musicStudioAreaIntro"><p className="musicStudioKicker">VOCAL WORKSPACE</p><h2>Get the vocal sitting right.</h2><p>Process your take, compare your own reference and hand off the exact settings.</p></div>
+          <div className="musicStudioFocusGrid">
+            <WorkspaceCard primary eyebrow="MIX" title="TM Vocal" description="Use the vocal chain, reference match, beat pocket, presets and WAV export." href={withProject("/tm-vocal")} />
+            <WorkspaceCard eyebrow="SESSIONS" title="Session Desk" description="Review saved takes, chain settings and timestamped notes." href="/tm-sessions" />
+            <WorkspaceCard eyebrow="ISOLATE" title="Pull out a vocal" description="Separate a lead, background or instrumental in Stem Director." href={withProject("/stem-agent?strategy=vocal-suite")} />
           </div>
-          <div className="musicStudioStatusRow">
-            <span>Controller</span>
-            <strong className={controllerOnline ? (controllerBootstrap ? "standby" : "good") : "warn"}>
-              {readiness ? (controllerOnline ? (controllerBootstrap ? "BOOTSTRAP" : "ONLINE") : "OFFLINE") : "…"}
-            </strong>
+        </>}
+        {area === "production" && <>
+          <div className="musicStudioAreaIntro"><p className="musicStudioKicker">PRODUCTION WORKSPACE</p><h2>Make room for the idea.</h2><p>Separate a recording, turn it into MIDI, or set the creative direction for the next pass.</p></div>
+          <div className="musicStudioFocusGrid">
+            <WorkspaceCard primary eyebrow="STEMS" title="Stem Director" description="Separate and save real stems for the song." href={withProject("/stem-agent")} />
+            <WorkspaceCard eyebrow="MIDI" title="MIDI Shredder" description="Turn audio parts into playable MIDI and edit the notes." href={withProject("/midi-shredder")} />
+            <div className="musicStudioCard musicStudioInlineCard"><span className="musicStudioKicker">DIRECTION</span><h3>Style Control</h3><p>Set textures, influences and reference weight right here.</p><button type="button" onClick={() => setShowStyle((value) => !value)} aria-expanded={showStyle} aria-controls="studio-style-control">{showStyle ? "Close controls ↑" : "Open controls ↓"}</button></div>
           </div>
-          <div className="musicStudioStatusRow">
-            <span>Compute</span>
-            <strong className={computeReady ? "good" : "standby"}>{readiness ? (computeReady ? "ONLINE" : "STANDBY") : "…"}</strong>
-          </div>
-          <div className="musicStudioStatusRow">
-            <span>Durable outputs</span>
-            <strong className={readiness?.capabilities?.permanentOutputs ? "good" : "warn"}>
-              {readiness ? (readiness.capabilities?.permanentOutputs ? "ON" : "CHECK") : "…"}
-            </strong>
-          </div>
-          {readiness?.nextAction && <p className="musicStudioNext">{readiness.nextAction}</p>}
-        </aside>
-      </section>
+          {showStyle && <div id="studio-style-control"><StyleControl projectId={projectId} /></div>}
+        </>}
+        {area === "assistant" && <>
+          <div className="musicStudioAreaIntro"><p className="musicStudioKicker">DEVELOPMENT WORKSPACE</p><h2>Talk through the next move.</h2><p>Ask about the current record, then develop your Producer DNA when you need a deeper pass.</p></div>
+          <div className="musicStudioAssistantLinks"><Link href={withProject("/studio-brain")}>Open full Studio Brain →</Link><Link href="/producer-dna">Explore Producer DNA →</Link></div>
+          <StudioAssistant />
+        </>}
+      </div>
+    </section>
 
-      <section className="musicStudioSection">
-        <div className="musicStudioSectionHead">
-          <div>
-            <p className="musicStudioKicker">START HERE</p>
-            <h2>What are you trying to do?</h2>
-          </div>
-          <span>Choose the job, not the technology.</span>
-        </div>
-
-        <div className="musicStudioGrid">
-          {cards.map((card) => (
-            <Link className="musicStudioCard" href={card.href} key={card.title}>
-              <div className="musicStudioCardTop">
-                <span>{card.eyebrow}</span>
-                <small>{card.badge}</small>
-              </div>
-              <h3>{card.title}</h3>
-              <p>{card.description}</p>
-              <strong className="musicStudioGo">Open →</strong>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <StudioAssistant />
-      <section className="musicStudioSection">
-        <div className="musicStudioSectionHead"><div><p className="musicStudioKicker">YOUR METHOD · YOUR NEXT MOVE</p><h2>A studio brain behind the software.</h2></div></div>
-        <div className="musicStudioGrid">
-          <Link className="musicStudioCard" href="/studio-brain"><div className="musicStudioCardTop"><span>ASSISTANT</span><small>Creative + technical</small></div><h3>Ask Studio Brain</h3><p>Production advice, song development, release guidance, and feature specifications using verified song context.</p><strong className="musicStudioGo">Start a session →</strong></Link>
-          <Link className="musicStudioCard" href="/studio-brain"><div className="musicStudioCardTop"><span>PRODUCER DNA</span><small>Editable method</small></div><h3>Your decisions. Documented.</h3><p>Capture your sound, workflow, coaching style, and creative rules. Add course notes and save private project snapshots.</p><strong className="musicStudioGo">Build your DNA →</strong></Link>
-          <Link className="musicStudioCard" href="/studio-brain"><div className="musicStudioCardTop"><span>DNA TOOLS</span><small>Guided concepts</small></div><h3>From course to workflow.</h3><p>Ten tool specifications covering vocal chains, beats, hooks, arrangements, presets, identity, and release preparation.</p><strong className="musicStudioGo">Explore tools →</strong></Link>
-        </div>
-      </section>
-      <StyleControl />
-
-      <section className="musicStudioPipeline">
-        <p className="musicStudioKicker">PRODUCTION FLOW</p>
-        <div className="musicStudioFlow">
-          {["Idea / Reference", "Song Project", "Audio Analysis", "Stem Director", "MIDI Shredder", "Revision + Mix", "DAW Export", "Release"].map((step, index) => (
-            <div className="musicStudioFlowStep" key={step}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{step}</strong>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="musicStudioLegacy">
-        <div>
-          <p className="musicStudioKicker">LOCAL / LEGACY TOOLS</p>
-          <h2>Available when you need them—not the default.</h2>
-          <p>
-            The older direct-worker Stem Studio remains available for local testing and diagnostics. Production separation should use Stem Director.
-          </p>
-        </div>
-        <div className="musicStudioLegacyLinks">
+    <div className="musicStudioUtilities">
+      <details>
+        <summary>More tools and help</summary>
+        <div className="musicStudioUtilityLinks">
+          <Link href="/guide">Guide</Link>
           <Link href="/stem-studio">Direct Stem Studio</Link>
           <Link href="/stem-lab">Stem Lab</Link>
-          <Link href="/stem-agent/status">Operations Status</Link>
-          <Link href="/guide">Guide</Link>
+          <Link href="/stem-agent/status">Operations status</Link>
+          <Link href="/login">Sign in</Link>
         </div>
-      </section>
-    </main>
-  );
+      </details>
+      <details onToggle={(event) => setShowStatus(event.currentTarget.open)}>
+        <summary>Production status</summary>
+        <div className="musicStudioStatusGrid" aria-live="polite">
+          <span>Control plane <strong>{!readiness ? "Checking…" : readiness.capabilities?.controlPlaneReady ? "Ready" : "Check"}</strong></span>
+          <span>Controller <strong>{!readiness ? "Checking…" : readiness.capabilities?.controllerOnline ? "Online" : "Offline"}</strong></span>
+          <span>Compute <strong>{!readiness ? "Checking…" : readiness.capabilities?.computeReady ? "Online" : "Standby"}</strong></span>
+          <span>Saved outputs <strong>{!readiness ? "Checking…" : readiness.capabilities?.permanentOutputs ? "Ready" : "Check"}</strong></span>
+        </div>
+        {readiness?.nextAction && <p>{readiness.nextAction}</p>}
+      </details>
+    </div>
+    {ready && <p className="musicStudioPageNote">Bookmark this studio page. The detailed tools remain available when you open a work area.</p>}
+  </main>;
 }

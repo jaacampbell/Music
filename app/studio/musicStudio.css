@@ -346,3 +346,52 @@
   .tmAssistantHead,.tmAssistantGrid { grid-template-columns:1fr; }
   .tmMessage { max-width:92%; }
 }
+
+/* A small number of work areas replaces the previous long launch directory. */
+.musicStudioCompactHero,.musicStudioWorkspace,.musicStudioUtilities,.musicStudioPageNote {
+  max-width:1400px;
+  margin:0 auto;
+  padding-left:clamp(1rem,5vw,5rem);
+  padding-right:clamp(1rem,5vw,5rem);
+}
+.musicStudioCompactHero { padding-top:clamp(2.4rem,6vw,5rem); padding-bottom:2rem; }
+.musicStudioCompactHero h1 { margin:0; font-size:clamp(2.65rem,6vw,5.7rem); letter-spacing:-.06em; line-height:1.04; }
+.musicStudioCompactHero>p:last-child { max-width:680px; color:#b8bdb4; line-height:1.6; font-size:1.06rem; }
+.musicStudioAreaTabs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.65rem; }
+.musicStudioAreaTabs button { text-align:left; display:grid; gap:.3rem; padding:1rem 1.1rem; border:1px solid rgba(255,255,255,.13); border-radius:16px; background:rgba(255,255,255,.035); color:#f6f7f3; cursor:pointer; }
+.musicStudioAreaTabs button.active { border-color:#b0cc00; background:rgba(176,204,0,.12); }
+.musicStudioAreaTabs button:focus-visible,.musicStudioInlineCard button:focus-visible,.musicStudioUtilities summary:focus-visible { outline:2px solid #b0cc00; outline-offset:3px; }
+.musicStudioAreaTabs strong { font-size:1rem; }
+.musicStudioAreaTabs small { font-size:.75rem; color:#9fa79a; line-height:1.35; }
+.musicStudioAreaContent { min-height:420px; padding:2.5rem 0 1rem; }
+.musicStudioAreaIntro h2 { margin:0; font-size:clamp(2rem,4vw,3.35rem); letter-spacing:-.045em; }
+.musicStudioAreaIntro>p:last-child { margin:.7rem 0 1.7rem; color:#aab1a6; line-height:1.55; }
+.musicStudioFocusGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+.musicStudioFocusGrid .musicStudioCard { min-height:210px; }
+.musicStudioCardFeatured { border-color:rgba(176,204,0,.42); background:linear-gradient(160deg,rgba(176,204,0,.16),rgba(255,255,255,.028)); }
+.musicStudioInlineCard button { align-self:flex-start; margin-top:auto; padding:0; border:0; background:transparent; color:#b0cc00; font-weight:800; cursor:pointer; }
+.musicStudioAssistantLinks { display:flex; gap:1.2rem; flex-wrap:wrap; margin:.3rem 0 1rem; }
+.musicStudioAssistantLinks a,.musicStudioUtilityLinks a { color:#b0cc00; text-decoration:none; font-size:.86rem; font-weight:750; }
+.musicStudioAreaContent>.tmAssistant,.musicStudioAreaContent .styleControl { padding-left:0; padding-right:0; }
+.musicStudioUtilities { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1.4rem; }
+.musicStudioUtilities details { border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.025); border-radius:14px; padding:1rem; color:#aab1a6; }
+.musicStudioUtilities summary { cursor:pointer; color:#e7e9e4; font-weight:700; }
+.musicStudioUtilityLinks { display:flex; flex-wrap:wrap; gap:1rem; padding-top:1rem; }
+.musicStudioStatusGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.7rem; margin-top:1rem; }
+.musicStudioStatusGrid span { display:flex; justify-content:space-between; gap:.6rem; }
+.musicStudioStatusGrid strong { color:#b0cc00; }
+.musicStudioUtilities p { line-height:1.5; font-size:.85rem; }
+.musicStudioPageNote { padding-top:1.7rem; color:#858b81; font-size:.84rem; }
+@media (max-width:900px) {
+  .musicStudioAreaTabs { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .musicStudioFocusGrid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:620px) {
+  .musicStudioCompactHero { padding-top:2.3rem; }
+  .musicStudioAreaTabs button { padding:.86rem; }
+  .musicStudioAreaTabs strong { font-size:.93rem; }
+  .musicStudioAreaTabs small { display:none; }
+  .musicStudioFocusGrid,.musicStudioUtilities,.musicStudioStatusGrid { grid-template-columns:1fr; }
+  .musicStudioAreaContent { padding-top:2rem; }
+  .musicStudioFocusGrid .musicStudioCard { min-height:180px; }
+}

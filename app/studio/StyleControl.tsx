@@ -38,11 +38,12 @@ function Slider({ label, value, onChange, hint }: { label: string; value: number
   return <label className="styleSlider"><div><strong>{label}</strong><span>{value}%</span></div><input type="range" min="0" max="100" value={value} onChange={(event) => onChange(Number(event.target.value))}/><small>{hint}</small></label>;
 }
 
-export function StyleControl(): React.JSX.Element {
+export function StyleControl({ projectId: linkedProjectId }: { projectId?: string | null } = {}): React.JSX.Element {
   const [value, setValue] = useState<StyleControlState>(DEFAULT_STYLE_CONTROL);
   const [status, setStatus] = useState("Controls are saved in this browser and travel with Stem Director jobs.");
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const projectId = useMemo(() => typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("projectId"), []);
+  const locationProjectId = useMemo(() => typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("projectId"), []);
+  const projectId = linkedProjectId ?? locationProjectId;
 
   useEffect(() => setValue(loadStyleControl()), []);
 

@@ -142,8 +142,15 @@ export default function HomePage(): React.JSX.Element {
   const [mode, setMode] = useState<AppMode>("guided");
   const [helpOpen, setHelpOpen] = useState(false);
 
+  const [showSongWorkspace, setShowSongWorkspace] = useState(!TM_STUDIO_HOME);
   useEffect(() => {
-    if (TM_STUDIO_HOME) router.replace("/studio");
+    if (!TM_STUDIO_HOME) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("workspace") === "1" || params.has("projectId") || params.get("mode") === "studio") {
+      setShowSongWorkspace(true);
+    } else {
+      router.replace("/studio");
+    }
   }, [router]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
@@ -425,7 +432,7 @@ export default function HomePage(): React.JSX.Element {
     }
   };
 
-  if (TM_STUDIO_HOME) {
+  if (!showSongWorkspace) {
     return <main className="musicOs"><div className="statusBar">Opening TM Music Studio…</div></main>;
   }
 

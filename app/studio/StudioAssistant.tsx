@@ -120,7 +120,7 @@ export function StudioAssistant(): React.JSX.Element {
         <div className="tmAssistantProject">
           <span>ACTIVE PROJECT</span>
           <strong>{projectLabel}</strong>
-          {project ? <Link href={`/?projectId=${project.id}`}>Open song workspace →</Link> : <Link href="/">Create song project →</Link>}
+          {project ? <Link href={`/?workspace=1&projectId=${project.id}`}>Open song workspace →</Link> : <Link href="/?workspace=1">Create song project →</Link>}
         </div>
       </div>
 
