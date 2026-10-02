@@ -152,3 +152,7 @@ npm run dev
 Open `http://localhost:5173`. From the repository root, the same player commands are available as `npm run dev:player`, `npm run build:player`, and `npm run lint:player` after installing the player dependencies.
 
 The GPU worker needs Python 3.11+, FFmpeg, CUDA for practical deep inference, and the appropriate gated-model credentials when SAM-Audio is enabled.
+
+## Native TM Vocal
+
+The first native TM Music Studio plugin lives in [`native/tm-vocal`](native/tm-vocal). It implements a real C++ vocal chain, DAW automation and preset recall, with VST3/standalone targets and AU on macOS. The native workflow builds and packages bundles for Mac, Windows and Linux. This is an alpha; platform DAW acceptance testing and signing remain pending. No pricing or customer tiers are enabled.

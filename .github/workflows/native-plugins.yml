@@ -1,0 +1,45 @@
+name: Native TM Vocal
+on:
+  workflow_dispatch:
+  push:
+    paths: ['native/**', '.github/workflows/native-plugins.yml']
+  pull_request:
+    paths: ['native/**', '.github/workflows/native-plugins.yml']
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, windows-2022, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Linux audio dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libx11-dev libxext-dev libxinerama-dev libxrandr-dev libxcursor-dev libfreetype6-dev libfontconfig1-dev libgl1-mesa-dev
+      - name: Configure Mac universal build
+        if: runner.os == 'macOS'
+        run: cmake -S native/tm-vocal -B native/build -DCMAKE_BUILD_TYPE=Release '-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64' -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+      - name: Configure Windows/Linux
+        if: runner.os != 'macOS'
+        run: cmake -S native/tm-vocal -B native/build -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build native/build --config Release --parallel 2
+      - name: DSP regression checks
+        run: ctest --test-dir native/build -C Release --output-on-failure
+      - name: Package plugin bundles
+        shell: python
+        run: |
+          import pathlib, zipfile
+          root = pathlib.Path('native/build/TMVocal_artefacts/Release')
+          with zipfile.ZipFile('TM-Vocal-${{ runner.os }}-0.1.0.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for path in root.rglob('*'):
+                  if path.is_file() and any(part in ('VST3', 'AU', 'Standalone') for part in path.parts):
+                      archive.write(path, path.relative_to(root))
+              archive.write('native/tm-vocal/README.md', 'README.md')
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TM-Vocal-${{ runner.os }}-0.1.0
+          path: TM-Vocal-*.zip
