@@ -15,6 +15,7 @@ import agent_api as base
 import agent_core as core
 import agent_phase5 as phase5
 import agent_phase7 as phase7
+from vocal_correction import correction_capabilities
 
 app = phase7.app
 SYSTEM_VERSION = "3.11.0"
@@ -79,6 +80,7 @@ def _heartbeat_payload(status_override: str | None = None) -> dict[str, Any] | N
     sam = base.legacy._sam_package_available()
     capacity = max(1, base.JOB_WORKERS)
     deep_ready = bool(cuda and sam)
+    vocal_correction = correction_capabilities()
     status = status_override or ("busy" if active >= capacity else "ready")
     cost_raw = os.environ.get("WORKER_COST_PER_HR", "").strip()
     try:
@@ -109,6 +111,9 @@ def _heartbeat_payload(status_override: str | None = None) -> dict[str, Any] | N
             "cloudLifecycleMirror": phase7._edge_mirror_enabled(),
             "refinementJobs": True,
             "signedDownloads": bool(core.WORKER_AUTH_SECRET),
+            "vocalCorrection": vocal_correction.get("ready") is True,
+            "formantPreservingPitch": vocal_correction.get("formantPreserving") is True,
+            "phraseAlignment": vocal_correction.get("phraseAlignment") is True,
         },
         "metadata": {
             "queuedJobs": queued,

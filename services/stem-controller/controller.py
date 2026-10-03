@@ -139,6 +139,15 @@ class Controller:
         rows = self.supabase("GET", f"/rest/v1/music_stem_jobs?{query}")
         return rows if isinstance(rows, list) else []
 
+    def load_compute_requests(self) -> list[dict[str, Any]]:
+        query = urllib_parse.urlencode({
+            "select": "request_id,status,kind,mode,expires_at,created_at,updated_at",
+            "order": "created_at.desc",
+            "limit": "100",
+        })
+        rows = self.supabase("GET", f"/rest/v1/music_compute_requests?{query}")
+        return rows if isinstance(rows, list) else []
+
     def load_workers(self) -> list[dict[str, Any]]:
         query = urllib_parse.urlencode({
             "select": "node_id,status,deep_ready,current_jobs,capacity,last_seen,provider,provider_node_id",
@@ -230,15 +239,30 @@ class Controller:
 
     def cycle(self) -> None:
         jobs = self.load_jobs()
+        requests = self.load_compute_requests()
         workers = self.fresh_workers(self.load_workers())
         active_jobs = [row for row in jobs if row.get("status") in ACTIVE_JOB_STATES and row.get("source_storage_path")]
         pending_jobs = [row for row in active_jobs if row.get("status") in DEMAND_JOB_STATES]
+        now_ts = time.time()
+        active_requests = []
+        for row in requests:
+            if row.get("status") not in {"queued", "running"}:
+                continue
+            try:
+                expires = datetime.fromisoformat(str(row.get("expires_at", "")).replace("Z", "+00:00")).timestamp()
+            except Exception:
+                continue
+            if expires > now_ts:
+                active_requests.append(row)
+        pending_requests = [row for row in active_requests if row.get("status") == "queued"]
         ready = [row for row in workers if row.get("status") == "ready" and int(row.get("current_jobs") or 0) < int(row.get("capacity") or 1)]
         deep_ready = [row for row in ready if row.get("deep_ready") is True]
-        demand_deep = any(row.get("mode") == "deep" for row in pending_jobs)
+        demand_deep = any(row.get("mode") == "deep" for row in pending_jobs) or any(row.get("mode") == "deep" for row in pending_requests)
         compatible = deep_ready if demand_deep else ready
+        pending_count = len(pending_jobs) + len(pending_requests)
+        active_count = len(active_jobs) + len(active_requests)
 
-        if active_jobs:
+        if active_count:
             self.last_demand_monotonic = time.monotonic()
 
         # Read-only provider probe is safe even when lifecycle automation is disabled.
@@ -257,20 +281,20 @@ class Controller:
         else:
             provider_env_keys = []
 
-        if pending_jobs and not compatible:
+        if pending_count and not compatible:
             if self.config.auto_start:
                 if not running:
                     self.runpod("POST", f"/pods/{self.config.pod_id}/start")
-                    self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), action="start", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
+                    self.publish("waking", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), action="start", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
                     return
-                self.publish("waking", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
+                self.publish("waking", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
                 return
-            self.publish("demand", pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
+            self.publish("demand", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
             return
 
-        if active_jobs:
+        if active_count:
             state = "busy" if any(int(row.get("current_jobs") or 0) > 0 for row in workers) else "ready"
-            self.publish(state, pending=len(pending_jobs), active=len(active_jobs), ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
+            self.publish(state, pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
             return
 
         idle_for = time.monotonic() - self.last_demand_monotonic

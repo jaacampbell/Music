@@ -20,8 +20,8 @@ export const DEFAULT_STUDIO_GRADE: StudioGradeSettings = {
   fxDuck: 72,
   masterGlue: 55,
   masterMatch: 78,
-  pitchCorrection: 0,
-  timingTightness: 0,
+  pitchCorrection: 58,
+  timingTightness: 35,
 };
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));

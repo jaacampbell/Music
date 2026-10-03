@@ -11,7 +11,9 @@ const bodySchema = z.object({
   targets: z.array(z.string().max(120)).max(80).default([]),
   styleControl: z.record(z.string(), z.unknown()).nullable().optional(),
   orchestrationId: z.string().uuid().nullable().optional(),
-  excludeNodeId: z.string().max(128).nullable().optional()
+  excludeNodeId: z.string().max(128).nullable().optional(),
+  computeRequestId: z.string().uuid().nullable().optional(),
+  computeKind: z.enum(["vocal-correction"]).nullable().optional()
 });
 
 type WorkerNode = {
@@ -24,6 +26,7 @@ type WorkerNode = {
   current_jobs: number;
   capacity: number;
   last_seen: string;
+  capabilities?: Record<string, unknown>;
 };
 
 type OrchestrationRow = {
@@ -151,10 +154,11 @@ async function selectWorker(
   config: { url: string; key: string },
   accessToken: string,
   mode: "core" | "deep",
-  excludeNodeId?: string | null
+  excludeNodeId?: string | null,
+  computeKind?: "vocal-correction" | null
 ): Promise<WorkerNode | null> {
   const params = new URLSearchParams({
-    select: "node_id,origin,status,worker_version,gpu_name,deep_ready,current_jobs,capacity,last_seen",
+    select: "node_id,origin,status,worker_version,gpu_name,deep_ready,current_jobs,capacity,last_seen,capabilities",
     status: "eq.ready",
     order: "current_jobs.asc,last_seen.desc",
     limit: "20"
@@ -175,7 +179,8 @@ async function selectWorker(
   }) ?? null;
 }
 
-function staticWorkerFallback(mode: "core" | "deep", excludeNodeId?: string | null): WorkerNode | null {
+function staticWorkerFallback(mode: "core" | "deep", excludeNodeId?: string | null, computeKind?: "vocal-correction" | null): WorkerNode | null {
+  if (computeKind) return null;
   if (excludeNodeId === "static-fallback") return null;
   const origin = process.env.NEXT_PUBLIC_SEPARATOR_URL?.replace(/\/$/, "");
   if (!origin || !/^https:\/\//.test(origin)) return null;
@@ -190,6 +195,53 @@ function staticWorkerFallback(mode: "core" | "deep", excludeNodeId?: string | nu
     capacity: 1,
     last_seen: new Date().toISOString()
   };
+}
+
+async function upsertComputeRequest(
+  config: { url: string; key: string },
+  accessToken: string,
+  userId: string,
+  input: { requestId: string; projectId?: string | null; kind: "vocal-correction"; mode: "core" | "deep" }
+): Promise<boolean> {
+  const response = await fetch(config.url + "/rest/v1/music_compute_requests?on_conflict=request_id", {
+    method: "POST",
+    headers: {
+      apikey: config.key,
+      Authorization: "Bearer " + accessToken,
+      "Content-Type": "application/json",
+      Prefer: "resolution=merge-duplicates,return=minimal"
+    },
+    body: JSON.stringify({
+      request_id: input.requestId,
+      user_id: userId,
+      project_id: input.projectId ?? null,
+      kind: input.kind,
+      mode: input.mode,
+      status: "queued",
+      expires_at: new Date(Date.now() + 10 * 60_000).toISOString(),
+      metadata: { source: "tm-vocal" }
+    })
+  });
+  return response.ok;
+}
+
+async function markComputeRunning(
+  config: { url: string; key: string },
+  accessToken: string,
+  userId: string,
+  requestId: string
+): Promise<void> {
+  const params = new URLSearchParams({ request_id: "eq." + requestId, user_id: "eq." + userId });
+  await fetch(config.url + "/rest/v1/music_compute_requests?" + params.toString(), {
+    method: "PATCH",
+    headers: {
+      apikey: config.key,
+      Authorization: "Bearer " + accessToken,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal"
+    },
+    body: JSON.stringify({ status: "running", updated_at: new Date().toISOString() })
+  }).catch(() => undefined);
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
@@ -214,6 +266,19 @@ export async function POST(request: Request): Promise<NextResponse> {
     if (!ownsProject) return NextResponse.json({ error: "The selected Music OS project does not belong to this account." }, { status: 403 });
   }
 
+  if (parsed.data.computeKind && !parsed.data.computeRequestId) {
+    return NextResponse.json({ error: "A compute request ID is required for vocal correction." }, { status: 400 });
+  }
+  if (parsed.data.computeKind && parsed.data.computeRequestId) {
+    const queued = await upsertComputeRequest(config, parsed.data.accessToken, user.id, {
+      requestId: parsed.data.computeRequestId,
+      projectId: parsed.data.projectId,
+      kind: parsed.data.computeKind,
+      mode: parsed.data.mode
+    });
+    if (!queued) return NextResponse.json({ error: "Could not stage the vocal-correction compute request." }, { status: 503 });
+  }
+
   let orchestration: OrchestrationRow | null = null;
   if (parsed.data.orchestrationId) {
     if (!parsed.data.projectId) return NextResponse.json({ error: "Cloud orchestration requires a linked Music OS project." }, { status: 400 });
@@ -222,12 +287,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     if (["completed", "cancelled"].includes(orchestration.status)) return NextResponse.json({ error: `Cloud orchestration is already ${orchestration.status}.` }, { status: 409 });
   }
 
-  const meshWorker = await selectWorker(config, parsed.data.accessToken, parsed.data.mode, parsed.data.excludeNodeId);
-  const worker = meshWorker ?? staticWorkerFallback(parsed.data.mode, parsed.data.excludeNodeId);
+  const meshWorker = await selectWorker(config, parsed.data.accessToken, parsed.data.mode, parsed.data.excludeNodeId, parsed.data.computeKind);
+  const worker = meshWorker ?? staticWorkerFallback(parsed.data.mode, parsed.data.excludeNodeId, parsed.data.computeKind);
   if (!worker) {
     const compute = await loadComputeState(config, parsed.data.accessToken);
     const controllerFresh = Boolean(compute && Number.isFinite(Date.parse(compute.last_seen)) && Date.parse(compute.last_seen) >= Date.now() - 30_000);
-    const canWake = Boolean(controllerFresh && compute?.auto_start_enabled && parsed.data.orchestrationId);
+    const canWake = Boolean(controllerFresh && compute?.auto_start_enabled && (parsed.data.orchestrationId || parsed.data.computeRequestId));
     const waking = Boolean(canWake && compute && ["standby", "demand", "waking", "ready", "cooldown"].includes(compute.state));
     const code = waking ? "COMPUTE_WAKING" : "NO_COMPATIBLE_WORKER";
     const error = waking
@@ -242,6 +307,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       code,
       mode: parsed.data.mode,
       retryAfterSeconds: waking ? 5 : null,
+      computeRequestId: parsed.data.computeRequestId ?? null,
       compute: compute ? {
         state: compute.state,
         autoStartEnabled: compute.auto_start_enabled,
@@ -254,7 +320,10 @@ export async function POST(request: Request): Promise<NextResponse> {
     }, { status: 503 });
   }
 
+  if (parsed.data.computeRequestId) await markComputeRunning(config, parsed.data.accessToken, user.id, parsed.data.computeRequestId);
+
   return NextResponse.json({
+    computeRequestId: parsed.data.computeRequestId ?? null,
     token: signWorkerToken(secret, user.id, {
       projectId: parsed.data.projectId,
       mode: parsed.data.mode,

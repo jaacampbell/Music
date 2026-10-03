@@ -31,6 +31,7 @@ import {
 import { saveHandoff } from "@/lib/tm-vocal/handoff";
 import { buildReferenceMatch, type ReferenceMatchResult } from "@/lib/tm-vocal/reference-match";
 import { DEFAULT_STUDIO_GRADE, renderStudioVocal, renderStudioMix, renderReferenceMaster, type StudioGradeSettings } from "@/lib/tm-vocal/studio-grade";
+import { correctVocalOnWorker, type WorkerCorrectionMeta } from "@/lib/tm-vocal/worker-correction";
 import { VocalAssistant } from "./VocalAssistant";
 import {
   getCurrentUser,
@@ -145,7 +146,9 @@ export default function VocalWorkspace() {
     [spaceMatch, setSpaceMatch] = useState(62),
     [matchResult, setMatchResult] = useState<ReferenceMatchResult | null>(null),
     [studioGrade, setStudioGrade] = useState<StudioGradeSettings>(DEFAULT_STUDIO_GRADE),
-    [studioStage, setStudioStage] = useState("Ready for studio-grade render.");
+    [studioStage, setStudioStage] = useState("Ready for studio-grade render."),
+    [rawBeforeCorrection, setRawBeforeCorrection] = useState<Loaded | null>(null),
+    [correctionMeta, setCorrectionMeta] = useState<WorkerCorrectionMeta | null>(null);
   const player = useRef<{
     context: AudioContext;
     sources: AudioBufferSourceNode[];
@@ -326,6 +329,8 @@ export default function VocalWorkspace() {
       const value = { file, buffer, measured };
       if (target === "vocal") {
         setVocal(value);
+        setRawBeforeCorrection(null);
+        setCorrectionMeta(null);
         setOutputCheck(null);
       } else if (target === "reference") setReference(value);
       else setBeat(value);
@@ -347,13 +352,61 @@ export default function VocalWorkspace() {
       setBusy(false);
     }
   }
+  async function runWorkerCorrection() {
+    if (!vocal) return;
+    stop();
+    setBusy(true);
+    setStudioStage("Analyzing key/BPM and acquiring the vocal-correction worker…");
+    try {
+      const analysisSource = beat?.file ?? reference?.file ?? vocal.file;
+      const analysis = await analyzeAudioFile(analysisSource);
+      const result = await correctVocalOnWorker({
+        vocal: vocal.file,
+        reference: reference?.file ?? null,
+        projectId: projectId || null,
+        key: analysis.key,
+        bpm: analysis.bpm,
+        pitchAmount: studioGrade.pitchCorrection,
+        timingTightness: studioGrade.timingTightness,
+        onStatus: (message) => setStudioStage(message),
+      });
+      const ctx = new AudioContext();
+      try {
+        const buffer = await ctx.decodeAudioData(await result.file.arrayBuffer());
+        const measured = await measure(buffer);
+        if (!rawBeforeCorrection) setRawBeforeCorrection(vocal);
+        setVocal({ file: result.file, buffer, measured });
+        setCorrectionMeta(result.meta);
+        setKeyLabel(
+          analysis.key
+            ? `${analysis.key}${analysis.bpm ? ` · ${analysis.bpm} BPM` : ""}`
+            : analysis.bpm
+              ? `${analysis.bpm} BPM`
+              : "Worker correction used chromatic pitch targets",
+        );
+        const pitchSegments = Number(result.meta?.pitch?.appliedSegments ?? 0);
+        const movedPhrases = Number(result.meta?.timing?.movedPhrases ?? 0);
+        setNotice(
+          `Worker correction complete: ${pitchSegments} pitch regions corrected and ${movedPhrases} phrase onsets aligned. The corrected stem now feeds Reference Match Pro before dynamics, FX and mastering.`,
+        );
+      } finally {
+        await ctx.close();
+      }
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Worker vocal correction failed.");
+    } finally {
+      setStudioStage("Ready for studio-grade render.");
+      setBusy(false);
+    }
+  }
+
   async function saveSessionCloud() {
     if (!vocal || !projectId) return;
     stop();
     setBusy(true);
     setNotice("Rendering and saving the private session…");
     try {
-      const wet = await renderWet(vocal.buffer, chain);
+      const wet = await renderStudioVocal(vocal.buffer, chain, studioGrade);
       const check = await measure(wet);
       setOutputCheck(check);
       if (check.peakDb > -0.1)
@@ -395,6 +448,7 @@ export default function VocalWorkspace() {
           beatMix: { levelDb: beatLevel, pocketCutDb: pocket, duckDb: duck },
           referenceDna: matchResult ? { referenceAmount, polish, glue, space: spaceMatch, ...matchResult } : null,
           studioGrade,
+          vocalCorrection: correctionMeta,
           source: { name: vocal.file.name, measurements: vocal.measured },
           reference: reference?.file.name ?? null,
           renderedMeasurements: check,
@@ -596,6 +650,7 @@ export default function VocalWorkspace() {
               },
               referenceDna: matchResult ? { referenceAmount, polish, glue, space: spaceMatch, ...matchResult } : null,
               studioGrade,
+              vocalCorrection: correctionMeta,
               source: vocal
                 ? { name: vocal.file.name, measurements: vocal.measured }
                 : null,
@@ -1275,6 +1330,14 @@ export default function VocalWorkspace() {
           vocal-pocket integration, and a reference-aware master.
         </p>
         <div className="tv-proGrid">
+          <label>Pitch correction <b>{studioGrade.pitchCorrection}%</b>
+            <input type="range" min="0" max="100" value={studioGrade.pitchCorrection} disabled={locked}
+              onChange={(e) => setStudioGrade({ ...studioGrade, pitchCorrection: +e.target.value })} />
+          </label>
+          <label>Timing tightness <b>{studioGrade.timingTightness}%</b>
+            <input type="range" min="0" max="100" value={studioGrade.timingTightness} disabled={locked}
+              onChange={(e) => setStudioGrade({ ...studioGrade, timingTightness: +e.target.value })} />
+          </label>
           <label>Adaptive de-ess <b>{studioGrade.deEss}%</b>
             <input type="range" min="0" max="100" value={studioGrade.deEss} disabled={locked}
               onChange={(e) => setStudioGrade({ ...studioGrade, deEss: +e.target.value })} />
@@ -1300,9 +1363,27 @@ export default function VocalWorkspace() {
               onChange={(e) => setStudioGrade({ ...studioGrade, masterMatch: +e.target.value })} />
           </label>
         </div>
+        <div className="tv-workerCorrection">
+          <button className="tv-primary" disabled={!vocal || locked || (studioGrade.pitchCorrection <= 0 && studioGrade.timingTightness <= 0)}
+            onClick={() => void runWorkerCorrection()}>
+            CORRECT PITCH + TIMING ON WORKER
+          </button>
+          {rawBeforeCorrection && (
+            <button disabled={locked} onClick={() => {
+              setVocal(rawBeforeCorrection);
+              setRawBeforeCorrection(null);
+              setCorrectionMeta(null);
+              setNotice("Restored the raw vocal. Worker correction is no longer feeding the mix chain.");
+            }}>Restore raw vocal</button>
+          )}
+          <small>
+            Runs before the mix chain. Pitch is corrected in bounded note regions with formant preservation; timing moves phrase onsets only, never the whole vocal speed.
+          </small>
+          {correctionMeta && <strong className="tv-correctionReady">CORRECTION READY · {String(correctionMeta.engine ?? "TM Worker")}</strong>}
+        </div>
         <div className="tv-treatmentRow">
-          <div><span>PITCH</span><strong>Key analysis + correction handoff</strong><small>Worker/native correction hook is preserved in the session; browser render does not fake pitch correction.</small></div>
-          <div><span>TIMING</span><strong>Performance-tightening handoff</strong><small>Phrase map is preserved for the worker/native timing engine instead of globally time-stretching the vocal.</small></div>
+          <div><span>PITCH</span><strong>Worker note-region correction</strong><small>Key-aware correction preserves formants and vocal movement instead of shifting the whole take.</small></div>
+          <div><span>TIMING</span><strong>Phrase-onset alignment</strong><small>Uses the reference vocal when available; otherwise phrases tighten toward the detected beat grid within bounded timing moves.</small></div>
           <div><span>MASTER</span><strong>Reference-aware full mix</strong><small>Final WAV targets the reference's density and level within bounded headroom.</small></div>
         </div>
         <p className="tv-small">{studioStage}</p>
@@ -1426,7 +1507,7 @@ export default function VocalWorkspace() {
           presets, undo, dry/wet WAV and settings exports.
         </p>
         <p>
-          Active in HQ render: adaptive de-essing, multiband dynamics, serial compression, phrase-aware ambience ducking, reference-aware full-mix mastering and stem-aware vocal pocketing. Native/worker hooks are reserved for transparent pitch correction and phrase-level timing so the browser does not fake those processes with destructive global speed changes. Planned next: AI noise removal/de-reverb, formants, harmony generation, comping, LUFS/true-peak and mono checks.
+          Active: authenticated worker pitch correction with formant-preserving note-region shifts, phrase-onset timing alignment, adaptive de-essing, multiband dynamics, serial compression, phrase-aware ambience ducking, reference-aware full-mix mastering and stem-aware vocal pocketing. Planned next: AI noise removal/de-reverb, formants, harmony generation, comping, LUFS/true-peak and mono checks.
         </p>
       </details>
       <footer className="tv-footer">

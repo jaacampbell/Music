@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import os
@@ -13,9 +14,12 @@ from typing import Any
 
 from fastapi import File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.responses import FileResponse
+from starlette.background import BackgroundTask
+from starlette.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
 import app as legacy
+from vocal_correction import correct_vocal, correction_capabilities
 from agent_core import (
     ACTIVE_STATUSES, ALLOWED_EXTENSIONS, DATA_DIR, JOBS, MAX_UPLOAD_BYTES, TERMINAL_STATUSES,
     WORKER_AUTH_SECRET, audio_profile, cleanup_expired, download_allowed, download_token,
@@ -233,12 +237,75 @@ def agent_health() -> dict[str, Any]:
             "deepTargetCount":len(legacy.TARGETS),"queue":{"workers":JOB_WORKERS},"auth":{"required":bool(WORKER_AUTH_SECRET)},
             "samAudio":{"installed":legacy._sam_package_available(),"model":legacy.SAM_MODEL_NAME,"cudaAvailable":legacy._cuda_available(),
                         "hfTokenPresent":bool(os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN"))},
-            "planner":{"openaiConfigured":bool(os.environ.get("OPENAI_API_KEY")),"model":os.environ.get("STEM_AGENT_MODEL","gpt-5-mini"),"enabled":os.environ.get("STEM_AGENT_USE_LLM","true").lower()=="true"}}
+            "planner":{"openaiConfigured":bool(os.environ.get("OPENAI_API_KEY")),"model":os.environ.get("STEM_AGENT_MODEL","gpt-5-mini"),"enabled":os.environ.get("STEM_AGENT_USE_LLM","true").lower()=="true"},
+            "vocalCorrection": correction_capabilities()}
 
 
 @app.get("/agent/ready")
 def agent_ready() -> dict[str, Any]:
-    return {"ready":shutil.which("ffmpeg") is not None,"demucs":True,"samAudio":legacy._sam_package_available(),"cuda":legacy._cuda_available()}
+    return {"ready":shutil.which("ffmpeg") is not None,"demucs":True,"samAudio":legacy._sam_package_available(),"cuda":legacy._cuda_available(),"vocalCorrection":correction_capabilities()}
+
+
+@app.post("/agent/vocal-correction")
+async def agent_vocal_correction(
+    request: Request,
+    vocal: UploadFile = File(...),
+    reference: UploadFile | None = File(default=None),
+    key: str = Form(""),
+    bpm: float | None = Form(default=None),
+    pitch_amount: float = Form(58.0),
+    timing_tightness: float = Form(35.0),
+) -> FileResponse:
+    worker_claims(request)
+    caps = correction_capabilities()
+    if not caps.get("ready"):
+        raise HTTPException(503, "Worker vocal-correction engine is not ready.")
+    suffix = Path(vocal.filename or "vocal.wav").suffix.lower()
+    if suffix not in ALLOWED_EXTENSIONS:
+        raise HTTPException(415, f"Unsupported vocal extension: {suffix or 'unknown'}")
+    if reference:
+        ref_suffix = Path(reference.filename or "reference.wav").suffix.lower()
+        if ref_suffix not in ALLOWED_EXTENSIONS:
+            raise HTTPException(415, f"Unsupported reference extension: {ref_suffix or 'unknown'}")
+    work = DATA_DIR / ("vocal-correction-" + uuid.uuid4().hex[:12])
+    work.mkdir(parents=True, exist_ok=True)
+    try:
+        vocal_upload = work / ("vocal-upload" + suffix)
+        await _save_upload(vocal, vocal_upload)
+        vocal_wav = work / "vocal.wav"
+        legacy._decode_to_wav(vocal_upload, vocal_wav)
+        reference_wav = None
+        if reference:
+            ref_suffix = Path(reference.filename or "reference.wav").suffix.lower()
+            ref_upload = work / ("reference-upload" + ref_suffix)
+            await _save_upload(reference, ref_upload)
+            reference_wav = work / "reference.wav"
+            legacy._decode_to_wav(ref_upload, reference_wav)
+        output = work / "tm-vocal-corrected.wav"
+        metadata = await run_in_threadpool(
+            correct_vocal,
+            vocal_wav,
+            output,
+            key=key[:32],
+            bpm=bpm if bpm and 40 <= bpm <= 240 else None,
+            pitch_amount=max(0.0, min(100.0, pitch_amount)),
+            timing_tightness=max(0.0, min(100.0, timing_tightness)),
+            reference_path=reference_wav,
+        )
+        encoded = base64.urlsafe_b64encode(json.dumps(metadata, separators=(",", ":")).encode("utf-8")).decode("ascii").rstrip("=")
+        return FileResponse(
+            str(output),
+            media_type="audio/wav",
+            filename="tm-vocal-corrected.wav",
+            headers={"X-TM-Correction-Meta": encoded, "Cache-Control": "no-store"},
+            background=BackgroundTask(shutil.rmtree, work, ignore_errors=True),
+        )
+    except HTTPException:
+        shutil.rmtree(work, ignore_errors=True)
+        raise
+    except Exception as exc:
+        shutil.rmtree(work, ignore_errors=True)
+        raise HTTPException(500, str(exc)[-1000:]) from exc
 
 
 async def _save_upload(file: UploadFile, destination: Path) -> tuple[int, str]:
