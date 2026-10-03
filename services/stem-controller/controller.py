@@ -367,7 +367,7 @@ class Controller:
         provider_image = str((pod or {}).get("imageName") or "") or None
         provider_ports = (pod or {}).get("ports") if isinstance((pod or {}).get("ports"), list) else None
         if self.maybe_upgrade_provider(pod):
-            self.publish("upgrading", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), action="update", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=[])
+            self.publish("waking", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), action="update", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=[])
             return
 
         raw_env = (pod or {}).get("env")
