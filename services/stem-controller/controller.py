@@ -104,6 +104,7 @@ class Controller:
         self.stop_event = threading.Event()
         self.upgrade_submitted = False
         self.upgrade_announced = False
+        self.film_ready_announced = False
 
     def supabase(self, method: str, path: str, body: dict[str, Any] | None = None) -> Any:
         payload = json.dumps(body).encode("utf-8") if body is not None else None
@@ -218,6 +219,25 @@ class Controller:
             raise RuntimeError("RunPod returned masked environment values; refusing worker upgrade to protect existing secrets.")
         return env
 
+    def film_worker_health(self) -> dict[str, Any] | None:
+        if not self.config.editor_secret or not self.config.pod_id:
+            return None
+        url = f"https://{self.config.pod_id}-8000.proxy.runpod.net/film/health"
+        req = urllib_request.Request(
+            url,
+            method="GET",
+            headers={
+                "Authorization": f"Bearer {self.config.editor_secret}",
+                "User-Agent": "MusicOS-StemComputeController/1.0",
+            },
+        )
+        try:
+            with urllib_request.urlopen(req, timeout=10) as response:
+                raw = response.read().decode("utf-8")
+                return json.loads(raw) if raw else {}
+        except Exception:
+            return None
+
     def maybe_upgrade_provider(self, pod: dict[str, Any] | None) -> bool:
         target = self.config.upgrade_image
         if not target or not pod:
@@ -228,6 +248,15 @@ class Controller:
             if not self.upgrade_announced:
                 print(f"JC Film GPU upgrade active; image={target}; filmWorkerUrl={film_url}", flush=True)
                 self.upgrade_announced = True
+            health = self.film_worker_health()
+            if health and health.get("editorReady") is True and not self.film_ready_announced:
+                capabilities = ",".join((health.get("capabilities") or {}).get("editor") or [])
+                print(
+                    f"JC Film GPU editor ready; version={health.get('version')}; "
+                    f"cuda={bool(health.get('cuda'))}; capabilities={capabilities}",
+                    flush=True,
+                )
+                self.film_ready_announced = True
             return False
         if self.upgrade_submitted:
             return True
@@ -338,7 +367,7 @@ class Controller:
         provider_image = str((pod or {}).get("imageName") or "") or None
         provider_ports = (pod or {}).get("ports") if isinstance((pod or {}).get("ports"), list) else None
         if self.maybe_upgrade_provider(pod):
-            self.publish("upgrading", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), action="update", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=[])
+            self.publish("waking", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), action="update", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=[])
             return
 
         raw_env = (pod or {}).get("env")
