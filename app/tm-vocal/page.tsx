@@ -30,6 +30,7 @@ import {
 } from "@/lib/tm-vocal/audio";
 import { saveHandoff } from "@/lib/tm-vocal/handoff";
 import { buildReferenceMatch, type ReferenceMatchResult } from "@/lib/tm-vocal/reference-match";
+import { DEFAULT_STUDIO_GRADE, renderStudioVocal, renderStudioMix, renderReferenceMaster, type StudioGradeSettings } from "@/lib/tm-vocal/studio-grade";
 import { VocalAssistant } from "./VocalAssistant";
 import {
   getCurrentUser,
@@ -142,7 +143,9 @@ export default function VocalWorkspace() {
     [polish, setPolish] = useState(72),
     [glue, setGlue] = useState(68),
     [spaceMatch, setSpaceMatch] = useState(62),
-    [matchResult, setMatchResult] = useState<ReferenceMatchResult | null>(null);
+    [matchResult, setMatchResult] = useState<ReferenceMatchResult | null>(null),
+    [studioGrade, setStudioGrade] = useState<StudioGradeSettings>(DEFAULT_STUDIO_GRADE),
+    [studioStage, setStudioStage] = useState("Ready for studio-grade render.");
   const player = useRef<{
     context: AudioContext;
     sources: AudioBufferSourceNode[];
@@ -188,6 +191,7 @@ export default function VocalWorkspace() {
         if (typeof raw.polish === "number") setPolish(Math.max(0, Math.min(100, raw.polish)));
         if (typeof raw.glue === "number") setGlue(Math.max(0, Math.min(100, raw.glue)));
         if (typeof raw.spaceMatch === "number") setSpaceMatch(Math.max(0, Math.min(100, raw.spaceMatch)));
+        if (raw.studioGrade && typeof raw.studioGrade === "object") setStudioGrade({ ...DEFAULT_STUDIO_GRADE, ...raw.studioGrade });
         setSaved(
           Array.isArray(raw.saved)
             ? raw.saved
@@ -220,14 +224,14 @@ export default function VocalWorkspace() {
     try {
       localStorage.setItem(
         "tm-vocal:v1:" + (projectId || "device"),
-        JSON.stringify({ chain, notes, dna, saved, beatLevel, pocket, duck, referenceAmount, polish, glue, spaceMatch }),
+        JSON.stringify({ chain, notes, dna, saved, beatLevel, pocket, duck, referenceAmount, polish, glue, spaceMatch, studioGrade }),
       );
     } catch {
       setNotice(
         "Device saving failed. Export the session to keep your settings.",
       );
     }
-  }, [chain, notes, dna, saved, beatLevel, pocket, duck, referenceAmount, polish, glue, spaceMatch, projectId, hydrated]);
+  }, [chain, notes, dna, saved, beatLevel, pocket, duck, referenceAmount, polish, glue, spaceMatch, studioGrade, projectId, hydrated]);
   useEffect(() => {
     if (!projectId) return;
     let cancelled = false;
@@ -375,6 +379,7 @@ export default function VocalWorkspace() {
           producerDna: dna,
           beatMix: { levelDb: beatLevel, pocketCutDb: pocket, duckDb: duck },
           referenceDna: matchResult ? { referenceAmount, polish, glue, space: spaceMatch, ...matchResult } : null,
+          studioGrade,
           source: { name: vocal.file.name, measurements: vocal.measured },
           reference: reference?.file.name ?? null,
           renderedMeasurements: check,
@@ -505,7 +510,7 @@ export default function VocalWorkspace() {
     stop();
     setBusy(true);
     try {
-      const buffer = wet ? await renderWet(vocal.buffer, chain) : vocal.buffer;
+      const buffer = wet ? await renderStudioVocal(vocal.buffer, chain, studioGrade) : vocal.buffer;
       const check = await measure(buffer);
       setOutputCheck(check);
       if (wet && check.peakDb > -0.1) {
@@ -532,15 +537,11 @@ export default function VocalWorkspace() {
     stop();
     setBusy(true);
     try {
-      const mix = await renderMix(
-        vocal.buffer,
-        beat.buffer,
-        chain,
-        beatLevel,
-        pocket,
-        duck,
-      );
-      const check = await measure(mix);
+      setStudioStage("Rendering adaptive de-ess → multiband dynamics → serial compression → phrase-aware FX…");
+      const mix = await renderStudioMix(vocal.buffer, beat.buffer, chain, studioGrade, beatLevel, pocket, duck);
+      setStudioStage("Applying reference master…");
+      const mastered = reference ? await renderReferenceMaster(mix, reference.measured, studioGrade) : mix;
+      const check = await measure(mastered);
       setOutputCheck(check);
       if (check.peakDb > -0.1)
         throw new Error(
@@ -548,14 +549,15 @@ export default function VocalWorkspace() {
         );
       download(
         "tm-vocal-beat-mix.wav",
-        new Blob([encodeWav(mix)], { type: "audio/wav" }),
+        new Blob([encodeWav(mastered)], { type: "audio/wav" }),
       );
       setNotice(
-        "Vocal + instrumental mix exported with the current pocket EQ and vocal-driven ducking.",
+        "Studio-grade mix exported with adaptive de-essing, multiband dynamics, serial compression, phrase-aware ambience, vocal pocketing, and reference mastering.",
       );
     } catch (e) {
       setNotice(e instanceof Error ? e.message : "Mix export failed.");
     } finally {
+      setStudioStage("Ready for studio-grade render.");
       setBusy(false);
     }
   }
@@ -578,6 +580,7 @@ export default function VocalWorkspace() {
                 duckDb: duck,
               },
               referenceDna: matchResult ? { referenceAmount, polish, glue, space: spaceMatch, ...matchResult } : null,
+              studioGrade,
               source: vocal
                 ? { name: vocal.file.name, measurements: vocal.measured }
                 : null,
@@ -1243,6 +1246,53 @@ export default function VocalWorkspace() {
           </section>
         </aside>
       </section>
+      <section className="tv-panel tv-studioGrade">
+        <div className="tv-heading">
+          <div>
+            <p className="tv-kicker">STUDIO-GRADE ENGINE · OFFLINE HQ</p>
+            <h2>Reference Match Pro.</h2>
+          </div>
+          <span className="tv-engineBadge">HQ WAV</span>
+        </div>
+        <p>
+          Final renders now use a heavier chain than live preview: adaptive de-essing,
+          three-band dynamics, two-stage compression, phrase-aware reverb/delay ducking,
+          vocal-pocket integration, and a reference-aware master.
+        </p>
+        <div className="tv-proGrid">
+          <label>Adaptive de-ess <b>{studioGrade.deEss}%</b>
+            <input type="range" min="0" max="100" value={studioGrade.deEss} disabled={locked}
+              onChange={(e) => setStudioGrade({ ...studioGrade, deEss: +e.target.value })} />
+          </label>
+          <label>Multiband control <b>{studioGrade.multiband}%</b>
+            <input type="range" min="0" max="100" value={studioGrade.multiband} disabled={locked}
+              onChange={(e) => setStudioGrade({ ...studioGrade, multiband: +e.target.value })} />
+          </label>
+          <label>Serial compression <b>{studioGrade.serialCompression}%</b>
+            <input type="range" min="0" max="100" value={studioGrade.serialCompression} disabled={locked}
+              onChange={(e) => setStudioGrade({ ...studioGrade, serialCompression: +e.target.value })} />
+          </label>
+          <label>FX phrase duck <b>{studioGrade.fxDuck}%</b>
+            <input type="range" min="0" max="100" value={studioGrade.fxDuck} disabled={locked}
+              onChange={(e) => setStudioGrade({ ...studioGrade, fxDuck: +e.target.value })} />
+          </label>
+          <label>Master glue <b>{studioGrade.masterGlue}%</b>
+            <input type="range" min="0" max="100" value={studioGrade.masterGlue} disabled={locked}
+              onChange={(e) => setStudioGrade({ ...studioGrade, masterGlue: +e.target.value })} />
+          </label>
+          <label>Reference master <b>{studioGrade.masterMatch}%</b>
+            <input type="range" min="0" max="100" value={studioGrade.masterMatch} disabled={locked}
+              onChange={(e) => setStudioGrade({ ...studioGrade, masterMatch: +e.target.value })} />
+          </label>
+        </div>
+        <div className="tv-treatmentRow">
+          <div><span>PITCH</span><strong>Key analysis + correction handoff</strong><small>Worker/native correction hook is preserved in the session; browser render does not fake pitch correction.</small></div>
+          <div><span>TIMING</span><strong>Performance-tightening handoff</strong><small>Phrase map is preserved for the worker/native timing engine instead of globally time-stretching the vocal.</small></div>
+          <div><span>MASTER</span><strong>Reference-aware full mix</strong><small>Final WAV targets the reference's density and level within bounded headroom.</small></div>
+        </div>
+        <p className="tv-small">{studioStage}</p>
+      </section>
+
       <section className="tv-grid">
         <div className="tv-panel">
           <p className="tv-kicker">SIGNATURE LIBRARY</p>
@@ -1361,11 +1411,7 @@ export default function VocalWorkspace() {
           presets, undo, dry/wet WAV and settings exports.
         </p>
         <p>
-          Planned: AU/VST3/AAX native engine, real-time pitch correction,
-          dynamic de-essing, AI noise removal/de-reverb, formants, harmony
-          generation, section automation, reference dynamics/space estimation,
-          engineer access across accounts, comping, LUFS/true-peak and mono
-          checks, hook video export.
+          Active in HQ render: adaptive de-essing, multiband dynamics, serial compression, phrase-aware ambience ducking, reference-aware full-mix mastering and stem-aware vocal pocketing. Native/worker hooks are reserved for transparent pitch correction and phrase-level timing so the browser does not fake those processes with destructive global speed changes. Planned next: AI noise removal/de-reverb, formants, harmony generation, comping, LUFS/true-peak and mono checks.
         </p>
       </details>
       <footer className="tv-footer">
