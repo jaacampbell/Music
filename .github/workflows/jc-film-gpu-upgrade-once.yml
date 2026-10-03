@@ -1,0 +1,32 @@
+name: JC Film GPU Upgrade Preflight
+
+on:
+  push:
+    branches: [ops/jc-film-gpu-upgrade]
+    paths:
+      - ".github/workflows/jc-film-gpu-upgrade-once.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify upgrade prerequisites
+        env:
+          RUNPOD_API_KEY: ${{ secrets.RUNPOD_API_KEY }}
+          SEPARATOR_GATEWAY_SECRET: ${{ secrets.SEPARATOR_GATEWAY_SECRET }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          POD_ID: ${{ vars.RUNPOD_STEM_POD_ID }}
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in RUNPOD_API_KEY SEPARATOR_GATEWAY_SECRET NETLIFY_AUTH_TOKEN POD_ID; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::Missing required upgrade prerequisite: $name"
+              missing=1
+            fi
+          done
+          if [[ "$missing" != "0" ]]; then exit 1; fi
+          echo "All GPU upgrade prerequisites are configured."
