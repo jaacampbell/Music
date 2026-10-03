@@ -95,6 +95,13 @@ def worker_env() -> dict[str, str]:
         env["HUGGING_FACE_HUB_TOKEN"] = hf
     if openai:
         env["OPENAI_API_KEY"] = openai
+    editor_secret = os.environ.get("JC_EDITOR_SIGNING_SECRET", "").strip()
+    editor_public_base = os.environ.get("WAN_PUBLIC_BASE_URL", "").strip().rstrip("/")
+    if editor_secret:
+        env["JC_EDITOR_SIGNING_SECRET"] = editor_secret
+        env["WAN_API_TOKEN"] = editor_secret
+    if editor_public_base:
+        env["WAN_PUBLIC_BASE_URL"] = editor_public_base
     return env
 
 
