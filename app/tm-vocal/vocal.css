@@ -329,3 +329,55 @@
     font-size: 23px;
   }
 }
+
+
+/* Reference DNA */
+.tv-reference {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(210, 233, 148, 0.12), transparent 36%),
+    #191e16;
+}
+.tv-matchMeter {
+  display: grid;
+  gap: 16px;
+  margin: 22px 0;
+}
+.tv-matchMeter label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 6px 14px;
+}
+.tv-matchMeter label b {
+  color: var(--accent);
+  font-size: 13px;
+}
+.tv-matchMeter input {
+  grid-column: 1 / -1;
+  margin-top: 2px !important;
+}
+.tv .tv-matchButton {
+  width: 100%;
+  min-height: 48px;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.tv-matchResult {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 9px 14px;
+  padding: 14px;
+  border: 1px solid #394130;
+  border-radius: 9px;
+  background: #141912;
+  margin-bottom: 14px;
+}
+.tv-matchResult span {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+.tv-matchResult strong {
+  font-size: 12px;
+  font-weight: 600;
+}

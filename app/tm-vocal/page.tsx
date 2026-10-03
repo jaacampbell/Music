@@ -29,6 +29,7 @@ import {
   type Measurement,
 } from "@/lib/tm-vocal/audio";
 import { saveHandoff } from "@/lib/tm-vocal/handoff";
+import { buildReferenceMatch, type ReferenceMatchResult } from "@/lib/tm-vocal/reference-match";
 import { VocalAssistant } from "./VocalAssistant";
 import {
   getCurrentUser,
@@ -136,7 +137,12 @@ export default function VocalWorkspace() {
     [keyLabel, setKeyLabel] = useState(""),
     [pocket, setPocket] = useState(0),
     [duck, setDuck] = useState(0),
-    [outputCheck, setOutputCheck] = useState<Measurement | null>(null);
+    [outputCheck, setOutputCheck] = useState<Measurement | null>(null),
+    [referenceAmount, setReferenceAmount] = useState(78),
+    [polish, setPolish] = useState(72),
+    [glue, setGlue] = useState(68),
+    [spaceMatch, setSpaceMatch] = useState(62),
+    [matchResult, setMatchResult] = useState<ReferenceMatchResult | null>(null);
   const player = useRef<{
     context: AudioContext;
     sources: AudioBufferSourceNode[];
@@ -178,6 +184,10 @@ export default function VocalWorkspace() {
         if (typeof raw.duck === "number")
           setDuck(Math.max(0, Math.min(9, raw.duck)));
         setDna(typeof raw.dna === "string" ? raw.dna : "");
+        if (typeof raw.referenceAmount === "number") setReferenceAmount(Math.max(0, Math.min(100, raw.referenceAmount)));
+        if (typeof raw.polish === "number") setPolish(Math.max(0, Math.min(100, raw.polish)));
+        if (typeof raw.glue === "number") setGlue(Math.max(0, Math.min(100, raw.glue)));
+        if (typeof raw.spaceMatch === "number") setSpaceMatch(Math.max(0, Math.min(100, raw.spaceMatch)));
         setSaved(
           Array.isArray(raw.saved)
             ? raw.saved
@@ -210,14 +220,14 @@ export default function VocalWorkspace() {
     try {
       localStorage.setItem(
         "tm-vocal:v1:" + (projectId || "device"),
-        JSON.stringify({ chain, notes, dna, saved, beatLevel, pocket, duck }),
+        JSON.stringify({ chain, notes, dna, saved, beatLevel, pocket, duck, referenceAmount, polish, glue, spaceMatch }),
       );
     } catch {
       setNotice(
         "Device saving failed. Export the session to keep your settings.",
       );
     }
-  }, [chain, notes, dna, saved, beatLevel, pocket, duck, projectId, hydrated]);
+  }, [chain, notes, dna, saved, beatLevel, pocket, duck, referenceAmount, polish, glue, spaceMatch, projectId, hydrated]);
   useEffect(() => {
     if (!projectId) return;
     let cancelled = false;
@@ -359,11 +369,12 @@ export default function VocalWorkspace() {
             : []),
         ],
         {
-          schema: "tm-vocal-session/v1",
+          schema: "tm-vocal-session/v2",
           chain,
           notes,
           producerDna: dna,
           beatMix: { levelDb: beatLevel, pocketCutDb: pocket, duckDb: duck },
+          referenceDna: matchResult ? { referenceAmount, polish, glue, space: spaceMatch, ...matchResult } : null,
           source: { name: vocal.file.name, measurements: vocal.measured },
           reference: reference?.file.name ?? null,
           renderedMeasurements: check,
@@ -466,27 +477,27 @@ export default function VocalWorkspace() {
   function match() {
     if (!vocal || !reference) return;
     if (vocal.measured.silent || reference.measured.silent) {
-      setNotice(
-        "Reference matching requires audible source and reference files.",
-      );
+      setNotice("Reference matching requires audible source and reference files.");
       return;
     }
-    const a = vocal.measured,
-      b = reference.measured;
-    const delta = a.bands.map(
-      (v, i) => b.bands[i] - b.spectrumRmsDb - (v - a.spectrumRmsDb),
-    );
-    commit(
-      {
-        ...chain,
-        warmth: Math.max(-6, Math.min(6, delta[0])),
-        presence: Math.max(-6, Math.min(6, delta[1])),
-        air: Math.max(-6, Math.min(6, delta[2])),
-      },
-      "Before reference suggestion",
-    );
+    const result = buildReferenceMatch({
+      vocal: vocal.measured,
+      reference: reference.measured,
+      beat: beat?.measured ?? null,
+      current: chain,
+      referenceAmount,
+      polish,
+      glue,
+      space: spaceMatch,
+    });
+    commit(result.chain, "Before Reference DNA match");
+    setPocket(result.pocketDb);
+    setDuck(result.duckDb);
+    setBeatLevel(result.beatLevelDb);
+    setMatchResult(result);
+    setDna((value) => value.trim() ? value : result.dnaSummary);
     setNotice(
-      "Applied bounded tonal suggestions from relative band energy. Use an isolated reference vocal for a useful comparison. Compression, reverb and delay were not inferred.",
+      "Reference DNA applied: tonal balance, density, ambience estimate, beat pocket and output target were translated to this vocal. It is intentionally bounded to preserve your voice."
     );
   }
   async function exportAudio(wet: boolean) {
@@ -555,7 +566,7 @@ export default function VocalWorkspace() {
         [
           JSON.stringify(
             {
-              schema: "tm-vocal-session/v1",
+              schema: "tm-vocal-session/v2",
               projectId: projectId || null,
               projectName,
               chain,
@@ -566,6 +577,7 @@ export default function VocalWorkspace() {
                 pocketCutDb: pocket,
                 duckDb: duck,
               },
+              referenceDna: matchResult ? { referenceAmount, polish, glue, space: spaceMatch, ...matchResult } : null,
               source: vocal
                 ? { name: vocal.file.name, measurements: vocal.measured }
                 : null,
@@ -1046,17 +1058,46 @@ export default function VocalWorkspace() {
           </form>
         </div>
         <aside className="tv-side">
-          <section className="tv-panel">
-            <p className="tv-kicker">REFERENCE MATCH / TONAL BETA</p>
-            <h2>Bring your own sound.</h2>
+          <section className="tv-panel tv-reference">
+            <p className="tv-kicker">REFERENCE DNA · SUNO → JO₵YN</p>
+            <h2>Match the world, keep your voice.</h2>
             <p>
-              Compares relative body, presence, and air energy in the first 20
-              seconds. An isolated reference vocal gives the most useful
-              starting point.
+              TM translates the reference's relative tone, density and perceived
+              space into a bounded chain for your vocal, then makes room in the
+              instrumental so the performance feels integrated instead of pasted on.
             </p>
-            <button disabled={!vocal || !reference || locked} onClick={match}>
-              Suggest matching EQ
+            <div className="tv-matchMeter">
+              <label>
+                Reference Match <b>{referenceAmount}%</b>
+                <input type="range" min="0" max="100" value={referenceAmount} disabled={locked}
+                  onChange={(e) => setReferenceAmount(+e.target.value)} />
+              </label>
+              <label>
+                Polish <b>{polish}%</b>
+                <input type="range" min="0" max="100" value={polish} disabled={locked}
+                  onChange={(e) => setPolish(+e.target.value)} />
+              </label>
+              <label>
+                Glue <b>{glue}%</b>
+                <input type="range" min="0" max="100" value={glue} disabled={locked}
+                  onChange={(e) => setGlue(+e.target.value)} />
+              </label>
+              <label>
+                Space <b>{spaceMatch}%</b>
+                <input type="range" min="0" max="100" value={spaceMatch} disabled={locked}
+                  onChange={(e) => setSpaceMatch(+e.target.value)} />
+              </label>
+            </div>
+            <button className="tv-primary tv-matchButton" disabled={!vocal || !reference || locked} onClick={match}>
+              MATCH REFERENCE
             </button>
+            {matchResult && (
+              <div className="tv-matchResult">
+                <span>VOICE DNA</span><strong>{matchResult.voiceProfile}</strong>
+                <span>FUSION</span><strong>{matchResult.fusionLabel}</strong>
+                <span>MASTER TARGET</span><strong>{matchResult.masterLabel}</strong>
+              </div>
+            )}
             <Link
               href={
                 "/stem-agent" +
@@ -1065,10 +1106,12 @@ export default function VocalWorkspace() {
                   : "?strategy=vocal-suite")
               }
             >
-              Isolate a full-song reference →
+              Isolate a full-song reference first →
             </Link>
             <small>
-              No exact-chain reconstruction or reverb/delay estimation yet.
+              Best results come from an isolated reference vocal plus the matching instrumental.
+              TM estimates ambience from measurable characteristics; it does not claim to reconstruct
+              hidden Suno processing exactly.
             </small>
           </section>
           <section className="tv-panel">
@@ -1312,8 +1355,8 @@ export default function VocalWorkspace() {
         <summary>Processing status and next capabilities</summary>
         <p>
           Available: browser vocal chain, editable module order, Simple/Advanced
-          modes, local phrase commands, measured waveform/peak/RMS, tonal
-          reference suggestions, beat audition, instrumental pocket EQ,
+          modes, local phrase commands, measured waveform/peak/RMS, Reference DNA
+          matching with bounded tone/density/space translation, beat audition, instrumental pocket EQ,
           vocal-envelope ducking, estimated key, short-delay widening, device
           presets, undo, dry/wet WAV and settings exports.
         </p>
