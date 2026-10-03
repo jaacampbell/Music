@@ -22,6 +22,7 @@ type Readiness = {
 const toolLinks = [
   { label: "TM Vocal", detail: "Record, tune, clean, mix and finish vocals.", href: "/tm-vocal", icon: "◉" },
   { label: "Stem Director", detail: "Separate real stems and preserve project context.", href: "/stem-agent", icon: "≋" },
+  { label: "Suno Transfer", detail: "Import Suno multitracks and learn JO₵YN Suno DNA.", href: "/suno-transfer", icon: "↯" },
   { label: "MIDI Shredder", detail: "Turn audio into editable MIDI and musical ideas.", href: "/midi-shredder", icon: "♬" },
   { label: "Producer DNA", detail: "Use your taste, method and creative system.", href: "/producer-dna", icon: "DNA" },
   { label: "Studio Brain", detail: "Develop the song, strategy and next production move.", href: "/studio-brain", icon: "✦" },
@@ -66,6 +67,7 @@ export default function MusicStudioHome(): React.JSX.Element {
     const value = command.trim().toLowerCase();
     if (!value) return null;
     if (value.includes("vocal") || value.includes("record") || value.includes("mix")) return withProject("/tm-vocal");
+    if (value.includes("suno") || value.includes("transfer") || value.includes("learn dna")) return withProject("/suno-transfer");
     if (value.includes("stem") || value.includes("separate")) return withProject("/stem-agent");
     if (value.includes("midi") || value.includes("chord")) return withProject("/midi-shredder");
     if (value.includes("project") || value.includes("arrange") || value.includes("song")) return withProject("/?workspace=1");
@@ -207,6 +209,7 @@ export default function MusicStudioHome(): React.JSX.Element {
               <button type="button" onClick={() => setPanel("assistant")}><span>✦</span><strong>Ask TM</strong><small>Develop the record</small></button>
               <Link href={withProject("/tm-vocal")}><span>◉</span><strong>Record</strong><small>Vocal workspace</small></Link>
               <Link href={withProject("/stem-agent")}><span>≋</span><strong>Separate</strong><small>Stem Director</small></Link>
+              <Link href={withProject("/suno-transfer")}><span>↯</span><strong>Suno Transfer</strong><small>Learn from Suno</small></Link>
               <Link href={withProject("/midi-shredder")}><span>♬</span><strong>Create MIDI</strong><small>Audio → notes</small></Link>
               <button type="button" onClick={() => setPanel("style")}><span>◫</span><strong>Style</strong><small>Creative direction</small></button>
               <Link href="/player"><span>▶</span><strong>Review</strong><small>Versions + playback</small></Link>

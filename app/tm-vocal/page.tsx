@@ -192,6 +192,21 @@ export default function VocalWorkspace() {
         if (typeof raw.glue === "number") setGlue(Math.max(0, Math.min(100, raw.glue)));
         if (typeof raw.spaceMatch === "number") setSpaceMatch(Math.max(0, Math.min(100, raw.spaceMatch)));
         if (raw.studioGrade && typeof raw.studioGrade === "object") setStudioGrade({ ...DEFAULT_STUDIO_GRADE, ...raw.studioGrade });
+        const learnedRaw = localStorage.getItem("tm:suno-dna:latest");
+        if (learnedRaw) {
+          try {
+            const learned = JSON.parse(learnedRaw);
+            if (learned?.chain) setChain(sanitizeChain({ ...raw.chain, ...learned.chain }));
+            if (learned?.studioGrade) setStudioGrade({ ...DEFAULT_STUDIO_GRADE, ...learned.studioGrade });
+            if (!raw.dna && typeof learned?.dnaSummary === "string") setDna(learned.dnaSummary);
+            if (typeof learned?.referenceAmount === "number") setReferenceAmount(learned.referenceAmount);
+            if (typeof learned?.polish === "number") setPolish(learned.polish);
+            if (typeof learned?.glue === "number") setGlue(learned.glue);
+            if (typeof learned?.space === "number") setSpaceMatch(learned.space);
+          } catch {
+            /* Ignore malformed learned profiles. */
+          }
+        }
         setSaved(
           Array.isArray(raw.saved)
             ? raw.saved
