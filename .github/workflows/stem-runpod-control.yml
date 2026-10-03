@@ -144,6 +144,7 @@ jobs:
             mesh_ok=false
             recovery_ok=false
             persistence_ok=false
+            vocal_ok=false
 
             if curl --fail --silent --show-error --max-time 10 "$WORKER_URL/agent/mesh/node" -o /tmp/mesh-node.json; then
               jq . /tmp/mesh-node.json
@@ -155,12 +156,17 @@ jobs:
               if [[ "$(jq -r '.enabled // false' /tmp/cloud-recovery.json)" == "true" && "$(jq -r '.sourceOfTruth // ""' /tmp/cloud-recovery.json)" == "supabase-private-storage" ]]; then recovery_ok=true; fi
             fi
 
+            if curl --fail --silent --show-error --max-time 10 "$WORKER_URL/agent/health" -o /tmp/worker-health.json; then
+              jq . /tmp/worker-health.json
+              if [[ "$(jq -r '.vocalCorrection.ready // false' /tmp/worker-health.json)" == "true" ]]; then vocal_ok=true; fi
+            fi
+
             if curl --fail --silent --show-error --max-time 10 "$WORKER_URL/agent/persistence/cloud" -o /tmp/cloud-persistence.json; then
               jq . /tmp/cloud-persistence.json
               if [[ "$(jq -r '.enabled // false' /tmp/cloud-persistence.json)" == "true" && "$(jq -r '.outputs // ""' /tmp/cloud-persistence.json)" == "supabase-private-storage" && "$(jq -r '.uploadProtocol // ""' /tmp/cloud-persistence.json)" == "tus-resumable-signed-token" && "$(jq -r '.completionBarrier // false' /tmp/cloud-persistence.json)" == "true" ]]; then persistence_ok=true; fi
             fi
 
-            if [[ "$mesh_ok" == "true" && "$recovery_ok" == "true" && "$persistence_ok" == "true" ]]; then
+            if [[ "$mesh_ok" == "true" && "$recovery_ok" == "true" && "$persistence_ok" == "true" && "$vocal_ok" == "true" ]]; then
               ok=true
               break
             fi
