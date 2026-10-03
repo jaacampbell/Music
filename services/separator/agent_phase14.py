@@ -19,7 +19,7 @@ import agent_phase11 as phase11
 import agent_phase12 as phase12
 
 app = phase12.app
-SYSTEM_VERSION = "3.14.0"
+SYSTEM_VERSION = "3.15.0"
 TUS_CHUNK_BYTES = 6 * 1024 * 1024
 UPLOAD_RETRIES = 4
 

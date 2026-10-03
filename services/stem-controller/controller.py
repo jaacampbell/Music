@@ -150,7 +150,7 @@ class Controller:
 
     def load_workers(self) -> list[dict[str, Any]]:
         query = urllib_parse.urlencode({
-            "select": "node_id,status,deep_ready,current_jobs,capacity,last_seen,provider,provider_node_id",
+            "select": "node_id,status,deep_ready,current_jobs,capacity,last_seen,provider,provider_node_id,capabilities",
             "order": "last_seen.desc",
             "limit": "50",
         })
@@ -201,7 +201,7 @@ class Controller:
             "last_seen": now_iso(),
             "last_error": error,
             "metadata": {
-                "controllerVersion": "1.0.0",
+                "controllerVersion": "1.1.0",
                 "policy": "approved-existing-pod-only",
                 "paidAutoStartRequested": self.config.auto_start_requested,
                 "providerReachable": provider_status not in {None, "unconfigured"},
@@ -258,7 +258,13 @@ class Controller:
         ready = [row for row in workers if row.get("status") == "ready" and int(row.get("current_jobs") or 0) < int(row.get("capacity") or 1)]
         deep_ready = [row for row in ready if row.get("deep_ready") is True]
         demand_deep = any(row.get("mode") == "deep" for row in pending_jobs) or any(row.get("mode") == "deep" for row in pending_requests)
-        compatible = deep_ready if demand_deep else ready
+        needs_vocal_correction = any(row.get("kind") == "vocal-correction" for row in pending_requests)
+        base_compatible = deep_ready if demand_deep else ready
+        compatible = [
+            row for row in base_compatible
+            if not needs_vocal_correction
+            or (isinstance(row.get("capabilities"), dict) and row["capabilities"].get("vocalCorrection") is True)
+        ]
         pending_count = len(pending_jobs) + len(pending_requests)
         active_count = len(active_jobs) + len(active_requests)
 

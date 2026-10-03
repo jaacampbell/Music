@@ -175,7 +175,8 @@ async function selectWorker(
     const available = node.current_jobs < node.capacity;
     const compatible = mode === "core" || node.deep_ready === true;
     const allowed = !excludeNodeId || node.node_id !== excludeNodeId;
-    return fresh && available && compatible && allowed && /^https:\/\//.test(node.origin);
+    const featureCompatible = !computeKind || node.capabilities?.vocalCorrection === true;
+    return fresh && available && compatible && allowed && featureCompatible && /^https:\/\//.test(node.origin);
   }) ?? null;
 }
 
