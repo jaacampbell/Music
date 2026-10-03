@@ -24,8 +24,6 @@ import {
   connectBeat,
   encodeWav,
   measure,
-  renderWet,
-  renderMix,
   type Measurement,
 } from "@/lib/tm-vocal/audio";
 import { saveHandoff } from "@/lib/tm-vocal/handoff";
