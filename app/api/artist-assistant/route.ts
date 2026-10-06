@@ -136,7 +136,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     const brands = await read("artist_brands", "id=eq." + brandId + "&user_id=eq." + user.id + "&select=*&limit=1");
     if (!brands.length) return NextResponse.json({ error: "Brand unavailable or not owned by you." }, { status: 403 });
 
-    let [tasks, campaigns, content, links, projects, releases] = await Promise.all([
+    const [initialTasks, campaigns, content, links, projects, releases] = await Promise.all([
       read("artist_tasks", "brand_id=eq." + brandId + "&user_id=eq." + user.id + "&select=*&order=created_at.desc&limit=80"),
       read("artist_campaigns", "brand_id=eq." + brandId + "&user_id=eq." + user.id + "&select=*&order=updated_at.desc&limit=30"),
       read("artist_content_items", "brand_id=eq." + brandId + "&user_id=eq." + user.id + "&select=*&order=scheduled_for.asc.nullslast&limit=50"),
@@ -145,6 +145,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       read("music_releases", "user_id=eq." + user.id + "&select=project_id,release_title,artist_name,release_date,distributor,checklist,updated_at&order=release_date.asc.nullslast&limit=40")
     ]);
 
+    let tasks = initialTasks;
     const actions: ActionLog[] = [];
     const completion = completionTarget(question);
 
