@@ -203,6 +203,10 @@ export default function ArtistOsPage(): React.JSX.Element {
     () => tasks.filter((task) => task.status !== "done" && task.status !== "archived").sort(taskSort),
     [tasks]
   );
+  const completedTasks = useMemo(
+    () => tasks.filter((task) => task.status === "done"),
+    [tasks]
+  );
   const activeCampaign = useMemo(
     () => campaigns.find((campaign) => campaign.status === "active") ?? campaigns[0] ?? null,
     [campaigns]
