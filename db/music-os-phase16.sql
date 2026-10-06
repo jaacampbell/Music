@@ -126,6 +126,18 @@ create index if not exists artist_content_brand_idx on public.artist_content_ite
 create index if not exists artist_links_brand_idx on public.artist_links(brand_id, position);
 create index if not exists artist_agent_messages_brand_idx on public.artist_agent_messages(brand_id, created_at desc);
 create index if not exists artist_activity_brand_idx on public.artist_activity(brand_id, created_at desc);
+create index if not exists artist_activity_user_idx on public.artist_activity(user_id);
+create index if not exists artist_agent_messages_user_idx on public.artist_agent_messages(user_id);
+create index if not exists artist_campaigns_user_idx on public.artist_campaigns(user_id);
+create index if not exists artist_campaigns_music_project_idx on public.artist_campaigns(music_project_id);
+create index if not exists artist_content_user_idx on public.artist_content_items(user_id);
+create index if not exists artist_content_campaign_idx on public.artist_content_items(campaign_id);
+create index if not exists artist_content_music_project_idx on public.artist_content_items(music_project_id);
+create index if not exists artist_links_user_idx on public.artist_links(user_id);
+create index if not exists artist_links_campaign_idx on public.artist_links(campaign_id);
+create index if not exists artist_tasks_user_idx on public.artist_tasks(user_id);
+create index if not exists artist_tasks_campaign_idx on public.artist_tasks(campaign_id);
+create index if not exists artist_tasks_music_project_idx on public.artist_tasks(music_project_id);
 
 drop trigger if exists artist_workspaces_updated_at on public.artist_workspaces;
 create trigger artist_workspaces_updated_at before update on public.artist_workspaces
