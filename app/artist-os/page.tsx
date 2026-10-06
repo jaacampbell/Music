@@ -807,7 +807,7 @@ export default function ArtistOsPage(): React.JSX.Element {
               <section className={styles.todayPanel}>
                 <div className={styles.sectionHead}>
                   <div><span className={styles.eyebrow}>NEXT</span><h2>Today</h2></div>
-                  <span>{openTasks.length} open</span>
+                  <span>{openTasks.length} open · {completedTasks.length} done</span>
                 </div>
 
                 <div className={styles.todayGroups}>
