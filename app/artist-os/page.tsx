@@ -20,8 +20,7 @@ import type {
   ArtistContentRow,
   ArtistLinkRow,
   ArtistTaskPriority,
-  ArtistTaskRow,
-  ArtistWorkspaceRow
+  ArtistTaskRow
 } from "@/lib/artist-os/types";
 import styles from "./artist-os.module.css";
 
@@ -169,7 +168,6 @@ function withinDays(value: string | null, days: number): boolean {
 
 export default function ArtistOsPage(): React.JSX.Element {
   const [section, setSection] = useState<Section>("command");
-  const [workspace, setWorkspace] = useState<ArtistWorkspaceRow | null>(null);
   const [brand, setBrand] = useState<ArtistBrandRow | null>(null);
   const [campaigns, setCampaigns] = useState<ArtistCampaignRow[]>([]);
   const [tasks, setTasks] = useState<ArtistTaskRow[]>([]);
@@ -202,10 +200,6 @@ export default function ArtistOsPage(): React.JSX.Element {
 
   const openTasks = useMemo(
     () => tasks.filter((task) => task.status !== "done" && task.status !== "archived").sort(taskSort),
-    [tasks]
-  );
-  const completedTasks = useMemo(
-    () => tasks.filter((task) => task.status === "done").sort((a, b) => new Date(b.completed_at ?? b.updated_at).getTime() - new Date(a.completed_at ?? a.updated_at).getTime()),
     [tasks]
   );
   const activeCampaign = useMemo(
@@ -358,7 +352,6 @@ export default function ArtistOsPage(): React.JSX.Element {
 
       const activeWorkspace = workspaces[0];
       if (!activeWorkspace) throw new Error("Artist workspace could not be created.");
-      setWorkspace(activeWorkspace);
 
       let brands = await supabaseRest<ArtistBrandRow[]>("artist_brands", {
         query: "select=*&workspace_id=eq." + activeWorkspace.id + "&order=created_at.asc&limit=1"
