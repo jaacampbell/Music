@@ -20,7 +20,8 @@ import type {
   ArtistContentRow,
   ArtistLinkRow,
   ArtistTaskPriority,
-  ArtistTaskRow
+  ArtistTaskRow,
+  ArtistWorkspaceRow
 } from "@/lib/artist-os/types";
 import styles from "./artist-os.module.css";
 
