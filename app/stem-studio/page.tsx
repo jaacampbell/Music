@@ -89,7 +89,7 @@ export default function StemStudioPage(): React.JSX.Element {
   const workerOnline = health?.status === "ok";
   const deepReady = workerOnline && health?.samAudio.installed === true && health?.samAudio.cudaAvailable === true;
   const projectQuery = projectId ? `?projectId=${encodeURIComponent(projectId)}` : "";
-  const isLocalWorker = /^https?:\\/\\/(localhost|127\\.0\\.0\\.1)(:\\d+)?\\/?$/i.test(SEPARATOR_URL);
+  const isLocalWorker = SEPARATOR_URL.startsWith("http://localhost:") || SEPARATOR_URL.startsWith("http://127.0.0.1:") || SEPARATOR_URL === "http://localhost" || SEPARATOR_URL === "http://127.0.0.1";
 
   const loadHealth = async (): Promise<void> => {
     setHealthChecking(true);
