@@ -68,6 +68,8 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=int(os.environ.get("TM_STEM_BRIDGE_PORT", "8766")))
     parser.add_argument("--token", default="")
     parser.add_argument("--interval", type=float, default=0.5)
+    parser.add_argument("--mode", choices=("core", "deep"), default="core")
+    parser.add_argument("--targets", default="", help="Comma-separated Deep 60+ target ids")
     args = parser.parse_args()
     if args.audio and args.id:
         parser.error("Pass a source file or --id, not both.")
@@ -106,7 +108,10 @@ def main() -> int:
         audio = args.audio.expanduser().resolve(strict=True)
         if not audio.is_file():
             parser.error("Audio source must be a file.")
-        job = call(args.port, "/jobs", token, {"audio": str(audio)})
+        payload: dict[str, object] = {"audio": str(audio), "mode": args.mode}
+        if args.mode == "deep":
+            payload["targets"] = [part.strip() for part in args.targets.split(",") if part.strip()]
+        job = call(args.port, "/jobs", token, payload)
         print(f"Job {job['id']}: {job.get('status', 'queued')}")
         result = poll(args.port, token, job["id"], args.interval) if args.wait else None
         if result is None:

@@ -504,7 +504,8 @@ export default function StemAgentPage(): React.JSX.Element {
           <div className="strategyGrid">
             {strategies.map(([id, label, detail]) => <button key={id} className={strategy === id ? "strategy active" : "strategy"} onClick={() => setStrategy(id)}><strong>{label}</strong><span>{detail}</span></button>)}
           </div>
-          <div className="modeRow"><button className={mode === "core" ? "active" : ""} onClick={() => setMode("core")}>Core 6</button><button className={mode === "deep" ? "active" : ""} onClick={() => setMode("deep")}>Agentic Deep</button></div>
+          <div className="modeRow"><button className={mode === "core" ? "active" : ""} onClick={() => setMode("core")}>Core 6</button><button className={mode === "deep" ? "active" : ""} onClick={() => setMode("deep")}>Deep 60+</button></div>
+          {mode === "deep" && <p className="statusLine">Deep 60+ isolates named parts such as lead vocal, kick, snare, and 808. Choose them below. This mode needs a CUDA SAM-Audio worker. Core 6 does not.</p>}
         </div>
 
         <aside className="panel sourcePanel">
@@ -519,7 +520,7 @@ export default function StemAgentPage(): React.JSX.Element {
       </section>
 
       <section className="panel targetsPanel">
-        <div className="panelHead"><div><p className="eyebrow">03 · Optional manual targets</p><h2>{targets.length ? `${targets.length} targets selected` : "Let the director choose"}</h2></div><button className="ghost" onClick={() => setTargets([])}>Clear manual targets</button></div>
+        <div className="panelHead"><div><p className="eyebrow">{mode === "deep" ? "03 · Deep 60+ targets" : "03 · Optional manual targets"}</p><h2>{mode === "deep" ? (targets.length ? `${targets.length} Deep 60+ targets selected` : "Choose Deep 60+ targets") : (targets.length ? `${targets.length} targets selected` : "Let the director choose")}</h2></div><button className="ghost" onClick={() => setTargets([])}>Clear manual targets</button></div>
         <div className="targetGroups">
           {groupedTargets.map(({ group, items }) => <div key={group} className="targetGroup"><h3>{group}</h3><div>{items.map((target) => <button key={target.id} className={targets.includes(target.id) ? "target active" : "target"} onClick={() => toggleTarget(target.id)}>{target.label}</button>)}</div></div>)}
         </div>

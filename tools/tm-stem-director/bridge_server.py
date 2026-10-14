@@ -21,7 +21,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from separate_local import STEMS, alignment_report
+from catalog import catalog_payload, resolve_targets, sam_audio_installed
+from separate_local import STEMS, alignment_report, wav_info
 
 HOST = "127.0.0.1"
 PORT = int(os.environ.get("TM_STEM_BRIDGE_PORT", "8766"))
@@ -47,6 +48,18 @@ class Config:
 
 class JobLimit(Exception):
     pass
+
+
+def deep_engine_ready() -> bool:
+    return sam_audio_installed()
+
+
+def path_inside(root: Path, candidate: Path) -> bool:
+    try:
+        candidate.resolve().relative_to(root.resolve())
+    except (OSError, ValueError):
+        return False
+    return candidate.is_file()
 
 
 def ensure_token(config: Config) -> str:
@@ -117,7 +130,7 @@ class JobManager:
             job = self.jobs.get(job_id)
             return dict(job) if job else None
 
-    def submit(self, audio: Path) -> dict:
+    def submit(self, audio: Path, mode: str = "core", targets: list[str] | None = None) -> dict:
         with self.lock:
             active = sum(1 for job in self.jobs.values() if job["status"] == "processing")
             queued = sum(1 for job in self.jobs.values() if job["status"] == "queued")
@@ -133,11 +146,15 @@ class JobManager:
                 "progress": 0,
                 "stage": "queued",
                 "error": None,
-                "engine": "htdemucs_6s",
+                "engine": "htdemucs_6s+sam-audio" if mode == "deep" else "htdemucs_6s",
+                "mode": mode,
+                "targets": list(targets or []),
                 "aligned": None,
                 "duration_seconds": None,
                 "sample_rate": None,
                 "stems": [],
+                "deep_stems": [],
+                "failed_targets": [],
                 "created_at": now,
                 "updated_at": now,
             }
@@ -232,7 +249,12 @@ class JobManager:
             self.config.device,
             "--progress-file",
             str(progress),
+            "--mode",
+            str(job.get("mode") or "core"),
         ]
+        targets = [str(item) for item in job.get("targets") or []]
+        if targets:
+            command.extend(["--targets", ",".join(targets)])
         process = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
@@ -282,7 +304,7 @@ class JobManager:
                 return
             if job_id in self.cancel_flags:
                 self._finish_locked(current, "cancelled", error="Cancelled.")
-            elif process.returncode == 0 and self._aligned_result(final):
+            elif process.returncode == 0 and self._accept_result(current, final):
                 assert final is not None
                 self._finish_locked(
                     current,
@@ -293,6 +315,8 @@ class JobManager:
                     duration_seconds=final.get("duration_seconds"),
                     sample_rate=final.get("sample_rate"),
                     stems=list(final.get("stems") or []),
+                    deep_stems=list(final.get("deep_stems") or []),
+                    failed_targets=list(final.get("failed_targets") or []),
                     output=str(self.config.root / Path(current["source"]).stem),
                 )
             else:
@@ -330,6 +354,57 @@ class JobManager:
         final["aligned"] = True
         final["duration_seconds"] = report["duration_seconds"]
         final["sample_rate"] = report["sample_rate"]
+        return True
+
+    def _accept_result(self, job: dict, final: dict | None) -> bool:
+        if not self._aligned_result(final):
+            return False
+        if job.get("mode") != "deep":
+            return True
+        return self._deep_result(job, final or {})
+
+    def _deep_result(self, job: dict, final: dict) -> bool:
+        requested = [str(item) for item in job.get("targets") or []]
+        if not requested:
+            return False
+        root = Path(str(job.get("output") or ""))
+        seen: list[dict] = []
+        used: set[str] = set()
+        for item in final.get("deep_stems") or []:
+            if not isinstance(item, dict):
+                return False
+            ident = str(item.get("id") or "")
+            candidate = Path(str(item.get("path") or ""))
+            if ident not in requested or ident in used or not path_inside(root, candidate):
+                final["error"] = f"Deep target {ident or 'unknown'} is missing or outside the job folder."
+                return False
+            try:
+                info = wav_info(candidate)
+            except (OSError, RuntimeError):
+                return False
+            used.add(ident)
+            seen.append({
+                "id": ident,
+                "path": str(candidate.resolve()),
+                "label": str(item.get("label") or ident),
+                "duration_seconds": info["duration_seconds"],
+                "sample_rate": info["sample_rate"],
+            })
+        failed: list[dict] = []
+        failed_ids: set[str] = set()
+        for item in final.get("failed_targets") or []:
+            if not isinstance(item, dict):
+                return False
+            ident = str(item.get("id") or "")
+            if ident not in requested or ident in failed_ids or ident in used:
+                return False
+            failed_ids.add(ident)
+            failed.append({"id": ident, "error": str(item.get("error") or "Deep target failed.")[:500]})
+        if not seen or used | failed_ids != set(requested):
+            final["error"] = "Deep 60+ did not produce a playable WAV for every requested target."
+            return False
+        final["deep_stems"] = seen
+        final["failed_targets"] = failed
         return True
 
     def _merge_progress(self, job_id: str, path: Path) -> None:
@@ -520,13 +595,26 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(500, {"error": "console is not installed"})
             return self.send_bytes(200, page, "text/html; charset=utf-8")
         if path == "/health":
-            return self.send_json(200, {"service": "tm-stem-bridge", "status": "ready", "engine": "htdemucs_6s"})
+            catalog = catalog_payload()
+            return self.send_json(200, {
+                "service": "tm-stem-bridge",
+                "status": "ready",
+                "engine": "htdemucs_6s",
+                "deepTargetCount": catalog["count"],
+                "samAudioInstalled": deep_engine_ready(),
+            })
+        if path == "/catalog":
+            payload = catalog_payload()
+            payload["samAudioInstalled"] = deep_engine_ready()
+            return self.send_json(200, payload)
         if not path.startswith("/jobs"):
             return self.send_json(404, {"error": "not found"})
         if not self.require_auth():
             return
         if path.startswith("/jobs/") and "/stems/" in path:
             return self.serve_stem()
+        if path.startswith("/jobs/") and "/deep/" in path:
+            return self.serve_deep()
         if path.startswith("/jobs/"):
             job_id = self.job_id_from("/jobs/")
             job = self.server.manager.snapshot(job_id) if job_id else None
@@ -555,6 +643,27 @@ class Handler(BaseHTTPRequestHandler):
         data = audio.read_bytes()
         self.send_bytes(200, data, "audio/wav")
 
+    def serve_deep(self) -> None:
+        path = self.route()
+        try:
+            _, job_id, _, name = path.strip("/").split("/")
+            job_id = str(uuid.UUID(job_id))
+        except ValueError:
+            return self.send_json(404, {"error": "unknown stem"})
+        if not name or any(character not in "abcdefghijklmnopqrstuvwxyz0123456789_" for character in name):
+            return self.send_json(404, {"error": "unknown stem"})
+        job = self.server.manager.snapshot(job_id)
+        if not job or job.get("status") != "completed":
+            return self.send_json(409, {"error": "stem is not ready"})
+        match = next((item for item in job.get("deep_stems") or [] if item.get("id") == name), None)
+        root = Path(str(job.get("output") or ""))
+        if not isinstance(match, dict):
+            return self.send_json(404, {"error": "missing stem"})
+        audio = Path(str(match.get("path") or ""))
+        if not path_inside(root, audio):
+            return self.send_json(404, {"error": "missing stem"})
+        self.send_bytes(200, audio.resolve().read_bytes(), "audio/wav")
+
     def do_POST(self) -> None:
         if not self.require_auth():
             return
@@ -577,8 +686,22 @@ class Handler(BaseHTTPRequestHandler):
             audio = Path(body["audio"]).expanduser().resolve(strict=True)
             if not audio.is_file() or audio.suffix.lower() not in AUDIO_SUFFIXES:
                 return self.send_json(400, {"error": "unsupported source file"})
-            job = self.server.manager.submit(audio)
-            return self.send_json(202, {"id": job["id"], "status": job["status"]})
+            mode = body.get("mode") or "core"
+            if mode not in {"core", "deep"}:
+                return self.send_json(400, {"error": "mode must be core or deep"})
+            raw_targets = body.get("targets") or []
+            targets: list[str] = []
+            if mode == "deep":
+                try:
+                    targets = [str(item["id"]) for item in resolve_targets(list(raw_targets))]
+                except ValueError as exc:
+                    return self.send_json(400, {"error": str(exc)})
+                if not deep_engine_ready():
+                    return self.send_json(409, {"error": "Deep 60+ needs SAM-Audio on this computer. Core 6 is available locally. Stem Studio and Stem Director run Deep 60+ on a CUDA worker when this machine does not have the model."})
+            elif raw_targets:
+                return self.send_json(400, {"error": "Core 6 does not take Deep 60+ targets."})
+            job = self.server.manager.submit(audio, mode, targets)
+            return self.send_json(202, {"id": job["id"], "status": job["status"], "mode": mode})
         except JobLimit:
             self.send_json(429, {"error": "too many jobs", "max_active": self.server.config.max_active, "max_queued": self.server.config.max_queued})
         except (KeyError, ValueError, OSError, TypeError, json.JSONDecodeError):

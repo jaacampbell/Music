@@ -15,11 +15,13 @@ import wave
 from contextlib import redirect_stderr
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from unittest.mock import patch
 from urllib.parse import quote
 
 import unittest
 
 from bridge_server import HOST, BridgeServer, Config
+from catalog import load_targets, resolve_targets, sam_audio_installed
 from separate_local import STEMS, alignment_report
 
 REPO = Path(__file__).resolve().parents[2]
@@ -59,6 +61,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--device", required=True)
     parser.add_argument("--progress-file", type=Path, required=True)
+    parser.add_argument("--mode", default="core")
+    parser.add_argument("--targets", default="")
     args = parser.parse_args()
     mode_path = args.audio.with_suffix(".mode")
     mode = mode_path.read_text(encoding="utf-8").strip() if mode_path.is_file() else "ok"
@@ -86,9 +90,19 @@ def main():
             files.append(str(destination))
         publish(args.progress_file, status="completed", progress=100, stage="completed", aligned=True, duration_seconds=1, sample_rate=44100, stems=files)
         return 0
+    if mode == "lie-deep":
+        files = write_set(folder, 22050, lambda _index: 2000)
+        publish(args.progress_file, status="completed", progress=100, stage="completed", aligned=True, duration_seconds=1, sample_rate=22050, stems=files, mode="deep", targets=["kick"], deep_stems=[], failed_targets=[])
+        return 0
     if mode == "ok":
         files = write_set(folder, 22050, lambda _index: 2000)
-        publish(args.progress_file, status="completed", progress=100, stage="completed", aligned=True, duration_seconds=999, sample_rate=1, stems=files)
+        deep_stems = []
+        target_ids = [item for item in args.targets.split(",") if item] if args.mode == "deep" else []
+        for ident in target_ids:
+            destination = folder / "deep" / f"{ident}.wav"
+            write_wav(destination, 16000, 480, 3)
+            deep_stems.append({"id": ident, "path": str(destination), "label": ident})
+        publish(args.progress_file, status="completed", progress=100, stage="completed", aligned=True, duration_seconds=999, sample_rate=1, stems=files, mode=args.mode, targets=target_ids, deep_stems=deep_stems, failed_targets=[])
         return 0
     publish(args.progress_file, status="failed", progress=100, stage="failed", error="unknown fake mode")
     return 1
@@ -631,6 +645,107 @@ class BridgeContractTests(unittest.TestCase):
                 self.fail(last)
             time.sleep(0.05)
         self.fail(last)
+
+
+class DeepCatalogTests(unittest.TestCase):
+    def test_every_catalog_target_resolves(self) -> None:
+        targets = load_targets()
+        self.assertGreaterEqual(len(targets), 60)
+        ids = [str(item["id"]) for item in targets]
+        self.assertEqual(len(ids), len(set(ids)))
+        for item in targets:
+            resolved = resolve_targets([str(item["id"])])
+            self.assertEqual(resolved[0]["id"], item["id"])
+            self.assertTrue(str(item["label"]).strip())
+            self.assertTrue(str(item["group"]).strip())
+            self.assertTrue(str(item["prompt"]).strip())
+        with self.assertRaises(ValueError):
+            resolve_targets([])
+        with self.assertRaises(ValueError):
+            resolve_targets(["not_a_real_target"])
+        with self.assertRaises(ValueError):
+            resolve_targets(ids[:60] + ["extra_target_id"])
+
+    def test_local_worker_stops_before_demucs_without_sam(self) -> None:
+        if sam_audio_installed():
+            self.skipTest("SAM-Audio is installed. This check only covers the missing-model refusal.")
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "song.wav"
+            source.write_bytes(b"not-audio")
+            completed = subprocess.run(
+                [sys.executable, str(Path(__file__).with_name("separate_local.py")), str(source), "--output", str(root / "out"), "--mode", "deep", "--targets", "kick,snare"],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(completed.returncode, 1, completed.stderr)
+            self.assertIn("SAM-Audio", completed.stderr)
+            status = json.loads((root / "out" / "song" / "status.json").read_text(encoding="utf-8"))
+            self.assertEqual(status["status"], "failed")
+            self.assertEqual(status["targets"], ["kick", "snare"])
+            self.assertFalse(list((root / "out").rglob("*.wav")))
+
+
+class DeepBridgeTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.bridge = BridgeContractTests()
+        self.bridge.setUp()
+
+    def tearDown(self) -> None:
+        self.bridge.tearDown()
+
+    def test_catalog_and_refusal(self) -> None:
+        bridge = self.bridge
+        bridge.start()
+        status, payload = bridge.request("GET", "/catalog", token=None)
+        self.assertEqual(status, 200, payload)
+        catalog = json.loads(payload)
+        self.assertGreaterEqual(catalog["count"], 60)
+        self.assertEqual(catalog["samAudioInstalled"], sam_audio_installed())
+        self.assertIn("Deep 60+", bridge.request("GET", "/", token=None)[1].decode())
+        source = bridge.make_source("unknown-deep.wav", "ok")
+        status, payload = bridge.request("POST", "/jobs", {"audio": str(source), "mode": "deep", "targets": ["not_a_target"]})
+        self.assertEqual(status, 400, payload)
+        source = bridge.make_source("empty-deep.wav", "ok")
+        status, payload = bridge.request("POST", "/jobs", {"audio": str(source), "mode": "deep", "targets": []})
+        self.assertEqual(status, 400, payload)
+        if sam_audio_installed():
+            return
+        source = bridge.make_source("needs-model.wav", "ok")
+        status, payload = bridge.request("POST", "/jobs", {"audio": str(source), "mode": "deep", "targets": ["kick"]})
+        self.assertEqual(status, 409, payload)
+        self.assertIn("SAM-Audio", json.loads(payload)["error"])
+
+    def test_each_deep_target_round_trip(self) -> None:
+        bridge = self.bridge
+        bridge.start()
+        targets = load_targets()
+        self.assertGreaterEqual(len(targets), 60)
+        with patch("bridge_server.deep_engine_ready", return_value=True):
+            for target in targets:
+                ident = str(target["id"])
+                status, payload = bridge.request("POST", "/jobs", {"audio": str(bridge.make_source(f"{ident}.wav", "ok")), "mode": "deep", "targets": [ident]})
+                self.assertEqual(status, 202, payload)
+                job = bridge.wait_job(json.loads(payload)["id"], timeout=8)
+                self.assertEqual(job["status"], "completed", job)
+                self.assertEqual([item["id"] for item in job["deep_stems"]], [ident])
+                self.assertGreater(float(job["deep_stems"][0]["duration_seconds"]), 0)
+                code, audio = bridge.request("GET", f"/jobs/{job['id']}/deep/{ident}")
+                self.assertEqual(code, 200, audio[:120])
+                self.assertTrue(audio.startswith(b"RIFF"))
+                code, core = bridge.request("GET", f"/jobs/{job['id']}/stems/vocals")
+                self.assertEqual(code, 200, core[:80])
+                self.assertTrue(core.startswith(b"RIFF"))
+
+    def test_deep_claim_without_files_fails(self) -> None:
+        bridge = self.bridge
+        bridge.start()
+        with patch("bridge_server.deep_engine_ready", return_value=True):
+            status, payload = bridge.request("POST", "/jobs", {"audio": str(bridge.make_source("lie.wav", "lie-deep")), "mode": "deep", "targets": ["kick"]})
+        self.assertEqual(status, 202, payload)
+        job = bridge.wait_job(json.loads(payload)["id"])
+        self.assertEqual(job["status"], "failed", job)
+        self.assertIn("Deep 60+", job["error"])
 
 
 def drain(stream, bucket: list[str]) -> None:

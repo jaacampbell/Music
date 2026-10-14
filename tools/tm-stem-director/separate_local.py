@@ -87,24 +87,72 @@ def publish(paths: list[Path], state: str, **extra: object) -> None:
         temporary.replace(path)
 
 
+def separate_deep_targets(audio: Path, targets: list[dict], out: Path) -> tuple[list[dict], list[dict]]:
+    """Isolate each Deep 60+ prompt with SAM-Audio. Callers check that the package is installed."""
+    import torch
+    import torchaudio
+    from sam_audio import SAMAudio, SAMAudioProcessor
+
+    model_name = os.environ.get("SAM_AUDIO_MODEL", "facebook/sam-audio-small")
+    device = os.environ.get("SAM_AUDIO_DEVICE", "cuda" if torch.cuda.is_available() else "cpu")
+    if device == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError("SAM_AUDIO_DEVICE=cuda but CUDA is not available.")
+    processor = SAMAudioProcessor.from_pretrained(model_name)
+    model = SAMAudio.from_pretrained(model_name).eval().to(device)
+    produced: list[dict] = []
+    failed: list[dict] = []
+    predict_spans = os.environ.get("SAM_PREDICT_SPANS", "false").lower() == "true"
+    candidates = int(os.environ.get("SAM_RERANK_CANDIDATES", "1"))
+    for index, target in enumerate(targets, 1):
+        try:
+            batch = processor(audios=[str(audio)], descriptions=[str(target["prompt"])]).to(device)
+            with torch.inference_mode():
+                result = model.separate(batch, predict_spans=predict_spans, reranking_candidates=candidates)
+            tensor = result.target.detach().cpu()
+            if tensor.dim() == 3:
+                tensor = tensor[0]
+            if tensor.dim() == 1:
+                tensor = tensor.unsqueeze(0)
+            destination = out / "deep" / f"{index:02d}_{target['id']}.wav"
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            torchaudio.save(str(destination), tensor, int(processor.audio_sampling_rate))
+            produced.append({"id": target["id"], "label": target["label"], "path": str(destination), "prompt": target["prompt"]})
+        except Exception as exc:
+            failed.append({"id": str(target["id"]), "error": str(exc)[-500:]})
+    return produced, failed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Separate an audio file into six aligned WAV stems.")
     parser.add_argument("audio", type=Path)
     parser.add_argument("--output", type=Path, default=Path.home() / "Music" / "TM Music Studio" / "Stems")
     parser.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     parser.add_argument("--progress-file", type=Path)
+    parser.add_argument("--mode", choices=("core", "deep"), default="core")
+    parser.add_argument("--targets", default="", help="Comma-separated Deep 60+ target ids")
     args = parser.parse_args()
     audio = args.audio.expanduser().resolve()
     if not audio.is_file() or audio.suffix.lower() not in AUDIO_SUFFIXES:
         parser.error("Supply an existing supported audio file.")
-    if shutil.which("ffmpeg") is None:
-        parser.error("ffmpeg is required; install it first.")
     out = args.output.expanduser().resolve() / audio.stem
     out.mkdir(parents=True, exist_ok=True)
     mirrors = [out / "status.json"]
     if args.progress_file:
         mirrors.append(args.progress_file.expanduser().resolve())
-    publish(mirrors, "processing", progress=1, stage="preparing", source=str(audio), engine="htdemucs_6s")
+    selected: list[dict] = []
+    if args.mode == "deep":
+        try:
+            selected = resolve_targets([part.strip() for part in args.targets.split(",") if part.strip()])
+        except ValueError as exc:
+            parser.error(str(exc))
+        if importlib.util.find_spec("sam_audio") is None:
+            message = "Deep 60+ needs SAM-Audio on this computer. Core 6 does not. Stem Studio and Stem Director run Deep 60+ on a CUDA worker when this machine does not have the model."
+            publish(mirrors, "failed", progress=100, stage="failed", source=str(audio), engine="htdemucs_6s", mode="deep", targets=[item["id"] for item in selected], aligned=False, error=message)
+            print(message, file=sys.stderr)
+            return 1
+    if shutil.which("ffmpeg") is None:
+        parser.error("ffmpeg is required; install it first.")
+    publish(mirrors, "processing", progress=1, stage="preparing", source=str(audio), engine="htdemucs_6s", mode=args.mode)
     try:
         with tempfile.TemporaryDirectory(prefix="tm-stems-") as temporary:
             command = [sys.executable, "-m", "demucs", "-n", "htdemucs_6s", "-d", args.device, "--out", temporary, str(audio)]
@@ -146,18 +194,32 @@ def main() -> int:
                 shutil.copy2(source / f"{name}.wav", destination)
                 files.append(destination)
             report = alignment_report(files)
+            deep_stems: list[dict] = []
+            failed_targets: list[dict] = []
+            if selected:
+                publish(mirrors, "processing", progress=94, stage="deep-60", source=str(audio), engine="htdemucs_6s", mode="deep")
+                deep_stems, failed_targets = separate_deep_targets(audio, selected, out)
+                if not deep_stems:
+                    detail = "; ".join(item["error"] for item in failed_targets) or "no isolates"
+                    raise RuntimeError(f"Deep 60+ produced no playable isolates. {detail}")
             archive = out / "stems.zip"
             with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
                 for item in files:
                     bundle.write(item, item.name)
+                for item in deep_stems:
+                    bundle.write(item["path"], Path(item["path"]).name)
             publish(
                 mirrors,
                 "completed",
                 progress=100,
                 stage="completed",
                 source=str(audio),
-                engine="htdemucs_6s",
+                engine="htdemucs_6s+sam-audio" if selected else "htdemucs_6s",
+                mode=args.mode,
+                targets=[item["id"] for item in selected],
                 stems=[str(item) for item in files],
+                deep_stems=deep_stems,
+                failed_targets=failed_targets,
                 archive=str(archive),
                 aligned=True,
                 sample_rate=report["sample_rate"],

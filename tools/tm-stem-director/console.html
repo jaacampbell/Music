@@ -14,7 +14,15 @@
   h1 { margin: .25rem 0 .6rem; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -.04em; }
   .honest, footer p { color: var(--muted); max-width: 70rem; }
   .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 1rem; margin: .8rem 0; }
-  .controls, .transport { display: flex; flex-wrap: wrap; gap: .7rem; align-items: end; }
+  .controls, .transport, .mode-row, .chips { display: flex; flex-wrap: wrap; gap: .7rem; align-items: end; }
+  .chips { align-items: stretch; margin-top: .6rem; }
+  .chips button.on { background: var(--accent); color: #082013; }
+  #deep-picker { width: 100%; }
+  .deep-group { margin: .8rem 0; }
+  .deep-group h2 { margin: 0 0 .4rem; font-size: .85rem; color: var(--muted); }
+  #deep-list { display: grid; gap: .6rem; }
+  .deep-row { display: grid; grid-template-columns: 10rem 1fr; gap: .6rem; align-items: center; }
+  .deep-row canvas { height: 48px; }
   label { display: grid; gap: .3rem; color: var(--muted); font-size: .78rem; }
   input[type="text"], input[type="password"] { min-width: 16rem; background: #0b0e0f; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .8rem; font: inherit; }
   #source { min-width: min(36rem, 100%); }
@@ -64,6 +72,12 @@
     <button id="separate" class="primary" type="button">Separate</button>
     <button id="cancel" type="button">Cancel</button>
     <button id="reveal" type="button">Reveal stems</button>
+    <div class="mode-row">
+      <button id="mode-core" class="primary" type="button">Core 6</button>
+      <button id="mode-deep" type="button">Deep 60+</button>
+    </div>
+    <p id="deep-note" class="honest">Deep 60+ isolates named parts such as lead vocal, kick, and 808. Those files can overlap, so they stay out of the Core 6 mixer. This machine must have SAM-Audio or the job is refused.</p>
+    <div id="deep-picker" hidden></div>
   </section>
   <section class="panel">
     <div class="status-row"><strong id="stage">Idle</strong><span id="progress-label">0%</span></div>
@@ -74,6 +88,11 @@
     <button id="play" class="primary" type="button">Play</button>
     <button id="stop" type="button">Stop</button>
     <p class="honest">Play starts every decoded stem at the same moment on one audio context. Mute, solo, and faders apply together.</p>
+  </section>
+  <section id="deep-results" class="panel" hidden>
+    <h2>Deep 60+ isolates</h2>
+    <p class="honest">Each preview is decoded on its own. A failed decode stays blank. Do not sum these with the Core 6 mixer.</p>
+    <div id="deep-list"></div>
   </section>
   <section id="mixer" aria-label="Core 6 mixer">
     <article class="channel" data-stem="vocals"><h2>Vocals</h2><canvas data-wave="vocals" width="160" height="72" aria-label="Vocals waveform"></canvas><p class="note" data-note="vocals">Waveform appears after a successful decode.</p><label>Level <input class="fader" data-fader="vocals" type="range" min="0" max="100" value="80" aria-label="Vocals level"></label><div class="switches"><button type="button" data-mute="vocals" aria-pressed="false">M</button><button type="button" data-solo="vocals" aria-pressed="false">S</button></div></article>
@@ -293,6 +312,46 @@ async function loadStems(id) {
   if (!decoded) setDetail("The job completed, but none of the six stems decoded. Empty displays are intentional.");
 }
 
+async function loadDeepStem(id, stem) {
+  const row = document.createElement("article");
+  row.className = "deep-row";
+  const title = document.createElement("strong");
+  title.textContent = stem.label || stem.id;
+  const canvas = document.createElement("canvas");
+  canvas.width = 320;
+  canvas.height = 48;
+  canvas.setAttribute("aria-label", (stem.label || stem.id) + " waveform");
+  row.append(title, canvas);
+  document.querySelector("#deep-list").append(row);
+  try {
+    const response = await fetch("/jobs/" + encodeURIComponent(id) + "/deep/" + encodeURIComponent(stem.id), {
+      headers: tokenValue() ? { Authorization: "Bearer " + tokenValue() } : {}
+    });
+    if (!response.ok) throw new Error("Deep stem request failed.");
+    const bytes = await response.arrayBuffer();
+    const ctx = context();
+    if (!ctx) throw new Error("Web Audio is unavailable.");
+    const audio = await ctx.decodeAudioData(bytes.slice(0));
+    if (!audio || audio.length <= 0) throw new Error("Decoded audio was empty.");
+    drawWaveform(canvas, audio);
+  } catch {
+    clearWaveform(canvas);
+    title.textContent = (stem.label || stem.id) + " — could not decode. No waveform is shown.";
+  }
+}
+
+async function loadDeepStems(id, stems) {
+  const section = document.querySelector("#deep-results");
+  const list = document.querySelector("#deep-list");
+  list.replaceChildren();
+  if (!stems || !stems.length) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+  await Promise.all(stems.map((stem) => loadDeepStem(id, stem)));
+}
+
 async function refresh(id) {
   window.clearTimeout(pollTimer);
   const job = await api("/jobs/" + encodeURIComponent(id));
@@ -300,6 +359,7 @@ async function refresh(id) {
   renderJob(job);
   if (job.status === "completed") {
     await loadStems(activeId);
+    await loadDeepStems(activeId, job.deep_stems || []);
     return;
   }
   if (job.status === "queued" || job.status === "processing") {
@@ -318,7 +378,16 @@ document.querySelector("#separate").addEventListener("click", () => {
     setDetail("Enter the source file path on this computer. The bridge reads that path; the browser does not upload the song.");
     return;
   }
-  api("/jobs", { method: "POST", body: JSON.stringify({ audio }) })
+  const payload = { audio };
+  if (separationMode === "deep") {
+    payload.mode = "deep";
+    payload.targets = Array.from(selectedTargets);
+    if (!payload.targets.length) {
+      setDetail("Choose at least one Deep 60+ target, or switch back to Core 6.");
+      return;
+    }
+  }
+  api("/jobs", { method: "POST", body: JSON.stringify(payload) })
     .then((job) => refresh(job.id))
     .catch((error) => setDetail(error.message));
 });
@@ -365,7 +434,73 @@ for (const name of STEMS) {
   });
 }
 
+let separationMode = "core";
+let selectedTargets = new Set();
+
+function setMode(mode) {
+  separationMode = mode;
+  document.querySelector("#mode-core").classList.toggle("primary", mode === "core");
+  document.querySelector("#mode-deep").classList.toggle("primary", mode === "deep");
+  document.querySelector("#deep-picker").hidden = mode !== "deep";
+}
+
+document.querySelector("#mode-core").addEventListener("click", () => setMode("core"));
+document.querySelector("#mode-deep").addEventListener("click", () => setMode("deep"));
+
+async function loadCatalog() {
+  const response = await fetch("/catalog");
+  if (!response.ok) return;
+  const catalog = await response.json();
+  const picker = document.querySelector("#deep-picker");
+  const note = document.querySelector("#deep-note");
+  note.textContent = "Deep 60+ has " + catalog.count + " named isolates. They can overlap and stay out of the Core 6 mixer. " + (catalog.samAudioInstalled
+    ? "SAM-Audio is installed on this computer."
+    : "SAM-Audio is not installed here, so a Deep 60+ job is refused. Core 6 still runs. The app's Stem Studio and Stem Director can send Deep 60+ to a CUDA worker.");
+  const presets = document.createElement("div");
+  presets.className = "chips";
+  Object.keys(catalog.presets || {}).forEach((name) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = name;
+    button.addEventListener("click", () => {
+      selectedTargets = new Set(catalog.presets[name]);
+      picker.querySelectorAll("[data-target]").forEach((item) => item.classList.toggle("on", selectedTargets.has(item.getAttribute("data-target"))));
+      setMode("deep");
+    });
+    presets.append(button);
+  });
+  picker.append(presets);
+  const byGroup = new Map();
+  (catalog.targets || []).forEach((target) => {
+    if (!byGroup.has(target.group)) byGroup.set(target.group, []);
+    byGroup.get(target.group).push(target);
+  });
+  byGroup.forEach((targets, group) => {
+    const block = document.createElement("div");
+    block.className = "deep-group";
+    const heading = document.createElement("h2");
+    heading.textContent = group;
+    const chips = document.createElement("div");
+    chips.className = "chips";
+    targets.forEach((target) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = target.label;
+      button.setAttribute("data-target", target.id);
+      button.addEventListener("click", () => {
+        if (selectedTargets.has(target.id)) selectedTargets.delete(target.id);
+        else selectedTargets.add(target.id);
+        button.classList.toggle("on", selectedTargets.has(target.id));
+      });
+      chips.append(button);
+    });
+    block.append(heading, chips);
+    picker.append(block);
+  });
+}
+
 loadTokenFromLocation();
+loadCatalog().catch(() => {});
 </script>
 </body>
 </html>

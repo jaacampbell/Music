@@ -1,6 +1,6 @@
 # TM Stem Director — local Core 6 bridge
 
-This folder is a loopback companion for six-stem Demucs `htdemucs_6s` separation. It writes real WAV files when the local worker succeeds. It does not change the installed Ableton `TM Stem Director.vst3`, and that plugin's source is not in this repository.
+This folder is a loopback companion for six-stem Demucs `htdemucs_6s` separation and, when SAM-Audio is installed, the same Deep 60+ named isolates used by Stem Studio. It writes real WAV files when the local worker succeeds. It does not change the installed Ableton `TM Stem Director.vst3`, and that plugin's source is not in this repository.
 
 The bridge binds to `127.0.0.1` only. A token stops other local programs from casually enqueueing jobs, but this is not a multi-user security boundary: anything that can see the token and reach loopback can use the bridge.
 

@@ -6,7 +6,9 @@ Run `python tools/tm-stem-director/bridge_server.py` after the Mac dependencies 
 
 ## Routes
 
-- `GET /health` — `{"service":"tm-stem-bridge","status":"ready","engine":"htdemucs_6s"}`.
+- `GET /health` — readiness, Core 6 engine name, Deep 60+ catalog count, and whether SAM-Audio is installed.
+- `GET /catalog` — every Deep 60+ target id, group, prompt, and preset. No token required.
+- `POST /jobs` — JSON `{"audio":"/absolute/path.wav","mode":"core"}` or `"mode":"deep"` with `"targets":["kick","snare"]`. Deep jobs return HTTP 409 when SAM-Audio is not installed. They do not start Demucs in that case.
 - `GET /` and `GET /console` — the local mixer. Waveforms come from `decodeAudioData`. A failed decode stays empty.
 - `POST /jobs` — JSON `{"audio":"/absolute/path/to/song.wav"}`. HTTP 202 with `id` and `status`, or 429 when active plus queued jobs are already at the limit.
 - `GET /jobs/{id}` — `queued`, `processing`, `completed`, `failed`, or `cancelled`, plus progress, stage, and error.
