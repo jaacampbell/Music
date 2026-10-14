@@ -72,6 +72,13 @@ export default function GuidePage(): React.JSX.Element {
         </div>
       </section>
 
+      <section className="card" style={{ marginBottom: "1rem", borderColor: "#7f66c8" }}>
+        <div className="eyebrow">Complete illustrated workflow</div>
+        <h2>New: The full Music OS tutorial</h2>
+        <p className="meta">Follow the entire studio: account and song setup, Guided and Studio modes, listening, production stem separation, Instrument Cleanup, MIDI Shredder, Ableton Live 11 Standard export, finishing and troubleshooting. Instrument Cleanup is on the development branch until the new worker ships.</p>
+        <div className="actionRow"><Link className="primaryButton linkButton" href="/guide/full-tour">Open the full walkthrough →</Link></div>
+      </section>
+
       <section className="card" style={{ marginBottom: "1rem" }}>
         <div className="eyebrow">The simple workflow</div>
         <h2>Idea → Sound → Versions → Stems → Review → Mix → Export</h2>
