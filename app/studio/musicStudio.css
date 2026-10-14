@@ -316,3 +316,10 @@
   .tmTrackButtons button:not(.armed) { display:none; }
   .tmBottomDock { grid-template-columns:repeat(2,1fr); }
 }
+
+/* Navigation-first Studio: demo lanes are never presented as functional audio editors. */
+.tmTimelineTools a { color: var(--accent); text-decoration:none; font-size:.64rem; font-weight:750; padding:.35rem .5rem; }
+.tmTimelineTools a:hover { text-decoration:underline; }
+.tmTrackButtons span { color:#89938a; font-weight:750; font-size:.52rem; letter-spacing:.08em; }
+.tmStatusPanel .tmRefresh { background:#24281b; border:1px solid var(--line); color:#e6f4b5; padding:.6rem .8rem; cursor:pointer; border-radius:7px; font-size:.65rem; }
+.tmStatusPanel .tmRefresh:disabled { cursor:progress; opacity:.6; }
