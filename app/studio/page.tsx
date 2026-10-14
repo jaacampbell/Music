@@ -14,6 +14,7 @@ type Readiness = {
     controlPlaneReady?: boolean;
     controllerOnline?: boolean;
     computeReady?: boolean;
+    deepReady?: boolean;
     permanentOutputs?: boolean;
   };
   nextAction?: string;
@@ -42,6 +43,8 @@ export default function MusicStudioHome(): React.JSX.Element {
   const [projectId, setProjectId] = useState<string | null>(null);
   const [panel, setPanel] = useState<ToolPanel>("assistant");
   const [readiness, setReadiness] = useState<Readiness | null>(null);
+  const [readinessBusy, setReadinessBusy] = useState(false);
+  const [readinessError, setReadinessError] = useState(false);
   const [command, setCommand] = useState("");
 
   useEffect(() => {
@@ -49,12 +52,23 @@ export default function MusicStudioHome(): React.JSX.Element {
     setProjectId(requested && /^[0-9a-f-]{36}$/i.test(requested) ? requested : loadActiveProjectId());
   }, []);
 
+  const checkReadiness = async (): Promise<void> => {
+    setReadinessBusy(true);
+    setReadinessError(false);
+    try {
+      const response = await fetch("/api/stem-agent/readiness", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error("Readiness endpoint unavailable");
+      setReadiness(await response.json() as Readiness);
+    } catch {
+      setReadinessError(true);
+      setReadiness(null);
+    } finally {
+      setReadinessBusy(false);
+    }
+  };
+
   useEffect(() => {
-    if (panel !== "status") return;
-    void fetch("/api/stem-agent/readiness", { cache: "no-store" })
-      .then(async (response) => response.ok ? response.json() as Promise<Readiness> : null)
-      .then(setReadiness)
-      .catch(() => setReadiness(null));
+    if (panel === "status") void checkReadiness();
   }, [panel]);
 
   const withProject = (path: string): string => {
@@ -68,7 +82,7 @@ export default function MusicStudioHome(): React.JSX.Element {
     if (!value) return null;
     if (value.includes("vocal") || value.includes("record") || value.includes("mix")) return withProject("/tm-vocal");
     if (value.includes("suno") || value.includes("transfer") || value.includes("learn dna")) return withProject("/suno-transfer");
-    if (value.includes("stem") || value.includes("separate")) return withProject("/stem-agent");
+    if (value.includes("stem") || value.includes("separate") || value.includes("cleanup") || value.includes("clean") || value.includes("instrument")) return withProject("/stem-agent");
     if (value.includes("midi") || value.includes("chord")) return withProject("/midi-shredder");
     if (value.includes("project") || value.includes("arrange") || value.includes("song")) return withProject("/?workspace=1");
     if (value.includes("listen") || value.includes("player") || value.includes("version")) return "/player";
@@ -91,16 +105,11 @@ export default function MusicStudioHome(): React.JSX.Element {
           <span><strong>Music Studio</strong><small>{projectId ? "Project connected" : "No project selected"}</small></span>
         </Link>
 
-        <div className="tmTransport" aria-label="Transport controls">
-          <button type="button" aria-label="Go to start">│◀</button>
-          <button type="button" aria-label="Rewind">◀</button>
-          <button type="button" className="tmPlay" aria-label="Play">▶</button>
-          <button type="button" className="tmRecord" aria-label="Record">●</button>
-          <span className="tmTime">01 · 01 · 000</span>
-          <span className="tmTempo">98.0</span>
-          <span className="tmMeter">4/4</span>
-          <button type="button" aria-label="Metronome">⌁</button>
-          <button type="button" aria-label="Loop">↻</button>
+        <div className="tmTransport" aria-label="Launch real audio workspaces">
+          <button type="button" className="tmPlay" title="Open Music Player" onClick={() => { window.location.href = "/player"; }}>▶</button>
+          <button type="button" className="tmRecord" title="Open TM Vocal recording" onClick={() => { window.location.href = withProject("/tm-vocal"); }}>●</button>
+          <button type="button" title="Open Stem Director" onClick={() => { window.location.href = withProject("/stem-agent"); }}>≋</button>
+          <span className="tmTime">Play, record and separate in dedicated audio tools</span>
         </div>
 
         <nav className="tmTopActions" aria-label="Studio navigation">
@@ -144,12 +153,12 @@ export default function MusicStudioHome(): React.JSX.Element {
               <span className="tmProjectDot" />
               <div>
                 <strong>{projectId ? "Current Song" : "Untitled Project"}</strong>
-                <small>{projectId ? "Autosaved · connected across studio tools" : "Create a project to connect every tool"}</small>
+                <small>{projectId ? "Song project selected · manage versions from Dashboard" : "Create a project to connect every tool"}</small>
               </div>
             </div>
             <div className="tmProjectMeta">
-              <span><small>KEY</small><strong>F♯m</strong></span>
-              <span><small>BPM</small><strong>98</strong></span>
+              <span><small>KEY</small><strong>—</strong></span>
+              <span><small>BPM</small><strong>—</strong></span>
               <span><small>MODE</small><strong>Studio</strong></span>
             </div>
             <div className="tmProjectMenu">
@@ -162,33 +171,28 @@ export default function MusicStudioHome(): React.JSX.Element {
             <div className="tmTimelineHeader">
               <div className="tmTimelineTitle">
                 <strong>Arrangement</strong>
-                <small>Song view</small>
+                <small>Workspace preview · open tools to edit real audio</small>
               </div>
               <div className="tmTimelineTools">
-                <button type="button">Pointer</button>
-                <button type="button">Split</button>
-                <button type="button">Snap</button>
-                <button type="button">Automation</button>
-                <span />
-                <button type="button">−</button>
-                <button type="button">+</button>
+                <Link href={withProject("/stem-agent")}>Extract audio ↗</Link>
+                <Link href={withProject("/midi-shredder")}>Edit MIDI ↗</Link>
               </div>
             </div>
 
             <div className="tmArrangement">
               <div className="tmTrackCorner">
-                <button type="button">＋ Track</button>
+                <button type="button" title="Open Stem Director to add real audio" onClick={() => { window.location.href = withProject("/stem-agent"); }}>＋ Audio</button>
               </div>
               <div className="tmRuler">
                 {Array.from({ length: 13 }, (_, index) => <span key={index}>{index * 4 + 1}</span>)}
               </div>
 
-              {tracks.map((track, index) => (
+              {tracks.map((track) => (
                 <article className="tmTrackRow" key={track.name}>
                   <div className="tmTrackHead">
                     <span className={`tmTrackColor ${track.type}`} />
                     <div className="tmTrackText"><strong>{track.name}</strong><small>{track.meta}</small></div>
-                    <div className="tmTrackButtons"><button type="button">M</button><button type="button">S</button>{index === 0 && <button type="button" className="armed">R</button>}</div>
+                    <div className="tmTrackButtons" title="Illustrative arrangement; edit audio in a dedicated tool"><span>PREVIEW</span></div>
                   </div>
                   <div className="tmLane">
                     <div className="tmBeatGrid" />
@@ -254,11 +258,15 @@ export default function MusicStudioHome(): React.JSX.Element {
 
             {panel === "status" && (
               <div className="tmStatusPanel" aria-live="polite">
-                <div><span>Control plane</span><strong>{!readiness ? "Checking…" : readiness.capabilities?.controlPlaneReady ? "Ready" : "Needs attention"}</strong></div>
-                <div><span>Controller</span><strong>{!readiness ? "Checking…" : readiness.capabilities?.controllerOnline ? "Online" : "Offline"}</strong></div>
-                <div><span>Compute</span><strong>{!readiness ? "Checking…" : readiness.capabilities?.computeReady ? "Online" : "Standby"}</strong></div>
-                <div><span>Saved outputs</span><strong>{!readiness ? "Checking…" : readiness.capabilities?.permanentOutputs ? "Ready" : "Needs attention"}</strong></div>
+                <div><span>Control plane</span><strong>{readinessBusy ? "Checking…" : readinessError || !readiness ? "Unknown" : readiness.capabilities?.controlPlaneReady ? "Ready" : "Needs attention"}</strong></div>
+                <div><span>Railway controller</span><strong>{readinessBusy ? "Checking…" : readinessError || !readiness ? "Unknown" : readiness.capabilities?.controllerOnline ? "Online" : "Offline"}</strong></div>
+                <div><span>Core stem compute</span><strong>{readinessBusy ? "Checking…" : readinessError || !readiness ? "Unknown" : readiness.capabilities?.computeReady ? "Ready" : "No worker ready"}</strong></div>
+                <div><span>Deep GPU isolation</span><strong>{readinessBusy ? "Checking…" : readinessError || !readiness ? "Unknown" : readiness.capabilities?.deepReady ? "Ready" : "Not ready"}</strong></div>
+                <div><span>Private output storage</span><strong>{readinessBusy ? "Checking…" : readinessError || !readiness ? "Unknown" : readiness.capabilities?.permanentOutputs ? "Configured" : "Needs attention"}</strong></div>
                 {readiness?.nextAction && <p>{readiness.nextAction}</p>}
+                {readinessError && <p>Could not query system readiness. Refresh and check the technical status page.</p>}
+                <p>Standby means no worker is currently ready, not that the approved GPU was deleted. Starting GPU compute can incur charges.</p>
+                <button className="tmRefresh" type="button" disabled={readinessBusy} onClick={() => void checkReadiness()}>{readinessBusy ? "Checking…" : "Refresh status"}</button>
                 <Link href="/stem-agent/status">Open technical status →</Link>
               </div>
             )}
