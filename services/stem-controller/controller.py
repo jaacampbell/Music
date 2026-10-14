@@ -374,7 +374,11 @@ class Controller:
         provider_image = str((pod or {}).get("imageName") or "") or None
         provider_ports = (pod or {}).get("ports") if isinstance((pod or {}).get("ports"), list) else None
         if self.maybe_upgrade_provider(pod):
-            self.publish("upgrading", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), action="update", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=[])
+            # DB constraint only permits known lifecycle states. An image update
+            # can happen while the approved Pod is exited; preserve that truth.
+            # The action/metadata field carries the upgrade detail without
+            # violating the music_compute_state_state_check constraint.
+            self.publish("waking" if running else "standby", pending=pending_count, active=active_count, ready=len(ready), deep=len(deep_ready), action="update", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=[])
             return
 
         raw_env = (pod or {}).get("env")
