@@ -485,7 +485,7 @@ export default function StemAgentPage(): React.JSX.Element {
       </header>
 
       <section className="agentHero">
-        <div><p className="eyebrow">Agentic production system · Resilient Worker Mesh v3.12</p><h1>Tell it what you need.<br/><span>It survives the worker.</span></h1><p>The Stem Director stages project audio privately before compute, discovers available nodes, coordinates Core 6 + hierarchical deep isolation, and can replay the same cloud orchestration on another worker after a real lease failure.</p></div>
+        <div><p className="eyebrow">Agentic production system · Resilient Worker Mesh v3.12</p><h1>Tell it what you need.<br/><span>It survives the worker.</span></h1><p>The Stem Director stages project audio privately before compute, discovers available nodes, coordinates Core 6 + hierarchical deep isolation, and can replay the same cloud orchestration on another worker after a real lease failure.</p><p className="localBridgeNote">Local Core 6 on this computer is a separate loopback tool. Start <code>python tools/tm-stem-director/bridge_server.py</code> and open the mixer at <a href="http://127.0.0.1:8766/">127.0.0.1:8766</a>. That console runs Demucs htdemucs_6s beside Ableton. It is not the installed TM Stem Director VST3 and it is not this cloud director.</p></div>
         <div className="healthCard">
           <span className={`dot ${online || fleetReady ? "online" : ""}`} />
           <div><strong>{healthTitle}</strong><small>{healthDetail}</small></div>

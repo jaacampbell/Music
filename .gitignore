@@ -8,3 +8,5 @@ dist
 .DS_Store
 public/models/basic-pitch/
 native/build*/
+native/tm-stem-director/build/
+native/tm-stem-director/build-*/
