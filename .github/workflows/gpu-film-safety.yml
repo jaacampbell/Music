@@ -1,0 +1,34 @@
+name: Shared GPU safety
+on:
+  pull_request:
+    paths:
+      - 'services/stem-controller/controller.py'
+      - 'services/separator/film_editor.py'
+      - 'services/separator/film_activity.py'
+      - 'services/separator/test_film_activity.py'
+      - 'services/separator/Dockerfile.gpu'
+      - '.github/workflows/gpu-film-safety.yml'
+  push:
+    branches:
+      - feature/film-safe-gpu-autowake
+    paths:
+      - 'services/stem-controller/controller.py'
+      - 'services/separator/film_editor.py'
+      - 'services/separator/film_activity.py'
+      - 'services/separator/test_film_activity.py'
+      - 'services/separator/Dockerfile.gpu'
+      - '.github/workflows/gpu-film-safety.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax
+        run: python -m py_compile services/stem-controller/controller.py services/separator/film_editor.py services/separator/film_activity.py
+      - name: Film occupancy tests
+        run: python -m unittest discover -s services/separator -p test_film_activity.py -v

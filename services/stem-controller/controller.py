@@ -8,8 +8,12 @@ Paid auto-start is disabled unless two independent environment switches are set.
 
 from __future__ import annotations
 
+import base64
+import hashlib
+import hmac
 import json
 import os
+import re
 import threading
 import time
 from datetime import datetime, timezone
@@ -143,6 +147,38 @@ class Controller:
         with urllib_request.urlopen(req, timeout=30) as response:
             raw = response.read().decode("utf-8")
             return json.loads(raw) if raw else {}
+
+    def film_worker_idle(self) -> bool:
+        """Fail-closed idle check for the JC Film workload sharing this GPU.
+
+        The controller must never stop a pod if film status cannot be read.
+        The target endpoint requires a short-lived HMAC-scoped capability.
+        """
+        if not self.config.editor_secret or not re.fullmatch(r"[a-z0-9]{8,40}", self.config.pod_id):
+            return False
+        payload = {
+            "v": 1, "ops": ["gpu-occupancy"], "exp": int(time.time()) + 45,
+            "nonce": "music-os-idle-guard",
+        }
+        encoded = base64.urlsafe_b64encode(
+            json.dumps(payload, separators=(",", ":")).encode("utf-8")
+        ).rstrip(b"=").decode("ascii")
+        signature = hmac.new(
+            self.config.editor_secret.encode("utf-8"), encoded.encode("ascii"), hashlib.sha256
+        ).digest()
+        token = encoded + "." + base64.urlsafe_b64encode(signature).rstrip(b"=").decode("ascii")
+        url = f"https://{self.config.pod_id}-8000.proxy.runpod.net/film/v1/editor/gpu-occupancy"
+        req = urllib_request.Request(url, headers={
+            "Authorization": f"Bearer {token}",
+            "User-Agent": "MusicOS-FilmAwareGpuIdleGuard/1.0",
+        })
+        try:
+            with urllib_request.urlopen(req, timeout=8) as response:
+                data = json.load(response)
+            # Only explicitly confirmed inactivity is sufficient to stop.
+            return data.get("busy") is False and data.get("activeJobs") == 0
+        except (OSError, ValueError, TypeError):
+            return False
 
     def load_jobs(self) -> list[dict[str, Any]]:
         query = urllib_parse.urlencode({
@@ -368,6 +404,11 @@ class Controller:
         idle_for = time.monotonic() - self.last_demand_monotonic
         if self.config.auto_stop and running:
             if idle_for >= self.config.idle_seconds:
+                if not self.film_worker_idle():
+                    # A film render may be running, or the film worker may be unreachable.
+                    # Safety first: never interrupt JC Film Studio on an unknown status.
+                    self.publish("cooldown", pending=0, active=0, ready=len(ready), deep=len(deep_ready), provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
+                    return
                 self.publish("stopping", pending=0, active=0, ready=len(ready), deep=len(deep_ready), action="stop", provider_status=provider_status, provider_image=provider_image, provider_ports=provider_ports, provider_env_keys=provider_env_keys)
                 self.runpod("POST", f"/pods/{self.config.pod_id}/stop")
                 return
