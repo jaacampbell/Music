@@ -323,3 +323,9 @@
 .tmTrackButtons span { color:#89938a; font-weight:750; font-size:.52rem; letter-spacing:.08em; }
 .tmStatusPanel .tmRefresh { background:#24281b; border:1px solid var(--line); color:#e6f4b5; padding:.6rem .8rem; cursor:pointer; border-radius:7px; font-size:.65rem; }
 .tmStatusPanel .tmRefresh:disabled { cursor:progress; opacity:.6; }
+
+@media(max-width: 680px) {
+  .tmTransport button:first-child,.tmTransport button:nth-child(2) { display:inline-block; }
+  .tmTransport .tmTime { display:none; }
+  .tmTransport { justify-content:center; }
+}
