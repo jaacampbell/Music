@@ -12,6 +12,7 @@ export type WorkerHealth = {
   auth?: { required: boolean };
   samAudio: { installed: boolean; model: string; cudaAvailable: boolean; hfTokenPresent: boolean };
   planner?: { openaiConfigured: boolean; model: string; enabled: boolean };
+  cleanup?: { ready: boolean; version: string; mode: string };
 };
 
 export type WorkerSelection = {

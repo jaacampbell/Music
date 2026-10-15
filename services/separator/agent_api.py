@@ -238,7 +238,7 @@ def agent_health() -> dict[str, Any]:
             "samAudio":{"installed":legacy._sam_package_available(),"model":legacy.SAM_MODEL_NAME,"cudaAvailable":legacy._cuda_available(),
                         "hfTokenPresent":bool(os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN"))},
             "planner":{"openaiConfigured":bool(os.environ.get("OPENAI_API_KEY")),"model":os.environ.get("STEM_AGENT_MODEL","gpt-5-mini"),"enabled":os.environ.get("STEM_AGENT_USE_LLM","true").lower()=="true"},
-            "vocalCorrection": correction_capabilities()}
+            "vocalCorrection": correction_capabilities(), "cleanup": {"ready": True, "version": "0.4.0", "mode": "authenticated-existing-job"}}
 
 
 @app.get("/agent/ready")

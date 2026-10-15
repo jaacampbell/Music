@@ -107,6 +107,11 @@ export default function StemAgentPage(): React.JSX.Element {
   const [report, setReport] = useState<Record<string, unknown> | null>(null);
   const [busy, setBusy] = useState(false);
   const [cloudSaved, setCloudSaved] = useState(0);
+  const [cleanupReference, setCleanupReference] = useState<File | null>(null);
+  const [cleanupMidi, setCleanupMidi] = useState<File | null>(null);
+  const [cleanupBusy, setCleanupBusy] = useState(false);
+  const [cleanupMessage, setCleanupMessage] = useState("Complete Core 6 separation before cleaning.");
+  const [cleanupResult, setCleanupResult] = useState<{ masterUrl: string; zipUrl: string; stemUrls: Record<string, string>; result: { referenceMatchApplied: boolean; midiIncluded: boolean; maxMasterSumDifference: number } } | null>(null);
   const [message, setMessage] = useState("Connect a source and give the Stem Director a production goal.");
   const [styleControl, setStyleControl] = useState<StyleControlState | null>(null);
 
@@ -428,6 +433,44 @@ export default function StemAgentPage(): React.JSX.Element {
     }
   };
 
+  const cleanAndMatch = async (): Promise<void> => {
+    if (!job || !activeSession || !manifest || cleanupBusy || health?.cleanup?.ready !== true) return;
+    setCleanupBusy(true);
+    setCleanupResult(null);
+    setCleanupMessage("Submitting restoration to the authenticated Stem Worker…");
+    try {
+      const form = new FormData();
+      if (cleanupReference) form.append("reference", cleanupReference);
+      if (cleanupMidi) form.append("midi", cleanupMidi);
+      form.append("denoise", "0.2");
+      form.append("match", cleanupReference ? "0.25" : "0");
+      const root = activeSession.worker.origin;
+      const endpoint = `${root}/agent/jobs/${job.jobId}/cleanup`;
+      const response = await fetch(endpoint, { method: "POST", headers: authHeaders(activeSession.token), body: form });
+      const accepted = await response.json().catch(() => ({})) as { detail?: string; error?: string };
+      if (!response.ok) throw new Error(accepted.detail ?? accepted.error ?? "Cleanup could not start.");
+      for (let attempt = 0; attempt < 180; attempt++) {
+        await new Promise<void>((resolve) => window.setTimeout(resolve, 3000));
+        const progress = await fetch(`${endpoint}/status`, { headers: authHeaders(activeSession.token), cache: "no-store" });
+        if (!progress.ok) throw new Error("Unable to read secure cleanup job status.");
+        const data = await progress.json() as { status: string; error?: string; masterUrl?: string; zipUrl?: string; stemUrls?: Record<string, string>; result?: { referenceMatchApplied: boolean; midiIncluded: boolean; maxMasterSumDifference: number } };
+        if (data.status === "completed" && data.masterUrl && data.zipUrl && data.result) {
+          setCleanupResult({ masterUrl: root + data.masterUrl, zipUrl: root + data.zipUrl,
+            stemUrls: Object.fromEntries(Object.entries(data.stemUrls ?? {}).map(([k, value]) => [k, root + value])), result: data.result });
+          setCleanupMessage("Complete — compare your cleaned master with the original before delivery.");
+          return;
+        }
+        if (data.status === "failed") throw new Error(data.error ?? "Cleanup failed quality checks.");
+        if (attempt % 4 === 0) setCleanupMessage(`Processing your aligned stems… ${(attempt + 1) * 3} seconds`);
+      }
+      throw new Error("Cleanup is still processing. Refresh the session or inspect worker status before retrying.");
+    } catch (error) {
+      setCleanupMessage(error instanceof Error ? error.message : "Cleanup could not finish.");
+    } finally {
+      setCleanupBusy(false);
+    }
+  };
+
   const refine = async (): Promise<void> => {
     if (!job || !activeSession) return;
     setBusy(true);
@@ -539,6 +582,25 @@ export default function StemAgentPage(): React.JSX.Element {
           <div className="channels">{player.stems.map((stem) => <div className="channel" key={stem.name}><strong>{stem.name}</strong><input type="range" min="0" max="1.25" step="0.01" value={stem.gain} onChange={(event) => player.setGain(stem.name, Number(event.target.value))}/><button className={stem.muted ? "active" : ""} onClick={() => player.setMuted(stem.name, !stem.muted)}>M</button><button className={stem.solo ? "active" : ""} onClick={() => player.setSolo(stem.name, !stem.solo)}>S</button></div>)}</div>
         </div>
         <aside className="panel scorePanel"><p className="eyebrow">Quality control</p><h2>{manifest.qualitySummary.stemCount} outputs</h2><div className="scoreGrid"><span>Excellent<strong>{manifest.qualitySummary.excellent}</strong></span><span>Good<strong>{manifest.qualitySummary.good}</strong></span><span>Review<strong>{manifest.qualitySummary.review}</strong></span><span>Cloud<strong>{cloudSaved}</strong></span></div>{resultOrigin && <a className="primary download" href={`${resultOrigin}${manifest.zipUrl}`}>Download organized pack</a>}<button className="ghost full" onClick={() => void refine()} disabled={busy || !activeSession}>Refine from same source</button></aside>
+      </section>}
+
+      {manifest && <section className="panel outputsPanel" aria-label="Instrument Cleanup">
+        <div className="panelHead"><div><p className="eyebrow">06 · Instrument Cleanup</p><h2>Clean &amp; Match Reference</h2></div><span>Core 6 · 24-bit WAV</span></div>
+        <p className="muted">Clean six synchronized stems and apply one restrained tonal reference EQ to the summed mix. Deep isolates are not summed because they may overlap. The original recording and arrangement remain unchanged.</p>
+        <div className="presetRow">
+          <label>Reference audio (optional) <input type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff" onChange={(e) => setCleanupReference(e.target.files?.[0] ?? null)} /></label>
+          <label>Existing MIDI (optional) <input type="file" accept=".mid,.midi" onChange={(e) => setCleanupMidi(e.target.files?.[0] ?? null)} /></label>
+        </div>
+        <button className="primary" onClick={() => void cleanAndMatch()} disabled={cleanupBusy || busy || !activeSession || health?.cleanup?.ready !== true}>
+          {cleanupBusy ? "Cleaning synchronized stems…" : "Clean & Match"}
+        </button>
+        {health?.cleanup?.ready !== true && <p className="muted">Cleanup needs the updated Stem Worker image. This button activates after the GPU worker reports Cleanup support.</p>}
+        <p className="statusLine" aria-live="polite">{cleanupMessage}</p>
+        {cleanupResult && <div className="outputActions">
+          <a className="primary download" href={cleanupResult.zipUrl} download>Download Ableton ZIP</a>
+          <a href={cleanupResult.masterUrl} download>24-bit Master WAV</a>
+          <p className="muted">Six aligned Core stems included. MIDI is copied only when supplied; automatic audio-to-MIDI and audio pitch correction are not included. Reference matching is approximate.</p>
+        </div>}
       </section>}
 
       {manifest && <DawHandoff manifest={manifest} resultOrigin={resultOrigin} projectId={projectId} projectTitle={project?.title ?? null} />}
