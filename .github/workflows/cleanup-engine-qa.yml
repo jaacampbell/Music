@@ -28,6 +28,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m pip install pytest numpy scipy soundfile
+      - run: python -m pip install pytest numpy scipy soundfile fastapi==0.115.6 python-multipart==0.0.20 httpx==0.28.1
       - run: python -m py_compile services/separator/agent_cleanup.py services/separator/agent_phase14.py services/separator/cleanup_engine/*.py
-      - run: cd services/separator && python -m pytest -q cleanup_engine/test_validation.py cleanup_engine/test_quality.py cleanup_engine/test_pipeline.py
+      - run: cd services/separator && python -m pytest -q cleanup_engine/test_validation.py cleanup_engine/test_quality.py cleanup_engine/test_pipeline.py test_cleanup_api.py
