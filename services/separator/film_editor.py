@@ -24,6 +24,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+from film_activity import film_gpu_occupancy
 from torchvision.models.segmentation import DeepLabV3_ResNet50_Weights, deeplabv3_resnet50
 
 WAN_ROOT = Path(os.getenv("WAN_ROOT", "/opt/Wan2.2"))
@@ -614,6 +615,14 @@ def health(_: dict = Depends(authorize_server)):
             "renderCodecs": ["h264", "h265", "prores_422_hq", "dnxhr_hq"],
         },
     }
+
+
+@app.get("/v1/editor/gpu-occupancy")
+def gpu_occupancy(auth: dict = Depends(authorize_editor)):
+    """Minimal authenticated activity check for the shared GPU idle controller."""
+    require_op(auth, "gpu-occupancy")
+    with jobs_lock:
+        return film_gpu_occupancy(jobs, editor_jobs)
 
 
 @app.post("/v1/generations", status_code=202)
