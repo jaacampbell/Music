@@ -38,7 +38,8 @@ from torchvision.models.segmentation import DeepLabV3_ResNet50_Weights, deeplabv
 deeplabv3_resnet50(weights=DeepLabV3_ResNet50_Weights.DEFAULT)
 print("Film Studio semantic roto weights cached")
 PY
-COPY app.py agent_core.py agent_api.py vocal_correction.py agent_phase5.py agent_phase6.py agent_phase7.py agent_phase11.py agent_phase12.py agent_phase14.py film_editor.py stem_catalog.json ./
+COPY app.py agent_core.py agent_api.py vocal_correction.py agent_phase5.py agent_phase6.py agent_phase7.py agent_phase11.py agent_phase12.py agent_phase14.py film_editor.py agent_cleanup.py stem_catalog.json ./
+COPY cleanup_engine ./cleanup_engine
 RUN mkdir -p /workspace/models/huggingface /workspace/models/torch /workspace/models/separator /workspace/stem-agent/jobs /workspace/film-editor/outputs /workspace/film-editor/private /workspace/film-editor/inputs
 
 EXPOSE 8000

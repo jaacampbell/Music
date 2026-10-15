@@ -18,6 +18,7 @@ import agent_phase5 as phase5
 import agent_phase11 as phase11
 import agent_phase12 as phase12
 import film_editor
+import agent_cleanup  # Register authenticated cleanup routes on the existing worker
 
 app = phase12.app
 app.mount("/film", film_editor.app)

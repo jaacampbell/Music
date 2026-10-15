@@ -8,3 +8,4 @@ librosa==0.10.2.post1
 
 httpx==0.28.1
 opencv-python-headless==4.10.0.84
+scipy>=1.11,<2
