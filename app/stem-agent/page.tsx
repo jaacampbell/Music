@@ -528,7 +528,7 @@ export default function StemAgentPage(): React.JSX.Element {
       </header>
 
       <section className="agentHero">
-        <div><p className="eyebrow">Agentic production system · Resilient Worker Mesh v3.12</p><h1>Tell it what you need.<br/><span>It survives the worker.</span></h1><p>The Stem Director stages project audio privately before compute, discovers available nodes, coordinates Core 6 + hierarchical deep isolation, and can replay the same cloud orchestration on another worker after a real lease failure.</p></div>
+        <div><p className="eyebrow">Agentic production system · Resilient Worker Mesh v3.12</p><h1>Tell it what you need.<br/><span>It survives the worker.</span></h1><p>The Stem Director stages project audio privately before compute, discovers available nodes, coordinates Core 6 + hierarchical deep isolation, and can replay the same cloud orchestration on another worker after a real lease failure.</p><p className="localBridgeNote">Local Core 6 on this computer is a separate loopback tool. Start <code>python tools/tm-stem-director/bridge_server.py</code> and open the mixer at <a href="http://127.0.0.1:8766/">127.0.0.1:8766</a>. That console runs Demucs htdemucs_6s beside Ableton. It is not the installed TM Stem Director VST3 and it is not this cloud director.</p></div>
         <div className="healthCard">
           <span className={`dot ${online || fleetReady ? "online" : ""}`} />
           <div><strong>{healthTitle}</strong><small>{healthDetail}</small></div>
@@ -547,7 +547,8 @@ export default function StemAgentPage(): React.JSX.Element {
           <div className="strategyGrid">
             {strategies.map(([id, label, detail]) => <button key={id} className={strategy === id ? "strategy active" : "strategy"} onClick={() => setStrategy(id)}><strong>{label}</strong><span>{detail}</span></button>)}
           </div>
-          <div className="modeRow"><button className={mode === "core" ? "active" : ""} onClick={() => setMode("core")}>Core 6</button><button className={mode === "deep" ? "active" : ""} onClick={() => setMode("deep")}>Agentic Deep</button></div>
+          <div className="modeRow"><button className={mode === "core" ? "active" : ""} onClick={() => setMode("core")}>Core 6</button><button className={mode === "deep" ? "active" : ""} onClick={() => setMode("deep")}>Deep 60+</button></div>
+          {mode === "deep" && <p className="statusLine">Deep 60+ isolates named parts such as lead vocal, kick, snare, and 808. Choose them below. This mode needs a CUDA SAM-Audio worker. Core 6 does not.</p>}
         </div>
 
         <aside className="panel sourcePanel">
@@ -562,7 +563,7 @@ export default function StemAgentPage(): React.JSX.Element {
       </section>
 
       <section className="panel targetsPanel">
-        <div className="panelHead"><div><p className="eyebrow">03 · Optional manual targets</p><h2>{targets.length ? `${targets.length} targets selected` : "Let the director choose"}</h2></div><button className="ghost" onClick={() => setTargets([])}>Clear manual targets</button></div>
+        <div className="panelHead"><div><p className="eyebrow">{mode === "deep" ? "03 · Deep 60+ targets" : "03 · Optional manual targets"}</p><h2>{mode === "deep" ? (targets.length ? `${targets.length} Deep 60+ targets selected` : "Choose Deep 60+ targets") : (targets.length ? `${targets.length} targets selected` : "Let the director choose")}</h2></div><button className="ghost" onClick={() => setTargets([])}>Clear manual targets</button></div>
         <div className="targetGroups">
           {groupedTargets.map(({ group, items }) => <div key={group} className="targetGroup"><h3>{group}</h3><div>{items.map((target) => <button key={target.id} className={targets.includes(target.id) ? "target active" : "target"} onClick={() => toggleTarget(target.id)}>{target.label}</button>)}</div></div>)}
         </div>

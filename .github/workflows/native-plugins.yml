@@ -44,3 +44,14 @@ jobs:
         with:
           name: TM-Vocal-${{ runner.os }}-0.1.0
           path: TM-Vocal-*.zip
+
+  stem-director-client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure loopback client
+        run: cmake -S native/tm-stem-director -B native/tm-stem-director/build -DCMAKE_BUILD_TYPE=Release
+      - name: Build loopback client
+        run: cmake --build native/tm-stem-director/build --parallel
+      - name: Test loopback client
+        run: ctest --test-dir native/tm-stem-director/build --output-on-failure
