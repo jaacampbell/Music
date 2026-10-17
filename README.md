@@ -9,7 +9,7 @@ It also includes the **JO₵YN Music Workspace** in [`apps/player`](apps/player)
 The Next.js app has one shared song/project identity across its major surfaces. The hosted Netlify app is the primary production experience; local services are optional development and diagnostic tools:
 
 - `/studio` — hosted JO₵YN Music Studio launchpad and production entry point.\n- `/` — beginner-first Guided Mode + advanced Studio Mode production command center.
-- `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.
+- `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.\n- `/artist-os` — JO₵YN Artist OS command center for campaigns, tasks, content planning, public links, and the artist-management assistant.\n- `/jocyn` — public JO₵YN link hub managed from Artist OS.
 - `/player` — JO₵YN unified listening room for secure cloud uploads, cross-device playback, and device-only audio.
 - `/stem-agent` — production Stem Director with worker-mesh routing, durable cloud staging, recovery, and permanent private outputs.\n- `/stem-studio` — direct-worker separator retained for local testing and diagnostics.
 - `/midi-shredder` — browser-based audio-to-MIDI transcription with a simple default workflow and optional Pro Edit desk. Pro Edit adds melodic or General MIDI drum detection, synchronized source comparison, estimated tempo/key/chord mapping, loop extraction, note timing/length repair, analysis-manifest export, and linked-project stem selection for named multi-track Ableton MIDI packs.

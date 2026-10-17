@@ -440,7 +440,7 @@ export default function HomePage(): React.JSX.Element {
     <main className="musicOs">
       <header className="topbar">
         <div><div className="brandRow"><span className="brandMark">M</span><strong>Music OS</strong><span className="betaPill">guided beta</span></div><p className="brandSub">Create → Produce → Analyze → Improve → Mix → Export</p></div>
-        <div className="topActions"><Link href="/studio" className="topLink">Studio Home</Link><div className="modeSwitch" aria-label="Interface mode"><button className={mode === "guided" ? "active" : ""} onClick={() => setMode("guided")}>Guided</button><button className={mode === "studio" ? "active" : ""} onClick={() => setMode("studio")}>Studio</button></div><Link href="/player" className="topLink">Player</Link><Link href="/guide" className="topLink">Guide</Link><button className="helpButton" onClick={() => setHelpOpen(true)} aria-label="Open help">?</button></div>
+        <div className="topActions"><Link href="/artist-os" className="topLink">Artist OS</Link><Link href="/studio" className="topLink">Studio Home</Link><div className="modeSwitch" aria-label="Interface mode"><button className={mode === "guided" ? "active" : ""} onClick={() => setMode("guided")}>Guided</button><button className={mode === "studio" ? "active" : ""} onClick={() => setMode("studio")}>Studio</button></div><Link href="/player" className="topLink">Player</Link><Link href="/guide" className="topLink">Guide</Link><button className="helpButton" onClick={() => setHelpOpen(true)} aria-label="Open help">?</button></div>
       </header>
 
       {mode === "guided" ? <>
