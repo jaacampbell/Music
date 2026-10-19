@@ -430,7 +430,7 @@ export default function SongDashboardPage(): React.JSX.Element {
       <header className={styles.topbar}>
         <div className={styles.brand}><span>M</span><div><strong>Music OS</strong><small>One song · one persistent project</small></div></div>
         <div className={styles.topActions}>
-          <Link href={`/${projectQuery}`}>Guided / Studio</Link>
+          <Link href="/artist-os">Artist OS</Link><Link href={`/${projectQuery}`}>Guided / Studio</Link>
           <Link href={`/stem-studio${projectQuery}`}>Stem Studio</Link>
           <span className={styles.userEmail}>{user?.email ?? "Private account"}</span><button onClick={() => void leave()}>Sign out</button>
         </div>
