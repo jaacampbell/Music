@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TM Stem Director — Local Core 6</title>
+<style>
+  :root { color-scheme: dark; --bg: #090b0c; --panel: #14181a; --line: #2a3230; --ink: #f3f7f4; --muted: #93a29a; --accent: #9cffc4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 10% 0%, rgba(156,255,196,.08), transparent 28rem), var(--bg); color: var(--ink); font: 15px/1.45 "Avenir Next", "Segoe UI", sans-serif; }
+  header, main { width: min(1180px, calc(100% - 2rem)); margin: 0 auto; }
+  header { padding: 1.6rem 0 1rem; }
+  .mark { margin: 0; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-size: .72rem; font-weight: 700; }
+  h1 { margin: .25rem 0 .6rem; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -.04em; }
+  .honest, footer p { color: var(--muted); max-width: 70rem; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 1rem; margin: .8rem 0; }
+  .controls, .transport, .mode-row, .chips { display: flex; flex-wrap: wrap; gap: .7rem; align-items: end; }
+  .chips { align-items: stretch; margin-top: .6rem; }
+  .chips button.on { background: var(--accent); color: #082013; }
+  #deep-picker { width: 100%; }
+  .deep-group { margin: .8rem 0; }
+  .deep-group h2 { margin: 0 0 .4rem; font-size: .85rem; color: var(--muted); }
+  #deep-list { display: grid; gap: .6rem; }
+  .deep-row { display: grid; grid-template-columns: 10rem 1fr; gap: .6rem; align-items: center; }
+  .deep-row canvas { height: 48px; }
+  label { display: grid; gap: .3rem; color: var(--muted); font-size: .78rem; }
+  input[type="text"], input[type="password"] { min-width: 16rem; background: #0b0e0f; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .8rem; font: inherit; }
+  #source { min-width: min(36rem, 100%); }
+  button { border: 0; border-radius: 10px; padding: .7rem .9rem; font: inherit; font-weight: 700; cursor: pointer; background: #22292a; color: var(--ink); }
+  button.primary { background: var(--accent); color: #082013; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .status-row { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+  #stage { font-weight: 700; }
+  .meter { height: 10px; background: #070909; border-radius: 999px; overflow: hidden; border: 1px solid #1d2422; }
+  #bar { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #67d99a, var(--accent)); }
+  #detail { min-height: 1.4em; color: var(--muted); overflow-wrap: anywhere; }
+  #mixer { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .7rem; }
+  .channel { background: #101416; border: 1px solid var(--line); border-radius: 16px; padding: .8rem .6rem 1rem; display: flex; flex-direction: column; align-items: center; gap: .55rem; min-height: 26rem; }
+  .channel h2 { margin: 0; font-size: .95rem; letter-spacing: .04em; text-transform: uppercase; color: var(--stem); }
+  canvas { width: 100%; height: 72px; background: #070909; border-radius: 8px; }
+  .note { min-height: 3.2em; margin: 0; text-align: center; color: var(--muted); font-size: .75rem; }
+  .fader { writing-mode: vertical-lr; direction: rtl; width: 28px; height: 160px; accent-color: var(--stem); }
+  .switches { display: flex; gap: .35rem; }
+  .switches button { width: 2.4rem; height: 2.4rem; padding: 0; }
+  .switches button.on { background: var(--stem); color: #08110c; }
+  .channel[data-stem="vocals"] { --stem: #e7c27a; }
+  .channel[data-stem="drums"] { --stem: #ef7d57; }
+  .channel[data-stem="bass"] { --stem: #6ea8fe; }
+  .channel[data-stem="guitar"] { --stem: #d98bff; }
+  .channel[data-stem="piano"] { --stem: #7dffb8; }
+  .channel[data-stem="other"] { --stem: #d5ddd8; }
+  footer { padding: 0 0 2rem; }
+  @media (max-width: 980px) { #mixer { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { #mixer { grid-template-columns: repeat(2, minmax(0, 1fr)); } header, main { width: min(1180px, calc(100% - 1rem)); } }
+</style>
+</head>
+<body>
+<header>
+  <p class="mark">TM Music Studio</p>
+  <h1>Stem Director</h1>
+  <p class="honest">Local Demucs htdemucs_6s on this computer. This page is the loopback mixer for the stem bridge. It is not the Ableton Live VST3, and it does not rebuild, sign, or replace that plugin.</p>
+</header>
+<main>
+  <section class="panel controls">
+    <label>Bridge token
+      <input id="token" type="password" autocomplete="off" spellcheck="false">
+    </label>
+    <button id="save-token" type="button">Use token</button>
+    <label>Source path on this computer
+      <input id="source" type="text" spellcheck="false" placeholder="/absolute/path/to/song.wav">
+    </label>
+    <button id="separate" class="primary" type="button">Separate</button>
+    <button id="cancel" type="button">Cancel</button>
+    <button id="reveal" type="button">Reveal stems</button>
+    <div class="mode-row">
+      <button id="mode-core" class="primary" type="button">Core 6</button>
+      <button id="mode-deep" type="button">Deep 60+</button>
+    </div>
+    <p id="deep-note" class="honest">Deep 60+ isolates named parts such as lead vocal, kick, and 808. Those files can overlap, so they stay out of the Core 6 mixer. This machine must have SAM-Audio or the job is refused.</p>
+    <div id="deep-picker" hidden></div>
+  </section>
+  <section class="panel">
+    <div class="status-row"><strong id="stage">Idle</strong><span id="progress-label">0%</span></div>
+    <div class="meter" aria-hidden="true"><span id="bar"></span></div>
+    <p id="detail">Enter a local source path. The bridge reads that file on this machine. The browser does not upload it.</p>
+  </section>
+  <section class="panel transport">
+    <button id="play" class="primary" type="button">Play</button>
+    <button id="stop" type="button">Stop</button>
+    <p class="honest">Play starts every decoded stem at the same moment on one audio context. Mute, solo, and faders apply together.</p>
+  </section>
+  <section id="deep-results" class="panel" hidden>
+    <h2>Deep 60+ isolates</h2>
+    <p class="honest">Each preview is decoded on its own. A failed decode stays blank. Do not sum these with the Core 6 mixer.</p>
+    <div id="deep-list"></div>
+  </section>
+  <section id="mixer" aria-label="Core 6 mixer">
+    <article class="channel" data-stem="vocals"><h2>Vocals</h2><canvas data-wave="vocals" width="160" height="72" aria-label="Vocals waveform"></canvas><p class="note" data-note="vocals">Waveform appears after a successful decode.</p><label>Level <input class="fader" data-fader="vocals" type="range" min="0" max="100" value="80" aria-label="Vocals level"></label><div class="switches"><button type="button" data-mute="vocals" aria-pressed="false">M</button><button type="button" data-solo="vocals" aria-pressed="false">S</button></div></article>
+    <article class="channel" data-stem="drums"><h2>Drums</h2><canvas data-wave="drums" width="160" height="72" aria-label="Drums waveform"></canvas><p class="note" data-note="drums">Waveform appears after a successful decode.</p><label>Level <input class="fader" data-fader="drums" type="range" min="0" max="100" value="80" aria-label="Drums level"></label><div class="switches"><button type="button" data-mute="drums" aria-pressed="false">M</button><button type="button" data-solo="drums" aria-pressed="false">S</button></div></article>
+    <article class="channel" data-stem="bass"><h2>Bass</h2><canvas data-wave="bass" width="160" height="72" aria-label="Bass waveform"></canvas><p class="note" data-note="bass">Waveform appears after a successful decode.</p><label>Level <input class="fader" data-fader="bass" type="range" min="0" max="100" value="80" aria-label="Bass level"></label><div class="switches"><button type="button" data-mute="bass" aria-pressed="false">M</button><button type="button" data-solo="bass" aria-pressed="false">S</button></div></article>
+    <article class="channel" data-stem="guitar"><h2>Guitar</h2><canvas data-wave="guitar" width="160" height="72" aria-label="Guitar waveform"></canvas><p class="note" data-note="guitar">Waveform appears after a successful decode.</p><label>Level <input class="fader" data-fader="guitar" type="range" min="0" max="100" value="80" aria-label="Guitar level"></label><div class="switches"><button type="button" data-mute="guitar" aria-pressed="false">M</button><button type="button" data-solo="guitar" aria-pressed="false">S</button></div></article>
+    <article class="channel" data-stem="piano"><h2>Piano</h2><canvas data-wave="piano" width="160" height="72" aria-label="Piano waveform"></canvas><p class="note" data-note="piano">Waveform appears after a successful decode.</p><label>Level <input class="fader" data-fader="piano" type="range" min="0" max="100" value="80" aria-label="Piano level"></label><div class="switches"><button type="button" data-mute="piano" aria-pressed="false">M</button><button type="button" data-solo="piano" aria-pressed="false">S</button></div></article>
+    <article class="channel" data-stem="other"><h2>Other</h2><canvas data-wave="other" width="160" height="72" aria-label="Other waveform"></canvas><p class="note" data-note="other">Waveform appears after a successful decode.</p><label>Level <input class="fader" data-fader="other" type="range" min="0" max="100" value="80" aria-label="Other level"></label><div class="switches"><button type="button" data-mute="other" aria-pressed="false">M</button><button type="button" data-solo="other" aria-pressed="false">S</button></div></article>
+  </section>
+</main>
+<footer>
+  <p>Waveforms are computed only from AudioBuffer channel data after decodeAudioData. If a stem cannot be decoded, that display stays empty.</p>
+  <p>This bridge binds to 127.0.0.1 only. It is a local companion for one computer, not a multi-user security boundary. No BAGGAGE CLAIM result is claimed from this page.</p>
+</footer>
+<script>
+const STEMS = ["vocals", "drums", "bass", "guitar", "piano", "other"];
+const TOKEN_KEY = "tm_stem_token";
+const buffers = Object.create(null);
+const faders = Object.create(null);
+const muted = Object.create(null);
+const solo = Object.create(null);
+const sources = Object.create(null);
+const gains = Object.create(null);
+let audioContext = null;
+let activeId = "";
+let pollTimer = 0;
+
+function setDetail(text) {
+  document.querySelector("#detail").textContent = text;
+}
+
+function setStemNote(name, text) {
+  const note = document.querySelector(`[data-note="${name}"]`);
+  if (note) note.textContent = text;
+}
+
+function tokenValue() {
+  return sessionStorage.getItem(TOKEN_KEY) || "";
+}
+
+function loadTokenFromLocation() {
+  const params = new URLSearchParams(window.location.search);
+  const fromQuery = params.get("access_token");
+  if (fromQuery) {
+    sessionStorage.setItem(TOKEN_KEY, fromQuery);
+    params.delete("access_token");
+    const query = params.toString();
+    window.history.replaceState({}, "", window.location.pathname + (query ? `?${query}` : "") + window.location.hash);
+  }
+  document.querySelector("#token").value = tokenValue();
+}
+
+function context() {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  if (!audioContext) audioContext = new Ctx();
+  return audioContext;
+}
+
+function clearWaveform(canvas) {
+  if (!canvas) return;
+  const g = canvas.getContext("2d");
+  if (!g) return;
+  g.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawWaveform(canvas, buffer) {
+  const dpr = window.devicePixelRatio || 1;
+  const cssWidth = Math.max(1, Math.floor(canvas.clientWidth || canvas.width));
+  const cssHeight = Math.max(1, Math.floor(canvas.clientHeight || canvas.height));
+  const width = Math.max(1, Math.floor(cssWidth * dpr));
+  const height = Math.max(1, Math.floor(cssHeight * dpr));
+  canvas.width = width;
+  canvas.height = height;
+  const g = canvas.getContext("2d");
+  if (!g) return;
+  g.clearRect(0, 0, width, height);
+  const columns = cssWidth;
+  const length = buffer.length;
+  const channels = buffer.numberOfChannels;
+  const block = Math.max(1, Math.floor(length / columns));
+  const step = Math.max(1, Math.floor(block / 48));
+  const color = getComputedStyle(canvas).getPropertyValue("--stem").trim() || "#9cffc4";
+  g.strokeStyle = color;
+  g.lineWidth = Math.max(1, dpr);
+  g.beginPath();
+  for (let x = 0; x < columns; x += 1) {
+    let min = 1;
+    let max = -1;
+    const start = x * block;
+    const end = Math.min(length, start + block);
+    for (let channel = 0; channel < channels; channel += 1) {
+      const data = buffer.getChannelData(channel);
+      for (let i = start; i < end; i += step) {
+        const sample = data[i];
+        if (sample < min) min = sample;
+        if (sample > max) max = sample;
+      }
+    }
+    const y1 = (1 - max) * 0.5 * height;
+    const y2 = (1 - min) * 0.5 * height;
+    const px = Math.floor((x + 0.5) * (width / columns));
+    g.moveTo(px, y1);
+    g.lineTo(px, y2);
+  }
+  g.stroke();
+}
+
+function audible(name) {
+  const soloed = STEMS.some((item) => solo[item]);
+  if (muted[name]) return false;
+  if (soloed && !solo[name]) return false;
+  return true;
+}
+
+function applyMix() {
+  if (!audioContext) return;
+  const now = audioContext.currentTime;
+  for (const name of STEMS) {
+    const node = gains[name];
+    if (!node) continue;
+    node.gain.setValueAtTime(audible(name) ? faders[name] : 0, now);
+  }
+}
+
+function stopPlayback() {
+  for (const name of STEMS) {
+    const node = sources[name];
+    sources[name] = null;
+    gains[name] = null;
+    if (!node) continue;
+    try { node.stop(); } catch { /* already stopped */ }
+  }
+}
+
+async function play() {
+  const ready = STEMS.filter((name) => buffers[name]);
+  if (!ready.length) {
+    setDetail("Nothing to play yet. A stem has to decode before playback.");
+    return;
+  }
+  const ctx = context();
+  if (!ctx) {
+    setDetail("This browser has no Web Audio API. No waveform was invented in its place.");
+    return;
+  }
+  if (ctx.state === "suspended") await ctx.resume();
+  stopPlayback();
+  const when = ctx.currentTime + 0.05;
+  for (const name of ready) {
+    const source = ctx.createBufferSource();
+    source.buffer = buffers[name];
+    const gain = ctx.createGain();
+    source.connect(gain).connect(ctx.destination);
+    gains[name] = gain;
+    sources[name] = source;
+    source.start(when);
+  }
+  applyMix();
+  setDetail("Playback started. Decoded stems share one start time.");
+}
+
+async function api(path, options) {
+  const headers = Object.assign({}, options && options.headers);
+  const token = tokenValue();
+  if (token) headers.Authorization = "Bearer " + token;
+  if (options && options.body) headers["Content-Type"] = "application/json";
+  const response = await fetch(path, Object.assign({}, options, { headers }));
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || ("Request failed (" + response.status + ")."));
+  return data;
+}
+
+function renderJob(job) {
+  const progress = Number(job.progress);
+  const shown = Number.isFinite(progress) ? progress : 0;
+  document.querySelector("#bar").style.width = Math.max(0, Math.min(100, shown)) + "%";
+  document.querySelector("#progress-label").textContent = shown + "%";
+  document.querySelector("#stage").textContent = job.status + (job.stage ? " · " + job.stage : "");
+  const bits = [];
+  if (job.sample_rate) bits.push(job.sample_rate + " Hz");
+  if (typeof job.duration_seconds === "number") bits.push(job.duration_seconds.toFixed(2) + " s");
+  if (job.aligned === true) bits.push("alignment checked");
+  if (job.output && job.status === "completed") bits.push(job.output);
+  if (job.error) bits.push(job.error);
+  if (bits.length) setDetail(bits.join(" · "));
+}
+
+async function loadStem(id, name) {
+  const canvas = document.querySelector(`canvas[data-wave="${name}"]`);
+  buffers[name] = null;
+  try {
+    const response = await fetch("/jobs/" + encodeURIComponent(id) + "/stems/" + name, {
+      headers: tokenValue() ? { Authorization: "Bearer " + tokenValue() } : {}
+    });
+    if (!response.ok) throw new Error("Stem request failed (" + response.status + ").");
+    const bytes = await response.arrayBuffer();
+    const ctx = context();
+    if (!ctx) throw new Error("Web Audio is unavailable.");
+    const audio = await ctx.decodeAudioData(bytes.slice(0));
+    if (!audio || audio.length <= 0 || audio.numberOfChannels <= 0) throw new Error("Decoded audio was empty.");
+    buffers[name] = audio;
+    drawWaveform(canvas, audio);
+    setStemNote(name, "Decoded " + audio.duration.toFixed(2) + " s");
+  } catch {
+    buffers[name] = null;
+    /* decode-failure-start */
+    clearWaveform(canvas);
+    setStemNote(name, "Could not decode this stem. No waveform is shown.");
+    /* decode-failure-end */
+  }
+}
+
+async function loadStems(id) {
+  await Promise.all(STEMS.map((name) => loadStem(id, name)));
+  const decoded = STEMS.filter((name) => buffers[name]).length;
+  if (!decoded) setDetail("The job completed, but none of the six stems decoded. Empty displays are intentional.");
+}
+
+async function loadDeepStem(id, stem) {
+  const row = document.createElement("article");
+  row.className = "deep-row";
+  const title = document.createElement("strong");
+  title.textContent = stem.label || stem.id;
+  const canvas = document.createElement("canvas");
+  canvas.width = 320;
+  canvas.height = 48;
+  canvas.setAttribute("aria-label", (stem.label || stem.id) + " waveform");
+  row.append(title, canvas);
+  document.querySelector("#deep-list").append(row);
+  try {
+    const response = await fetch("/jobs/" + encodeURIComponent(id) + "/deep/" + encodeURIComponent(stem.id), {
+      headers: tokenValue() ? { Authorization: "Bearer " + tokenValue() } : {}
+    });
+    if (!response.ok) throw new Error("Deep stem request failed.");
+    const bytes = await response.arrayBuffer();
+    const ctx = context();
+    if (!ctx) throw new Error("Web Audio is unavailable.");
+    const audio = await ctx.decodeAudioData(bytes.slice(0));
+    if (!audio || audio.length <= 0) throw new Error("Decoded audio was empty.");
+    drawWaveform(canvas, audio);
+  } catch {
+    clearWaveform(canvas);
+    title.textContent = (stem.label || stem.id) + " — could not decode. No waveform is shown.";
+  }
+}
+
+async function loadDeepStems(id, stems) {
+  const section = document.querySelector("#deep-results");
+  const list = document.querySelector("#deep-list");
+  list.replaceChildren();
+  if (!stems || !stems.length) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+  await Promise.all(stems.map((stem) => loadDeepStem(id, stem)));
+}
+
+async function refresh(id) {
+  window.clearTimeout(pollTimer);
+  const job = await api("/jobs/" + encodeURIComponent(id));
+  activeId = job.id || id;
+  renderJob(job);
+  if (job.status === "completed") {
+    await loadStems(activeId);
+    await loadDeepStems(activeId, job.deep_stems || []);
+    return;
+  }
+  if (job.status === "queued" || job.status === "processing") {
+    pollTimer = window.setTimeout(() => { refresh(activeId).catch((error) => setDetail(error.message)); }, 400);
+  }
+}
+
+document.querySelector("#save-token").addEventListener("click", () => {
+  sessionStorage.setItem(TOKEN_KEY, document.querySelector("#token").value.trim());
+  setDetail(tokenValue() ? "Token stored in this tab session." : "Token cleared.");
+});
+
+document.querySelector("#separate").addEventListener("click", () => {
+  const audio = document.querySelector("#source").value.trim();
+  if (!audio) {
+    setDetail("Enter the source file path on this computer. The bridge reads that path; the browser does not upload the song.");
+    return;
+  }
+  const payload = { audio };
+  if (separationMode === "deep") {
+    payload.mode = "deep";
+    payload.targets = Array.from(selectedTargets);
+    if (!payload.targets.length) {
+      setDetail("Choose at least one Deep 60+ target, or switch back to Core 6.");
+      return;
+    }
+  }
+  api("/jobs", { method: "POST", body: JSON.stringify(payload) })
+    .then((job) => refresh(job.id))
+    .catch((error) => setDetail(error.message));
+});
+
+document.querySelector("#cancel").addEventListener("click", () => {
+  if (!activeId) return;
+  api("/jobs/" + encodeURIComponent(activeId) + "/cancel", { method: "POST" })
+    .then(() => refresh(activeId))
+    .catch((error) => setDetail(error.message));
+});
+
+document.querySelector("#reveal").addEventListener("click", () => {
+  if (!activeId) return;
+  api("/jobs/" + encodeURIComponent(activeId) + "/reveal", { method: "POST" })
+    .then((result) => setDetail(result.opened
+      ? "Asked the operating system to show " + result.output + "."
+      : "Stems are in " + result.output + ". The folder was not opened from here."))
+    .catch((error) => setDetail(error.message));
+});
+
+document.querySelector("#play").addEventListener("click", () => { play().catch((error) => setDetail(error.message)); });
+document.querySelector("#stop").addEventListener("click", () => { stopPlayback(); setDetail("Playback stopped."); });
+
+for (const name of STEMS) {
+  faders[name] = 0.8;
+  muted[name] = false;
+  solo[name] = false;
+  buffers[name] = null;
+  document.querySelector(`[data-fader="${name}"]`).addEventListener("input", (event) => {
+    faders[name] = Number(event.target.value) / 100;
+    applyMix();
+  });
+  document.querySelector(`[data-mute="${name}"]`).addEventListener("click", (event) => {
+    muted[name] = !muted[name];
+    event.currentTarget.classList.toggle("on", muted[name]);
+    event.currentTarget.setAttribute("aria-pressed", muted[name] ? "true" : "false");
+    applyMix();
+  });
+  document.querySelector(`[data-solo="${name}"]`).addEventListener("click", (event) => {
+    solo[name] = !solo[name];
+    event.currentTarget.classList.toggle("on", solo[name]);
+    event.currentTarget.setAttribute("aria-pressed", solo[name] ? "true" : "false");
+    applyMix();
+  });
+}
+
+let separationMode = "core";
+let selectedTargets = new Set();
+
+function setMode(mode) {
+  separationMode = mode;
+  document.querySelector("#mode-core").classList.toggle("primary", mode === "core");
+  document.querySelector("#mode-deep").classList.toggle("primary", mode === "deep");
+  document.querySelector("#deep-picker").hidden = mode !== "deep";
+}
+
+document.querySelector("#mode-core").addEventListener("click", () => setMode("core"));
+document.querySelector("#mode-deep").addEventListener("click", () => setMode("deep"));
+
+async function loadCatalog() {
+  const response = await fetch("/catalog");
+  if (!response.ok) return;
+  const catalog = await response.json();
+  const picker = document.querySelector("#deep-picker");
+  const note = document.querySelector("#deep-note");
+  note.textContent = "Deep 60+ has " + catalog.count + " named isolates. They can overlap and stay out of the Core 6 mixer. " + (catalog.samAudioInstalled
+    ? "SAM-Audio is installed on this computer."
+    : "SAM-Audio is not installed here, so a Deep 60+ job is refused. Core 6 still runs. The app's Stem Studio and Stem Director can send Deep 60+ to a CUDA worker.");
+  const presets = document.createElement("div");
+  presets.className = "chips";
+  Object.keys(catalog.presets || {}).forEach((name) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = name;
+    button.addEventListener("click", () => {
+      selectedTargets = new Set(catalog.presets[name]);
+      picker.querySelectorAll("[data-target]").forEach((item) => item.classList.toggle("on", selectedTargets.has(item.getAttribute("data-target"))));
+      setMode("deep");
+    });
+    presets.append(button);
+  });
+  picker.append(presets);
+  const byGroup = new Map();
+  (catalog.targets || []).forEach((target) => {
+    if (!byGroup.has(target.group)) byGroup.set(target.group, []);
+    byGroup.get(target.group).push(target);
+  });
+  byGroup.forEach((targets, group) => {
+    const block = document.createElement("div");
+    block.className = "deep-group";
+    const heading = document.createElement("h2");
+    heading.textContent = group;
+    const chips = document.createElement("div");
+    chips.className = "chips";
+    targets.forEach((target) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = target.label;
+      button.setAttribute("data-target", target.id);
+      button.addEventListener("click", () => {
+        if (selectedTargets.has(target.id)) selectedTargets.delete(target.id);
+        else selectedTargets.add(target.id);
+        button.classList.toggle("on", selectedTargets.has(target.id));
+      });
+      chips.append(button);
+    });
+    block.append(heading, chips);
+    picker.append(block);
+  });
+}
+
+loadTokenFromLocation();
+loadCatalog().catch(() => {});
+</script>
+</body>
+</html>
