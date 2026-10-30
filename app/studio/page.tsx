@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { loadActiveProjectId } from "@/lib/browser-project-storage";
 import { StyleControl } from "./StyleControl";
+import { RecentProjects } from "./RecentProjects";
 import { StudioAssistant } from "./StudioAssistant";
 import "./musicStudio.css";
 
@@ -236,6 +237,7 @@ export default function MusicStudioHome(): React.JSX.Element {
 
             {panel === "library" && (
               <div className="tmToolLibrary">
+                <RecentProjects />
                 <div className="tmToolSearch"><span>⌕</span><input placeholder="Search tools" /></div>
                 <p className="tmToolSectionLabel">STUDIO TOOLS</p>
                 <div className="tmToolCards">
