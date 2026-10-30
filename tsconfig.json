@@ -39,6 +39,7 @@
   "exclude": [
     "node_modules",
     "apps/player/**",
-    "supabase/functions/**"
+    "supabase/functions/**",
+    "native"
   ]
 }

@@ -1,0 +1,22 @@
+name: Controller state regression
+on:
+  pull_request:
+    paths:
+      - 'services/stem-controller/controller.py'
+      - 'services/stem-controller/test_controller_upgrade.py'
+      - '.github/workflows/controller-state-regression.yml'
+  push:
+    branches:
+      - fix/controller-upgrade-state-check-20261014
+permissions:
+  contents: read
+jobs:
+  controller:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m py_compile services/stem-controller/controller.py
+      - run: python -m unittest discover -s services/stem-controller -p test_controller_upgrade.py -v

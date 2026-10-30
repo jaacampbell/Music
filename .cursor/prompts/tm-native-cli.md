@@ -1,0 +1,9 @@
+Finish TM Vocal's native CLI workflow on this machine. Read AGENTS.md, docs/cursor-native-workflow.md, native/tm-vocal/README.md and tools/native/tm_native.py first.
+
+Execute the workflow, fix concrete failures and continue to completion. Use `python3 tools/native/tm_native.py doctor`, then `python3 tools/native/tm_native.py all --install --validate` on Mac. On Linux use `all --install`; on Windows build/package in a Visual Studio x64 Native Tools terminal and report the system VST3 installation step. Use Python's available executable if its name differs. Install missing prerequisites through the machine's normal package manager when authorized; otherwise report the exact missing prerequisite. Keep existing user edits and audio projects.
+
+Use the current TM Vocal source; do not rebuild the browser app as the native plugin or present a plan as a functioning processor. Fix build/runtime/preset bugs, preserve parameter IDs, then rerun relevant checks. If pluginval is available, pass its absolute path using --pluginval. On Mac validate Intel and Apple Silicon slices and run auval. Package the verified outputs with checksums.
+
+After CLI validation, provide the installed bundle paths, package paths, test results, wrapper-validation results, and exact Ableton rescan/listening steps. Mark anything requiring the user's Ableton session as pending rather than inventing success. Signing/notarization requires the user's configured Apple identity and credentials; keep the alpha status when those are unavailable. Never print credentials or add secrets to repository files.
+
+TM Vocal is the current deliverable. Native TM Tune, MIDI Shredder, Stem Director and assistant/DNA synchronization are separate future development tasks. Do not label them complete because this build succeeded. Return a concise completion report backed by native/build-cli/workflow-result.json.

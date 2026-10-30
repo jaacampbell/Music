@@ -9,9 +9,11 @@ It also includes the **JO₵YN Music Workspace** in [`apps/player`](apps/player)
 The Next.js app has one shared song/project identity across its major surfaces. The hosted Netlify app is the primary production experience; local services are optional development and diagnostic tools:
 
 - `/studio` — hosted JO₵YN Music Studio launchpad and production entry point.\n- `/` — beginner-first Guided Mode + advanced Studio Mode production command center.
-- `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.
+- `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.\n- `/artist-os` — JO₵YN Artist OS command center for campaigns, tasks, content planning, public links, and the artist-management assistant.\n- `/jocyn` — public JO₵YN link hub managed from Artist OS.
 - `/player` — JO₵YN unified listening room for secure cloud uploads, cross-device playback, and device-only audio.
 - `/stem-agent` — production Stem Director with worker-mesh routing, durable cloud staging, recovery, and permanent private outputs.\n- `/stem-studio` — direct-worker separator retained for local testing and diagnostics.
+- `/midi-shredder` — browser-based audio-to-MIDI transcription with a simple default workflow and optional Pro Edit desk. Pro Edit adds melodic or General MIDI drum detection, synchronized source comparison, estimated tempo/key/chord mapping, loop extraction, note timing/length repair, analysis-manifest export, and linked-project stem selection for named multi-track Ableton MIDI packs.
+- `/stem-studio` — direct-worker separator retained for local testing and diagnostics.
 - `/stem-lab` — deterministic stem workflow/contract MVP.
 - `/login` — Supabase-backed account creation/sign-in.
 - `/guide` — plain-language walkthrough and glossary.
@@ -49,6 +51,14 @@ See [`docs/phase3-unified-music-os.md`](docs/phase3-unified-music-os.md).
 - project-aware Ask Music conversation history.
 
 ## Ask Music
+
+TM Studio Brain is now available at `/studio-brain`, linked from `/studio`.
+It adds editable personal Producer DNA, private project DNA snapshots,
+course excerpts, curated industry references, and ten guided tool
+specifications. See [the implementation notes](docs/tm-studio-brain.md).
+The assistant requires a verified bearer session and retrieves song context
+through owner-scoped server reads, rather than trusting a cookie hint or
+client-supplied ownership.
 
 `/api/music-assistant` is a server-side project-aware assistant route. It verifies a Music OS session and project ownership before using a configured OpenAI model. The server-only configuration is:
 
@@ -142,3 +152,11 @@ npm run dev
 Open `http://localhost:5173`. From the repository root, the same player commands are available as `npm run dev:player`, `npm run build:player`, and `npm run lint:player` after installing the player dependencies.
 
 The GPU worker needs Python 3.11+, FFmpeg, CUDA for practical deep inference, and the appropriate gated-model credentials when SAM-Audio is enabled.
+
+## Native TM Vocal
+
+The first native TM Music Studio plugin lives in [`native/tm-vocal`](native/tm-vocal). It implements a real C++ vocal chain, DAW automation and preset recall, with VST3/standalone targets and AU on macOS. The native workflow builds and packages bundles for Mac, Windows and Linux. This is an alpha; platform DAW acceptance testing and signing remain pending. No pricing or customer tiers are enabled.
+
+## Cursor native CLI workflow
+
+Run `agent "Read .cursor/prompts/tm-native-cli.md and execute the native TM Vocal workflow on this machine."` from the repository, or run `python3 tools/native/tm_native.py all --install --validate` directly on Mac. See [`docs/cursor-native-workflow.md`](docs/cursor-native-workflow.md) for prerequisites, Windows/Linux commands, installation backups, validators and Ableton acceptance.

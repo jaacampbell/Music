@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      SITE: https://musicdevnc.netlify.app
+      SITE: https://tm-music-studio.netlify.app
 
     steps:
       - name: Check operations page

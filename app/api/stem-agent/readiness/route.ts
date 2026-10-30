@@ -42,6 +42,11 @@ export async function GET(): Promise<NextResponse> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") ?? "";
   const separatorUrl = process.env.NEXT_PUBLIC_SEPARATOR_URL?.replace(/\/$/, "") ?? "";
   const gatewayConfigured = Boolean(process.env.SEPARATOR_GATEWAY_SECRET?.trim());
+  const controllerUrl = process.env.STEM_CONTROLLER_URL?.replace(/\/$/, "") ?? "";
+
+  const computeController = controllerUrl
+    ? await probeJson(`${controllerUrl}/health`)
+    : { ok: false, error: "Stem compute controller URL is not configured." } satisfies Probe;
 
   const edgeMirror = supabaseUrl
     ? await probeJson(`${supabaseUrl}/functions/v1/stem-worker-mirror`)
@@ -63,6 +68,9 @@ export async function GET(): Promise<NextResponse> {
     ? await probeJson(`${separatorUrl}/agent/mirror/edge`)
     : { ok: false, error: separatorUrl ? "Static worker health probe failed." : "Static worker fallback is not configured." } satisfies Probe;
 
+  const controllerData = computeController.data ?? {};
+  const controllerOnline = Boolean(computeController.ok);
+  const controllerBootstrap = controllerData.bootstrapOnly === true || controllerData.status === "bootstrap";
   const healthData = workerHealth.data ?? {};
   const samAudio = (healthData.samAudio ?? {}) as Record<string, unknown>;
   const systemData = workerSystem.data ?? {};
@@ -75,6 +83,7 @@ export async function GET(): Promise<NextResponse> {
   const fleetRecovery = numberField(fleetData, "recoveryNodes");
   const fleetMirror = numberField(fleetData, "cloudMirrorNodes");
   const fleetSam = numberField(fleetData, "samReadyNodes");
+  const fleetVocalCorrection = numberField(fleetData, "vocalCorrectionNodes");
 
   const staticComputeReady = Boolean(separatorUrl && workerHealth.ok);
   const fleetComputeReady = Boolean(workerFleet.ok && fleetReadyNodes > 0);
@@ -89,6 +98,8 @@ export async function GET(): Promise<NextResponse> {
   const computeReady = staticComputeReady || fleetComputeReady;
   const deepReady = Boolean(fleetDeepNodes > 0 || (staticComputeReady && samAudio.installed === true && samAudio.cudaAvailable === true));
   const cloudRecovery = Boolean(artifactBroker.ok && edgeMirror.ok && workerFleet.ok);
+  const staticVocalCorrection = Boolean((healthData.vocalCorrection as Record<string, unknown> | undefined)?.ready === true);
+  const vocalCorrection = Boolean(fleetVocalCorrection > 0 || staticVocalCorrection);
 
   const nextAction = !supabaseUrl
     ? "Configure Supabase for Music OS."
@@ -102,11 +113,17 @@ export async function GET(): Promise<NextResponse> {
             ? "Repair the stem artifact broker."
             : !permanentOutputs
               ? "Deploy the Phase 14 artifact broker with resumable permanent-output persistence."
-              : !computeReady
-                ? "Compute is safely in standby. Start or wake an approved Phase 14 worker when a stem job needs GPU capacity."
+              : !controllerOnline
+                ? "Bring the always-on Stem Compute Controller online."
+                : controllerBootstrap
+                  ? "Controller host is online in safe bootstrap mode. Add its trusted Supabase + approved RunPod credentials to activate wake-on-demand compute."
+                  : !computeReady
+                    ? "Controller is online and compute is safely in standby. Wake the approved GPU worker when a stem job needs capacity."
                 : !deepReady
                   ? "Core workers are available. Add a CUDA + SAM-Audio node to unlock Agentic Deep mode."
-                  : "Stem Director, wake-on-demand compute, cross-node recovery, and permanent private outputs are ready.";
+                  : !vocalCorrection
+                    ? "Deep compute is online, but the worker image must be updated before TM Vocal pitch/timing correction is available."
+                    : "Stem Director, TM Vocal correction, wake-on-demand compute, cross-node recovery, and permanent private outputs are ready.";
 
   return NextResponse.json({
     status: controlPlaneReady && computeReady ? "ready" : controlPlaneReady ? "control-plane-ready" : "degraded",
@@ -116,9 +133,11 @@ export async function GET(): Promise<NextResponse> {
       supabase: Boolean(supabaseUrl),
       gatewaySecret: gatewayConfigured,
       separatorUrl: Boolean(separatorUrl),
-      workerMesh: Boolean(supabaseUrl)
+      workerMesh: Boolean(supabaseUrl),
+      controllerUrl: Boolean(controllerUrl)
     },
     services: {
+      computeController,
       edgeMirror,
       workerFleet,
       artifactBroker,
@@ -128,10 +147,13 @@ export async function GET(): Promise<NextResponse> {
     },
     capabilities: {
       controlPlaneReady,
+      controllerOnline,
+      controllerBootstrap,
       computeReady,
       deepReady,
       cuda: fleetDeepNodes > 0 || samAudio.cudaAvailable === true,
       samAudio: fleetSam > 0 || samAudio.installed === true,
+      vocalCorrection,
       hierarchicalRouting: fleetHierarchical > 0 || systemData.hierarchicalRouting === true,
       restartRecovery: fleetRecovery > 0 || recovery.enabled === true,
       cloudMirror: fleetMirror > 0 || workerMirror.ok,

@@ -1,0 +1,11 @@
+---
+description: Native TM Music Studio plugins and CLI build/installation workflow
+globs: native/**,tools/native/**,docs/cursor-native-workflow.md
+alwaysApply: false
+---
+
+Read AGENTS.md and docs/cursor-native-workflow.md. Use tools/native/tm_native.py as the build entrypoint. Preserve the web studio and existing native processor.
+
+Keep processing local to the audio thread, with no allocation, locks, network or secrets in playback. Preserve stable parameter IDs and preset/session compatibility. Retain mono/stereo behavior and the approved baritone-forward direction. Do not invent listening, tuning, analysis, signing or DAW acceptance results. Keep the project user-supported; no pricing, customer tiers or licensing gates.
+
+Use the pinned JUCE dependency. Run meaningful DSP and processor tests after native changes. When browser code changes, follow AGENTS.md web checks as well. Do not erase uncommitted work or force-push. Existing installed bundles must be backed up before replacement. Do not alter global macOS security settings or clear unrelated plugin caches.

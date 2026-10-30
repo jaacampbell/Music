@@ -5,7 +5,7 @@ from pathlib import Path
 EXPECTED_SUPABASE = "https://jgnsrjjgeodqruafafav.supabase.co"
 RUNPOD_WORKFLOW = Path(".github/workflows/stem-runpod-control.yml")
 PRODUCTION_SMOKE = Path(".github/workflows/production-smoke.yml")
-EXPECTED_SITE = "https://musicdevnc.netlify.app"
+EXPECTED_SITE = "https://tm-music-studio.netlify.app"
 
 
 def require(condition: bool, message: str) -> None:
@@ -27,7 +27,11 @@ def main() -> None:
     )
     require(
         f"SITE: {EXPECTED_SITE}" in smoke,
-        "Production Smoke is not pointed at the production Netlify site.",
+        "Production Smoke is not pointed at the TM Music Studio production site.",
+    )
+    require(
+        f"CORS_ORIGINS: {EXPECTED_SITE}" in runpod,
+        "Stem GPU Control CORS is not pinned to TM Music Studio.",
     )
 
     print("Production cloud invariants OK")

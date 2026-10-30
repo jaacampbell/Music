@@ -4,8 +4,8 @@ import { CloudProjectBridge } from "@/app/components/CloudProjectBridge";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Music OS — Guided Production Workspace",
-  description: "A guided music production workspace for creating, analyzing, improving, separating, protecting, and releasing songs."
+  title: "TM Music Studio — Music OS and Studio Brain",
+  description: "TM Music Studio combines Studio Brain, Producer DNA, song development, AI Style Control, Stem Director, MIDI Shredder, project management, DAW handoff, and release preparation."
 };
 
 export default function RootLayout({

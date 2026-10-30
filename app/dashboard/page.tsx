@@ -6,6 +6,7 @@ import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "re
 import {
   downloadPrivateFile,
   getCurrentUser,
+  getSessionAccessToken,
   isCloudConfigured,
   signOut,
   supabaseRest,
@@ -410,7 +411,8 @@ export default function SongDashboardPage(): React.JSX.Element {
     const question = askInput.trim(); setAskInput(""); setAskAnswer("Thinking with this project’s current context…");
     await run(async () => {
       await supabaseRest<AgentMessageRow[]>("music_agent_messages", { method: "POST", body: { project_id: activeProject.id, user_id: user.id, role: "user", body: question } }).catch(() => undefined);
-      const response = await fetch("/api/music-assistant", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, context: { project: activeProject, versions: versions.map(({ id, label, notes, bpm, song_key, duration_sec, created_at }) => ({ id, label, notes, bpm, song_key, duration_sec, created_at })), tasks, comments: comments.slice(-20), comparisons: comparisons.slice(0, 8), release } }) });
+      const token = await getSessionAccessToken();
+      const response = await fetch("/api/music-assistant", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token ?? ""}` }, body: JSON.stringify({ question, projectId: activeProject.id, history: agentMessages.slice(-8).map(({ role, body }) => ({ role, body })) }) });
       const payload = (await response.json().catch(() => ({}))) as { answer?: string; model?: string; error?: string };
       if (!response.ok || !payload.answer) throw new Error(payload.error ?? `Ask Music failed (${response.status}).`);
       setAskAnswer(payload.answer);
@@ -428,7 +430,7 @@ export default function SongDashboardPage(): React.JSX.Element {
       <header className={styles.topbar}>
         <div className={styles.brand}><span>M</span><div><strong>Music OS</strong><small>One song · one persistent project</small></div></div>
         <div className={styles.topActions}>
-          <Link href={`/${projectQuery}`}>Guided / Studio</Link>
+          <Link href="/artist-os">Artist OS</Link><Link href={`/${projectQuery}`}>Guided / Studio</Link>
           <Link href={`/stem-studio${projectQuery}`}>Stem Studio</Link>
           <span className={styles.userEmail}>{user?.email ?? "Private account"}</span><button onClick={() => void leave()}>Sign out</button>
         </div>
@@ -448,6 +450,7 @@ export default function SongDashboardPage(): React.JSX.Element {
             <div className={styles.songIdentity}><span className={styles.kicker}>Current song</span><input className={styles.titleInput} value={draftProject?.title ?? ""} onChange={(event) => draftProject && setDraftProject({ ...draftProject, title: event.target.value })} /><textarea value={draftProject?.brief ?? ""} onChange={(event) => draftProject && setDraftProject({ ...draftProject, brief: event.target.value })} /><div className={styles.heroMeta}><label>BPM<input type="number" min="1" max="400" value={draftProject?.bpm ?? ""} onChange={(event) => draftProject && setDraftProject({ ...draftProject, bpm: event.target.value ? Number(event.target.value) : null })} /></label><label>Key<input value={draftProject?.song_key ?? ""} onChange={(event) => draftProject && setDraftProject({ ...draftProject, song_key: event.target.value || null })} placeholder="e.g. D minor" /></label><label>Status<select value={draftProject?.status ?? "draft"} onChange={(event) => draftProject && setDraftProject({ ...draftProject, status: event.target.value as MusicProjectRow["status"] })}><option value="draft">Draft</option><option value="in-progress">In production</option><option value="mixing">Mixing</option><option value="ready-for-release">Ready for release</option><option value="released">Released</option><option value="archived">Archived</option></select></label><label>Readiness<input type="range" min="0" max="100" value={draftProject?.readiness ?? 0} onChange={(event) => draftProject && setDraftProject({ ...draftProject, readiness: Number(event.target.value) })} /><span>{draftProject?.readiness ?? 0}%</span></label></div><div className={styles.autosave}>● Cloud autosave · {status}</div></div>
           </section>
 
+          <div style={{display:"flex",gap:16,margin:"16px 0"}}><Link href={`/tm-vocal?projectId=${activeProject.id}`}>Open TM Vocal →</Link><Link href="/tm-sessions">TM Session Desk →</Link></div>
           <nav className={styles.tabs} aria-label="Song dashboard sections">{(["overview", "versions", "files", "compare", "release", "ask"] as DashboardTab[]).map((item) => <button key={item} className={tab === item ? styles.activeTab : ""} onClick={() => setTab(item)}>{item === "ask" ? "Ask Music" : item[0].toUpperCase() + item.slice(1)}</button>)}</nav>
 
           {tab === "overview" && <section className={styles.dashboardGrid}>

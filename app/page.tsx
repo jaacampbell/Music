@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ProducerDnaPanel } from "@/app/components/ProducerDnaPanel";
@@ -60,6 +61,7 @@ interface LiveManifest {
 }
 
 const SEPARATOR_URL = process.env.NEXT_PUBLIC_SEPARATOR_URL ?? "http://localhost:8000";
+const TM_STUDIO_HOME = process.env.NEXT_PUBLIC_TM_STUDIO_HOME === "true";
 
 const TABS: Array<{ id: TabName; label: string; description: string }> = [
   { id: "Song Brief", label: "Song Idea", description: "What you want to make and how it should feel." },
@@ -136,8 +138,20 @@ function formatBytes(bytes: number): string {
 }
 
 export default function HomePage(): React.JSX.Element {
+  const router = useRouter();
   const [mode, setMode] = useState<AppMode>("guided");
   const [helpOpen, setHelpOpen] = useState(false);
+
+  const [showSongWorkspace, setShowSongWorkspace] = useState(!TM_STUDIO_HOME);
+  useEffect(() => {
+    if (!TM_STUDIO_HOME) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("workspace") === "1" || params.has("projectId") || params.get("mode") === "studio") {
+      setShowSongWorkspace(true);
+    } else {
+      router.replace("/studio");
+    }
+  }, [router]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabName>("Song Brief");
@@ -418,11 +432,15 @@ export default function HomePage(): React.JSX.Element {
     }
   };
 
+  if (!showSongWorkspace) {
+    return <main className="musicOs"><div className="statusBar">Opening TM Music Studio…</div></main>;
+  }
+
   return (
     <main className="musicOs">
       <header className="topbar">
         <div><div className="brandRow"><span className="brandMark">M</span><strong>Music OS</strong><span className="betaPill">guided beta</span></div><p className="brandSub">Create → Produce → Analyze → Improve → Mix → Export</p></div>
-        <div className="topActions"><Link href="/studio" className="topLink">Studio Home</Link><div className="modeSwitch" aria-label="Interface mode"><button className={mode === "guided" ? "active" : ""} onClick={() => setMode("guided")}>Guided</button><button className={mode === "studio" ? "active" : ""} onClick={() => setMode("studio")}>Studio</button></div><Link href="/player" className="topLink">Player</Link><Link href="/guide" className="topLink">Guide</Link><button className="helpButton" onClick={() => setHelpOpen(true)} aria-label="Open help">?</button></div>
+        <div className="topActions"><Link href="/artist-os" className="topLink">Artist OS</Link><Link href="/studio" className="topLink">Studio Home</Link><div className="modeSwitch" aria-label="Interface mode"><button className={mode === "guided" ? "active" : ""} onClick={() => setMode("guided")}>Guided</button><button className={mode === "studio" ? "active" : ""} onClick={() => setMode("studio")}>Studio</button></div><Link href="/player" className="topLink">Player</Link><Link href="/guide" className="topLink">Guide</Link><button className="helpButton" onClick={() => setHelpOpen(true)} aria-label="Open help">?</button></div>
       </header>
 
       {mode === "guided" ? <>

@@ -14,7 +14,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     STEM_WORKER_HEARTBEAT_SECONDS=15
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ffmpeg libsndfile1 tini ca-certificates \
+    && apt-get install -y --no-install-recommends ffmpeg libsndfile1 rubberband-cli tini ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -25,7 +25,8 @@ RUN python -m pip install --upgrade pip \
 
 COPY requirements.txt ./
 RUN python -m pip install -r requirements.txt
-COPY app.py agent_core.py agent_api.py agent_phase5.py agent_phase6.py agent_phase7.py agent_phase11.py agent_phase12.py agent_phase14.py stem_catalog.json ./
+COPY app.py agent_core.py agent_api.py vocal_correction.py agent_phase5.py agent_phase6.py agent_phase7.py agent_phase11.py agent_phase12.py agent_phase14.py agent_cleanup.py agent_cpu_entry.py stem_catalog.json ./
+COPY cleanup_engine ./cleanup_engine
 RUN mkdir -p /data/jobs /data/models
 
 EXPOSE 8000
@@ -33,4 +34,4 @@ VOLUME ["/data"]
 HEALTHCHECK --interval=30s --timeout=8s --start-period=30s --retries=4 \
   CMD python -c "import json,urllib.request; data=json.load(urllib.request.urlopen('http://127.0.0.1:8000/agent/ready',timeout=5)); raise SystemExit(0 if data.get('ready') else 1)"
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["uvicorn", "agent_phase14:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--proxy-headers"]
+CMD ["uvicorn", "agent_cpu_entry:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--proxy-headers"]
