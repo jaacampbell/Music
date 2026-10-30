@@ -1,0 +1,35 @@
+name: Verify Approved GPU Image
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/verify-approved-gpu-image.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify production RunPod image is available
+        run: |
+          set -euo pipefail
+          image="ghcr.io/jaacampbell/music-separator:sha-21eda63"
+          for attempt in {1..24}; do
+            if docker manifest inspect "$image" > /tmp/gpu-image.json 2>/tmp/manifest-error; then
+              echo "Image manifest exists: $image"
+              head -c 200 /tmp/gpu-image.json
+              exit 0
+            fi
+            echo "Awaiting GPU image publication (attempt $attempt/24)"
+            sleep 20
+          done
+          cat /tmp/manifest-error
+          echo "Image not published or package access denied"
+          exit 1
