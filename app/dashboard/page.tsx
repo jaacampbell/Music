@@ -27,9 +27,10 @@ import type {
   SongwriterSplit,
   WaveformCommentRow
 } from "@/lib/persistence/types";
+import SyncPanel from "./SyncPanel";
 import styles from "./dashboard.module.css";
 
-type DashboardTab = "overview" | "versions" | "files" | "compare" | "release" | "ask";
+type DashboardTab = "overview" | "versions" | "files" | "compare" | "release" | "sync" | "ask";
 type Choice = "a" | "b" | "tie";
 type Side = "a" | "b";
 
@@ -451,7 +452,7 @@ export default function SongDashboardPage(): React.JSX.Element {
           </section>
 
           <div style={{display:"flex",gap:16,margin:"16px 0"}}><Link href={`/tm-vocal?projectId=${activeProject.id}`}>Open TM Vocal →</Link><Link href="/tm-sessions">TM Session Desk →</Link></div>
-          <nav className={styles.tabs} aria-label="Song dashboard sections">{(["overview", "versions", "files", "compare", "release", "ask"] as DashboardTab[]).map((item) => <button key={item} className={tab === item ? styles.activeTab : ""} onClick={() => setTab(item)}>{item === "ask" ? "Ask Music" : item[0].toUpperCase() + item.slice(1)}</button>)}</nav>
+          <nav className={styles.tabs} aria-label="Song dashboard sections">{(["overview", "versions", "files", "compare", "release", "sync", "ask"] as DashboardTab[]).map((item) => <button key={item} className={tab === item ? styles.activeTab : ""} onClick={() => setTab(item)}>{item === "ask" ? "Ask Music" : item[0].toUpperCase() + item.slice(1)}</button>)}</nav>
 
           {tab === "overview" && <section className={styles.dashboardGrid}>
             <article className={`${styles.card} ${styles.nextCard}`}><span className={styles.kicker}>Continue where you left off</span><h2>{projectNextStep(activeProject, versions, tasks, release)}</h2><div className={styles.actionRow}><button onClick={() => setTab(versions.length === 0 ? "versions" : activeProject.readiness >= 50 ? "release" : "compare")}>Continue →</button><Link className={styles.secondary} href={`/${projectQuery}`}>Open production workspace</Link><Link className={styles.secondary} href={`/stem-studio${projectQuery}`}>Open Stem Studio</Link></div></article>
@@ -459,6 +460,8 @@ export default function SongDashboardPage(): React.JSX.Element {
             <article className={styles.card}><span className={styles.kicker}>Tasks</span><h2>What needs attention</h2><form className={styles.inlineForm} onSubmit={(event) => void addTask(event)}><input value={newTask} onChange={(event) => setNewTask(event.target.value)} placeholder="Add a task…" /><button>Add</button></form><div className={styles.taskList}>{tasks.length === 0 ? <p className={styles.muted}>No tasks yet.</p> : tasks.slice(0, 8).map((task) => <button key={task.id} className={task.status === "done" ? styles.taskDone : styles.task} onClick={() => void toggleTask(task)}><span>{task.status === "done" ? "✓" : "○"}</span>{task.title}</button>)}</div></article>
             <article className={styles.card}><span className={styles.kicker}>History</span><h2>Saved checkpoints</h2><button className={styles.secondary} onClick={() => void saveCheckpoint()}>Save checkpoint</button>{history.length === 0 ? <p className={styles.muted}>Save a checkpoint before a major revision, mix, or release handoff.</p> : <div className={styles.historyList}>{history.map((item) => <div key={item.id}><strong>{item.label}</strong><span>{new Date(item.created_at).toLocaleString()}</span></div>)}</div>}</article>
           </section>}
+
+          {tab === "sync" && user && <SyncPanel project={activeProject} user={user} release={release} assets={assets} onStatus={setStatus} />}
 
           {tab === "versions" && <section className={styles.sectionCard}><div className={styles.sectionHead}><div><span className={styles.kicker}>Song versions</span><h2>Never overwrite a meaningful bounce.</h2><p>Each demo, revision, mix, or master is a separate private version.</p></div><label className={styles.uploadButton}>＋ Upload new version<input type="file" accept="audio/*,.wav,.mp3,.flac,.m4a,.aiff" onChange={(event) => void uploadVersion(event)} /></label></div><div className={styles.versionList}>{versions.length === 0 ? <div className={styles.empty}><h3>No audio versions yet.</h3><p>Upload the current demo or mix as Version 1.</p></div> : versions.map((version) => <article key={version.id} className={styles.versionCard}><div><span className={styles.versionNumber}>V{version.version_number}</span><h3>{version.label}</h3><p>{version.original_name ?? "No source file"}</p></div><div className={styles.versionMeta}><span>{version.duration_sec ? formatTime(version.duration_sec) : "—"}</span><span>{formatBytes(version.byte_size)}</span><span>{new Date(version.created_at).toLocaleDateString()}</span></div><button onClick={() => void loadAudio(version.storage_path, version.label, version.id)}>Play</button></article>)}</div></section>}
 
