@@ -9,7 +9,7 @@ It also includes the **JO₵YN Music Workspace** in [`apps/player`](apps/player)
 The Next.js app has one shared song/project identity across its major surfaces. The hosted Netlify app is the primary production experience; local services are optional development and diagnostic tools:
 
 - `/studio` — hosted JO₵YN Music Studio launchpad and production entry point.\n- `/` — beginner-first Guided Mode + advanced Studio Mode production command center.
-- `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage.\n- `/artist-os` — JO₵YN Artist OS command center for campaigns, tasks, content planning, public links, and the artist-management assistant.\n- `/jocyn` — public JO₵YN link hub managed from Artist OS.
+- `/dashboard` — private persistent Song Dashboard backed by Supabase/Postgres + private Storage, including song-level Sync & Licensing.\n- `/artist-os` — JO₵YN Artist OS command center for campaigns, tasks, content planning, public links, and the artist-management assistant.\n- `/jocyn` — public JO₵YN link hub managed from Artist OS.
 - `/player` — JO₵YN unified listening room for secure cloud uploads, cross-device playback, and device-only audio.
 - `/stem-agent` — production Stem Director with worker-mesh routing, durable cloud staging, recovery, and permanent private outputs.\n- `/stem-studio` — direct-worker separator retained for local testing and diagnostics.
 - `/midi-shredder` — browser-based audio-to-MIDI transcription with a simple default workflow and optional Pro Edit desk. Pro Edit adds melodic or General MIDI drum detection, synchronized source comparison, estimated tempo/key/chord mapping, loop extraction, note timing/length repair, analysis-manifest export, and linked-project stem selection for named multi-track Ableton MIDI packs.
@@ -42,6 +42,7 @@ See [`docs/phase3-unified-music-os.md`](docs/phase3-unified-music-os.md).
 - debounced cloud autosave;
 - artwork, BPM/key, status, readiness, tasks, and checkpoints;
 - private audio version history and project files;
+- song-level Sync & Licensing for rights control, alternate-version readiness, briefs, submissions, placements, fees, contracts, and PRO tracking;
 - decoded waveform playback and timestamped mix comments;
 - synchronized A/B playback with position-preserving switching;
 - saved drums/atmosphere/vocal-space/low-end comparison decisions;
@@ -160,3 +161,8 @@ The first native TM Music Studio plugin lives in [`native/tm-vocal`](native/tm-v
 ## Cursor native CLI workflow
 
 Run `agent "Read .cursor/prompts/tm-native-cli.md and execute the native TM Vocal workflow on this machine."` from the repository, or run `python3 tools/native/tm_native.py all --install --validate` directly on Mac. See [`docs/cursor-native-workflow.md`](docs/cursor-native-workflow.md) for prerequisites, Windows/Linux commands, installation backups, validators and Ableton acceptance.
+
+
+## Sync & Licensing
+
+Music OS Phase 17 adds a shared song-level sync licensing layer keyed by the canonical `music_projects.id`. See [`docs/sync-licensing.md`](docs/sync-licensing.md) and apply [`db/music-os-phase17.sql`](db/music-os-phase17.sql) when provisioning a fresh database.
