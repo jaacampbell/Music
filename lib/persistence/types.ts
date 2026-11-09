@@ -180,3 +180,80 @@ export interface AgentMessageRow {
   model: string | null;
   created_at: string;
 }
+
+export type SyncTrackStatus = "audit" | "prep" | "ready" | "pitched" | "placed" | "hold";
+export type SyncOpportunityStatus = "saved" | "researching" | "pitching" | "submitted" | "closed" | "won" | "lost";
+export type SyncSubmissionStatus = "prepared" | "submitted" | "follow_up" | "shortlisted" | "declined" | "placed" | "licensed" | "paid";
+export type SyncContractStatus = "not_started" | "review" | "signature" | "fully_executed";
+
+export interface SyncTrackRow {
+  id: string;
+  user_id: string;
+  brand_id: string | null;
+  composition_id: string | null;
+  release_schedule_id: string | null;
+  music_project_id: string | null;
+  title: string;
+  status: SyncTrackStatus;
+  one_stop: boolean;
+  master_control_pct: number;
+  publishing_control_pct: number;
+  master_owner: string;
+  publishing_owner: string;
+  pro_affiliation: string;
+  isrc: string;
+  bpm: number | null;
+  song_key: string;
+  explicit_available: boolean;
+  clean_available: boolean;
+  instrumental_available: boolean;
+  acapella_available: boolean;
+  tv_mix_available: boolean;
+  cut_60_available: boolean;
+  cut_30_available: boolean;
+  cut_15_available: boolean;
+  stems_available: boolean;
+  lyrics_available: boolean;
+  moods: string;
+  use_cases: string;
+  notes: string;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SyncOpportunityRow {
+  id: string;
+  user_id: string;
+  title: string;
+  company: string;
+  source: string;
+  url: string;
+  deadline: string | null;
+  use_case: string;
+  budget_text: string;
+  status: SyncOpportunityStatus;
+  notes: string;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SyncSubmissionRow {
+  id: string;
+  user_id: string;
+  track_id: string;
+  opportunity_id: string | null;
+  status: SyncSubmissionStatus;
+  submitted_at: string | null;
+  follow_up_on: string | null;
+  quoted_fee: number | null;
+  license_fee: number | null;
+  contract_status: SyncContractStatus;
+  pro_tracking: boolean;
+  notes: string;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+

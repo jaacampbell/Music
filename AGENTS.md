@@ -40,9 +40,11 @@ The bridge:
 Do not create another independent project identifier for a feature that belongs to a song. New song-level features should reference `music_projects.id`.
 
 ### Persistence and security
-Run both migrations, in order:
+For the core project graph, run:
 1. `db/music-os-phase2.sql`
 2. `db/music-os-phase3.sql`
+
+For the shared Music OS / Artist OS licensing workflow, also apply `db/music-os-phase17.sql`. Sync rows must reference the canonical `music_projects.id`; do not create a second song identifier.
 
 Supabase Auth + Row Level Security is the authorization boundary for private project rows and Storage objects. `proxy.ts` is only an optimistic route guard for `/dashboard`; do not treat the route cookie as a replacement for RLS.
 
