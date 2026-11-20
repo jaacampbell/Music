@@ -714,6 +714,7 @@ export default function ArtistOsPage(): React.JSX.Element {
 
         <div className={styles.sidebarFoot}>
           <button onClick={() => setCommandOpen(true)}><span>⌘</span><span>Command palette</span><kbd>⌘K</kbd></button>
+          <Link href="/artist-os/councils"><span>◇</span><span>AI Councils</span></Link>
           <Link href="/dashboard"><span>♫</span><span>Music OS</span></Link>
           <Link href="/studio"><span>≋</span><span>TM Studio</span></Link>
           <button onClick={() => void leave()}><span>↪</span><span>Sign out</span></button>
