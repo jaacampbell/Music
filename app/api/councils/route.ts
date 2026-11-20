@@ -19,6 +19,11 @@ const activeUsers = new Set<string>();
 const attemptLog = new Map<string, number[]>();
 const MODEL = process.env.OPENAI_COUNCIL_MODEL || process.env.OPENAI_ARTIST_MODEL ||
   process.env.OPENAI_MUSIC_MODEL || "gpt-5-mini";
+// Optional list of separately provisioned OpenAI models; rotating models does not
+// impersonate independent companies. Default is the already configured Music model.
+const MODEL_POOL = (process.env.OPENAI_COUNCIL_MODELS || "").split(",")
+  .map(value => value.trim()).filter(value => /^[a-zA-Z0-9._-]{2,100}$/.test(value)).slice(0, 3);
+if (!MODEL_POOL.length) MODEL_POOL.push(MODEL);
 const select = "id,board_id,question,context,project_id,perspectives,verdict,status,model,created_at,updated_at,request_key";
 
 const fail = (error: string, status: number) => NextResponse.json({ error }, { status });
@@ -60,7 +65,7 @@ function recentAttempts(userId: string): number {
   return recent.length;
 }
 
-async function askModel(prompt: CouncilPrompt, verifiedProject: unknown): Promise<string> {
+async function askModel(prompt: CouncilPrompt, verifiedProject: unknown, selectedModel: string): Promise<string> {
   const chair = prompt.role === "chair";
   const instructions = [
     "You are " + prompt.name + " for a private, owner-directed council.",
@@ -88,16 +93,18 @@ async function askModel(prompt: CouncilPrompt, verifiedProject: unknown): Promis
     method: "POST",
     headers: { Authorization: "Bearer " + process.env.OPENAI_API_KEY, "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: MODEL, store: false, max_output_tokens: chair ? 1200 : 700,
+      model: selectedModel, store: false, max_output_tokens: chair ? 1200 : 700,
       instructions, input
     }),
     signal: AbortSignal.timeout(30000)
   });
   if (!response.ok) throw new Error("Provider failed");
   const payload = await response.json() as {
+    status?: string;
     output_text?: string;
     output?: Array<{content?: Array<{type?:string;text?:string}>}>;
   };
+  if (payload.status && payload.status !== "completed") throw new Error("Incomplete provider generation");
   const answer = (payload.output_text ||
     payload.output?.flatMap(i => i.content ?? []).filter(c => c.type === "output_text").map(c => c.text ?? "").join("\n") || "").trim();
   if (!answer) throw new Error("Provider returned no text");
@@ -161,7 +168,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       body: JSON.stringify({
         user_id: auth.userId, request_key: requestKey, board_id: boardId,
         question, context, project_id: projectId || null,
-        status: "running", perspectives: [], verdict: null, model: MODEL
+        status: "running", perspectives: [], verdict: null, model: MODEL_POOL.join(",")
       })
     });
     if (!draft.ok) {
@@ -179,7 +186,11 @@ export async function POST(request: Request): Promise<NextResponse> {
     attemptLog.set(auth.userId, [...(attemptLog.get(auth.userId) || []), Date.now()]);
 
     const outcome = await runCouncil({ board, question, context, concurrency: 2,
-      respond: (prompt) => askModel(prompt, verifiedProject) });
+      respond: (prompt) => {
+        const index = prompt.role === "chair" ? 0 :
+          board.advisors.findIndex(advisor => advisor.name === prompt.name);
+        return askModel(prompt, verifiedProject, MODEL_POOL[Math.max(0, index) % MODEL_POOL.length]);
+      } });
     const changed = await dbRequest(auth, "music_council_reviews",
       "id=eq." + record.id + "&user_id=eq." + auth.userId + "&select=" + select, {
         method: "PATCH", headers: { Prefer: "return=representation" },
