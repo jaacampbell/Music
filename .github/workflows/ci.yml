@@ -17,6 +17,7 @@ jobs:
       - run: npm ci
       - run: node scripts/test-tm-vocal.mjs
       - run: node scripts/test-studio-brain.mjs
+      - run: node scripts/test-councils.mjs
       - run: npm run lint
       - run: npm run build
 
